@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitUseStrict": true,
+    "noEmitHelpers": true,
+    "experimentalDecorators": true,
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false
+  },
+  "paths": {
+    "*": [
+      "./node_modules/tns-core-modules/*",
+      "./node_modules/*"
+    ]
+  }
+}

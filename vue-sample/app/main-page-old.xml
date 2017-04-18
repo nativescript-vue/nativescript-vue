@@ -1,0 +1,4 @@
+<Page>
+  <ActionBar title="My App" class="action-bar"></ActionBar>
+  <!-- Your UI components go here -->
+</Page>

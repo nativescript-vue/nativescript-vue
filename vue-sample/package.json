@@ -1,0 +1,24 @@
+{
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "readme": "NativeScript Application",
+  "repository": "<fill-your-repository-here>",
+  "nativescript": {
+    "id": "org.nativescript.vuesample",
+    "tns-android": {
+      "version": "2.5.0"
+    }
+  },
+  "dependencies": {
+    "nativescript-theme-core": "~1.0.2",
+    "nativescript-vue": "file:../nativescript-vue",
+    "tns-core-modules": "^2.5.2"
+  },
+  "devDependencies": {
+    "babel-traverse": "6.24.1",
+    "babel-types": "6.24.1",
+    "babylon": "6.16.1",
+    "lazy": "1.0.11",
+    "nativescript-dev-android-snapshot": "^0.*.*"
+  }
+}
