@@ -7,7 +7,7 @@ function typof(v) {
 
 export const namespaceMap = {}
 
-export function createElement(tagName) {
+export function createElement(tagName, vnode) {
     console.log('createElement', tagName)
     return new Vue.renderer.Element(tagName)
 }
@@ -20,7 +20,7 @@ export function createElementNS(namespace, tagName) {
 export function createTextNode(text) {
     console.log('createTextNode', text)
     let node = new Vue.renderer.Element('label')
-    node.text = text
+    node.setAttr('text', text)
     return node
 }
 
@@ -29,7 +29,7 @@ export function createComment(text) {
     return new Vue.renderer.Comment(text)
 }
 
-export function insertBefore(node, target, before) {
+export function insertBefore(parentNode, newNode, referenceNode) {
     console.log('insertBefore')
 }
 
@@ -39,7 +39,8 @@ export function removeChild(node, child) {
 
 export function appendChild(node, child) {
     console.log('appendChild')
-    Vue.prototype.$document.content = child
+    // todo change this to append children to Element...
+    Vue.prototype.$document.addChild(child.view)
 }
 
 export function parentNode(node) {
@@ -52,17 +53,17 @@ export function nextSibling(node) {
     return node.nextSibling
 }
 
-export function tagName(node) {
+export function tagName(elementNode) {
     console.log('tagName')
-    return node.type
+    return elementNode.type
 }
 
 export function setTextContent(node, text) {
     console.log('setTextContent', text)
-    node.text = text
+    node.setAttr('text', text)
 }
 
-export function setAttribute(node, key, val) {
+export function setAttribute(nodeElement, key, val) {
     console.log('setAttribute')
-    // node.setAttr(key, val)
+    nodeElement.setAttr(key, val)
 }

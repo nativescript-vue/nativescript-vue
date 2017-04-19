@@ -23,9 +23,6 @@
     "url": "https://github.com/rigor789/nativescript-vue/issues"
   },
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
-  "peerDependencies": {
-    "tns-core-modules": "^2.5.0"
-  },
   "dependencies": {
     "tns-core-modules": "^2.5.2",
     "vue": "^2.2.6"

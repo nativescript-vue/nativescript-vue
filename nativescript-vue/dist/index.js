@@ -4155,7 +4155,7 @@ Vue$2.version = '__VERSION__';
 
 const namespaceMap = {};
 
-function createElement$1(tagName) {
+function createElement$1(tagName, vnode) {
     console.log('createElement', tagName);
     return new Vue$2.renderer.Element(tagName)
 }
@@ -4168,7 +4168,7 @@ function createElementNS(namespace, tagName) {
 function createTextNode(text) {
     console.log('createTextNode', text);
     let node = new Vue$2.renderer.Element('label');
-    node.text = text;
+    node.setAttr('text', text);
     return node
 }
 
@@ -4177,7 +4177,7 @@ function createComment(text) {
     return new Vue$2.renderer.Comment(text)
 }
 
-function insertBefore(node, target, before) {
+function insertBefore(parentNode, newNode, referenceNode) {
     console.log('insertBefore');
 }
 
@@ -4187,7 +4187,8 @@ function removeChild(node, child) {
 
 function appendChild(node, child) {
     console.log('appendChild');
-    Vue$2.prototype.$document.content = child;
+    // todo change this to append children to Element...
+    Vue$2.prototype.$document.addChild(child.view);
 }
 
 function parentNode(node) {
@@ -4200,19 +4201,19 @@ function nextSibling(node) {
     return node.nextSibling
 }
 
-function tagName(node) {
+function tagName(elementNode) {
     console.log('tagName');
-    return node.type
+    return elementNode.type
 }
 
 function setTextContent(node, text) {
     console.log('setTextContent', text);
-    node.text = text;
+    node.setAttr('text', text);
 }
 
-function setAttribute(node, key, val) {
+function setAttribute(nodeElement, key, val) {
     console.log('setAttribute');
-    // node.setAttr(key, val)
+    nodeElement.setAttr(key, val);
 }
 
 var nodeOps = Object.freeze({
@@ -5023,11 +5024,78 @@ const patch = createPatchFunction({
     modules: modules$1
 });
 
+// import {View} from "tns-core-modules/ui/core/view";
+
+const elementMap = new Map;
+
+class ViewMeta {
+    constructor(options = {}) {
+        this.skipAddToDom = options.skipAddToDom || false;
+        this.isUnaryTag = options.isUnaryTag || false;
+    }
+}
+
+// class VueView extends View {
+//     constructor(name, meta) {
+//         super()
+//         this.nodeType = 0
+//         this.nodeName = name
+//         this.templateParent = null
+//         this.meta = meta
+//     }
+// }
+
+function registerElement(elementName, resolver, meta) {
+    if (elementMap.has(elementName)) {
+        throw new Error(`Element for ${elementName} already registered.`)
+    }
+
+    const entry = {resolver: resolver, meta: meta};
+    elementMap.set(elementName.toLowerCase(), entry);
+
+    console.log(`Element ${elementName} has been registered!`);
+}
+
+function getViewClass(elementName) {
+    const entry = elementMap.get(elementName.toLowerCase());
+
+    if (!entry) {
+        throw new TypeError(`No known component for element ${elementName}.`)
+    }
+
+    try {
+        return entry.resolver();
+    } catch (e) {
+        throw new TypeError(`Could not load view for: ${elementName}. ${e}`)
+    }
+}
+
+function getViewMeta(nodeName) {
+    let meta = new ViewMeta();
+    const entry = elementMap.get(nodeName.toLowerCase());
+
+    if (entry && entry.meta) {
+        meta = entry.meta;
+    }
+
+    return meta;
+}
+
+function isKnownView(elementName) {
+    return elementMap.has(elementName.toLowerCase())
+}
+
+//registerElement("Image", () => require("tns-core-modules/ui/image").Image, new ViewMeta({isUnaryTag: true}));
+registerElement("img", () => require("tns-core-modules/ui/image").Image, {isUnaryTag: true});
+registerElement("Label", () => require("tns-core-modules/ui/label").Label);
+// registerElement("Span", () => require("tns-core-modules/text/span").Span);
+registerElement("Button", () => require("tns-core-modules/ui/button").Button);
+
 const isReservedTag = makeMap('template', true);
 
 const canBeLeftOpenTag = makeMap('', true);
 
-const isUnaryTag = makeMap('img,image', true);
+
 
 function mustUseProp() {
     console.log('mustUseProp');
@@ -5036,7 +5104,10 @@ function mustUseProp() {
 
 
 function isUnknownElement(el) {
-    console.log('isUnknownElement', el);
+
+    let k = !isKnownView(el);
+    console.log(`isUnknown ${el}? ${k}`);
+    return k
 }
 
 function query(el, document) {
@@ -5077,89 +5148,48 @@ function init(cfg) {
     return Vue$2
 }
 
-class Document {
-    // constructor() {
-    //     console.log('new document')
-    //
-    //     this.nodeMap = {}
-    //     this.createDocumentElement()
-    // }
-    //
-    // createDocumentElement() {
-    //     if (!this.documentElement) {
-    //         const el = new Element('document')
-    //         el.role = 'documentElement'
-    //         el.depth = 0
-    //         el.ref = '_documentElement'
-    //         this.nodeMap._documentElement = el
-    //         this.documentElement = el
-    //     }
-    //
-    //     return this.documentElement
-    // }
-    //
-    // createBody(type, props) {
-    //     if (!this.body) {
-    //         const el = new Element(type, props)
-    //         setBody(this, el)
-    //     }
-    //
-    //     return this.body
-    // }
-    //
-    // createElement(tagName, props) {
-    //     return new Element(tagName, props)
-    // }
-    //
-    // createComment(text) {
-    //     return new Comment(text)
-    // }
+class Document  {
+
+    constructor(page) {
+        this.view = page;
+    }
 }
 
 class Element {
 
     constructor(type) {
-        const LabelModule = require('tns-core-modules/ui/label');
-        console.log('new element');
-        return new LabelModule.Label()
+        console.log('Element constructor for', type);
+
+        this.type = type;
+        this.parentNode = null;
+        this.nextSibling = null;
+        this.meta = getViewMeta(type);
+
+        const viewClass = getViewClass(type);
+        this.view = new viewClass();
+
+        console.log('Element object ' + type);
     }
-    // constructor(type = DEFAULT_TAG_NAME, props, isExtended) {
-    //     super(type, props)
-    //     const XElement = elementTypes[type]
-    //     if (XElement && !isExtended) {
-    //         return new XElement(props)
-    //     }
-    //     props = props || {}
-    //     this.nodeType = 1
-    //     this.nodeId = uniqueId()
-    //     this.ref = this.nodeId
-    //     this.type = type
-    //     this.attr = props.attr || {}
-    //     this.style = props.style || {}
-    //     this.classStyle = props.classStyle || {}
-    //     this.event = {}
-    //     this.children = []
-    //     this.pureChildren = []
-    // }
-    //
-    // setAttr(key, value) {
-    //     if (this.attr[key] === value) {
-    //         return
-    //     }
-    //
-    //     this.attr[key] = value
-    // }
-    //
-    // appendChild(node) {
-    //     if (node.parentNode && node.parentNode !== this) {
-    //         return
-    //     }
-    //
-    //     if (!node.parentNode) {
-    //         node.parentNode = this
-    //         this.children.push(node)
-    //     }
-    // }
+
+    setAttr(key, val) {
+        if (!(key in this.view)) {
+            throw new Error(`Element ${this.type} has no property ${key}.`)
+        }
+
+        this.view[key] = val;
+    }
+
+    insertBefore() {
+        // Todo
+    }
+
+    appendChild() {
+        // Todo
+    }
+
+    removeChild() {
+        // Todo
+    }
 }
 class Comment {
 }

@@ -1,4 +1,8 @@
-<Page>
+<Page loaded="pageLoaded">
   <ActionBar title="My App" class="action-bar"></ActionBar>
   <!-- Your UI components go here -->
+  <StackLayout id="main">
+    <Button text="Tap me"></Button>
+    <Button text="Tap me"></Button>
+  </StackLayout>
 </Page>

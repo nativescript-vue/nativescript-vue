@@ -1,8 +1,12 @@
 const Page = require('tns-core-modules/ui/page').Page
+const StackLayout = require('tns-core-modules/ui/layouts/stack-layout').StackLayout
 
 function createPage() {
     let page = new Page()
-    page.addEventListener('loaded', () => onReady(page))
+    let layout = new StackLayout()
+    page.content = layout
+    page.addEventListener('loaded', () => onReady(layout))
+
     return page
 }
 exports.createPage = createPage
@@ -17,7 +21,10 @@ function onReady(page) {
         },
 
         render(h) {
-            return h('label', [this.msg])
+            return h('label', [
+                h('button', [this.msg]),
+                h('label', [this.msg]),
+            ])
         },
 
         created() {
