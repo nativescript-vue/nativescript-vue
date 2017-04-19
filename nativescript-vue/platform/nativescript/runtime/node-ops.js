@@ -40,7 +40,11 @@ export function removeChild(node, child) {
 export function appendChild(node, child) {
     console.log('appendChild')
     // todo change this to append children to Element...
-    Vue.prototype.$document.addChild(child.view)
+    try {
+        Vue.prototype.$document.addChild(child.view)
+    } catch (e) {
+        console.log('>>', e)
+    }
 }
 
 export function parentNode(node) {

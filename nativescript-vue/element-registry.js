@@ -1,5 +1,3 @@
-// import {View} from "tns-core-modules/ui/core/view";
-
 const elementMap = new Map
 
 class ViewMeta {
@@ -7,6 +5,9 @@ class ViewMeta {
         this.skipAddToDom = options.skipAddToDom || false
         this.isUnaryTag = options.isUnaryTag || false
     }
+}
+
+class Div {
 }
 
 // class VueView extends View {
@@ -59,8 +60,8 @@ export function isKnownView(elementName) {
     return elementMap.has(elementName.toLowerCase())
 }
 
-//registerElement("Image", () => require("tns-core-modules/ui/image").Image, new ViewMeta({isUnaryTag: true}));
-registerElement("img", () => require("tns-core-modules/ui/image").Image, {isUnaryTag: true});
+registerElement("div", () => Div);
 registerElement("Label", () => require("tns-core-modules/ui/label").Label);
-// registerElement("Span", () => require("tns-core-modules/text/span").Span);
 registerElement("Button", () => require("tns-core-modules/ui/button").Button);
+registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
+

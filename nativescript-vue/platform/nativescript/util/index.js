@@ -19,10 +19,7 @@ export function getTagNamespace() {
 }
 
 export function isUnknownElement(el) {
-
-    let k = !isKnownView(el)
-    console.log(`isUnknown ${el}? ${k}`)
-    return k
+    return !isKnownView(el)
 }
 
 export function query(el, document) {

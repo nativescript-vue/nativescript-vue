@@ -19,7 +19,7 @@ Vue.config.isUnknownElement = isUnknownElement
 Vue.prototype.__patch__ = patch
 
 Vue.prototype.$mount = function (el, hydrating) {
-    return mountComponent(this, el && query(el, this.$document), hydrating)
+    return mountComponent(this)
 }
 
 export default Vue

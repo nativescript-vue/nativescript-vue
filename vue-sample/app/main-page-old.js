@@ -1,8 +1,7 @@
-const Button = require('tns-core-modules/ui/button').Button
+const Button = require('tns-core-modules/ui/label').Label
 
 exports.pageLoaded = function(e) {
     console.log('loaded..')
-    console.dump(e.object)
     var layout = e.object.getViewById("main");
     var button = new Button()
     button.text = "Hi"

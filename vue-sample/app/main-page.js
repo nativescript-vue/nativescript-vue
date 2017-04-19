@@ -1,10 +1,17 @@
 const Page = require('tns-core-modules/ui/page').Page
 const StackLayout = require('tns-core-modules/ui/layouts/stack-layout').StackLayout
+// Odd behaviour, if these are commented out, Error is thrown
+// otherwise works as expected
+// Same require statement is run inside the element-registry.js (when required in this file)
+// so it gets resolved, and it's not bundled.
+require('tns-core-modules/ui/label').Label
+require('tns-core-modules/ui/button').Button
 
 function createPage() {
     let page = new Page()
     let layout = new StackLayout()
     page.content = layout
+
     page.addEventListener('loaded', () => onReady(layout))
 
     return page
@@ -12,7 +19,8 @@ function createPage() {
 exports.createPage = createPage
 
 function onReady(page) {
-    const Vue = require('nativescript-vue')
+
+    const Vue = require('nativescript-vue/dist/index')
     Vue.prototype.$document = page
 
     const vm = new Vue({
@@ -21,9 +29,11 @@ function onReady(page) {
         },
 
         render(h) {
-            return h('label', [
-                h('button', [this.msg]),
-                h('label', [this.msg]),
+            return h('div', [
+                this.msg, // creates a label
+                h('label', {attrs: {text: 'test1'}}), // same as this
+                h('label', ['test2']), // or this
+                h('button', {attrs: {text: 'Hello World'}})
             ])
         },
 
@@ -38,5 +48,5 @@ function onReady(page) {
                 this.msg = 'changed ' + change++
             }, 1000)
         }
-    }).$mount('#app')
+    }).$mount()
 }

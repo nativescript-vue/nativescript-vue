@@ -19,12 +19,13 @@ export class Element {
         this.meta = getViewMeta(type)
 
         const viewClass = getViewClass(type)
-        this.view = new viewClass()
+        this.view = new viewClass
 
         console.log('Element object ' + type)
     }
 
     setAttr(key, val) {
+        console.log(`setAttr on ${this.type} [${this.view._domId}]: ${key} = ${val}`)
         if (!(key in this.view)) {
             throw new Error(`Element ${this.type} has no property ${key}.`)
         }

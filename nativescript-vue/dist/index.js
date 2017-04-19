@@ -4188,7 +4188,11 @@ function removeChild(node, child) {
 function appendChild(node, child) {
     console.log('appendChild');
     // todo change this to append children to Element...
-    Vue$2.prototype.$document.addChild(child.view);
+    try {
+        Vue$2.prototype.$document.addChild(child.view);
+    } catch (e) {
+        console.log('>>', e);
+    }
 }
 
 function parentNode(node) {
@@ -4903,6 +4907,38 @@ function createPatchFunction (backend) {
   }
 }
 
+function updateAttrs (oldVnode, vnode) {
+    if (!oldVnode.data.attrs && !vnode.data.attrs) {
+        return
+    }
+    let key, cur, old;
+    const elm = vnode.elm;
+    const oldAttrs = oldVnode.data.attrs || {};
+    let attrs = vnode.data.attrs || {};
+    // clone observed objects, as the user probably wants to mutate it
+    if (attrs.__ob__) {
+        attrs = vnode.data.attrs = extend({}, attrs);
+    }
+
+    for (key in attrs) {
+        cur = attrs[key];
+        old = oldAttrs[key];
+        if (old !== cur) {
+            elm.setAttr(key, cur);
+        }
+    }
+    for (key in oldAttrs) {
+        if (attrs[key] == null) {
+            elm.setAttr(key);
+        }
+    }
+}
+
+var attrs = {
+    create: updateAttrs,
+    update: updateAttrs
+};
+
 /*  */
 
 var directives = {
@@ -5017,14 +5053,12 @@ var baseModules = [
   directives
 ];
 
-const modules$1 = [].concat(baseModules);
+const modules$1 = [attrs].concat(baseModules);
 
 const patch = createPatchFunction({
     nodeOps,
     modules: modules$1
 });
-
-// import {View} from "tns-core-modules/ui/core/view";
 
 const elementMap = new Map;
 
@@ -5033,6 +5067,9 @@ class ViewMeta {
         this.skipAddToDom = options.skipAddToDom || false;
         this.isUnaryTag = options.isUnaryTag || false;
     }
+}
+
+class Div {
 }
 
 // class VueView extends View {
@@ -5085,11 +5122,10 @@ function isKnownView(elementName) {
     return elementMap.has(elementName.toLowerCase())
 }
 
-//registerElement("Image", () => require("tns-core-modules/ui/image").Image, new ViewMeta({isUnaryTag: true}));
-registerElement("img", () => require("tns-core-modules/ui/image").Image, {isUnaryTag: true});
+registerElement("div", () => Div);
 registerElement("Label", () => require("tns-core-modules/ui/label").Label);
-// registerElement("Span", () => require("tns-core-modules/text/span").Span);
 registerElement("Button", () => require("tns-core-modules/ui/button").Button);
+registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
 
 const isReservedTag = makeMap('template', true);
 
@@ -5104,15 +5140,7 @@ function mustUseProp() {
 
 
 function isUnknownElement(el) {
-
-    let k = !isKnownView(el);
-    console.log(`isUnknown ${el}? ${k}`);
-    return k
-}
-
-function query(el, document) {
-    // todo
-    console.log('query', el, document);
+    return !isKnownView(el)
 }
 
 Vue$2.config.mustUseProp = mustUseProp;
@@ -5125,7 +5153,7 @@ Vue$2.config.isUnknownElement = isUnknownElement;
 Vue$2.prototype.__patch__ = patch;
 
 Vue$2.prototype.$mount = function (el, hydrating) {
-    return mountComponent(this, el && query(el, this.$document), hydrating)
+    return mountComponent(this)
 };
 
 const modules = {};
@@ -5166,12 +5194,13 @@ class Element {
         this.meta = getViewMeta(type);
 
         const viewClass = getViewClass(type);
-        this.view = new viewClass();
+        this.view = new viewClass;
 
         console.log('Element object ' + type);
     }
 
     setAttr(key, val) {
+        console.log(`setAttr on ${this.type} [${this.view._domId}]: ${key} = ${val}`);
         if (!(key in this.view)) {
             throw new Error(`Element ${this.type} has no property ${key}.`)
         }
