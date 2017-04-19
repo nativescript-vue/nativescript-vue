@@ -4167,7 +4167,9 @@ function createElementNS(namespace, tagName) {
 
 function createTextNode(text) {
     console.log('createTextNode', text);
-    return new Vue$2.renderer.TextNode(text)
+    let node = new Vue$2.renderer.Element('label');
+    node.text = text;
+    return node
 }
 
 function createComment(text) {
@@ -4177,43 +4179,15 @@ function createComment(text) {
 
 function insertBefore(node, target, before) {
     console.log('insertBefore');
-    if (target.nodeType === 3) {
-        if (node.type === 'text') {
-            node.setAttr('value', target.text);
-            target.parentNode = node;
-        } else {
-            const text = createElement$1('text');
-            text.setAttr('value', target.text);
-            node.insertBefore(text, before);
-        }
-        return
-    }
-    node.insetBefore(target, before);
 }
 
 function removeChild(node, child) {
     console.log('removeChild');
-    if (child.nodeType === 3) {
-        node.setAttr('value', '');
-        return
-    }
-    node.removeChild(child);
 }
 
 function appendChild(node, child) {
     console.log('appendChild');
-    if (child.nodeType === 3) {
-        if (node.type === 'text') {
-            node.setAttr('value', child.text);
-            child.parentNode = node;
-        } else {
-            const text = createElement$1('text');
-            text.setAttr('value', child.text);
-            node.appendChild(text);
-        }
-        return
-    }
-    node.appendChild(child);
+    Vue$2.prototype.$document.content = child;
 }
 
 function parentNode(node) {
@@ -4238,7 +4212,7 @@ function setTextContent(node, text) {
 
 function setAttribute(node, key, val) {
     console.log('setAttribute');
-    node.setAttr(key, val);
+    // node.setAttr(key, val)
 }
 
 var nodeOps = Object.freeze({
@@ -5067,6 +5041,7 @@ function isUnknownElement(el) {
 
 function query(el, document) {
     // todo
+    console.log('query', el, document);
 }
 
 Vue$2.config.mustUseProp = mustUseProp;
@@ -5102,94 +5077,89 @@ function init(cfg) {
     return Vue$2
 }
 
-const elementTypes = {};
-
-let nextNodeRef = 1;
-function uniqueId() {
-    return (nextNodeRef++).toString()
-}
-
-
-
 class Document {
-    constructor() {
-        console.log('new document');
-
-        this.nodeMap = {};
-        this.createDocumentElement();
-    }
-
-    createDocumentElement() {
-        if (!this.documentElement) {
-            const el = new Element('document');
-            el.role = 'documentElement';
-            el.depth = 0;
-            el.ref = '_documentElement';
-            this.nodeMap._documentElement = el;
-            this.documentElement = el;
-        }
-
-        return this.documentElement
-    }
-
-    createBody(type, props) {
-        if (!this.body) {
-            const el = new Element(type, props);
-            setBody(this, el);
-        }
-
-        return this.body
-    }
-
-    createElement(tagName, props) {
-        return new Element(tagName, props)
-    }
-
-    createComment(text) {
-        return new Comment(text)
-    }
+    // constructor() {
+    //     console.log('new document')
+    //
+    //     this.nodeMap = {}
+    //     this.createDocumentElement()
+    // }
+    //
+    // createDocumentElement() {
+    //     if (!this.documentElement) {
+    //         const el = new Element('document')
+    //         el.role = 'documentElement'
+    //         el.depth = 0
+    //         el.ref = '_documentElement'
+    //         this.nodeMap._documentElement = el
+    //         this.documentElement = el
+    //     }
+    //
+    //     return this.documentElement
+    // }
+    //
+    // createBody(type, props) {
+    //     if (!this.body) {
+    //         const el = new Element(type, props)
+    //         setBody(this, el)
+    //     }
+    //
+    //     return this.body
+    // }
+    //
+    // createElement(tagName, props) {
+    //     return new Element(tagName, props)
+    // }
+    //
+    // createComment(text) {
+    //     return new Comment(text)
+    // }
 }
 
-const DEFAULT_TAG_NAME = 'label';
+class Element {
 
-class Element extends VNode {
-    constructor(type = DEFAULT_TAG_NAME, props, isExtended) {
-        super(type, props);
-        const XElement = elementTypes[type];
-        if (XElement && !isExtended) {
-            return new XElement(props)
-        }
-        props = props || {};
-        this.nodeType = 1;
-        this.nodeId = uniqueId();
-        this.ref = this.nodeId;
-        this.type = type;
-        this.attr = props.attr || {};
-        this.style = props.style || {};
-        this.classStyle = props.classStyle || {};
-        this.event = {};
-        this.children = [];
-        this.pureChildren = [];
+    constructor(type) {
+        const LabelModule = require('tns-core-modules/ui/label');
+        console.log('new element');
+        return new LabelModule.Label()
     }
-
-    setAttr(key, value) {
-        if (this.attr[key] === value) {
-            return
-        }
-
-        this.attr[key] = value;
-    }
-
-    appendChild(node) {
-        if (node.parentNode && node.parentNode !== this) {
-            return
-        }
-
-        if (!node.parentNode) {
-            node.parentNode = this;
-            this.children.push(node);
-        }
-    }
+    // constructor(type = DEFAULT_TAG_NAME, props, isExtended) {
+    //     super(type, props)
+    //     const XElement = elementTypes[type]
+    //     if (XElement && !isExtended) {
+    //         return new XElement(props)
+    //     }
+    //     props = props || {}
+    //     this.nodeType = 1
+    //     this.nodeId = uniqueId()
+    //     this.ref = this.nodeId
+    //     this.type = type
+    //     this.attr = props.attr || {}
+    //     this.style = props.style || {}
+    //     this.classStyle = props.classStyle || {}
+    //     this.event = {}
+    //     this.children = []
+    //     this.pureChildren = []
+    // }
+    //
+    // setAttr(key, value) {
+    //     if (this.attr[key] === value) {
+    //         return
+    //     }
+    //
+    //     this.attr[key] = value
+    // }
+    //
+    // appendChild(node) {
+    //     if (node.parentNode && node.parentNode !== this) {
+    //         return
+    //     }
+    //
+    //     if (!node.parentNode) {
+    //         node.parentNode = this
+    //         this.children.push(node)
+    //     }
+    // }
 }
 class Comment {
 }

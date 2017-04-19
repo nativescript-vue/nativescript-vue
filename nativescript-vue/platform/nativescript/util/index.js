@@ -20,4 +20,5 @@ export function isUnknownElement(el) {
 
 export function query(el, document) {
     // todo
+    console.log('query', el, document)
 }

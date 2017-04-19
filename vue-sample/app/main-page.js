@@ -2,20 +2,22 @@ const Page = require('tns-core-modules/ui/page').Page
 
 function createPage() {
     let page = new Page()
-    page.addEventListener('loaded', onReady())
+    page.addEventListener('loaded', () => onReady(page))
     return page
 }
 exports.createPage = createPage
 
-function onReady() {
+function onReady(page) {
     const Vue = require('nativescript-vue')
+    Vue.prototype.$document = page
+
     const vm = new Vue({
         data: {
             msg: 'hi'
         },
 
         render(h) {
-            return h('app', [this.msg])
+            return h('label', [this.msg])
         },
 
         created() {
@@ -24,8 +26,9 @@ function onReady() {
 
         mounted() {
             console.log('mounted')
-            setTimeout(() => {
-                this.msg = 'changed'
+            let change = 1
+            setInterval(() => {
+                this.msg = 'changed ' + change++
             }, 1000)
         }
     }).$mount('#app')
