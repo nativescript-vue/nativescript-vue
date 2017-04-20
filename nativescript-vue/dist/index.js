@@ -2041,7 +2041,6 @@ function lifecycleMixin (Vue) {
     // based on the rendering backend used.
     if (!prevVnode) {
       // initial render
-        console.log('[Vue] Initial render');
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
         vm.$options._parentElm,
@@ -4219,9 +4218,7 @@ function appendChild(node, child) {
         node.appendChild(child);
     } catch (e) {
         console.log('>>> ', e);
-        const ViewBase = require('tns-core-modules/ui/core/view-base').ViewBase;
 
-        console.dir(child.view instanceof ViewBase);
         // console.log('>>', console.createDump(e))
     }
 }
@@ -5152,46 +5149,46 @@ function isKnownView(elementName) {
     return elementMap.has(elementName.toLowerCase())
 }
 
-// registerElement("stack-layout", () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout);
-// registerElement("Label", () => require("tns-core-modules/ui/label").Label);
-// registerElement("Button", () => require("tns-core-modules/ui/button").Button);
-// registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
+// registerElement("stack-layout", () => require('ui/layouts/stack-layout').StackLayout);
+// registerElement("Label", () => require("ui/label").Label);
+// registerElement("Button", () => require("ui/button").Button);
+// registerElement("TextField", () => require("ui/text-field").TextField);
 
-registerElement("AbsoluteLayout", () => require("tns-core-modules/ui/layouts/absolute-layout").AbsoluteLayout);
-registerElement("ActivityIndicator", () => require("tns-core-modules/ui/activity-indicator").ActivityIndicator);
-registerElement("Border", () => require("tns-core-modules/ui/border").Border);
-registerElement("Button", () => require("tns-core-modules/ui/button").Button);
-registerElement("ContentView", () => require("tns-core-modules/ui/content-view").ContentView);
-registerElement("DatePicker", () => require("tns-core-modules/ui/date-picker").DatePicker);
-registerElement("DockLayout", () => require("tns-core-modules/ui/layouts/dock-layout").DockLayout);
-registerElement("GridLayout", () => require("tns-core-modules/ui/layouts/grid-layout").GridLayout);
-registerElement("HtmlView", () => require("tns-core-modules/ui/html-view").HtmlView);
-registerElement("Image", () => require("tns-core-modules/ui/image").Image);
-registerElement("img", () => require("tns-core-modules/ui/image").Image);
-registerElement("Label", () => require("tns-core-modules/ui/label").Label);
-registerElement("ListPicker", () => require("tns-core-modules/ui/list-picker").ListPicker);
-registerElement("ListView", () => require("tns-core-modules/ui/list-view").ListView);
-registerElement("Page", () => require("tns-core-modules/ui/page").Page);
-registerElement("Placeholder", () => require("tns-core-modules/ui/placeholder").Placeholder);
-registerElement("Progress", () => require("tns-core-modules/ui/progress").Progress);
-registerElement("ProxyViewContainer", () => require("tns-core-modules/ui/proxy-view-container").ProxyViewContainer);
-registerElement("Repeater", () => require("tns-core-modules/ui/repeater").Repeater);
-registerElement("ScrollView", () => require("tns-core-modules/ui/scroll-view").ScrollView);
-registerElement("SearchBar", () => require("tns-core-modules/ui/search-bar").SearchBar);
-registerElement("SegmentedBar", () => require("tns-core-modules/ui/segmented-bar").SegmentedBar);
-registerElement("SegmentedBarItem", () => require("tns-core-modules/ui/segmented-bar").SegmentedBarItem);
-registerElement("Slider", () => require("tns-core-modules/ui/slider").Slider);
-registerElement("StackLayout", () => require("tns-core-modules/ui/layouts/stack-layout").StackLayout);
-registerElement("FlexboxLayout", () => require("tns-core-modules/ui/layouts/flexbox-layout").FlexboxLayout);
-registerElement("Switch", () => require("tns-core-modules/ui/switch").Switch);
-registerElement("TabView", () => require("tns-core-modules/ui/tab-view").TabView);
-registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
-registerElement("TextView", () => require("tns-core-modules/ui/text-view").TextView);
-registerElement("TimePicker", () => require("tns-core-modules/ui/time-picker").TimePicker);
-registerElement("WebView", () => require("tns-core-modules/ui/web-view").WebView);
-registerElement("WrapLayout", () => require("tns-core-modules/ui/layouts/wrap-layout").WrapLayout);
-registerElement("FormattedString", () => require("tns-core-modules/text/formatted-string").FormattedString);
-registerElement("Span", () => require("tns-core-modules/text/span").Span);
+registerElement("AbsoluteLayout", () => require("ui/layouts/absolute-layout").AbsoluteLayout);
+registerElement("ActivityIndicator", () => require("ui/activity-indicator").ActivityIndicator);
+registerElement("Border", () => require("ui/border").Border);
+registerElement("Button", () => require("ui/button").Button);
+registerElement("ContentView", () => require("ui/content-view").ContentView);
+registerElement("DatePicker", () => require("ui/date-picker").DatePicker);
+registerElement("DockLayout", () => require("ui/layouts/dock-layout").DockLayout);
+registerElement("GridLayout", () => require("ui/layouts/grid-layout").GridLayout);
+registerElement("HtmlView", () => require("ui/html-view").HtmlView);
+registerElement("Image", () => require("ui/image").Image);
+registerElement("img", () => require("ui/image").Image);
+registerElement("Label", () => require("ui/label").Label);
+registerElement("ListPicker", () => require("ui/list-picker").ListPicker);
+registerElement("ListView", () => require("ui/list-view").ListView);
+registerElement("Page", () => require("ui/page").Page);
+registerElement("Placeholder", () => require("ui/placeholder").Placeholder);
+registerElement("Progress", () => require("ui/progress").Progress);
+registerElement("ProxyViewContainer", () => require("ui/proxy-view-container").ProxyViewContainer);
+registerElement("Repeater", () => require("ui/repeater").Repeater);
+registerElement("ScrollView", () => require("ui/scroll-view").ScrollView);
+registerElement("SearchBar", () => require("ui/search-bar").SearchBar);
+registerElement("SegmentedBar", () => require("ui/segmented-bar").SegmentedBar);
+registerElement("SegmentedBarItem", () => require("ui/segmented-bar").SegmentedBarItem);
+registerElement("Slider", () => require("ui/slider").Slider);
+registerElement("StackLayout", () => require("ui/layouts/stack-layout").StackLayout);
+registerElement("FlexboxLayout", () => require("ui/layouts/flexbox-layout").FlexboxLayout);
+registerElement("Switch", () => require("ui/switch").Switch);
+registerElement("TabView", () => require("ui/tab-view").TabView);
+registerElement("TextField", () => require("ui/text-field").TextField);
+registerElement("TextView", () => require("ui/text-view").TextView);
+registerElement("TimePicker", () => require("ui/time-picker").TimePicker);
+registerElement("WebView", () => require("ui/web-view").WebView);
+registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout);
+registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
+registerElement("Span", () => require("text/span").Span);
 
 const isReservedTag = makeMap('template', true);
 

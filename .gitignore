@@ -1,4 +1,5 @@
 .vscode
+npm-debug.log
 node_modules/
 vue-sample/platforms
 vue-sample/node_modules

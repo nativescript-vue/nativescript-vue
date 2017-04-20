@@ -43,8 +43,5 @@ export default {
             include: [path.resolve(__dirname, 'node_modules', 'vue') + '/**'],
         }),
     ],
-    external(id) {
-        return id.indexOf('tns-core-modules') !== -1
-    },
     banner
 };
