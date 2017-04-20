@@ -1,10 +1,5 @@
 import Vue from './index'
 
-function typof(v) {
-    let s = Object.prototype.toString.call(v)
-    return s.substring(8, s.length - 1).toLowerCase()
-}
-
 export const namespaceMap = {}
 
 export function createElement(tagName, vnode) {
@@ -39,22 +34,22 @@ export function removeChild(node, child) {
 
 export function appendChild(node, child) {
     console.log('appendChild')
-    // todo change this to append children to Element...
     try {
-        Vue.prototype.$document.addChild(child.view)
+        node.appendChild(child)
     } catch (e) {
-        console.log('>>', e)
+        console.log('>>> ', e)
+        // console.log('>>', console.createDump(e))
     }
 }
 
 export function parentNode(node) {
-    console.log('parentNode')
-    return node.parentNode
+    console.log('parentNode ' + node)
+    return node && node.parentNode
 }
 
 export function nextSibling(node) {
-    console.log('nextSibling')
-    return node.nextSibling
+    console.log('nextSibling ' + node)
+    return node && node.nextSibling
 }
 
 export function tagName(elementNode) {

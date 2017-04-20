@@ -1,14 +1,6 @@
-import TextNode from './runtime/text-node'
 import Vue from './runtime/index'
 
-const modules = {}
-const components = {}
-
-const renderer = {
-    TextNode,
-    modules,
-    components
-}
+const renderer = {}
 
 export function init(cfg) {
     renderer.Document = cfg.Document
@@ -16,7 +8,9 @@ export function init(cfg) {
     renderer.Comment = cfg.Comment
 
     Vue.renderer = renderer
-    Vue.prototype.$document = new renderer.Document
+    Vue.setDocument = (view) => {
+        Vue.prototype.$document = new renderer.Document(view)
+    }
 
     return Vue
 }

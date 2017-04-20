@@ -1,3 +1,4 @@
+.vscode
 node_modules/
 vue-sample/platforms
 vue-sample/node_modules

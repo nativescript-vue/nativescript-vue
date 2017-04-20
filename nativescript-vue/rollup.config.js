@@ -29,6 +29,7 @@ export default {
     format: 'cjs',
     dest: './dist/index.js',
     moduleName: 'NativeScript-Vue',
+    sourceMap: true,
 
     plugins: [
         flow(),

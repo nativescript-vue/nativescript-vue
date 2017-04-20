@@ -7,16 +7,6 @@
 
 'use strict';
 
-let latestNodeId = 1;
-
-function TextNode(text) {
-    this.instanceId = '';
-    this.nodeId = latestNodeId++;
-    this.parentNode = null;
-    this.nodeType = 3;
-    this.text = text;
-}
-
 /*  */
 
 /**
@@ -2033,6 +2023,7 @@ function lifecycleMixin (Vue) {
     // based on the rendering backend used.
     if (!prevVnode) {
       // initial render
+        console.log('[Vue] Initial render');
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
         vm.$options._parentElm,
@@ -4187,22 +4178,22 @@ function removeChild(node, child) {
 
 function appendChild(node, child) {
     console.log('appendChild');
-    // todo change this to append children to Element...
     try {
-        Vue$2.prototype.$document.addChild(child.view);
+        node.appendChild(child);
     } catch (e) {
-        console.log('>>', e);
+        console.log('>>> ', e);
+        // console.log('>>', console.createDump(e))
     }
 }
 
 function parentNode(node) {
-    console.log('parentNode');
-    return node.parentNode
+    console.log('parentNode ' + node);
+    return node && node.parentNode
 }
 
 function nextSibling(node) {
-    console.log('nextSibling');
-    return node.nextSibling
+    console.log('nextSibling ' + node);
+    return node && node.nextSibling
 }
 
 function tagName(elementNode) {
@@ -5053,11 +5044,11 @@ var baseModules = [
   directives
 ];
 
-const modules$1 = [attrs].concat(baseModules);
+const modules = [attrs].concat(baseModules);
 
 const patch = createPatchFunction({
     nodeOps,
-    modules: modules$1
+    modules
 });
 
 const elementMap = new Map;
@@ -5067,9 +5058,6 @@ class ViewMeta {
         this.skipAddToDom = options.skipAddToDom || false;
         this.isUnaryTag = options.isUnaryTag || false;
     }
-}
-
-class Div {
 }
 
 // class VueView extends View {
@@ -5122,7 +5110,7 @@ function isKnownView(elementName) {
     return elementMap.has(elementName.toLowerCase())
 }
 
-registerElement("div", () => Div);
+registerElement("stack-layout", () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout);
 registerElement("Label", () => require("tns-core-modules/ui/label").Label);
 registerElement("Button", () => require("tns-core-modules/ui/button").Button);
 registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
@@ -5153,17 +5141,11 @@ Vue$2.config.isUnknownElement = isUnknownElement;
 Vue$2.prototype.__patch__ = patch;
 
 Vue$2.prototype.$mount = function (el, hydrating) {
-    return mountComponent(this)
+    // mountComponent(this, query(el, Vue.renderer, this.$document), hydrating)
+    mountComponent(this, this.$document, hydrating);
 };
 
-const modules = {};
-const components = {};
-
-const renderer = {
-    TextNode,
-    modules,
-    components
-};
+const renderer = {};
 
 function init(cfg) {
     renderer.Document = cfg.Document;
@@ -5171,32 +5153,22 @@ function init(cfg) {
     renderer.Comment = cfg.Comment;
 
     Vue$2.renderer = renderer;
-    Vue$2.prototype.$document = new renderer.Document;
+    Vue$2.setDocument = (view) => {
+        Vue$2.prototype.$document = new renderer.Document(view);
+    };
 
     return Vue$2
 }
 
-class Document  {
+class ViewNode {
 
-    constructor(page) {
-        this.view = page;
-    }
-}
-
-class Element {
-
-    constructor(type) {
-        console.log('Element constructor for', type);
-
-        this.type = type;
+    constructor() {
+        this.type = null;
         this.parentNode = null;
         this.nextSibling = null;
-        this.meta = getViewMeta(type);
-
-        const viewClass = getViewClass(type);
-        this.view = new viewClass;
-
-        console.log('Element object ' + type);
+        this.meta = getViewMeta('view-node');
+        this.view = null;
+        this.elm = {};
     }
 
     setAttr(key, val) {
@@ -5208,19 +5180,82 @@ class Element {
         this.view[key] = val;
     }
 
-    insertBefore() {
-        // Todo
+    hasAttribute() {
+        console.log('hasAttribute');
     }
 
-    appendChild() {
+    setAttribute() {
+        console.log('setAttribute');
+    }
+
+    insertBefore() {
         // Todo
+        console.log('[Element] insertBefore');
+    }
+
+    appendChild(child) {
+        console.log('[Element] appendChild ' + this.type);
+        if (child.meta.skipAddToDom) {
+            console.log('skipping adding to dom');
+            return
+        }
+
+        if ('addChild' in this.view) {
+            return this.view.addChild(child.view)
+        }
+
+        throw new Error(`Cant append child to ${this.type}`)
     }
 
     removeChild() {
-        // Todo
+        console.log('[Element] removeChild');
     }
 }
-class Comment {
+
+class Document extends ViewNode {
+
+    constructor(page) {
+        super();
+        this.type = 'document';
+        this.view = page;
+        this.elm = {
+            parentNode: this
+        };
+
+        console.log('Created new Document element.');
+    }
+
+    appendChild(node) {
+        console.log('[Document] appendChild ' + node.type);
+        this.view.content = node.view;
+    }
+}
+
+class Element extends ViewNode {
+    constructor(type) {
+        super();
+        console.log('Element constructor for', type);
+
+        this.type = type;
+        this.meta = getViewMeta(type);
+
+        try {
+            const viewClass = getViewClass(type);
+            this.elm = this.view = new viewClass;
+        } catch (e) {
+            console.log(`Failed to instantiate View class for ${type}. ${e}`);
+        }
+
+        console.log('Element object ' + type);
+    }
+}
+
+class Comment extends ViewNode {
+    constructor() {
+        super();
+        this.type = 'comment';
+        this.meta.skipAddToDom = true;
+    }
 }
 
 var index = init({
@@ -5230,3 +5265,4 @@ var index = init({
 });
 
 module.exports = index;
+//# sourceMappingURL=index.js.map

@@ -7,9 +7,6 @@ class ViewMeta {
     }
 }
 
-class Div {
-}
-
 // class VueView extends View {
 //     constructor(name, meta) {
 //         super()
@@ -60,7 +57,7 @@ export function isKnownView(elementName) {
     return elementMap.has(elementName.toLowerCase())
 }
 
-registerElement("div", () => Div);
+registerElement("stack-layout", () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout);
 registerElement("Label", () => require("tns-core-modules/ui/label").Label);
 registerElement("Button", () => require("tns-core-modules/ui/button").Button);
 registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);

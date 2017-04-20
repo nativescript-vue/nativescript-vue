@@ -22,7 +22,6 @@ export function isUnknownElement(el) {
     return !isKnownView(el)
 }
 
-export function query(el, document) {
-    // todo
-    console.log('query', el, document)
+export function query(el, renderer, document) {
+    // Todo
 }
