@@ -3,9 +3,13 @@ const Page = require('tns-core-modules/ui/page').Page
 // otherwise works as expected
 // Same require statement is run inside the element-registry.js (when required in this file)
 // so it gets resolved, and it's not bundled.
+const ViewBase = require('tns-core-modules/ui/core/view-base').ViewBase
+const GridLayout = require("tns-core-modules/ui/layouts/grid-layout").GridLayout
 require('tns-core-modules/ui/layouts/stack-layout').StackLayout
 require('tns-core-modules/ui/label').Label
 require('tns-core-modules/ui/button').Button
+require('tns-core-modules/ui/switch').Switch
+console.log(new GridLayout instanceof ViewBase)
 
 function createPage() {
     let page = new Page()
@@ -34,6 +38,10 @@ function onReady(page) {
                     h('button', {attrs: {text: 'Foo'}}),
                     h('button', {attrs: {text: 'Bar'}}),
                     h('button', {attrs: {text: 'Baz'}})
+                ]),
+                h('grid-layout', {attrs: {rows: 'auto auto', columns: '* *'}}, [
+                    'test',
+                    h('switch')
                 ])
             ])
         },

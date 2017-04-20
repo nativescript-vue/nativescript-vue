@@ -38,6 +38,9 @@ export function appendChild(node, child) {
         node.appendChild(child)
     } catch (e) {
         console.log('>>> ', e)
+        const ViewBase = require('tns-core-modules/ui/core/view-base').ViewBase
+
+        console.dir(child.view instanceof ViewBase)
         // console.log('>>', console.createDump(e))
     }
 }

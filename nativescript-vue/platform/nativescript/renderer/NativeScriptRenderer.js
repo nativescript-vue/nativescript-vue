@@ -1,4 +1,4 @@
-import {getViewClass, getViewMeta} from '../../../element-registry'
+import {getViewClass, getViewMeta} from '../element-registry'
 
 class ViewNode {
 
@@ -13,11 +13,11 @@ class ViewNode {
 
     setAttr(key, val) {
         console.log(`setAttr on ${this.type} [${this.view._domId}]: ${key} = ${val}`)
-        if (!(key in this.view)) {
+        try {
+            this.view[key] = val
+        } catch (e) {
             throw new Error(`Element ${this.type} has no property ${key}.`)
         }
-
-        this.view[key] = val
     }
 
     hasAttribute() {
