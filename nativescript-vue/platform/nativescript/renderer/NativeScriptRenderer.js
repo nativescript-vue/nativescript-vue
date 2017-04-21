@@ -29,7 +29,7 @@ class ViewNode {
     }
 
     removeEvent(evt) {
-        // todo
+        this.view.off(evt)
     }
 
     insertBefore() {
