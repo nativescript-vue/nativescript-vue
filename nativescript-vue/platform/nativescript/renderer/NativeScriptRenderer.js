@@ -2,6 +2,7 @@ import {getViewClass, getViewMeta} from '../element-registry'
 import {ContentView} from 'ui/content-view'
 import {LayoutBase} from 'ui/layouts/layout-base'
 import {TextBase} from 'ui/text-base'
+import {Color} from 'ui/styling/style'
 
 class ViewNode {
 
@@ -23,9 +24,21 @@ class ViewNode {
         }
     }
 
+    addEvent(evt, handler) {
+        this.view.on(evt, handler)
+    }
+
+    removeEvent(evt) {
+        // todo
+    }
+
     insertBefore() {
         // Todo
         console.log('[Element] insertBefore')
+    }
+
+    setStyle(prop, val) {
+        this.view.style[prop] = val
     }
 
     appendChild(child) {

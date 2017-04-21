@@ -26,9 +26,15 @@ function onReady(page) {
                     h('label', {attrs: {text: 'test1'}}), // same as this
                     h('label', [this.msg]), // or even this!
                     h('stack-layout', {attrs: {orientation: 'horizontal'}}, [
-                        h('button', {attrs: {text: 'Foo'}}),
-                        h('button', {attrs: {text: 'Bar'}}),
-                        h('button', {attrs: {text: 'Baz'}})
+                        h('button', {attrs: {text: 'Foo'}, on: {tap: this.onTap}}),
+                        h('button', {
+                            attrs: {text: 'Bar'}, on: {
+                                tap: () => {
+                                    this.msg = 'BAR'
+                                }
+                            }
+                        }),
+                        h('button', {attrs: {text: 'Baz'}, style: {color: 'red', backgroundColor: 'cyan'}})
                     ]),
                     h('stack-layout', {attrs: {orientation: 'horizontal'}}, [
                         h('label', {attrs: {text: 'Label for Switch'}}),
@@ -52,10 +58,12 @@ function onReady(page) {
 
         mounted() {
             console.log('mounted')
-            let change = 1
-            setInterval(() => {
-                this.msg = 'changed ' + change++
-            }, 1000)
+        },
+
+        methods: {
+            onTap(e) {
+                alert('YOU HAVE TAPPED ME!')
+            }
         }
     }).$mount()
 }

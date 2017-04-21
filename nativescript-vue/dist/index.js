@@ -10,6 +10,7 @@
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
 var ui_textBase = require('ui/text-base');
+require('ui/styling/style');
 
 /*  */
 
@@ -4934,6 +4935,130 @@ var attrs = {
     update: updateAttrs
 };
 
+let target$1;
+
+function add$1 (
+    event,
+    handler,
+    once,
+    capture
+) {
+    if (capture) {
+        console.log('bubble phase not supported');
+        return
+    }
+    if (once) {
+        const oldHandler = handler;
+        const _target = target$1; // save current target element in closure
+        handler = function (ev) {
+            const res = arguments.length === 1
+                ? oldHandler(ev)
+                : oldHandler.apply(null, arguments);
+            if (res !== null) {
+                remove$2(event, null, null, _target);
+            }
+        };
+    }
+    target$1.addEvent(event, handler);
+}
+
+function remove$2 (
+    event,
+    handler,
+    capture,
+    _target
+) {
+    (_target || target$1).removeEvent(event);
+}
+
+function updateDOMListeners (oldVnode, vnode) {
+    if (!oldVnode.data.on && !vnode.data.on) {
+        return
+    }
+    const on = vnode.data.on || {};
+    const oldOn = oldVnode.data.on || {};
+    target$1 = vnode.elm;
+    updateListeners(on, oldOn, add$1, remove$2, vnode.context);
+}
+
+var events = {
+    create: updateDOMListeners,
+    update: updateDOMListeners
+};
+
+/*  */
+
+const normalize = cached(camelize);
+
+function createStyle (oldVnode, vnode) {
+    if (!vnode.data.staticStyle) {
+        updateStyle(oldVnode, vnode);
+        return
+    }
+    const elm = vnode.elm;
+    const staticStyle = vnode.data.staticStyle;
+    for (const name in staticStyle) {
+        if (staticStyle[name]) {
+            elm.setStyle(normalize(name), staticStyle[name]);
+        }
+    }
+    updateStyle(oldVnode, vnode);
+}
+
+function updateStyle (oldVnode, vnode) {
+    if (!oldVnode.data.style && !vnode.data.style) {
+        return
+    }
+    let cur, name;
+    const elm = vnode.elm;
+    const oldStyle= oldVnode.data.style || {};
+    let style= vnode.data.style || {};
+
+    const needClone = style.__ob__;
+
+    // handle array syntax
+    if (Array.isArray(style)) {
+        style = vnode.data.style = toObject$1(style);
+    }
+
+    // clone the style for future updates,
+    // in case the user mutates the style object in-place.
+    if (needClone) {
+        style = vnode.data.style = extend({}, style);
+    }
+
+    for (name in oldStyle) {
+        if (!style[name]) {
+            elm.setStyle(normalize(name), '');
+        }
+    }
+    for (name in style) {
+        cur = style[name];
+        elm.setStyle(normalize(name), cur);
+    }
+}
+
+function toObject$1 (arr) {
+    const res = {};
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i]) {
+            extend(res, arr[i]);
+        }
+    }
+    return res
+}
+
+var style = {
+    create: createStyle,
+    update: updateStyle
+};
+
+var platformModules = [
+    attrs,
+    events,
+    style
+];
+
 /*  */
 
 var directives = {
@@ -5048,7 +5173,7 @@ var baseModules = [
   directives
 ];
 
-const modules = [attrs].concat(baseModules);
+const modules = platformModules.concat(baseModules);
 
 const patch = createPatchFunction({
     nodeOps,
@@ -5222,9 +5347,21 @@ class ViewNode {
         }
     }
 
+    addEvent(evt, handler) {
+        this.view.on(evt, handler);
+    }
+
+    removeEvent(evt) {
+        // todo
+    }
+
     insertBefore() {
         // Todo
         console.log('[Element] insertBefore');
+    }
+
+    setStyle(prop, val) {
+        this.view.style[prop] = val;
     }
 
     appendChild(child) {

@@ -43,5 +43,8 @@ export default {
             include: [path.resolve(__dirname, 'node_modules', 'vue') + '/**'],
         }),
     ],
+    external(id) {
+        return id.startsWith('ui/')
+    },
     banner
 };
