@@ -20,8 +20,11 @@ const resolveVue = p => {
 const aliases = {
     vue: resolveVue('core/index'),
     compiler: resolveVue('compiler'),
+    web: resolveVue('platforms/web'),
     core: resolveVue('core'),
     shared: resolveVue('shared'),
+    sfc: resolveVue('sfc'),
+    he: path.resolve(__dirname, 'platform/nativescript/util/entity-decoder')
 }
 
 export default {

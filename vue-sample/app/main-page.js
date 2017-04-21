@@ -18,7 +18,21 @@ function onReady(page) {
             msg: 'hi'
         },
 
-        render(h) {
+        template: `
+            <scroll-view>
+                <stack-layout>
+                    <label>{{msg}}</label>
+                    <label>##{{msg}}##</label>
+                    <stack-layout orientation="horizontal">
+                        <button text="Foo"></button>
+                        <button text="Bar" @tap="onTap"></button>
+                        <button text="Baz" style="color: red;"></button>
+                    </stack-layout>
+                </stack-layout>
+            </scroll-view>
+        `,
+
+        _render(h) {
             console.log('render')
             return h('scroll-view', [
                 h('stack-layout', [
