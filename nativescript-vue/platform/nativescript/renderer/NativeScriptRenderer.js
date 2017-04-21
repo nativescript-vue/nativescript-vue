@@ -1,4 +1,7 @@
 import {getViewClass, getViewMeta} from '../element-registry'
+import {ContentView} from 'ui/content-view'
+import {LayoutBase} from 'ui/layouts/layout-base'
+import {TextBase} from 'ui/text-base'
 
 class ViewNode {
 
@@ -20,14 +23,6 @@ class ViewNode {
         }
     }
 
-    hasAttribute() {
-        console.log('hasAttribute')
-    }
-
-    setAttribute() {
-        console.log('setAttribute')
-    }
-
     insertBefore() {
         // Todo
         console.log('[Element] insertBefore')
@@ -40,11 +35,19 @@ class ViewNode {
             return
         }
 
-        if ('addChild' in this.view) {
+        if (this.view instanceof LayoutBase) {
             return this.view.addChild(child.view)
         }
+        if (this.view instanceof ContentView) {
+            return this.view.content = child.view
+        }
+        if ((this.view instanceof TextBase) && (child.view instanceof TextBase)) {
+            this.view = child.view
+            return this.setAttr('text', child.view.text)
+        }
 
-        throw new Error(`Cant append child to ${this.type}`)
+
+        console.log(`Cant append child to ${this.type}`)
     }
 
     removeChild() {

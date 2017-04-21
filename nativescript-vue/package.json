@@ -37,6 +37,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-resolve-aliases": "^0.2.0",
-    "rollup-watch": "^3.2.2"
+    "rollup-watch": "^3.2.2",
+    "tns-core-modules": "^3.0.0-rc.2"
   }
 }
