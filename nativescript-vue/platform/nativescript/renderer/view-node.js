@@ -45,6 +45,14 @@ export default class ViewNode {
         }
     }
 
+    setText(text) {
+        if (this.type === 'detached-text') {
+            this.parent.setText(text)
+        } else {
+            this.setAttr('text', text)
+        }
+    }
+
     addEvent(evt, handler) {
         this.view.on(evt, handler)
     }
@@ -93,7 +101,7 @@ export default class ViewNode {
             }
         } else if (isTextView(this.view)) {
             child.view.parent = this.view
-            this.setAttr('text', child.view.text)
+            this.setText(child.view.text)
         } else {
             child.parent = null
             console.log(`Cant append child to ${this.type}`)

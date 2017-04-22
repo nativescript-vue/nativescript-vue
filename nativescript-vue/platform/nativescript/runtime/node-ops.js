@@ -75,7 +75,7 @@ export function tagName(elementNode) {
 export function setTextContent(node, text) {
     console.log(`{NSVue} -> SetTextContent(${node}, ${text})`)
 
-    node.setAttr('text', text)
+    node.setText(text)
 }
 
 export function setAttribute(nodeElement, key, val) {

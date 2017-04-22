@@ -6468,7 +6468,7 @@ function tagName(elementNode) {
 function setTextContent(node, text) {
     console.log(`{NSVue} -> SetTextContent(${node}, ${text})`);
 
-    node.setAttr('text', text);
+    node.setText(text);
 }
 
 function setAttribute(nodeElement, key, val) {
@@ -7543,6 +7543,14 @@ class ViewNode {
         }
     }
 
+    setText(text) {
+        if (this.type === 'detached-text') {
+            this.parent.setText(text);
+        } else {
+            this.setAttr('text', text);
+        }
+    }
+
     addEvent(evt, handler) {
         this.view.on(evt, handler);
     }
@@ -7591,7 +7599,7 @@ class ViewNode {
             }
         } else if (isTextView(this.view)) {
             child.view.parent = this.view;
-            this.setAttr('text', child.view.text);
+            this.setText(child.view.text);
         } else {
             child.parent = null;
             console.log(`Cant append child to ${this.type}`);
