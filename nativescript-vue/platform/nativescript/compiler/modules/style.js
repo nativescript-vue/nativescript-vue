@@ -1,5 +1,3 @@
-/* @flow */
-
 import { cached, camelize } from 'shared/util'
 import { parseText } from 'compiler/parser/text-parser'
 import {

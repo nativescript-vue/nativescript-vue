@@ -14,13 +14,14 @@ export function createElementNS(namespace, tagName) {
 
 export function createTextNode(text) {
     console.log(`{NSVue} -> CreateTextNode(${text})`)
-    let node = new Vue.renderer.Element('label')
+    let node = new Vue.renderer.Element('detached-text')
     node.setAttr('text', text)
     return node
 }
 
 export function createComment(text) {
     console.log(`{NSVue} -> CreateComment(${text})`)
+
     return new Vue.renderer.Comment(text)
 }
 
@@ -56,13 +57,13 @@ export function appendChild(node, child) {
 export function parentNode(node) {
     console.log(`{NSVue} -> ParentNode(${node})`)
 
-    return node && node.parentNode ? node.parentNode : null
+    return node.parentNode()
 }
 
 export function nextSibling(node) {
     console.log(`{NSVue} -> NextSibling(${node})`)
 
-    return node && node.nextSibling ? node.nextSibling : null
+    return node.nextSibling()
 }
 
 export function tagName(elementNode) {

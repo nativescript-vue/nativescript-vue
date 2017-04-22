@@ -1,10 +1,9 @@
-/* @flow */
-
-import { extend, cached, camelize } from 'shared/util'
+import {extend, cached, camelize} from 'shared/util'
 
 const normalize = cached(camelize)
 
-function createStyle (oldVnode, vnode) {
+function createStyle(oldVnode, vnode) {
+    // console.log(`\t\t ===> createStyle(${oldVnode}, ${vnode})`)
     if (!vnode.data.staticStyle) {
         updateStyle(oldVnode, vnode)
         return
@@ -19,14 +18,14 @@ function createStyle (oldVnode, vnode) {
     updateStyle(oldVnode, vnode)
 }
 
-function updateStyle (oldVnode, vnode) {
+function updateStyle(oldVnode, vnode) {
     if (!oldVnode.data.style && !vnode.data.style) {
         return
     }
     let cur, name
     const elm = vnode.elm
-    const oldStyle= oldVnode.data.style || {}
-    let style= vnode.data.style || {}
+    const oldStyle = oldVnode.data.style || {}
+    let style = vnode.data.style || {}
 
     const needClone = style.__ob__
 
@@ -52,7 +51,7 @@ function updateStyle (oldVnode, vnode) {
     }
 }
 
-function toObject (arr) {
+function toObject(arr) {
     const res = {}
     for (var i = 0; i < arr.length; i++) {
         if (arr[i]) {

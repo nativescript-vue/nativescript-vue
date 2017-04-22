@@ -100,4 +100,10 @@ registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
 registerElement("Span", () => require("text/span").Span)
 
+registerElement('DetachedContainer', () => require('ui/proxy-view-container').ProxyViewContainer, {
+    skipAddToDom: true
+})
+registerElement("DetachedText", () => require("ui/placeholder").Placeholder, new ViewMeta({
+    skipAddToDom: true
+}))
 registerElement("Comment", () => require("ui/placeholder").Placeholder)

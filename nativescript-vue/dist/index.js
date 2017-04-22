@@ -9,6 +9,7 @@
 
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
+var ui_core_view = require('ui/core/view');
 var ui_textBase = require('ui/text-base');
 
 /*  */
@@ -6173,8 +6174,6 @@ function createCompiler (baseOptions) {
   }
 }
 
-/*  */
-
 const normalize = cached(camelize);
 
 function transformNode (el, options) {
@@ -6351,6 +6350,12 @@ registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
 registerElement("Span", () => require("text/span").Span);
 
+registerElement('DetachedContainer', () => require('ui/proxy-view-container').ProxyViewContainer, {
+    skipAddToDom: true
+});
+registerElement("DetachedText", () => require("ui/placeholder").Placeholder, new ViewMeta({
+    skipAddToDom: true
+}));
 registerElement("Comment", () => require("ui/placeholder").Placeholder);
 
 const isReservedTag = makeMap('template', true);
@@ -6402,13 +6407,14 @@ function createElementNS(namespace, tagName) {
 
 function createTextNode(text) {
     console.log(`{NSVue} -> CreateTextNode(${text})`);
-    let node = new Vue$2.renderer.Element('label');
+    let node = new Vue$2.renderer.Element('detached-text');
     node.setAttr('text', text);
     return node
 }
 
 function createComment(text) {
     console.log(`{NSVue} -> CreateComment(${text})`);
+
     return new Vue$2.renderer.Comment(text)
 }
 
@@ -6444,13 +6450,13 @@ function appendChild(node, child) {
 function parentNode(node) {
     console.log(`{NSVue} -> ParentNode(${node})`);
 
-    return node && node.parentNode ? node.parentNode : null
+    return node.parentNode()
 }
 
 function nextSibling(node) {
     console.log(`{NSVue} -> NextSibling(${node})`);
 
-    return node && node.nextSibling ? node.nextSibling : null
+    return node.nextSibling()
 }
 
 function tagName(elementNode) {
@@ -7241,11 +7247,10 @@ var events = {
     update: updateDOMListeners
 };
 
-/*  */
-
 const normalize$1 = cached(camelize);
 
-function createStyle (oldVnode, vnode) {
+function createStyle(oldVnode, vnode) {
+    // console.log(`\t\t ===> createStyle(${oldVnode}, ${vnode})`)
     if (!vnode.data.staticStyle) {
         updateStyle(oldVnode, vnode);
         return
@@ -7260,14 +7265,14 @@ function createStyle (oldVnode, vnode) {
     updateStyle(oldVnode, vnode);
 }
 
-function updateStyle (oldVnode, vnode) {
+function updateStyle(oldVnode, vnode) {
     if (!oldVnode.data.style && !vnode.data.style) {
         return
     }
     let cur, name;
     const elm = vnode.elm;
-    const oldStyle= oldVnode.data.style || {};
-    let style= vnode.data.style || {};
+    const oldStyle = oldVnode.data.style || {};
+    let style = vnode.data.style || {};
 
     const needClone = style.__ob__;
 
@@ -7293,7 +7298,7 @@ function updateStyle (oldVnode, vnode) {
     }
 }
 
-function toObject$1 (arr) {
+function toObject$1(arr) {
     const res = {};
     for (var i = 0; i < arr.length; i++) {
         if (arr[i]) {
@@ -7484,12 +7489,24 @@ function init(cfg) {
     return Vue$2
 }
 
+function isView(view) {
+    return view instanceof ui_core_view.View
+}
+function isLayout(view) {
+    return view instanceof ui_layouts_layoutBase.LayoutBase
+}
+function isContentView(view) {
+    return view instanceof ui_contentView.ContentView
+}
+function isTextView(view) {
+    return view instanceof ui_textBase.TextBase
+}
+
 class ViewNode {
 
     constructor() {
         this.type = null;
-        this.parentNode = null;
-        this.nextSibling = null;
+        this.parent = null;
         this.meta = getViewMeta('view-node');
         this.view = null;
         this.elm = {};
@@ -7497,6 +7514,25 @@ class ViewNode {
 
     toString() {
         return `${this.type}(${this.view ? this.view : '-'})`
+    }
+
+    parentNode() {
+        return this.parent
+    }
+
+    nextSibling(node) {
+        let index = 0;
+        let found = false;
+        this.view.eachChild(child => {
+            if (child === node.view) {
+                found = true;
+            }
+
+            index += 1;
+            return !found;
+        });
+
+        return found ? index : -1;
     }
 
     setAttr(key, val) {
@@ -7521,59 +7557,65 @@ class ViewNode {
     }
 
     setStyle(prop, val) {
+        console.log(`{NSR} -> ${this}.setStyle(${prop}, ${val})`);
         if (!(val = val.trim()).length) {
             return
         }
         if (prop.endsWith('Align')) {
-            // Nativescript uses Alignment instead of Align, this ensures that text-align works
+            // NativeScript uses Alignment instead of Align, this ensures that text-align works
             prop += 'ment';
         }
         this.view.style[prop] = val;
     }
 
     appendChild(child, atIndex = -1) {
-        if (child.meta.skipAddToDom) {
-            return
-        }
-
-        if (this.view instanceof ui_layouts_layoutBase.LayoutBase) {
-            if (child.parentNode === this) {
+        child.parent = this;
+        if (isLayout(this.view)) {
+            if (child.view.parent === this.view) {
                 let index = this.view.getChildIndex(child.view);
 
                 if (index !== -1) {
                     this.removeChild(child);
                 }
             }
-            child.parentNode = this;
             if (atIndex !== -1) {
-                return this.view.insertChild(child.view, atIndex)
+                this.view.insertChild(child.view, atIndex);
+            } else {
+                this.view.addChild(child.view);
             }
-            return this.view.addChild(child.view)
-        }
-        if (this.view instanceof ui_contentView.ContentView) {
-            child.parentNode = this;
+        } else if (isContentView(this.view)) {
             if (child.type === 'comment') {
-                return this.view._addView(child.view, atIndex)
+                this.view._addView(child.view, atIndex);
+            } else {
+                this.view.content = child.view;
             }
-            return this.view.content = child.view
+        } else if (isTextView(this.view)) {
+            child.view.parent = this.view;
+            this.setAttr('text', child.view.text);
+        } else {
+            child.parent = null;
+            console.log(`Cant append child to ${this.type}`);
         }
-        if ((this.view instanceof ui_textBase.TextBase) && (child.view instanceof ui_textBase.TextBase)) {
-            child.parentNode = this;
-            return this.setAttr('text', child.view.text)
-        }
-
-
-        console.log(`Cant append child to ${this.type}`);
     }
 
     removeChild(child) {
-        if (this.view instanceof ui_layouts_layoutBase.LayoutBase) {
-            child.parentNode = null;
-            return this.view.removeChild(child.view)
-        }
-        if (this.view instanceof ui_contentView.ContentView) {
-            child.parentNode = null;
-            return this.view.content = null
+        let childParent = child.parent;
+        child.parent = null;
+        if (isLayout(this.view)) {
+            this.view.removeChild(child.view);
+        } else if (isContentView(this.view)) {
+            if (this.view.content === child.view.content) {
+                this.view.content = null;
+            }
+
+            if (child.type === 'comment') {
+                this.view._removeView(child.view);
+            }
+        } else if (isView(this.view)) {
+            this.view._removeView(child.view);
+        } else {
+            child.parent = childParent;
+            console.log(`Cant remove child from ${this.type}`);
         }
     }
 }
@@ -7584,18 +7626,29 @@ class Document extends ViewNode {
         super();
         this.type = 'document';
         this.view = page;
+        let plView;
+        try {
+            const viewClass = getViewClass('detached-container');
+            plView = new viewClass;
+        } catch (e) {
+            console.log(`Failed to instantiate View class for ${type}. ${e}`);
+        }
         this.elm = {
+            toString: () => 'placeholder',
             type: 'placeholder',
-            parentNode: this
+            view: plView,
+            elm: plView,
+            parentNode: () => this,
+            nextSibling: () => null
         };
-    }
-
-    removeChild(child) {
-        // do nothing
     }
 
     insertBefore(newNode, referenceNode) {
         this.appendChild(newNode);
+    }
+
+    removeChild(child) {
+        // do nothing
     }
 }
 
@@ -7618,12 +7671,13 @@ class Comment extends ViewNode {
     constructor() {
         super();
         this.type = 'comment';
+        this.meta = getViewMeta(this.type);
 
         try {
             const viewClass = getViewClass(this.type);
             this.elm = this.view = new viewClass;
         } catch (e) {
-            console.log(`Failed to instantiate View class for ${type}. ${e}`);
+            console.log(`Failed to instantiate View class for ${this.type}. ${e}`);
         }
     }
 }
