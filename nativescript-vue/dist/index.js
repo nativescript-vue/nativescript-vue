@@ -395,7 +395,6 @@ function parsePath (path) {
 /*  */
 /* globals MutationObserver */
 
-// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -950,11 +949,6 @@ function dependArray (value) {
 
 /*  */
 
-/**
- * Option overwriting strategies are functions that handle
- * how to merge a parent option value and a child option
- * value into the final value.
- */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -1754,18 +1748,6 @@ function mergeVNodeHook (def, hookKey, hook) {
 
 /*  */
 
-// The template compiler attempts to minimize the need for normalization by
-// statically analyzing the template at compile time.
-//
-// For plain HTML markup, normalization can be completely skipped because the
-// generated render function is guaranteed to return Array<VNode>. There are
-// two cases where extra normalization is needed:
-
-// 1. When the children contains components - because a functional component
-// may return an Array instead of a single root. In this case, just a simple
-// normalization is needed - if any child is an Array, we flatten the whole
-// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
-// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -2937,7 +2919,6 @@ function stateMixin (Vue) {
 
 /*  */
 
-// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -3390,9 +3371,6 @@ function applyNS (vnode, ns) {
 
 /*  */
 
-/**
- * Runtime helper for rendering v-for lists.
- */
 function renderList (
   val,
   render
@@ -3421,9 +3399,6 @@ function renderList (
 
 /*  */
 
-/**
- * Runtime helper for rendering <slot>
- */
 function renderSlot (
   name,
   fallback,
@@ -3454,18 +3429,12 @@ function renderSlot (
 
 /*  */
 
-/**
- * Runtime helper for resolving filters
- */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
-/**
- * Runtime helper for checking keyCodes from config.
- */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -3481,9 +3450,6 @@ function checkKeyCodes (
 
 /*  */
 
-/**
- * Runtime helper for merging v-bind="object" into a VNode's data.
- */
 function bindObjectProps (
   data,
   tag,
@@ -3521,9 +3487,6 @@ function bindObjectProps (
 
 /*  */
 
-/**
- * Runtime helper for rendering static trees.
- */
 function renderStatic (
   index,
   isInFor
@@ -4227,7 +4190,6 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
-// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -5567,7 +5529,6 @@ var baseDirectives = {
 
 /*  */
 
-// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -5969,8 +5930,6 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
-// these keywords should not appear inside expressions, but operators like
-// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -6319,7 +6278,7 @@ function registerElement(elementName, resolver, meta) {
     elementMap.set(elementName.toLowerCase(), entry);
     elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
 
-    console.log(`Element ${elementName} has been registered!`);
+    // console.log(`Element ${elementName} has been registered!`)
 }
 
 function getViewClass(elementName) {
@@ -6392,6 +6351,8 @@ registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
 registerElement("Span", () => require("text/span").Span);
 
+registerElement("Comment", () => require("ui/placeholder").Placeholder);
+
 const isReservedTag = makeMap('template', true);
 
 const canBeLeftOpenTag$1 = makeMap('', true);
@@ -6405,8 +6366,8 @@ function mustUseProp() {
     console.log('mustUseProp');
 }
 
-function getTagNamespace() {
-    console.log('getTagNamespace');
+function getTagNamespace(tag) {
+    // console.log('getTagNamespace ' + tag)
 }
 
 function isUnknownElement(el) {
@@ -6430,68 +6391,83 @@ const {compile, compileToFunctions} = createCompiler(baseOptions);
 const namespaceMap = {};
 
 function createElement$1(tagName, vnode) {
-    console.log('createElement', tagName);
+    console.log(`{NSVue} -> CreateElement(${tagName})`);
     return new Vue$2.renderer.Element(tagName)
 }
 
 function createElementNS(namespace, tagName) {
-    console.log('createElementNS', namespace, tagName);
+    console.log(`{NSVue} -> CreateElementNS(${namespace}#${tagName})`);
     return new Vue$2.renderer.Element(namespace + ':' + tagName)
 }
 
 function createTextNode(text) {
-    console.log('createTextNode', text);
+    console.log(`{NSVue} -> CreateTextNode(${text})`);
     let node = new Vue$2.renderer.Element('label');
     node.setAttr('text', text);
     return node
 }
 
 function createComment(text) {
-    console.log('createComment', text);
+    console.log(`{NSVue} -> CreateComment(${text})`);
     return new Vue$2.renderer.Comment(text)
 }
 
 function insertBefore(parentNode, newNode, referenceNode) {
-    console.log('insertBefore');
+    console.log(`{NSVue} -> InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`);
+    try {
+        parentNode.insertBefore(newNode, referenceNode);
+    } catch (e) {
+        console.log('IB>>> ', e);
+    }
 }
 
 function removeChild(node, child) {
-    console.log('removeChild');
+    console.log(`{NSVue} -> RemoveChild(${node}, ${child})`);
+
+    try {
+        node.removeChild(child);
+    } catch (e) {
+        console.log('RC>>> ', e);
+    }
 }
 
 function appendChild(node, child) {
-    console.log('appendChild');
+    console.log(`{NSVue} -> AppendChild(${node}, ${child})`);
+
     try {
         node.appendChild(child);
     } catch (e) {
-        console.log('>>> ', e);
-
-        // console.log('>>', console.createDump(e))
+        console.log('AC>>> ', e);
     }
 }
 
 function parentNode(node) {
-    console.log('parentNode ' + node);
-    return node && node.parentNode
+    console.log(`{NSVue} -> ParentNode(${node})`);
+
+    return node && node.parentNode ? node.parentNode : null
 }
 
 function nextSibling(node) {
-    console.log('nextSibling ' + node);
-    return node && node.nextSibling
+    console.log(`{NSVue} -> NextSibling(${node})`);
+
+    return node && node.nextSibling ? node.nextSibling : null
 }
 
 function tagName(elementNode) {
-    console.log('tagName');
+    console.log(`{NSVue} -> TagName(${elementNode})`);
+
     return elementNode.type
 }
 
 function setTextContent(node, text) {
-    console.log('setTextContent', text);
+    console.log(`{NSVue} -> SetTextContent(${node}, ${text})`);
+
     node.setAttr('text', text);
 }
 
 function setAttribute(nodeElement, key, val) {
-    console.log('setAttribute');
+    console.log(`{NSVue} -> SetAttribute(${nodeElement}, ${key}, ${val})`);
+
     nodeElement.setAttr(key, val);
 }
 
@@ -7519,8 +7495,11 @@ class ViewNode {
         this.elm = {};
     }
 
+    toString() {
+        return `${this.type}(${this.view ? this.view : '-'})`
+    }
+
     setAttr(key, val) {
-        console.log(`setAttr on ${this.type} [${this.view._domId}]: ${key} = ${val}`);
         try {
             this.view[key] = val;
         } catch (e) {
@@ -7536,30 +7515,50 @@ class ViewNode {
         this.view.off(evt);
     }
 
-    insertBefore() {
-        // Todo
-        console.log('[Element] insertBefore');
+    insertBefore(newNode, referenceNode) {
+        let index = referenceNode ? this.view.getChildIndex(referenceNode.view) : 0;
+        this.appendChild(newNode, index);
     }
 
     setStyle(prop, val) {
+        if (!(val = val.trim()).length) {
+            return
+        }
+        if (prop.endsWith('Align')) {
+            // Nativescript uses Alignment instead of Align, this ensures that text-align works
+            prop += 'ment';
+        }
         this.view.style[prop] = val;
     }
 
-    appendChild(child) {
-        console.log('[Element] appendChild ' + this.type);
+    appendChild(child, atIndex = -1) {
         if (child.meta.skipAddToDom) {
-            console.log('skipping adding to dom');
             return
         }
 
         if (this.view instanceof ui_layouts_layoutBase.LayoutBase) {
+            if (child.parentNode === this) {
+                let index = this.view.getChildIndex(child.view);
+
+                if (index !== -1) {
+                    this.removeChild(child);
+                }
+            }
+            child.parentNode = this;
+            if (atIndex !== -1) {
+                return this.view.insertChild(child.view, atIndex)
+            }
             return this.view.addChild(child.view)
         }
         if (this.view instanceof ui_contentView.ContentView) {
+            child.parentNode = this;
+            if (child.type === 'comment') {
+                return this.view._addView(child.view, atIndex)
+            }
             return this.view.content = child.view
         }
         if ((this.view instanceof ui_textBase.TextBase) && (child.view instanceof ui_textBase.TextBase)) {
-            this.view = child.view;
+            child.parentNode = this;
             return this.setAttr('text', child.view.text)
         }
 
@@ -7567,8 +7566,15 @@ class ViewNode {
         console.log(`Cant append child to ${this.type}`);
     }
 
-    removeChild() {
-        console.log('[Element] removeChild');
+    removeChild(child) {
+        if (this.view instanceof ui_layouts_layoutBase.LayoutBase) {
+            child.parentNode = null;
+            return this.view.removeChild(child.view)
+        }
+        if (this.view instanceof ui_contentView.ContentView) {
+            child.parentNode = null;
+            return this.view.content = null
+        }
     }
 }
 
@@ -7579,23 +7585,23 @@ class Document extends ViewNode {
         this.type = 'document';
         this.view = page;
         this.elm = {
+            type: 'placeholder',
             parentNode: this
         };
-
-        console.log('Created new Document element.');
     }
 
-    appendChild(node) {
-        console.log('[Document] appendChild ' + node.type);
-        this.view.content = node.view;
+    removeChild(child) {
+        // do nothing
+    }
+
+    insertBefore(newNode, referenceNode) {
+        this.appendChild(newNode);
     }
 }
 
 class Element extends ViewNode {
     constructor(type) {
         super();
-        console.log('Element constructor for', type);
-
         this.type = type;
         this.meta = getViewMeta(type);
 
@@ -7605,8 +7611,6 @@ class Element extends ViewNode {
         } catch (e) {
             console.log(`Failed to instantiate View class for ${type}. ${e}`);
         }
-
-        console.log('Element object ' + type);
     }
 }
 
@@ -7614,7 +7618,13 @@ class Comment extends ViewNode {
     constructor() {
         super();
         this.type = 'comment';
-        this.meta.skipAddToDom = true;
+
+        try {
+            const viewClass = getViewClass(this.type);
+            this.elm = this.view = new viewClass;
+        } catch (e) {
+            console.log(`Failed to instantiate View class for ${type}. ${e}`);
+        }
     }
 }
 

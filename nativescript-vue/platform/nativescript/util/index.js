@@ -14,8 +14,8 @@ export function mustUseProp() {
     console.log('mustUseProp')
 }
 
-export function getTagNamespace() {
-    console.log('getTagNamespace')
+export function getTagNamespace(tag) {
+    // console.log('getTagNamespace ' + tag)
 }
 
 export function isUnknownElement(el) {

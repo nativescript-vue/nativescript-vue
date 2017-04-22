@@ -14,8 +14,11 @@ class ViewNode {
         this.elm = {}
     }
 
+    toString() {
+        return `${this.type}(${this.view ? this.view : '-'})`
+    }
+
     setAttr(key, val) {
-        console.log(`setAttr on ${this.type} [${this.view._domId}]: ${key} = ${val}`)
         try {
             this.view[key] = val
         } catch (e) {
@@ -31,30 +34,50 @@ class ViewNode {
         this.view.off(evt)
     }
 
-    insertBefore() {
-        // Todo
-        console.log('[Element] insertBefore')
+    insertBefore(newNode, referenceNode) {
+        let index = referenceNode ? this.view.getChildIndex(referenceNode.view) : 0
+        this.appendChild(newNode, index)
     }
 
     setStyle(prop, val) {
+        if (!(val = val.trim()).length) {
+            return
+        }
+        if (prop.endsWith('Align')) {
+            // Nativescript uses Alignment instead of Align, this ensures that text-align works
+            prop += 'ment'
+        }
         this.view.style[prop] = val
     }
 
-    appendChild(child) {
-        console.log('[Element] appendChild ' + this.type)
+    appendChild(child, atIndex = -1) {
         if (child.meta.skipAddToDom) {
-            console.log('skipping adding to dom')
             return
         }
 
         if (this.view instanceof LayoutBase) {
+            if (child.parentNode === this) {
+                let index = this.view.getChildIndex(child.view)
+
+                if (index !== -1) {
+                    this.removeChild(child)
+                }
+            }
+            child.parentNode = this
+            if (atIndex !== -1) {
+                return this.view.insertChild(child.view, atIndex)
+            }
             return this.view.addChild(child.view)
         }
         if (this.view instanceof ContentView) {
+            child.parentNode = this
+            if (child.type === 'comment') {
+                return this.view._addView(child.view, atIndex)
+            }
             return this.view.content = child.view
         }
         if ((this.view instanceof TextBase) && (child.view instanceof TextBase)) {
-            this.view = child.view
+            child.parentNode = this
             return this.setAttr('text', child.view.text)
         }
 
@@ -62,8 +85,15 @@ class ViewNode {
         console.log(`Cant append child to ${this.type}`)
     }
 
-    removeChild() {
-        console.log('[Element] removeChild')
+    removeChild(child) {
+        if (this.view instanceof LayoutBase) {
+            child.parentNode = null
+            return this.view.removeChild(child.view)
+        }
+        if (this.view instanceof ContentView) {
+            child.parentNode = null
+            return this.view.content = null
+        }
     }
 }
 
@@ -74,23 +104,23 @@ export class Document extends ViewNode {
         this.type = 'document'
         this.view = page
         this.elm = {
+            type: 'placeholder',
             parentNode: this
         }
-
-        console.log('Created new Document element.')
     }
 
-    appendChild(node) {
-        console.log('[Document] appendChild ' + node.type)
-        this.view.content = node.view
+    removeChild(child) {
+        // do nothing
+    }
+
+    insertBefore(newNode, referenceNode) {
+        this.appendChild(newNode)
     }
 }
 
 export class Element extends ViewNode {
     constructor(type) {
         super()
-        console.log('Element constructor for', type)
-
         this.type = type
         this.meta = getViewMeta(type)
 
@@ -100,8 +130,6 @@ export class Element extends ViewNode {
         } catch (e) {
             console.log(`Failed to instantiate View class for ${type}. ${e}`)
         }
-
-        console.log('Element object ' + type)
     }
 }
 
@@ -109,6 +137,12 @@ export class Comment extends ViewNode {
     constructor() {
         super()
         this.type = 'comment'
-        this.meta.skipAddToDom = true
+
+        try {
+            const viewClass = getViewClass(this.type)
+            this.elm = this.view = new viewClass
+        } catch (e) {
+            console.log(`Failed to instantiate View class for ${type}. ${e}`)
+        }
     }
 }

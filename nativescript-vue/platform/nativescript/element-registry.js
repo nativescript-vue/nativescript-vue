@@ -27,7 +27,7 @@ export function registerElement(elementName, resolver, meta) {
     elementMap.set(elementName.toLowerCase(), entry)
     elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
 
-    console.log(`Element ${elementName} has been registered!`)
+    // console.log(`Element ${elementName} has been registered!`)
 }
 
 export function getViewClass(elementName) {
@@ -99,3 +99,5 @@ registerElement("WebView", () => require("ui/web-view").WebView);
 registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout);
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
 registerElement("Span", () => require("text/span").Span)
+
+registerElement("Comment", () => require("ui/placeholder").Placeholder)

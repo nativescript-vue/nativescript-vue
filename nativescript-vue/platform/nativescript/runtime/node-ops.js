@@ -3,67 +3,82 @@ import Vue from './index'
 export const namespaceMap = {}
 
 export function createElement(tagName, vnode) {
-    console.log('createElement', tagName)
+    console.log(`{NSVue} -> CreateElement(${tagName})`)
     return new Vue.renderer.Element(tagName)
 }
 
 export function createElementNS(namespace, tagName) {
-    console.log('createElementNS', namespace, tagName)
+    console.log(`{NSVue} -> CreateElementNS(${namespace}#${tagName})`)
     return new Vue.renderer.Element(namespace + ':' + tagName)
 }
 
 export function createTextNode(text) {
-    console.log('createTextNode', text)
+    console.log(`{NSVue} -> CreateTextNode(${text})`)
     let node = new Vue.renderer.Element('label')
     node.setAttr('text', text)
     return node
 }
 
 export function createComment(text) {
-    console.log('createComment', text)
+    console.log(`{NSVue} -> CreateComment(${text})`)
     return new Vue.renderer.Comment(text)
 }
 
 export function insertBefore(parentNode, newNode, referenceNode) {
-    console.log('insertBefore')
+    console.log(`{NSVue} -> InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`)
+    try {
+        parentNode.insertBefore(newNode, referenceNode)
+    } catch (e) {
+        console.log('IB>>> ', e)
+    }
 }
 
 export function removeChild(node, child) {
-    console.log('removeChild')
+    console.log(`{NSVue} -> RemoveChild(${node}, ${child})`)
+
+    try {
+        node.removeChild(child)
+    } catch (e) {
+        console.log('RC>>> ', e)
+    }
 }
 
 export function appendChild(node, child) {
-    console.log('appendChild')
+    console.log(`{NSVue} -> AppendChild(${node}, ${child})`)
+
     try {
         node.appendChild(child)
     } catch (e) {
-        console.log('>>> ', e)
-
-        // console.log('>>', console.createDump(e))
+        console.log('AC>>> ', e)
     }
 }
 
 export function parentNode(node) {
-    console.log('parentNode ' + node)
-    return node && node.parentNode
+    console.log(`{NSVue} -> ParentNode(${node})`)
+
+    return node && node.parentNode ? node.parentNode : null
 }
 
 export function nextSibling(node) {
-    console.log('nextSibling ' + node)
-    return node && node.nextSibling
+    console.log(`{NSVue} -> NextSibling(${node})`)
+
+    return node && node.nextSibling ? node.nextSibling : null
 }
 
 export function tagName(elementNode) {
-    console.log('tagName')
+    console.log(`{NSVue} -> TagName(${elementNode})`)
+
     return elementNode.type
 }
 
 export function setTextContent(node, text) {
-    console.log('setTextContent', text)
+    console.log(`{NSVue} -> SetTextContent(${node}, ${text})`)
+
     node.setAttr('text', text)
 }
 
 export function setAttribute(nodeElement, key, val) {
-    console.log('setAttribute')
+    console.log(`{NSVue} -> SetAttribute(${nodeElement}, ${key}, ${val})`)
+
     nodeElement.setAttr(key, val)
 }
