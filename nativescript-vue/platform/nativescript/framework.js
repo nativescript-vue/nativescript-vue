@@ -1,4 +1,5 @@
 import Vue from './runtime/index'
+import {registerElement} from './element-registry'
 
 const renderer = {}
 
@@ -11,6 +12,7 @@ export function init(cfg) {
     Vue.setDocument = (view) => {
         Vue.prototype.$document = new renderer.Document(view)
     }
+    Vue.registerElement = registerElement
 
     return Vue
 }
