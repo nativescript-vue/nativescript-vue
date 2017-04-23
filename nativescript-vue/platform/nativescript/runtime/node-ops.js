@@ -27,31 +27,18 @@ export function createComment(text) {
 
 export function insertBefore(parentNode, newNode, referenceNode) {
     console.log(`{NSVue} -> InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`)
-    try {
-        parentNode.insertBefore(newNode, referenceNode)
-    } catch (e) {
-        console.log('IB>>> ', e)
-    }
+    parentNode.insertBefore(newNode, referenceNode)
 }
 
 export function removeChild(node, child) {
     console.log(`{NSVue} -> RemoveChild(${node}, ${child})`)
-
-    try {
-        node.removeChild(child)
-    } catch (e) {
-        console.log('RC>>> ', e)
-    }
+    node.removeChild(child)
 }
 
 export function appendChild(node, child) {
     console.log(`{NSVue} -> AppendChild(${node}, ${child})`)
 
-    try {
-        node.appendChild(child)
-    } catch (e) {
-        console.log('AC>>> ', e)
-    }
+    node.appendChild(child)
 }
 
 export function parentNode(node) {

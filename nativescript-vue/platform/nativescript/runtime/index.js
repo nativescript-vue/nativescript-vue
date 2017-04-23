@@ -21,7 +21,7 @@ Vue.config.isUnknownElement = isUnknownElement
 Vue.prototype.__patch__ = patch
 
 const mount = function (el, hydrating) {
-    mountComponent(this, this.$document, hydrating)
+    mountComponent(this, el ? el : this.$document.getRootView(), hydrating)
 }
 
 Vue.prototype.$mount = function (el, hydrating) {

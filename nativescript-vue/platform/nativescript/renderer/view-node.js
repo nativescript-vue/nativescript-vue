@@ -1,17 +1,22 @@
 import {getViewMeta} from '../element-registry'
-import {ContentView} from 'ui/content-view'
-import {LayoutBase} from 'ui/layouts/layout-base'
-
 import {isView, isLayout, isContentView, isTextView} from './util'
 
 export default class ViewNode {
 
     constructor() {
-        this.type = null
+        this.nodeType = null
         this.parent = null
         this.meta = getViewMeta('view-node')
         this.view = null
-        this.elm = {}
+        this.elm = this
+    }
+
+    get type() {
+        return this.nodeType
+    }
+
+    set type(type) {
+        this.nodeType = type
     }
 
     toString() {
@@ -23,6 +28,10 @@ export default class ViewNode {
     }
 
     nextSibling(node) {
+        if (!node) {
+            return -1
+        }
+
         let index = 0;
         let found = false;
         this.view.eachChild(child => {
@@ -120,6 +129,7 @@ export default class ViewNode {
 
             if (child.type === 'comment') {
                 this.view._removeView(child.view)
+                console.dir(this.view)
             }
         } else if (isView(this.view)) {
             this.view._removeView(child.view)

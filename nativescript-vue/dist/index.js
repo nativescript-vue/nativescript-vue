@@ -7,10 +7,11 @@
 
 'use strict';
 
+var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
-var ui_core_view = require('ui/core/view');
 var ui_textBase = require('ui/text-base');
+var application = require('application');
 
 /*  */
 
@@ -141,12 +142,12 @@ function bind (fn, ctx) {
 /**
  * Convert an Array-like object to a real Array.
  */
-function toArray (list, start) {
-  start = start || 0;
-  let i = list.length - start;
+function toArray (list, start$$1) {
+  start$$1 = start$$1 || 0;
+  let i = list.length - start$$1;
   const ret = new Array(i);
   while (i--) {
-    ret[i] = list[i + start];
+    ret[i] = list[i + start$$1];
   }
   return ret
 }
@@ -396,7 +397,6 @@ function parsePath (path) {
 /*  */
 /* globals MutationObserver */
 
-// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -951,11 +951,6 @@ function dependArray (value) {
 
 /*  */
 
-/**
- * Option overwriting strategies are functions that handle
- * how to merge a parent option value and a child option
- * value into the final value.
- */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -1755,18 +1750,6 @@ function mergeVNodeHook (def, hookKey, hook) {
 
 /*  */
 
-// The template compiler attempts to minimize the need for normalization by
-// statically analyzing the template at compile time.
-//
-// For plain HTML markup, normalization can be completely skipped because the
-// generated render function is guaranteed to return Array<VNode>. There are
-// two cases where extra normalization is needed:
-
-// 1. When the children contains components - because a functional component
-// may return an Array instead of a single root. In this case, just a simple
-// normalization is needed - if any child is an Array, we flatten the whole
-// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
-// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -2938,7 +2921,6 @@ function stateMixin (Vue) {
 
 /*  */
 
-// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -3391,9 +3373,6 @@ function applyNS (vnode, ns) {
 
 /*  */
 
-/**
- * Runtime helper for rendering v-for lists.
- */
 function renderList (
   val,
   render
@@ -3422,9 +3401,6 @@ function renderList (
 
 /*  */
 
-/**
- * Runtime helper for rendering <slot>
- */
 function renderSlot (
   name,
   fallback,
@@ -3455,18 +3431,12 @@ function renderSlot (
 
 /*  */
 
-/**
- * Runtime helper for resolving filters
- */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
-/**
- * Runtime helper for checking keyCodes from config.
- */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -3482,9 +3452,6 @@ function checkKeyCodes (
 
 /*  */
 
-/**
- * Runtime helper for merging v-bind="object" into a VNode's data.
- */
 function bindObjectProps (
   data,
   tag,
@@ -3522,9 +3489,6 @@ function bindObjectProps (
 
 /*  */
 
-/**
- * Runtime helper for rendering static trees.
- */
 function renderStatic (
   index,
   isInFor
@@ -4228,7 +4192,6 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
-// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -4403,14 +4366,14 @@ function parseHTML (html, options) {
   }
 
   function parseStartTag () {
-    const start = html.match(startTagOpen);
-    if (start) {
+    const start$$1 = html.match(startTagOpen);
+    if (start$$1) {
       const match = {
-        tagName: start[1],
+        tagName: start$$1[1],
         attrs: [],
         start: index
       };
-      advance(start[0].length);
+      advance(start$$1[0].length);
       let end, attr;
       while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
         advance(attr[0].length);
@@ -4470,9 +4433,9 @@ function parseHTML (html, options) {
     }
   }
 
-  function parseEndTag (tagName, start, end) {
+  function parseEndTag (tagName, start$$1, end) {
     let pos, lowerCasedTagName;
-    if (start == null) start = index;
+    if (start$$1 == null) start$$1 = index;
     if (end == null) end = index;
 
     if (tagName) {
@@ -4502,7 +4465,7 @@ function parseHTML (html, options) {
           );
         }
         if (options.end) {
-          options.end(stack[i].tag, start, end);
+          options.end(stack[i].tag, start$$1, end);
         }
       }
 
@@ -4511,14 +4474,14 @@ function parseHTML (html, options) {
       lastTag = pos && stack[pos - 1].tag;
     } else if (lowerCasedTagName === 'br') {
       if (options.start) {
-        options.start(tagName, [], true, start, end);
+        options.start(tagName, [], true, start$$1, end);
       }
     } else if (lowerCasedTagName === 'p') {
       if (options.start) {
-        options.start(tagName, [], false, start, end);
+        options.start(tagName, [], false, start$$1, end);
       }
       if (options.end) {
-        options.end(tagName, start, end);
+        options.end(tagName, start$$1, end);
       }
     }
   }
@@ -5568,7 +5531,6 @@ var baseDirectives = {
 
 /*  */
 
-// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -5970,8 +5932,6 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
-// these keywords should not appear inside expressions, but operators like
-// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -6405,11 +6365,11 @@ const canBeLeftOpenTag$1 = makeMap('', true);
 
 const isUnaryTag$1 = function (el) {
     const meta = getViewMeta(el);
-    return meta && meta.isUnaryTag
+    return meta.isUnaryTag
 };
 
 function mustUseProp() {
-    console.log('mustUseProp');
+    // console.log('mustUseProp')
 }
 
 function getTagNamespace(tag) {
@@ -6461,31 +6421,18 @@ function createComment(text) {
 
 function insertBefore(parentNode, newNode, referenceNode) {
     console.log(`{NSVue} -> InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`);
-    try {
-        parentNode.insertBefore(newNode, referenceNode);
-    } catch (e) {
-        console.log('IB>>> ', e);
-    }
+    parentNode.insertBefore(newNode, referenceNode);
 }
 
 function removeChild(node, child) {
     console.log(`{NSVue} -> RemoveChild(${node}, ${child})`);
-
-    try {
-        node.removeChild(child);
-    } catch (e) {
-        console.log('RC>>> ', e);
-    }
+    node.removeChild(child);
 }
 
 function appendChild(node, child) {
     console.log(`{NSVue} -> AppendChild(${node}, ${child})`);
 
-    try {
-        node.appendChild(child);
-    } catch (e) {
-        console.log('AC>>> ', e);
-    }
+    node.appendChild(child);
 }
 
 function parentNode(node) {
@@ -7491,7 +7438,7 @@ Vue$2.config.isUnknownElement = isUnknownElement;
 Vue$2.prototype.__patch__ = patch;
 
 const mount = function (el, hydrating) {
-    mountComponent(this, this.$document, hydrating);
+    mountComponent(this, el ? el : this.$document.getRootView(), hydrating);
 };
 
 Vue$2.prototype.$mount = function (el, hydrating) {
@@ -7523,9 +7470,7 @@ function init(cfg) {
     renderer.Comment = cfg.Comment;
 
     Vue$2.renderer = renderer;
-    Vue$2.setDocument = (view) => {
-        Vue$2.prototype.$document = new renderer.Document(view);
-    };
+    Vue$2.prototype.$document = new renderer.Document();
     Vue$2.registerElement = registerElement;
 
     return Vue$2
@@ -7547,11 +7492,19 @@ function isTextView(view) {
 class ViewNode {
 
     constructor() {
-        this.type = null;
+        this.nodeType = null;
         this.parent = null;
         this.meta = getViewMeta('view-node');
         this.view = null;
-        this.elm = {};
+        this.elm = this;
+    }
+
+    get type() {
+        return this.nodeType
+    }
+
+    set type(type) {
+        this.nodeType = type;
     }
 
     toString() {
@@ -7563,6 +7516,10 @@ class ViewNode {
     }
 
     nextSibling(node) {
+        if (!node) {
+            return -1
+        }
+
         let index = 0;
         let found = false;
         this.view.eachChild(child => {
@@ -7660,59 +7617,13 @@ class ViewNode {
 
             if (child.type === 'comment') {
                 this.view._removeView(child.view);
+                console.dir(this.view);
             }
         } else if (isView(this.view)) {
             this.view._removeView(child.view);
         } else {
             child.parent = childParent;
             console.log(`Cant remove child from ${this.type}`);
-        }
-    }
-}
-
-class Document extends ViewNode {
-
-    constructor(page) {
-        super();
-        this.type = 'document';
-        this.view = page;
-        let plView;
-        try {
-            const viewClass = getViewClass('detached-container');
-            plView = new viewClass;
-        } catch (e) {
-            console.log(`Failed to instantiate View class for ${type}. ${e}`);
-        }
-        this.elm = {
-            toString: () => 'placeholder',
-            type: 'placeholder',
-            view: plView,
-            elm: plView,
-            parentNode: () => this,
-            nextSibling: () => null
-        };
-    }
-
-    insertBefore(newNode, referenceNode) {
-        this.appendChild(newNode);
-    }
-
-    removeChild(child) {
-        // do nothing
-    }
-}
-
-class Element extends ViewNode {
-    constructor(type) {
-        super();
-        this.type = type;
-        this.meta = getViewMeta(type);
-
-        try {
-            const viewClass = getViewClass(type);
-            this.elm = this.view = new viewClass;
-        } catch (e) {
-            console.log(`Failed to instantiate View class for ${type}. ${e}`);
         }
     }
 }
@@ -7725,9 +7636,78 @@ class Comment extends ViewNode {
 
         try {
             const viewClass = getViewClass(this.type);
-            this.elm = this.view = new viewClass;
+            this.view = new viewClass;
         } catch (e) {
             console.log(`Failed to instantiate View class for ${this.type}. ${e}`);
+        }
+    }
+}
+
+class Document extends ViewNode {
+
+    constructor() {
+        super();
+        this.type = 'document';
+        try {
+            const viewClass = getViewClass('detached-container');
+            this.view = new viewClass;
+        } catch (e) {
+            console.log(`Failed to instantiate View class for detached-container in ${this}. ${e}`);
+        }
+
+        // append placeholder, which will get replaced by initial $mount
+        this.isRootElement = true;
+        this.placeholder = new Comment();
+        this.appendChild(this.placeholder);
+    }
+
+    getRootView() {
+        return this.placeholder
+    }
+
+    hasNonPlaceholderChild(view) {
+        let found = false;
+        view.eachChild(child => {
+            if (child.typeName.toLowerCase() !== 'placeholder') {
+                found = true;
+            }
+        });
+
+        return found
+    }
+
+    insertBefore(newNode, referenceNode) {
+        if (this.hasNonPlaceholderChild(this.view)) {
+            throw new Error(`only one root is allowed.`)
+        }
+        if (newNode.type !== 'page') {
+            throw new Error(`root node must be <page>. <${newNode.type}> given.`)
+        }
+
+        if (this.isRootElement) {
+            this.isRootElement = false;
+            this.placeholder = newNode;
+        }
+
+        application.start({
+            create() {
+                return newNode.view
+            }
+        });
+    }
+}
+
+class Element extends ViewNode {
+    constructor(type) {
+        super();
+        this.type = type;
+        this.meta = getViewMeta(type);
+        try {
+            const viewClass = getViewClass(type);
+            this.view = new viewClass;
+
+        } catch (e) {
+            console.log(`Failed to instantiate View class for ${type}. ${e}`);
         }
     }
 }

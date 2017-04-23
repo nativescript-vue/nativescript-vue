@@ -10,7 +10,7 @@ export default class Comment extends ViewNode {
 
         try {
             const viewClass = getViewClass(this.type)
-            this.elm = this.view = new viewClass
+            this.view = new viewClass
         } catch (e) {
             console.log(`Failed to instantiate View class for ${this.type}. ${e}`)
         }

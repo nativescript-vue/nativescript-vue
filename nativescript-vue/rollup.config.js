@@ -47,7 +47,7 @@ export default {
         }),
     ],
     external(id) {
-        return id.startsWith('ui/')
+        return id.startsWith('ui/') || id.startsWith('application')
     },
     banner
 };

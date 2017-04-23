@@ -7,10 +7,10 @@ export default class Element extends ViewNode {
         super()
         this.type = type
         this.meta = getViewMeta(type)
-
         try {
             const viewClass = getViewClass(type)
-            this.elm = this.view = new viewClass
+            this.view = new viewClass
+
         } catch (e) {
             console.log(`Failed to instantiate View class for ${type}. ${e}`)
         }

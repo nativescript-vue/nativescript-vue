@@ -7,11 +7,11 @@ export const canBeLeftOpenTag = makeMap('', true)
 
 export const isUnaryTag = function (el) {
     const meta = getViewMeta(el)
-    return meta && meta.isUnaryTag
+    return meta.isUnaryTag
 }
 
 export function mustUseProp() {
-    console.log('mustUseProp')
+    // console.log('mustUseProp')
 }
 
 export function getTagNamespace(tag) {

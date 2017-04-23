@@ -9,9 +9,7 @@ export function init(cfg) {
     renderer.Comment = cfg.Comment
 
     Vue.renderer = renderer
-    Vue.setDocument = (view) => {
-        Vue.prototype.$document = new renderer.Document(view)
-    }
+    Vue.prototype.$document = new renderer.Document()
     Vue.registerElement = registerElement
 
     return Vue
