@@ -1,6 +1,26 @@
 const Vue = require('nativescript-vue/dist/index')
 
-const vm = new Vue({
+Vue.component('image-viewer', {
+    props: ['imgSrc'],
+
+    template: `
+    <stack-layout>
+        <image style="height: 200;" :src="imgSrc"></image>
+        <scroll-view orientation="horizontal" style="height: 100">
+            <stack-layout orientation="horizontal">
+                <image v-for="i in 10" key="i" 
+                :src="i%2 ? '~/images/apple.jpg' : '~/images/vue.png'" 
+                @tap="imgSrc = i%2 ? '~/images/apple.jpg' : '~/images/vue.png'"></image>
+            </stack-layout>
+        </scroll-view>
+    </stack-layout>`,
+
+    mounted() {
+        console.log(this.imgSrc)
+    }
+})
+
+new Vue({
     template: `
         <page>
             <scroll-view>
@@ -12,13 +32,7 @@ const vm = new Vue({
                             :text="showTrick ? 'Poof!' : 'Wait for it!'"></label>
                     <button @tap="showTrick = !showTrick">Tap to see a trick!</button>
                     
-                    <image v-if="showTrick" style="height: 200;" :src="imgSrc"></image>
-                    
-                    <scroll-view orientation="horizontal" style="height: 100">
-                        <stack-layout orientation="horizontal">
-                            <image v-for="i in 10" key="i" :src="i%2 ? '~/images/apple.jpg' : '~/images/vue.png'" @tap="imgSrc = i%2 ? '~/images/apple.jpg' : '~/images/vue.png'"></image>
-                        </stack-layout>
-                    </scroll-view>
+                    <image-viewer v-if="showTrick" :imgSrc="imgSrc"></image-viewer>
                 </stack-layout>
             </scroll-view>
         </page>
@@ -35,4 +49,4 @@ const vm = new Vue({
             alert('Nice Tap!')
         }
     }
-}).$mount()
+}).$mount(true)
