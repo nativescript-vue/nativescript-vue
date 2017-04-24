@@ -1,6 +1,8 @@
 import {getViewMeta} from '../element-registry'
 import {isView, isLayout, isContentView, isTextView} from './util'
 
+const XML_ATTRIBUTES = Object.freeze(['style', 'rows', 'columns', 'fontAttributes'])
+
 export default class ViewNode {
 
     constructor() {
@@ -48,7 +50,11 @@ export default class ViewNode {
 
     setAttr(key, val) {
         try {
-            this.view[key] = val
+            if (XML_ATTRIBUTES.indexOf(key) !== -1) {
+                this.view._applyXmlAttribute(key, val)
+            } else {
+                this.view[key] = val
+            }
         } catch (e) {
             throw new Error(`Element ${this.type} has no property ${key}.`)
         }
