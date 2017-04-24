@@ -12,7 +12,8 @@
   "dependencies": {
     "nativescript-theme-core": "~1.0.2",
     "nativescript-vue": "file:../nativescript-vue",
-    "tns-core-modules": "^3.0.0-rc.2"
+    "tns-core-modules": "^3.0.0-rc.2",
+    "vue-router": "^2.4.0"
   },
   "devDependencies": {
     "babel-traverse": "6.24.1",
