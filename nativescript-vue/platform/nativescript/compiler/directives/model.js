@@ -1,5 +1,6 @@
 import {addHandler, addAttr} from 'compiler/helpers'
 import {genComponentModel, genAssignmentCode} from 'compiler/directives/model'
+import {getViewMeta} from '../../element-registry'
 
 const valueTypes = ['text', 'value', 'checked', 'date', 'selectedIndex', 'time']
 
@@ -13,7 +14,7 @@ export default function model(el, dir, _warn) {
 
 function genDefaultModel(el, value, modifiers) {
     const {trim, number} = modifiers || {}
-    const event = valueTypes.map(type => type + 'Change').join(',')
+    const {prop, event} = getViewMeta(el.tag).model
 
 
     let valueExpression = `$event.value${trim ? '.trim()' : ''}`
@@ -24,6 +25,6 @@ function genDefaultModel(el, value, modifiers) {
 
     const code = genAssignmentCode(value, valueExpression)
 
-    valueTypes.forEach(type => addAttr(el, type, `(${value})`))
+    addAttr(el, prop, `(${value})`)
     addHandler(el, event, code, null, true)
 }

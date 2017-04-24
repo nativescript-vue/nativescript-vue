@@ -397,6 +397,7 @@ function parsePath (path) {
 /*  */
 /* globals MutationObserver */
 
+// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -951,6 +952,11 @@ function dependArray (value) {
 
 /*  */
 
+/**
+ * Option overwriting strategies are functions that handle
+ * how to merge a parent option value and a child option
+ * value into the final value.
+ */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -1750,6 +1756,18 @@ function mergeVNodeHook (def, hookKey, hook) {
 
 /*  */
 
+// The template compiler attempts to minimize the need for normalization by
+// statically analyzing the template at compile time.
+//
+// For plain HTML markup, normalization can be completely skipped because the
+// generated render function is guaranteed to return Array<VNode>. There are
+// two cases where extra normalization is needed:
+
+// 1. When the children contains components - because a functional component
+// may return an Array instead of a single root. In this case, just a simple
+// normalization is needed - if any child is an Array, we flatten the whole
+// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
+// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -2921,6 +2939,7 @@ function stateMixin (Vue) {
 
 /*  */
 
+// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -3373,6 +3392,9 @@ function applyNS (vnode, ns) {
 
 /*  */
 
+/**
+ * Runtime helper for rendering v-for lists.
+ */
 function renderList (
   val,
   render
@@ -3401,6 +3423,9 @@ function renderList (
 
 /*  */
 
+/**
+ * Runtime helper for rendering <slot>
+ */
 function renderSlot (
   name,
   fallback,
@@ -3431,12 +3456,18 @@ function renderSlot (
 
 /*  */
 
+/**
+ * Runtime helper for resolving filters
+ */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
+/**
+ * Runtime helper for checking keyCodes from config.
+ */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -3452,6 +3483,9 @@ function checkKeyCodes (
 
 /*  */
 
+/**
+ * Runtime helper for merging v-bind="object" into a VNode's data.
+ */
 function bindObjectProps (
   data,
   tag,
@@ -3489,6 +3523,9 @@ function bindObjectProps (
 
 /*  */
 
+/**
+ * Runtime helper for rendering static trees.
+ */
 function renderStatic (
   index,
   isInFor
@@ -4192,6 +4229,7 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
+// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -5531,6 +5569,7 @@ var baseDirectives = {
 
 /*  */
 
+// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -5932,6 +5971,8 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
+// these keywords should not appear inside expressions, but operators like
+// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -6386,49 +6427,24 @@ function parseString (chr) {
   }
 }
 
-const valueTypes = ['text', 'value', 'checked', 'date', 'selectedIndex', 'time'];
-
-function model(el, dir, _warn) {
-    if (el.type === 1) {
-        genDefaultModel(el, dir.value, dir.modifiers);
-    } else {
-        genComponentModel(el, dir.value, dir.modifiers);
-    }
-}
-
-function genDefaultModel(el, value, modifiers) {
-    const {trim, number} = modifiers || {};
-    const event = valueTypes.map(type => type + 'Change').join(',');
-
-
-    let valueExpression = `$event.value${trim ? '.trim()' : ''}`;
-
-    if (number) {
-        valueExpression = `_n(${valueExpression})`;
-    }
-
-    const code = genAssignmentCode(value, valueExpression);
-
-    valueTypes.forEach(type => addAttr(el, type, `(${value})`));
-    addHandler(el, event, code, null, true);
-}
-
-var directives = {
-    model
-};
-
 const elementMap = new Map;
 
-class ViewMeta {
-    constructor(options = {}) {
-        this.skipAddToDom = options.skipAddToDom || false;
-        this.isUnaryTag = options.isUnaryTag || false;
+const defaultViewMeta = {
+    skipAddToDom: false,
+    isUnaryTag: false,
+    tagNamespace: '',
+    canBeLeftOpen: false,
+    model: {
+        prop: 'text',
+        event: 'textChange'
     }
-}
+};
 
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
 function registerElement(elementName, resolver, meta) {
+    meta = Object.assign({}, defaultViewMeta, meta);
+
     if (elementMap.has(elementName)) {
         throw new Error(`Element for ${elementName} already registered.`)
     }
@@ -6436,8 +6452,6 @@ function registerElement(elementName, resolver, meta) {
     const entry = {resolver: resolver, meta: meta};
     elementMap.set(elementName.toLowerCase(), entry);
     elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
-
-    // console.log(`Element ${elementName} has been registered!`)
 }
 
 function getViewClass(elementName) {
@@ -6455,7 +6469,7 @@ function getViewClass(elementName) {
 }
 
 function getViewMeta(nodeName) {
-    let meta = new ViewMeta();
+    let meta = defaultViewMeta;
     const entry = elementMap.get(nodeName.toLowerCase());
 
     if (entry && entry.meta) {
@@ -6469,24 +6483,29 @@ function isKnownView(elementName) {
     return elementMap.has(elementName.toLowerCase())
 }
 
-// registerElement("stack-layout", () => require('ui/layouts/stack-layout').StackLayout);
-// registerElement("Label", () => require("ui/label").Label);
-// registerElement("Button", () => require("ui/button").Button);
-// registerElement("TextField", () => require("ui/text-field").TextField);
-
 registerElement("AbsoluteLayout", () => require("ui/layouts/absolute-layout").AbsoluteLayout);
 registerElement("ActivityIndicator", () => require("ui/activity-indicator").ActivityIndicator);
 registerElement("Border", () => require("ui/border").Border);
 registerElement("Button", () => require("ui/button").Button);
 registerElement("ContentView", () => require("ui/content-view").ContentView);
-registerElement("DatePicker", () => require("ui/date-picker").DatePicker);
+registerElement("DatePicker", () => require("ui/date-picker").DatePicker, {
+    model: {
+        prop: 'date',
+        event: 'dateChange'
+    }
+});
 registerElement("DockLayout", () => require("ui/layouts/dock-layout").DockLayout);
 registerElement("GridLayout", () => require("ui/layouts/grid-layout").GridLayout);
 registerElement("HtmlView", () => require("ui/html-view").HtmlView);
 registerElement("Image", () => require("ui/image").Image);
 registerElement("img", () => require("ui/image").Image);
 registerElement("Label", () => require("ui/label").Label);
-registerElement("ListPicker", () => require("ui/list-picker").ListPicker);
+registerElement("ListPicker", () => require("ui/list-picker").ListPicker, {
+    model: {
+        prop: 'selectedIndex',
+        event: 'selectedIndexChange'
+    }
+});
 registerElement("ListView", () => require("ui/list-view").ListView);
 registerElement("Page", () => require("ui/page").Page);
 registerElement("Placeholder", () => require("ui/placeholder").Placeholder);
@@ -6495,16 +6514,41 @@ registerElement("ProxyViewContainer", () => require("ui/proxy-view-container").P
 registerElement("Repeater", () => require("ui/repeater").Repeater);
 registerElement("ScrollView", () => require("ui/scroll-view").ScrollView);
 registerElement("SearchBar", () => require("ui/search-bar").SearchBar);
-registerElement("SegmentedBar", () => require("ui/segmented-bar").SegmentedBar);
+registerElement("SegmentedBar", () => require("ui/segmented-bar").SegmentedBar, {
+    model: {
+        prop: 'selectedIndex',
+        event: 'selectedIndexChange'
+    }
+});
 registerElement("SegmentedBarItem", () => require("ui/segmented-bar").SegmentedBarItem);
-registerElement("Slider", () => require("ui/slider").Slider);
+registerElement("Slider", () => require("ui/slider").Slider, {
+    model: {
+        prop: 'value',
+        event: 'valueChange'
+    }
+});
 registerElement("StackLayout", () => require("ui/layouts/stack-layout").StackLayout);
 registerElement("FlexboxLayout", () => require("ui/layouts/flexbox-layout").FlexboxLayout);
-registerElement("Switch", () => require("ui/switch").Switch);
-registerElement("TabView", () => require("ui/tab-view").TabView);
+registerElement("Switch", () => require("ui/switch").Switch, {
+    model: {
+        prop: 'checked',
+        event: 'checkedChange'
+    }
+});
+registerElement("TabView", () => require("ui/tab-view").TabView, {
+    model: {
+        prop: 'selectedIndex',
+        event: 'selectedIndexChange'
+    }
+});
 registerElement("TextField", () => require("ui/text-field").TextField);
 registerElement("TextView", () => require("ui/text-view").TextView);
-registerElement("TimePicker", () => require("ui/time-picker").TimePicker);
+registerElement("TimePicker", () => require("ui/time-picker").TimePicker, {
+    model: {
+        prop: 'time',
+        event: 'timeChange'
+    }
+});
 registerElement("WebView", () => require("ui/web-view").WebView);
 registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout);
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
@@ -6513,26 +6557,56 @@ registerElement("Span", () => require("text/span").Span);
 registerElement('DetachedContainer', () => require('ui/proxy-view-container').ProxyViewContainer, {
     skipAddToDom: true
 });
-registerElement("DetachedText", () => require("ui/placeholder").Placeholder, new ViewMeta({
+registerElement("DetachedText", () => require("ui/placeholder").Placeholder, {
     skipAddToDom: true
-}));
+});
 registerElement("Comment", () => require("ui/placeholder").Placeholder);
+
+function model(el, dir, _warn) {
+    if (el.type === 1) {
+        genDefaultModel(el, dir.value, dir.modifiers);
+    } else {
+        genComponentModel(el, dir.value, dir.modifiers);
+    }
+}
+
+function genDefaultModel(el, value, modifiers) {
+    const {trim, number} = modifiers || {};
+    const {prop, event} = getViewMeta(el.tag).model;
+
+
+    let valueExpression = `$event.value${trim ? '.trim()' : ''}`;
+
+    if (number) {
+        valueExpression = `_n(${valueExpression})`;
+    }
+
+    const code = genAssignmentCode(value, valueExpression);
+
+    addAttr(el, prop, `(${value})`);
+    addHandler(el, event, code, null, true);
+}
+
+var directives = {
+    model
+};
 
 const isReservedTag = makeMap('template', true);
 
-const canBeLeftOpenTag$1 = makeMap('', true);
+const canBeLeftOpenTag$1 = function (el) {
+    return getViewMeta(el).canBeLeftOpenTag
+};
 
 const isUnaryTag$1 = function (el) {
-    const meta = getViewMeta(el);
-    return meta.isUnaryTag
+    return getViewMeta(el).isUnaryTag
 };
 
 function mustUseProp() {
     // console.log('mustUseProp')
 }
 
-function getTagNamespace(tag) {
-    // console.log('getTagNamespace ' + tag)
+function getTagNamespace(el) {
+    return getViewMeta(el).tagNamespace
 }
 
 function isUnknownElement(el) {
@@ -7590,6 +7664,7 @@ const patch = createPatchFunction({
 var platformDirectives$1 = {
 };
 
+// import platformComponents from './components/index'
 const platformComponents = {};
 
 Vue$2.config.mustUseProp = mustUseProp;
