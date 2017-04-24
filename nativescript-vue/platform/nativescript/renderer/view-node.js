@@ -63,6 +63,7 @@ export default class ViewNode {
     }
 
     addEvent(evt, handler) {
+        console.log(`addEvent(${evt})`)
         this.view.on(evt, handler)
     }
 

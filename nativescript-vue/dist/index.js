@@ -6247,7 +6247,175 @@ var modules = [
     style
 ];
 
-var directives = [];
+/*  */
+
+/**
+ * Cross-platform code generation for component v-model
+ */
+function genComponentModel (
+  el,
+  value,
+  modifiers
+) {
+  const { number, trim } = modifiers || {};
+
+  const baseValueExpression = '$$v';
+  let valueExpression = baseValueExpression;
+  if (trim) {
+    valueExpression =
+      `(typeof ${baseValueExpression} === 'string'` +
+        `? ${baseValueExpression}.trim()` +
+        `: ${baseValueExpression})`;
+  }
+  if (number) {
+    valueExpression = `_n(${valueExpression})`;
+  }
+  const assignment = genAssignmentCode(value, valueExpression);
+
+  el.model = {
+    value: `(${value})`,
+    expression: `"${value}"`,
+    callback: `function (${baseValueExpression}) {${assignment}}`
+  };
+}
+
+/**
+ * Cross-platform codegen helper for generating v-model value assignment code.
+ */
+function genAssignmentCode (
+  value,
+  assignment
+) {
+  const modelRs = parseModel(value);
+  if (modelRs.idx === null) {
+    return `${value}=${assignment}`
+  } else {
+    return `var $$exp = ${modelRs.exp}, $$idx = ${modelRs.idx};` +
+      `if (!Array.isArray($$exp)){` +
+        `${value}=${assignment}}` +
+      `else{$$exp.splice($$idx, 1, ${assignment})}`
+  }
+}
+
+/**
+ * parse directive model to do the array update transform. a[idx] = val => $$a.splice($$idx, 1, val)
+ *
+ * for loop possible cases:
+ *
+ * - test
+ * - test[idx]
+ * - test[test1[idx]]
+ * - test["a"][idx]
+ * - xxx.test[a[a].test1[idx]]
+ * - test.xxx.a["asa"][test1[idx]]
+ *
+ */
+
+let len;
+let str;
+let chr;
+let index$2;
+let expressionPos;
+let expressionEndPos;
+
+function parseModel (val) {
+  str = val;
+  len = str.length;
+  index$2 = expressionPos = expressionEndPos = 0;
+
+  if (val.indexOf('[') < 0 || val.lastIndexOf(']') < len - 1) {
+    return {
+      exp: val,
+      idx: null
+    }
+  }
+
+  while (!eof()) {
+    chr = next();
+    /* istanbul ignore if */
+    if (isStringStart(chr)) {
+      parseString(chr);
+    } else if (chr === 0x5B) {
+      parseBracket(chr);
+    }
+  }
+
+  return {
+    exp: val.substring(0, expressionPos),
+    idx: val.substring(expressionPos + 1, expressionEndPos)
+  }
+}
+
+function next () {
+  return str.charCodeAt(++index$2)
+}
+
+function eof () {
+  return index$2 >= len
+}
+
+function isStringStart (chr) {
+  return chr === 0x22 || chr === 0x27
+}
+
+function parseBracket (chr) {
+  let inBracket = 1;
+  expressionPos = index$2;
+  while (!eof()) {
+    chr = next();
+    if (isStringStart(chr)) {
+      parseString(chr);
+      continue
+    }
+    if (chr === 0x5B) inBracket++;
+    if (chr === 0x5D) inBracket--;
+    if (inBracket === 0) {
+      expressionEndPos = index$2;
+      break
+    }
+  }
+}
+
+function parseString (chr) {
+  const stringQuote = chr;
+  while (!eof()) {
+    chr = next();
+    if (chr === stringQuote) {
+      break
+    }
+  }
+}
+
+const valueTypes = ['text', 'value', 'checked', 'date', 'selectedIndex', 'time'];
+
+function model(el, dir, _warn) {
+    if (el.type === 1) {
+        genDefaultModel(el, dir.value, dir.modifiers);
+    } else {
+        genComponentModel(el, dir.value, dir.modifiers);
+    }
+}
+
+function genDefaultModel(el, value, modifiers) {
+    const {trim, number} = modifiers || {};
+    const event = valueTypes.map(type => type + 'Change').join(',');
+
+
+    let valueExpression = `$event.value${trim ? '.trim()' : ''}`;
+
+    if (number) {
+        valueExpression = `_n(${valueExpression})`;
+    }
+
+    const code = genAssignmentCode(value, valueExpression);
+
+    valueTypes.forEach(type => addAttr(el, type, `(${value})`));
+    addHandler(el, event, code, null, true);
+}
+
+var directives = {
+    model
+};
 
 const elementMap = new Map;
 
@@ -6258,15 +6426,6 @@ class ViewMeta {
     }
 }
 
-// class VueView extends View {
-//     constructor(name, meta) {
-//         super()
-//         this.nodeType = 0
-//         this.nodeName = name
-//         this.templateParent = null
-//         this.meta = meta
-//     }
-// }
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
 function registerElement(elementName, resolver, meta) {
@@ -7428,12 +7587,18 @@ const patch = createPatchFunction({
     modules: modules$1
 });
 
+var platformDirectives$1 = {
+};
+
+const platformComponents = {};
+
 Vue$2.config.mustUseProp = mustUseProp;
 Vue$2.config.isReservedTag = isReservedTag;
 Vue$2.config.isUnknownElement = isUnknownElement;
 
-//Vue.options.directives = platformDirectives
-//Vue.options.components = platformComponents
+Vue$2.options.directives = platformDirectives$1;
+Vue$2.options.components = platformComponents;
+
 Vue$2.prototype.__patch__ = patch;
 
 Vue$2.prototype.$start = function () {
@@ -7554,6 +7719,7 @@ class ViewNode {
     }
 
     addEvent(evt, handler) {
+        console.log(`addEvent(${evt})`);
         this.view.on(evt, handler);
     }
 

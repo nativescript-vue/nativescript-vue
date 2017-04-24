@@ -3,6 +3,9 @@ import {warn} from 'core/util/index'
 import {compileToFunctions} from '../compiler/index'
 import {patch} from './patch'
 import {mountComponent} from 'core/instance/lifecycle'
+import platformDirectives from './directives/index'
+// import platformComponents from './components/index'
+const platformComponents = {}
 
 import {
     query,
@@ -15,8 +18,9 @@ Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
 Vue.config.isUnknownElement = isUnknownElement
 
-//Vue.options.directives = platformDirectives
-//Vue.options.components = platformComponents
+Vue.options.directives = platformDirectives
+Vue.options.components = platformComponents
+
 Vue.prototype.__patch__ = patch
 
 Vue.prototype.$start = function () {

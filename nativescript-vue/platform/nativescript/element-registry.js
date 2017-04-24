@@ -7,15 +7,6 @@ class ViewMeta {
     }
 }
 
-// class VueView extends View {
-//     constructor(name, meta) {
-//         super()
-//         this.nodeType = 0
-//         this.nodeName = name
-//         this.templateParent = null
-//         this.meta = meta
-//     }
-// }
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
 export function registerElement(elementName, resolver, meta) {
