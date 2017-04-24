@@ -4,16 +4,17 @@ Vue.component('image-viewer', {
     props: ['imgSrc'],
 
     template: `
-    <stack-layout>
-        <image style="height: 200;" :src="imgSrc"></image>
-        <scroll-view orientation="horizontal" style="height: 100">
-            <stack-layout orientation="horizontal">
-                <image v-for="i in 10" key="i" 
-                :src="i%2 ? '~/images/apple.jpg' : '~/images/vue.png'" 
-                @tap="imgSrc = i%2 ? '~/images/apple.jpg' : '~/images/vue.png'"></image>
-            </stack-layout>
-        </scroll-view>
-    </stack-layout>`,
+        <stack-layout>
+            <image style="height: 200;" :src="imgSrc"></image>
+            <scroll-view orientation="horizontal" style="height: 100">
+                <stack-layout orientation="horizontal">
+                    <image v-for="i in 10" key="i" 
+                    :src="i%2 ? '~/images/apple.jpg' : '~/images/vue.png'" 
+                    @tap="imgSrc = i%2 ? '~/images/apple.jpg' : '~/images/vue.png'"></image>
+                </stack-layout>
+            </scroll-view>
+        </stack-layout>
+    `,
 
     mounted() {
         console.log(this.imgSrc)
@@ -49,4 +50,4 @@ new Vue({
             alert('Nice Tap!')
         }
     }
-}).$mount(true)
+}).$start()

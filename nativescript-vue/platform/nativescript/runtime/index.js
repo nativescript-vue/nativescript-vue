@@ -19,6 +19,10 @@ Vue.config.isUnknownElement = isUnknownElement
 //Vue.options.components = platformComponents
 Vue.prototype.__patch__ = patch
 
+Vue.prototype.$start = function () {
+    this.$mount(true /* root */)
+}
+
 const mount = function (root, hydrating) {
     mountComponent(this, root ? this.$document.getRootView() : undefined, hydrating)
 }
