@@ -1,11 +1,10 @@
 {
   "name": "nativescript-vue",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc -p tsconfig.json",
     "dev": "rollup -c -w"
   },
   "repository": {
