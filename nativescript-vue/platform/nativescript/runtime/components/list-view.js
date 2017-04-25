@@ -1,18 +1,11 @@
-/*
- <list-view :items="items">
- <template scope="list">
- <stack-layout>
- <label>{{ list.index }} {{ list.item.prop1 }}</label>
- </stack-layout>
- </template>
- </list-view>
- */
-import {Label} from 'ui/label'
-import {createElement} from '../node-ops'
+import LayoutBase from 'ui/layouts/layout-base'
+
+const VUE_VIEW = '_vueViewRef'
 
 export default {
     name: 'list-view',
-    // abstract: true,
+
+    template: `<native-list-view ref="listView" @itemLoading="onItemLoading"></native-list-view>`,
 
     props: {
         items: {
@@ -21,36 +14,117 @@ export default {
         }
     },
 
-    render() {
-        let _vm = this
-        let _h = _vm.$createElement
-        let _c = _vm._self._c || _h
+    created() {
+        // this._templateMap = new Map()
+    },
 
-        let $index = 0
-        return _c('native-list-view', {
-            attrs: {
-                items: _vm.items,
-                itemTemplate: function () {
-                    let item = _vm.items[$index]
-                    if (typeof item === 'object') {
-                        item = Object.assign({}, {$index}, item)
-                    } else {
-                        item = Object.assign({}, {$index, value: item})
-                    }
+    mounted() {
+        // this.setupTemplates()
 
-                    let res = _vm.$scopedSlots.default(item)
-                    let vnode = res[0]
+        this.$refs.listView.setAttr('items', this.items)
+    },
 
-                    let $el = _vm.__patch__(
-                        undefined /* $el */,
-                        vnode
-                    )
+    watch: {
+        items(newVal) {
+            this.$refs.listView.setAttr('items', newVal)
+            this.$refs.listView.view.refresh()
+        }
+    },
 
-                    $index++
-                    return $el.view
-                }
-                // itemTemplate: '<Label text="{{ $value }}" padding="20" backgroundColor="red"/>'
+    methods: {
+        // setupTemplates() {
+        //     const slots = Object.keys(this.$scopedSlots)
+        //
+        //     slots.forEach((slotName) => {
+        //         const keyedTemplate = {
+        //             key: slotName,
+        //             createView() {
+        //                 this.getItemTemplate('foo', 0)
+        //                 return view;
+        //             }
+        //         }
+        //         this._templateMap.set(slotName, keyedTemplate)
+        //     })
+        //
+        //     this.setItemTemplates()
+        // },
+        //
+        // setItemTemplates() {
+        //     const templates = [];
+        //     this._templateMap.forEach(value => {
+        //         templates.push(value);
+        //     })
+        //     this.$refs.listView.setAttr('itemTemplates', templates);
+        // },
+
+        onItemLoading(args) {
+            const index = args.index
+            const items = args.object.items
+            const currentItem = typeof items.getItem === 'function' ? items.getItem(index) : items[index]
+
+            let viewRef
+            // if (args.view) {
+            //     viewRef = args.view[VUE_VIEW]
+            //
+            //     if (!viewRef && args.view instanceof LayoutBase && args.view.getChildrenCount() > 0) {
+            //         viewRef = args.view.getChildAt(0)[VUE_VIEW];
+            //     }
+            //
+            //     if (!viewRef) {
+            //         console.log('Cant reuse view...')
+            //     }
+            // }
+
+            if (!viewRef) {
+                viewRef = this.getItemTemplate(currentItem, index)
+                args.view = viewRef.view
+                args.view[VUE_VIEW] = viewRef;
             }
-        })
+
+            // this.updateItemTemplate(viewRef, currentItem, index)
+        },
+
+        updateItemTemplate(viewRef, item, index) {
+            return patchViewFromScopedSlot(
+                viewRef,
+                this.$scopedSlots.default,
+                new ItemContext(item, index),
+                this.__patch__
+            )
+        },
+
+        getItemTemplate(item, index) {
+            return generateViewFromScopedSlot(
+                this.$scopedSlots.default,
+                new ItemContext(item, index),
+                this.__patch__
+            )
+        }
     }
+}
+
+class ItemContext {
+    constructor(item, index) {
+        this.$index = index
+        if (typeof  item === 'object') {
+            Object.assign(this, item)
+        } else {
+            this.value = item
+        }
+    }
+}
+
+export function generateViewFromScopedSlot(slot, context, patch) {
+    return patch(
+        undefined /* $el */,
+        slot(context)[0]
+    )
+}
+
+
+export function patchViewFromScopedSlot($el, slot, context, patch) {
+    return patch(
+        $el,
+        slot(context)[0]
+    )
 }
