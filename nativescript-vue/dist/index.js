@@ -7,6 +7,7 @@
 
 'use strict';
 
+require('ui/label');
 var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
@@ -6465,7 +6466,7 @@ registerElement("ListPicker", () => require("ui/list-picker").ListPicker, {
         event: 'selectedIndexChange'
     }
 });
-registerElement("ListView", () => require("ui/list-view").ListView);
+registerElement("NativeListView", () => require("ui/list-view").ListView);
 registerElement("Page", () => require("ui/page").Page);
 registerElement("Placeholder", () => require("ui/placeholder").Placeholder);
 registerElement("Progress", () => require("ui/progress").Progress);
@@ -7623,7 +7624,63 @@ const patch = createPatchFunction({
 var platformDirectives$1 = {
 };
 
-const platformComponents = {};
+/*
+ <list-view :items="items">
+ <template scope="list">
+ <stack-layout>
+ <label>{{ list.index }} {{ list.item.prop1 }}</label>
+ </stack-layout>
+ </template>
+ </list-view>
+ */
+var ListView = {
+    name: 'list-view',
+    // abstract: true,
+
+    props: {
+        items: {
+            type: Array,
+            required: true
+        }
+    },
+
+    render() {
+        let _vm = this;
+        let _h = _vm.$createElement;
+        let _c = _vm._self._c || _h;
+
+        let $index = 0;
+        return _c('native-list-view', {
+            attrs: {
+                items: _vm.items,
+                itemTemplate: function () {
+                    let item = _vm.items[$index];
+                    if (typeof item === 'object') {
+                        item = Object.assign({}, {$index}, item);
+                    } else {
+                        item = Object.assign({}, {$index, value: item});
+                    }
+
+                    let res = _vm.$scopedSlots.default(item);
+                    let vnode = res[0];
+
+                    let $el = _vm.__patch__(
+                        undefined /* $el */,
+                        vnode
+                    );
+
+                    $index++;
+                    return $el.view
+                }
+                // itemTemplate: '<Label text="{{ $value }}" padding="20" backgroundColor="red"/>'
+            }
+        })
+    }
+};
+
+var platformComponents = {
+    ListView
+};
 
 Vue$2.config.mustUseProp = mustUseProp;
 Vue$2.config.isReservedTag = isReservedTag;
@@ -7785,6 +7842,7 @@ class ViewNode {
 
     appendChild(child, atIndex = -1) {
         child.parent = this;
+
         if (isLayout(this.view)) {
             if (child.view.parent === this.view) {
                 let index = this.view.getChildIndex(child.view);

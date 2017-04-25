@@ -96,6 +96,7 @@ export default class ViewNode {
 
     appendChild(child, atIndex = -1) {
         child.parent = this
+
         if (isLayout(this.view)) {
             if (child.view.parent === this.view) {
                 let index = this.view.getChildIndex(child.view)

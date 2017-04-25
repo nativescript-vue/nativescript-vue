@@ -77,7 +77,7 @@ registerElement("ListPicker", () => require("ui/list-picker").ListPicker, {
         event: 'selectedIndexChange'
     }
 });
-registerElement("ListView", () => require("ui/list-view").ListView);
+registerElement("NativeListView", () => require("ui/list-view").ListView);
 registerElement("Page", () => require("ui/page").Page);
 registerElement("Placeholder", () => require("ui/placeholder").Placeholder);
 registerElement("Progress", () => require("ui/progress").Progress);

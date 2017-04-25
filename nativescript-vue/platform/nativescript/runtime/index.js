@@ -4,8 +4,7 @@ import {compileToFunctions} from '../compiler/index'
 import {patch} from './patch'
 import {mountComponent} from 'core/instance/lifecycle'
 import platformDirectives from './directives/index'
-// import platformComponents from './components/index'
-const platformComponents = {}
+import platformComponents from './components/index'
 
 import {
     query,
