@@ -6257,7 +6257,6 @@ function preTransformNode(el, options) {
     }
 }
 var scopedSlots = {
-    staticKeys: ['_scopedSlots'],
     preTransformNode
 };
 
@@ -7661,11 +7660,11 @@ var ListView = {
     },
 
     created() {
-        // this._templateMap = new Map()
+        this._templateMap = new Map();
     },
 
     mounted() {
-        // this.setupTemplates()
+        this.setupTemplates();
 
         this.$refs.listView.setAttr('items', this.items);
     },
@@ -7678,30 +7677,39 @@ var ListView = {
     },
 
     methods: {
-        // setupTemplates() {
-        //     const slots = Object.keys(this.$scopedSlots)
-        //
-        //     slots.forEach((slotName) => {
-        //         const keyedTemplate = {
-        //             key: slotName,
-        //             createView() {
-        //                 this.getItemTemplate('foo', 0)
-        //                 return view;
-        //             }
-        //         }
-        //         this._templateMap.set(slotName, keyedTemplate)
-        //     })
-        //
-        //     this.setItemTemplates()
-        // },
-        //
-        // setItemTemplates() {
-        //     const templates = [];
-        //     this._templateMap.forEach(value => {
-        //         templates.push(value);
-        //     })
-        //     this.$refs.listView.setAttr('itemTemplates', templates);
-        // },
+        setupTemplates() {
+            const self = this;
+            const slots = Object.keys(this.$scopedSlots);
+
+            slots.forEach((slotName) => {
+                const keyedTemplate = {
+                    key: slotName,
+                    createView() {
+                        let vnode = self.getItemTemplate('', 0);
+                        vnode.elm.view[VUE_VIEW] = vnode;
+                        return vnode.elm.view;
+                    }
+                };
+                this._templateMap.set(slotName, keyedTemplate);
+            });
+
+            this.setItemTemplates();
+        },
+
+        setItemTemplates() {
+            const templates = [];
+            this._templateMap.forEach(value => {
+                templates.push(value);
+            });
+
+            this.$refs.listView.setAttr('_itemTemplatesInternal', templates);
+
+            if (typeof this.templateSelector === 'function') {
+                this.$refs.listView.setAttr('_itemTemplateSelector', (item, index, items) => {
+                    return this.templateSelector(new ItemContext(item, index))
+                });
+            }
+        },
 
         onItemLoading(args) {
             const index = args.index;

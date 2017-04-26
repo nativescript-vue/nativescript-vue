@@ -22,12 +22,11 @@ new Vue({
                 <list-view :items="items" :templateSelector="templateSelector">
                     <template scope="item">
                         <stack-layout orientation="horizontal" style="padding: 20">
-                            <label>{{ item.$index }}</label>
-                            <label style="margin-left: 10; text-align: left; width: 100%">{{ item.value }}</label>
+                            <label style="margin-left: 10; width: 100%; font-size: 20;" :text="item.$index"></label>
                         </stack-layout>
                     </template>
                     <template name="alt" scope="item">
-                        <label style="padding: 20; background-color: darkcyan;">{{ item.value }}</label>
+                        <label style="padding: 20; text-align: right; font-size: 20; background-color: darkcyan;" :text="item.$index"></label>
                     </template>
                 </list-view>    
                 
@@ -47,7 +46,8 @@ new Vue({
 
     methods: {
         addMore() {
-            this.items.push('added...' + Math.random())
+            for(let i = 0; i < 20000; ++i)
+                this.items.push('added...' + Math.random())
         },
         shuffle() {
             console.log('shuffle')

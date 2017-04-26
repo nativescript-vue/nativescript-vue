@@ -12,6 +12,5 @@ function preTransformNode(el, options) {
     }
 }
 export default {
-    staticKeys: ['_scopedSlots'],
     preTransformNode
 }
