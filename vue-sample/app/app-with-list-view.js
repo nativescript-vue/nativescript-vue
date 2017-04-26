@@ -27,10 +27,7 @@ new Vue({
                         </stack-layout>
                     </template>
                     <template name="alt" scope="item">
-                        <stack-layout orientation="horizontal" style="padding: 20">
-                            <label>{{ item.$index }}</label>
-                            <label style="margin-left: 10; text-align: center; width: 100%">{{ item.value }}</label>
-                        </stack-layout>
+                        <label style="padding: 20; background-color: darkcyan;">{{ item.value }}</label>
                     </template>
                 </list-view>    
                 
@@ -60,7 +57,7 @@ new Vue({
             this.items.splice(0, 1)
         },
         templateSelector(item) {
-            return item.$index < 2 ? "default" : "alt"
+            return item.even ? "default" : "alt"
         }
     }
 }).$start()

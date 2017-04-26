@@ -1,6 +1,4 @@
-import LayoutBase from 'ui/layouts/layout-base'
-
-const VUE_VIEW = '_vueViewRef'
+const VUE_VIEW = '__vueVNodeRef__'
 
 export default {
     name: 'list-view',
@@ -26,8 +24,6 @@ export default {
         // this.setupTemplates()
 
         this.$refs.listView.setAttr('items', this.items)
-
-        console.log(this.$scopedSlots)
     },
 
     watch: {
@@ -77,20 +73,18 @@ export default {
                 }
             }
 
-            if (!vnode) {
-                vnode = this.getItemTemplate(currentItem, index)
-                args.view = vnode.elm.view
-                args.view[VUE_VIEW] = vnode;
-            } else {
-                vnode = this.getItemTemplate(currentItem, index, vnode)
-                args.view[VUE_VIEW] = vnode;
-            }
+            vnode = this.getItemTemplate(currentItem, index, vnode)
+            args.view = vnode.elm.view
+            args.view[VUE_VIEW] = vnode;
         },
 
         getItemTemplate(item, index, oldVnode) {
             let context = new ItemContext(item, index)
-            let template = this.templateSelector ? this.templateSelector(context) : 'default'
-            console.log(template)
+            let template = 'default'
+            if (typeof this.templateSelector === 'function') {
+                template = this.templateSelector(context)
+            }
+
             let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
             let vnode = slot(context)[0]
             this.__patch__(oldVnode, vnode)
@@ -108,6 +102,8 @@ class ItemContext {
         } else {
             this.value = item
         }
+        this.even = index % 2 === 0
+        this.odd = !this.even
 
         // return JSON.parse(JSON.stringify(this))
     }

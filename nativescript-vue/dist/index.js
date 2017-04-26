@@ -7,12 +7,9 @@
 
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var ui_layouts_layoutBase = require('ui/layouts/layout-base');
-var ui_layouts_layoutBase__default = _interopDefault(ui_layouts_layoutBase);
 var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
+var ui_layouts_layoutBase = require('ui/layouts/layout-base');
 var ui_textBase = require('ui/text-base');
 var application = require('application');
 
@@ -6247,15 +6244,18 @@ var style = {
 };
 
 function preTransformNode(el, options) {
-    if(el.tag === 'template') {
+    if (el.tag === 'template') {
         let name = el.attrsMap.name;
-        if(name) {
-            el.parent.scopedSlots[`"${name}"`] = el;
-            console.dir(el);
+
+        if (name) {
+            el.attrsMap['slot'] = name;
+            el.attrsList.push({
+                name: 'slot',
+                value: name
+            });
         }
     }
 }
-
 var scopedSlots = {
     staticKeys: ['_scopedSlots'],
     preTransformNode
@@ -7642,7 +7642,7 @@ const patch = createPatchFunction({
 var platformDirectives$1 = {
 };
 
-const VUE_VIEW = '_vueViewRef';
+const VUE_VIEW = '__vueVNodeRef__';
 
 var ListView = {
     name: 'list-view',
@@ -7668,8 +7668,6 @@ var ListView = {
         // this.setupTemplates()
 
         this.$refs.listView.setAttr('items', this.items);
-
-        console.log(this.$scopedSlots);
     },
 
     watch: {
@@ -7719,20 +7717,18 @@ var ListView = {
                 }
             }
 
-            if (!vnode) {
-                vnode = this.getItemTemplate(currentItem, index);
-                args.view = vnode.elm.view;
-                args.view[VUE_VIEW] = vnode;
-            } else {
-                vnode = this.getItemTemplate(currentItem, index, vnode);
-                args.view[VUE_VIEW] = vnode;
-            }
+            vnode = this.getItemTemplate(currentItem, index, vnode);
+            args.view = vnode.elm.view;
+            args.view[VUE_VIEW] = vnode;
         },
 
         getItemTemplate(item, index, oldVnode) {
             let context = new ItemContext(item, index);
-            let template = this.templateSelector ? this.templateSelector(context) : 'default';
-            console.log(template);
+            let template = 'default';
+            if (typeof this.templateSelector === 'function') {
+                template = this.templateSelector(context);
+            }
+
             let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default;
             let vnode = slot(context)[0];
             this.__patch__(oldVnode, vnode);
@@ -7750,6 +7746,8 @@ class ItemContext {
         } else {
             this.value = item;
         }
+        this.even = index % 2 === 0;
+        this.odd = !this.even;
 
         // return JSON.parse(JSON.stringify(this))
     }
