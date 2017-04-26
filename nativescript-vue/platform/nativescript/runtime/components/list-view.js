@@ -113,7 +113,5 @@ class ItemContext {
         }
         this.even = index % 2 === 0
         this.odd = !this.even
-
-        // return JSON.parse(JSON.stringify(this))
     }
 }
