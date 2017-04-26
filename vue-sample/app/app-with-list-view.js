@@ -1,37 +1,39 @@
 const Vue = require('nativescript-vue/dist/index')
+const http = require("http");
+Vue.prototype.$http = http
 
 new Vue({
     data: {
-        items: ['foo', 'bar', 'fizz', 'buzz'],
+        items: [],
     },
 
     template: `
         <page>
             <stack-layout>
-                <button @tap="addMore">Add more (+100000)</button>
-                <button @tap="remove">remove</button>
-                <label :text="items.length" style="text-align: center; font-size: 40;"></label>
-                
                 <list-view :items="items">
                     <template scope="item">
-                        <stack-layout orientation="horizontal" style="padding: 20">
-                            <label style="margin-left: 10; width: 100%; font-size: 20;" :text="item.$index"></label>
-                        </stack-layout>
+                        <grid-layout rows="80" columns="80, *">
+                            <image :src="item.image" row="0" col="0" style="padding: 20;"></image>
+                            <label :text="item.title" row="0" col="1" style="padding: 20; font-size: 18"></label>
+                        </grid-layout>
                     </template>
                 </list-view>
             </stack-layout>
         </page>
     `,
 
-    methods: {
-        addMore() {
-            let items = []
-            for(let i = 0; i < 100000; ++i)
-                this.items.push('added')
-            this.items = this.items.concat(items)
-        },
-        remove() {
-            this.items.splice(0, 1)
-        }
-    }
+    created() {
+        this.$http.getJSON('https://www.reddit.com/r/funny.json').then((res) => {
+            this.items = res.data.children.map((item) => {
+                return {
+                    title: item.data.title,
+                    image: item.data.thumbnail
+                }
+            })
+        }).catch((err) => {
+            console.log('err..' + err)
+        })
+    },
+
+    methods: {}
 }).$start()
