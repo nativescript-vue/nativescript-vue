@@ -16,13 +16,20 @@ new Vue({
             <stack-layout>
                 <button @tap="addMore">Add more</button>
                 <button @tap="remove">remove</button>
-                <label :text="items.length" style="font-size: 30; text-align: center; margin: 30;"></label>
+                <button @tap="shuffle">shuffle</button>
+                <label :text="JSON.stringify(items)"></label>
                 
-                <list-view :items="items">
+                <list-view :items="items" :templateSelector="templateSelector">
                     <template scope="item">
                         <stack-layout orientation="horizontal" style="padding: 20">
-                            <label :text="item.$index"></label>
-                            <label :text="item.value" style="margin-left: 10"></label>
+                            <label>{{ item.$index }}</label>
+                            <label style="margin-left: 10; text-align: left; width: 100%">{{ item.value }}</label>
+                        </stack-layout>
+                    </template>
+                    <template name="alt" scope="item">
+                        <stack-layout orientation="horizontal" style="padding: 20">
+                            <label>{{ item.$index }}</label>
+                            <label style="margin-left: 10; text-align: center; width: 100%">{{ item.value }}</label>
                         </stack-layout>
                     </template>
                 </list-view>    
@@ -45,9 +52,15 @@ new Vue({
         addMore() {
             this.items.push('added...' + Math.random())
         },
+        shuffle() {
+            console.log('shuffle')
+            this.items.push(this.items.shift())
+        },
         remove() {
             this.items.splice(0, 1)
+        },
+        templateSelector(item) {
+            return item.$index < 2 ? "default" : "alt"
         }
-
     }
 }).$start()

@@ -11,6 +11,10 @@ export default {
         items: {
             type: Array,
             required: true
+        },
+        templateSelector: {
+            type: Function,
+            default: () => 'default'
         }
     },
 
@@ -22,6 +26,8 @@ export default {
         // this.setupTemplates()
 
         this.$refs.listView.setAttr('items', this.items)
+
+        console.log(this.$scopedSlots)
     },
 
     watch: {
@@ -62,43 +68,34 @@ export default {
             const items = args.object.items
             const currentItem = typeof items.getItem === 'function' ? items.getItem(index) : items[index]
 
-            let viewRef
-            // if (args.view) {
-            //     viewRef = args.view[VUE_VIEW]
-            //
-            //     if (!viewRef && args.view instanceof LayoutBase && args.view.getChildrenCount() > 0) {
-            //         viewRef = args.view.getChildAt(0)[VUE_VIEW];
-            //     }
-            //
-            //     if (!viewRef) {
-            //         console.log('Cant reuse view...')
-            //     }
-            // }
+            let vnode
+            if (args.view) {
+                vnode = args.view[VUE_VIEW]
 
-            if (!viewRef) {
-                viewRef = this.getItemTemplate(currentItem, index)
-                args.view = viewRef.view
-                args.view[VUE_VIEW] = viewRef;
+                if (!vnode) {
+                    console.log('Cant reuse view...')
+                }
             }
 
-            // this.updateItemTemplate(viewRef, currentItem, index)
+            if (!vnode) {
+                vnode = this.getItemTemplate(currentItem, index)
+                args.view = vnode.elm.view
+                args.view[VUE_VIEW] = vnode;
+            } else {
+                vnode = this.getItemTemplate(currentItem, index, vnode)
+                args.view[VUE_VIEW] = vnode;
+            }
         },
 
-        updateItemTemplate(viewRef, item, index) {
-            return patchViewFromScopedSlot(
-                viewRef,
-                this.$scopedSlots.default,
-                new ItemContext(item, index),
-                this.__patch__
-            )
-        },
+        getItemTemplate(item, index, oldVnode) {
+            let context = new ItemContext(item, index)
+            let template = this.templateSelector ? this.templateSelector(context) : 'default'
+            console.log(template)
+            let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
+            let vnode = slot(context)[0]
+            this.__patch__(oldVnode, vnode)
 
-        getItemTemplate(item, index) {
-            return generateViewFromScopedSlot(
-                this.$scopedSlots.default,
-                new ItemContext(item, index),
-                this.__patch__
-            )
+            return vnode
         }
     }
 }
@@ -111,20 +108,7 @@ class ItemContext {
         } else {
             this.value = item
         }
+
+        // return JSON.parse(JSON.stringify(this))
     }
-}
-
-export function generateViewFromScopedSlot(slot, context, patch) {
-    return patch(
-        undefined /* $el */,
-        slot(context)[0]
-    )
-}
-
-
-export function patchViewFromScopedSlot($el, slot, context, patch) {
-    return patch(
-        $el,
-        slot(context)[0]
-    )
 }
