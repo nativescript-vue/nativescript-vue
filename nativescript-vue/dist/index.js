@@ -397,6 +397,7 @@ function parsePath (path) {
 /*  */
 /* globals MutationObserver */
 
+// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -951,6 +952,11 @@ function dependArray (value) {
 
 /*  */
 
+/**
+ * Option overwriting strategies are functions that handle
+ * how to merge a parent option value and a child option
+ * value into the final value.
+ */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -1750,6 +1756,18 @@ function mergeVNodeHook (def, hookKey, hook) {
 
 /*  */
 
+// The template compiler attempts to minimize the need for normalization by
+// statically analyzing the template at compile time.
+//
+// For plain HTML markup, normalization can be completely skipped because the
+// generated render function is guaranteed to return Array<VNode>. There are
+// two cases where extra normalization is needed:
+
+// 1. When the children contains components - because a functional component
+// may return an Array instead of a single root. In this case, just a simple
+// normalization is needed - if any child is an Array, we flatten the whole
+// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
+// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -2921,6 +2939,7 @@ function stateMixin (Vue) {
 
 /*  */
 
+// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -3373,6 +3392,9 @@ function applyNS (vnode, ns) {
 
 /*  */
 
+/**
+ * Runtime helper for rendering v-for lists.
+ */
 function renderList (
   val,
   render
@@ -3401,6 +3423,9 @@ function renderList (
 
 /*  */
 
+/**
+ * Runtime helper for rendering <slot>
+ */
 function renderSlot (
   name,
   fallback,
@@ -3431,12 +3456,18 @@ function renderSlot (
 
 /*  */
 
+/**
+ * Runtime helper for resolving filters
+ */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
+/**
+ * Runtime helper for checking keyCodes from config.
+ */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -3452,6 +3483,9 @@ function checkKeyCodes (
 
 /*  */
 
+/**
+ * Runtime helper for merging v-bind="object" into a VNode's data.
+ */
 function bindObjectProps (
   data,
   tag,
@@ -3489,6 +3523,9 @@ function bindObjectProps (
 
 /*  */
 
+/**
+ * Runtime helper for rendering static trees.
+ */
 function renderStatic (
   index,
   isInFor
@@ -4192,6 +4229,7 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
+// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -5531,6 +5569,7 @@ var baseDirectives = {
 
 /*  */
 
+// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -5932,6 +5971,8 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
+// these keywords should not appear inside expressions, but operators like
+// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -6175,9 +6216,49 @@ function createCompiler (baseOptions) {
   }
 }
 
+function transformNode(el, options) {
+    const warn = options.warn || baseWarn;
+    const staticClass = getAndRemoveAttr(el, 'class');
+    if ('development' !== 'production' && staticClass) {
+        const expression = parseText(staticClass, options.delimiters);
+        if (expression) {
+            warn(
+                `class="${staticClass}": ` +
+                'Interpolation inside attributes has been removed. ' +
+                'Use v-bind or the colon shorthand instead. For example, ' +
+                'instead of <div class="{{ val }}">, use <div :class="val">.'
+            );
+        }
+    }
+    if (staticClass) {
+        el.staticClass = JSON.stringify(staticClass);
+    }
+    const classBinding = getBindingAttr(el, 'class', false /* getStatic */);
+    if (classBinding) {
+        el.classBinding = classBinding;
+    }
+}
+
+function genData$1(el) {
+    let data = '';
+    if (el.staticClass) {
+        data += `staticClass:${el.staticClass},`;
+    }
+    if (el.classBinding) {
+        data += `class:${el.classBinding},`;
+    }
+    return data
+}
+
+var class_ = {
+    staticKeys: ['staticClass'],
+    transformNode,
+    genData: genData$1
+};
+
 const normalize = cached(camelize);
 
-function transformNode (el, options) {
+function transformNode$1 (el, options) {
     const warn = options.warn || baseWarn;
     const staticStyle = getAndRemoveAttr(el, 'style');
     const { dynamic, styleResult } = parseStaticStyle(staticStyle, options);
@@ -6199,7 +6280,7 @@ function transformNode (el, options) {
     }
 }
 
-function genData$1 (el) {
+function genData$2 (el) {
     let data = '';
     if (el.staticStyle) {
         data += `staticStyle:${el.staticStyle},`;
@@ -6239,8 +6320,8 @@ function parseStaticStyle (staticStyle, options) {
 
 var style = {
     staticKeys: ['staticStyle'],
-    transformNode,
-    genData: genData$1
+    transformNode: transformNode$1,
+    genData: genData$2
 };
 
 function preTransformNode(el, options) {
@@ -6261,6 +6342,7 @@ var scopedSlots = {
 };
 
 var modules = [
+    class_,
     style,
     scopedSlots
 ];
@@ -7394,6 +7476,157 @@ var attrs = {
     update: updateAttrs
 };
 
+/*  */
+
+// attributes that should be using props for binding
+const acceptValue = makeMap('input,textarea,option,select');
+
+
+const isEnumeratedAttr = makeMap('contenteditable,draggable,spellcheck');
+
+const isBooleanAttr = makeMap(
+  'allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,' +
+  'default,defaultchecked,defaultmuted,defaultselected,defer,disabled,' +
+  'enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,' +
+  'muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,' +
+  'required,reversed,scoped,seamless,selected,sortable,translate,' +
+  'truespeed,typemustmatch,visible'
+);
+
+/*  */
+
+function genClassForVnode (vnode) {
+  let data = vnode.data;
+  let parentNode = vnode;
+  let childNode = vnode;
+  while (childNode.componentInstance) {
+    childNode = childNode.componentInstance._vnode;
+    if (childNode.data) {
+      data = mergeClassData(childNode.data, data);
+    }
+  }
+  while ((parentNode = parentNode.parent)) {
+    if (parentNode.data) {
+      data = mergeClassData(data, parentNode.data);
+    }
+  }
+  return genClassFromData(data)
+}
+
+function mergeClassData (child, parent) {
+  return {
+    staticClass: concat(child.staticClass, parent.staticClass),
+    class: child.class
+      ? [child.class, parent.class]
+      : parent.class
+  }
+}
+
+function genClassFromData (data) {
+  const dynamicClass = data.class;
+  const staticClass = data.staticClass;
+  if (staticClass || dynamicClass) {
+    return concat(staticClass, stringifyClass(dynamicClass))
+  }
+  /* istanbul ignore next */
+  return ''
+}
+
+function concat (a, b) {
+  return a ? b ? (a + ' ' + b) : a : (b || '')
+}
+
+function stringifyClass (value) {
+  let res = '';
+  if (!value) {
+    return res
+  }
+  if (typeof value === 'string') {
+    return value
+  }
+  if (Array.isArray(value)) {
+    let stringified;
+    for (let i = 0, l = value.length; i < l; i++) {
+      if (value[i]) {
+        if ((stringified = stringifyClass(value[i]))) {
+          res += stringified + ' ';
+        }
+      }
+    }
+    return res.slice(0, -1)
+  }
+  if (isObject(value)) {
+    for (const key in value) {
+      if (value[key]) res += key + ' ';
+    }
+    return res.slice(0, -1)
+  }
+  /* istanbul ignore next */
+  return res
+}
+
+/*  */
+
+
+
+const isHTMLTag = makeMap(
+  'html,body,base,head,link,meta,style,title,' +
+  'address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,' +
+  'div,dd,dl,dt,figcaption,figure,hr,img,li,main,ol,p,pre,ul,' +
+  'a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,' +
+  's,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video,' +
+  'embed,object,param,source,canvas,script,noscript,del,ins,' +
+  'caption,col,colgroup,table,thead,tbody,td,th,tr,' +
+  'button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,' +
+  'output,progress,select,textarea,' +
+  'details,dialog,menu,menuitem,summary,' +
+  'content,element,shadow,template'
+);
+
+// this map is intentionally selective, only covering SVG elements that may
+// contain child elements.
+const isSVG = makeMap(
+  'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
+  'foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
+  'polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view',
+  true
+);
+
+/*  */
+
+/**
+ * Query an element selector if it's not an element already.
+ */
+
+function updateClass(oldVnode, vnode) {
+    const el = vnode.elm;
+    const data = vnode.data;
+    const oldData = oldVnode.data;
+    if (!data.staticClass && !data.class &&
+        (!oldData || (!oldData.staticClass && !oldData.class))) {
+        return
+    }
+
+    let cls = genClassForVnode(vnode);
+
+    // handle transition classes
+    const transitionClass = el._transitionClasses;
+    if (transitionClass) {
+        cls = concat(cls, stringifyClass(transitionClass));
+    }
+
+    // set the class
+    if (cls !== el._prevClass) {
+        el.setAttr('class', cls);
+        el._prevClass = cls;
+    }
+}
+
+var class_$1 = {
+    create: updateClass,
+    update: updateClass
+};
+
 let target$1;
 
 function add$1 (
@@ -7513,6 +7746,7 @@ var style$1 = {
 
 var platformModules = [
     attrs,
+    class_$1,
     events,
     style$1
 ];
@@ -7646,7 +7880,7 @@ const VUE_VIEW = '__vueVNodeRef__';
 var ListView = {
     name: 'list-view',
 
-    template: `<native-list-view ref="listView" @itemLoading="onItemLoading"></native-list-view>`,
+    template: `<native-list-view ref="listView" @itemLoading="onItemLoading" @itemTap="onItemTap"></native-list-view>`,
 
     props: {
         items: {
@@ -7677,6 +7911,10 @@ var ListView = {
     },
 
     methods: {
+        onItemTap(args) {
+            this.$emit('itemTap', args);
+        },
+
         setupTemplates() {
             const self = this;
             const slots = Object.keys(this.$scopedSlots);

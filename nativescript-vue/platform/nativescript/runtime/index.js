@@ -7,7 +7,6 @@ import platformDirectives from './directives/index'
 import platformComponents from './components/index'
 
 import {
-    query,
     mustUseProp,
     isReservedTag,
     isUnknownElement

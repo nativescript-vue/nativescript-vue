@@ -3,7 +3,7 @@ const VUE_VIEW = '__vueVNodeRef__'
 export default {
     name: 'list-view',
 
-    template: `<native-list-view ref="listView" @itemLoading="onItemLoading"></native-list-view>`,
+    template: `<native-list-view ref="listView" @itemLoading="onItemLoading" @itemTap="onItemTap"></native-list-view>`,
 
     props: {
         items: {
@@ -34,6 +34,10 @@ export default {
     },
 
     methods: {
+        onItemTap(args) {
+            this.$emit('itemTap', args)
+        },
+
         setupTemplates() {
             const self = this
             const slots = Object.keys(this.$scopedSlots)
