@@ -12,7 +12,7 @@ export class ViewNode {
         this.nextSibling = null
         this.ownerDocument = null
 
-        this.nativeView = null
+        this._nativeView = null
     }
 
     get firstChild() {
@@ -23,10 +23,19 @@ export class ViewNode {
         return this.childNodes.length ? this.childNodes[this.childNodes.length - 1] : null
     }
 
-    getNativeView() {
-        return this.nativeView
+    get nativeView() {
+        return this._nativeView
     }
 
+    set nativeView(view) {
+        if (this._nativeView) {
+            throw new Error(`Can't override native view.`)
+        }
+
+        this._nativeView = view
+    }
+
+    /* istanbul ignore next */
     setAttribute(key, value) {
         try {
             if (XML_ATTRIBUTES.indexOf(key) !== -1) {
@@ -40,6 +49,7 @@ export class ViewNode {
 
     }
 
+    /* istanbul ignore next */
     setText(text) {
         if (this.tagName === 'detached-text') {
             this.parentNode.setText(text)

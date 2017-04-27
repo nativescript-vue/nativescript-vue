@@ -162,7 +162,45 @@ describe('ViewNode', () => {
         expect(() => node.removeChild(childNode)).toThrow(`different parent.`)
     })
 
-    it('removeChild sets the correct node relations', () => {
+    it('removeChild throws if childNode has no parent', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+
+        expect(() => node.removeChild(childNode)).toThrow(`no parent.`)
+    })
+
+    it('removeChild sets the correct node relations for firstChild', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+        let nextChildNode = new ViewNode
+
+        node.appendChild(childNode)
+        node.appendChild(nextChildNode)
+
+        expect(nextChildNode.prevSibling).toEqual(childNode)
+
+        node.removeChild(childNode)
+
+        expect(nextChildNode.prevSibling).toBeNull()
+    })
+
+
+    it('removeChild sets the correct node relations for lastChild', () => {
+        let node = new ViewNode
+        let prevChildNode = new ViewNode
+        let childNode = new ViewNode
+
+        node.appendChild(prevChildNode)
+        node.appendChild(childNode)
+
+        expect(prevChildNode.nextSibling).toEqual(childNode)
+
+        node.removeChild(childNode)
+
+        expect(prevChildNode.nextSibling).toBeNull()
+    })
+
+    it('removeChild sets the correct node relations for prevChildNode and nextChildNode', () => {
         let node = new ViewNode
         let prevChildNode = new ViewNode
         let childNode = new ViewNode
@@ -181,5 +219,22 @@ describe('ViewNode', () => {
         expect(prevChildNode.nextSibling).toEqual(nextChildNode)
         expect(nextChildNode.prevSibling).toEqual(prevChildNode)
         expect(childNode.parentNode).toBeNull()
+    })
+
+    it('nativeView can be set once', () => {
+        let node = new ViewNode
+        let dummyView = {name: 'dummy'}
+        node.nativeView = dummyView
+
+        expect(node.nativeView).toEqual(dummyView)
+    })
+
+    it('nativeView can\'t be set multiple times', () => {
+        let node = new ViewNode
+        let dummyView = {name: 'dummy'}
+        node.nativeView = dummyView
+
+        expect(() => node.nativeView = dummyView).toThrow(`Can't override`)
+        expect(node.nativeView).toEqual(dummyView)
     })
 })

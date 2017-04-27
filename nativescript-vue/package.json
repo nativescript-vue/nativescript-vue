@@ -47,6 +47,7 @@
     "verbose": true,
     "modulePaths": [
       "<rootDir>/platform/nativescript"
-    ]
+    ],
+    "collectCoverage": true
   }
 }
