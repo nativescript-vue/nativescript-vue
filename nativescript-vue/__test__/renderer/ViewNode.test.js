@@ -67,7 +67,7 @@ describe('ViewNode', () => {
     })
 
 
-    it('insertBefore throws if childNode is already a children', () => {
+    it('insertBefore throws if childNode is already a child', () => {
         let node = new ViewNode
         let childNode = new ViewNode
         childNode.parentNode = node
@@ -100,5 +100,86 @@ describe('ViewNode', () => {
         expect(childNode.nextSibling).toEqual(refNode)
         expect(refNode.prevSibling).toEqual(childNode)
         expect(refNode.nextSibling).toBeFalsy()
+    })
+
+    it('appendChild throws if no childNode is given', () => {
+        let node = new ViewNode
+
+        expect(node.appendChild).toThrow(`Can't append child.`)
+    })
+
+    it('appendChild throws if childNode has a different parent', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+        childNode.parentNode = new ViewNode
+
+        expect(() => node.appendChild(childNode)).toThrow(`already has a different parent`)
+    })
+
+    it('appendChild throws if childNode is already a child', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+        childNode.parentNode = node
+
+        expect(() => node.appendChild(childNode)).toThrow(`already a child`)
+    })
+
+    it('appendChild sets the correct node relations for only child', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+
+        node.appendChild(childNode)
+
+        expect(node.childNodes.length).toBe(1)
+        expect(childNode.parentNode).toEqual(node)
+        expect(childNode.prevSibling).toBeFalsy()
+    })
+
+    it('appendChild sets the correct node relations for multiple children', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+        let prevChildNode = new ViewNode
+
+        node.appendChild(prevChildNode)
+        node.appendChild(childNode)
+
+        expect(node.childNodes.length).toBe(2)
+        expect(childNode.prevSibling).toEqual(prevChildNode)
+        expect(prevChildNode.nextSibling).toEqual(childNode)
+    })
+
+    it('removeChild throws if no childNode is given', () => {
+        let node = new ViewNode
+
+        expect(node.removeChild).toThrow(`Can't remove child.`)
+    })
+
+    it('removeChild throws if childNode has a different parent', () => {
+        let node = new ViewNode
+        let childNode = new ViewNode
+        childNode.parentNode = new ViewNode
+
+        expect(() => node.removeChild(childNode)).toThrow(`different parent.`)
+    })
+
+    it('removeChild sets the correct node relations', () => {
+        let node = new ViewNode
+        let prevChildNode = new ViewNode
+        let childNode = new ViewNode
+        let nextChildNode = new ViewNode
+
+        node.appendChild(prevChildNode)
+        node.appendChild(childNode)
+        node.appendChild(nextChildNode)
+
+        expect(prevChildNode.nextSibling).toEqual(childNode)
+        expect(nextChildNode.prevSibling).toEqual(childNode)
+
+        node.removeChild(childNode)
+
+        expect(node.childNodes.length).toBe(2)
+        expect(prevChildNode.nextSibling).toEqual(nextChildNode)
+        expect(nextChildNode.prevSibling).toEqual(prevChildNode)
+        expect(childNode.parentNode).toBeNull()
     })
 })

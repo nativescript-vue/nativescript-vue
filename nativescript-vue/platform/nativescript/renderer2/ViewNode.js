@@ -49,11 +49,11 @@ export class ViewNode {
     }
 
     insertBefore(childNode, referenceNode) {
-        if(!childNode) {
+        if (!childNode) {
             throw new Error(`Can't insert child.`)
         }
 
-        if(referenceNode && referenceNode.parentNode !== this) {
+        if (referenceNode && referenceNode.parentNode !== this) {
             throw new Error(`Can't insert child, because the reference node has a different parent.`)
         }
 
@@ -76,20 +76,33 @@ export class ViewNode {
     }
 
     appendChild(childNode) {
+        if (!childNode) {
+            throw new Error(`Can't append child.`)
+        }
+
         if (childNode.parentNode && childNode.parentNode !== this) {
             throw new Error(`Can't append child, because it already has a different parent.`)
         }
 
         if (childNode.parentNode === this) {
-            throw new Error(`Can't append child, because it is already appended.`)
+            throw new Error(`Can't append child, because it is already a child.`)
         }
 
         childNode.parentNode = this
-        childNode.prevSibling = this.lastChild
+
+        if (this.lastChild) {
+            childNode.prevSibling = this.lastChild
+            this.lastChild.nextSibling = childNode
+        }
+
         this.childNodes.push(childNode)
     }
 
     removeChild(childNode) {
+        if (!childNode) {
+            throw new Error(`Can't remove child.`)
+        }
+
         if (!childNode.parentNode) {
             throw new Error(`Can't remove child, because it has no parent.`)
         }
