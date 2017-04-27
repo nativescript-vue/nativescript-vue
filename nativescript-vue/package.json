@@ -4,7 +4,8 @@
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "tdd": "jest --watch",
     "dev": "rollup -c -w"
   },
   "repository": {
@@ -23,12 +24,15 @@
   },
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "dependencies": {
-    "vue": "^2.2.6"
+    "vue": "2.2.6"
   },
   "peerDependencies": {
     "tns-core-modules": "^3.0.0-rc.2"
   },
   "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "babel-preset-env": "^1.4.0",
+    "jest": "^19.0.2",
     "rollup": "^0.41.6",
     "rollup-plugin-alias": "^1.3.1",
     "rollup-plugin-commonjs": "^8.0.2",
@@ -38,5 +42,11 @@
     "rollup-plugin-resolve-aliases": "^0.2.0",
     "rollup-watch": "^3.2.2",
     "tns-core-modules": "^3.0.0-rc.2"
+  },
+  "jest": {
+    "verbose": true,
+    "modulePaths": [
+      "<rootDir>/platform/nativescript"
+    ]
   }
 }
