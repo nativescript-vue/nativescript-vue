@@ -7,7 +7,7 @@ dependencies:
     - nativescript-vue/node_modules
 
   override:
-    - cd nativescript-vue && npm install
+    - cd nativescript-vue && npm install && npm install codecov
 
 general:
   artifacts:
@@ -15,5 +15,5 @@ general:
 
 test:
   override:
-    - cd nativescript-vue && npm run test
+    - cd nativescript-vue && npm run test && cat ./coverage/lcov.info | ./node_modules/.bin/codecov
 
