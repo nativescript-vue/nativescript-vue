@@ -1,0 +1,15 @@
+machine:
+  node:
+    version: 6
+
+dependencies:
+  cache_directories:
+    - nativescript-vue/node_modules
+
+  override:
+    - cd nativescript-vue && npm install
+
+test:
+  override:
+    - cd nativescript-vue && npm run test
+
