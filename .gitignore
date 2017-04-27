@@ -1,4 +1,5 @@
 .vscode
+nativescript-vue/coverage
 npm-debug.log
 node_modules/
 vue-sample/platforms

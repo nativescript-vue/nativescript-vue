@@ -9,6 +9,10 @@ dependencies:
   override:
     - cd nativescript-vue && npm install
 
+general:
+  artifacts:
+    - nativescript-vue/coverage
+
 test:
   override:
     - cd nativescript-vue && npm run test
