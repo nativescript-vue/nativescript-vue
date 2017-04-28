@@ -12,9 +12,9 @@ dependencies:
 general:
   artifacts:
     - nativescript-vue/coverage
+    - nativescript-vue/junit.xml
 
 test:
   override:
     - cd nativescript-vue && npm run test
-    - cat ./nativescript-vue/coverage/lcov.info | ./node_modules/.bin/codecov
-    - mv ./nativescript-vue/junit.xml $CIRCLE_TEST_REPORTS/reports
+    - cat ./coverage/lcov.info | ./node_modules/.bin/codecov
