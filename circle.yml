@@ -18,4 +18,5 @@ test:
   override:
     - cd nativescript-vue && npm run test
     - cd nativescript-vue && cat ./coverage/lcov.info | ./node_modules/.bin/codecov
+    - mkdir -p $CIRCLE_TEST_REPORTS/reports
     - cd nativescript-vue && mv ./junit.xml $CIRCLE_TEST_REPORTS/reports
