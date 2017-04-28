@@ -1,28 +1,26 @@
-import Vue from './index'
+import {default as document} from '../renderer2/DocumentNode'
 
 export const namespaceMap = {}
 
 export function createElement(tagName, vnode) {
     console.log(`{NSVue} -> CreateElement(${tagName})`)
-    return new Vue.renderer.Element(tagName)
+    return document.createElement(tagName)
 }
 
 export function createElementNS(namespace, tagName) {
     console.log(`{NSVue} -> CreateElementNS(${namespace}#${tagName})`)
-    return new Vue.renderer.Element(namespace + ':' + tagName)
+    return document.createElementNS(namespace, tagName)
 }
 
 export function createTextNode(text) {
     console.log(`{NSVue} -> CreateTextNode(${text})`)
-    let node = new Vue.renderer.Element('detached-text')
-    node.setAttr('text', text)
-    return node
+    return document.createTextNode(text)
 }
 
 export function createComment(text) {
     console.log(`{NSVue} -> CreateComment(${text})`)
 
-    return new Vue.renderer.Comment(text)
+    return document.createComment(text)
 }
 
 export function insertBefore(parentNode, newNode, referenceNode) {
@@ -44,19 +42,19 @@ export function appendChild(node, child) {
 export function parentNode(node) {
     console.log(`{NSVue} -> ParentNode(${node})`)
 
-    return node.parentNode()
+    return node.parentNode
 }
 
 export function nextSibling(node) {
     console.log(`{NSVue} -> NextSibling(${node})`)
 
-    return node.nextSibling()
+    return node.nextSibling
 }
 
 export function tagName(elementNode) {
     console.log(`{NSVue} -> TagName(${elementNode})`)
 
-    return elementNode.type
+    return elementNode.tagName
 }
 
 export function setTextContent(node, text) {
@@ -65,8 +63,8 @@ export function setTextContent(node, text) {
     node.setText(text)
 }
 
-export function setAttribute(nodeElement, key, val) {
-    console.log(`{NSVue} -> SetAttribute(${nodeElement}, ${key}, ${val})`)
+export function setAttribute(node, key, val) {
+    console.log(`{NSVue} -> SetAttribute(${node}, ${key}, ${val})`)
 
-    nodeElement.setAttr(key, val)
+    node.setAttribute(key, val)
 }

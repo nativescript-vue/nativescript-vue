@@ -24,7 +24,7 @@ function add (
             }
         }
     }
-    target.addEvent(event, handler)
+    target.addEventListener(event, handler)
 }
 
 function remove (
@@ -33,7 +33,7 @@ function remove (
     capture,
     _target
 ) {
-    (_target || target).removeEvent(event)
+    (_target || target).removeEventListener(event)
 }
 
 function updateDOMListeners (oldVnode, vnode) {

@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "dependencies": {
-    "vue": "2.2.6"
+    "vue": "2.3.0"
   },
   "peerDependencies": {
     "tns-core-modules": "^3.0.0-rc.2"

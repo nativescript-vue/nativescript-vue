@@ -23,13 +23,13 @@ export default {
     mounted() {
         this.setupTemplates()
 
-        this.$refs.listView.setAttr('items', this.items)
+        this.$refs.listView.setAttribute('items', this.items)
     },
 
     watch: {
         items(newVal) {
-            this.$refs.listView.setAttr('items', newVal)
-            this.$refs.listView.view.refresh()
+            this.$refs.listView.setAttribute('items', newVal)
+            this.$refs.listView.nativeView.refresh()
         }
     },
 
@@ -47,8 +47,8 @@ export default {
                     key: slotName,
                     createView() {
                         let vnode = self.getItemTemplate('', 0)
-                        vnode.elm.view[VUE_VIEW] = vnode
-                        return vnode.elm.view;
+                        vnode.elm.nativeView[VUE_VIEW] = vnode
+                        return vnode.elm.nativeView;
                     }
                 }
                 this._templateMap.set(slotName, keyedTemplate)
@@ -63,10 +63,10 @@ export default {
                 templates.push(value);
             })
 
-            this.$refs.listView.setAttr('_itemTemplatesInternal', templates);
+            this.$refs.listView.setAttribute('_itemTemplatesInternal', templates);
 
             if (typeof this.templateSelector === 'function') {
-                this.$refs.listView.setAttr('_itemTemplateSelector', (item, index, items) => {
+                this.$refs.listView.setAttribute('_itemTemplateSelector', (item, index, items) => {
                     return this.templateSelector(new ItemContext(item, index))
                 })
             }
@@ -87,7 +87,7 @@ export default {
             }
 
             vnode = this.getItemTemplate(currentItem, index, vnode)
-            args.view = vnode.elm.view
+            args.view = vnode.elm.nativeView
             args.view[VUE_VIEW] = vnode;
         },
 

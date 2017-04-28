@@ -17,12 +17,12 @@ function updateAttrs (oldVnode, vnode) {
         cur = attrs[key]
         old = oldAttrs[key]
         if (old !== cur) {
-            elm.setAttr(key, cur)
+            elm.setAttribute(key, cur)
         }
     }
     for (key in oldAttrs) {
         if (attrs[key] == null) {
-            elm.setAttr(key)
+            elm.setAttribute(key)
         }
     }
 }

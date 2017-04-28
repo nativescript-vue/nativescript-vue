@@ -19,7 +19,7 @@ function updateClass(oldVnode, vnode) {
 
     // set the class
     if (cls !== el._prevClass) {
-        el.setAttr('class', cls)
+        el.setAttribute('class', cls)
         el._prevClass = cls
     }
 }

@@ -11,9 +11,13 @@ const defaultViewMeta = {
     }
 }
 
-const camelCaseSplit = /([a-z0-9])([A-Z])/g;
+export function normalizeElementName(elementName) {
+    return elementName.replace(/-/g, '').toLowerCase()
+}
 
 export function registerElement(elementName, resolver, meta) {
+    elementName = normalizeElementName(elementName)
+
     meta = Object.assign({}, defaultViewMeta, meta)
 
     if (elementMap.has(elementName)) {
@@ -22,10 +26,10 @@ export function registerElement(elementName, resolver, meta) {
 
     const entry = {resolver: resolver, meta: meta}
     elementMap.set(elementName.toLowerCase(), entry)
-    elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
 }
 
 export function getViewClass(elementName) {
+    elementName = normalizeElementName(elementName)
     const entry = elementMap.get(elementName.toLowerCase())
 
     if (!entry) {
@@ -40,6 +44,8 @@ export function getViewClass(elementName) {
 }
 
 export function getViewMeta(nodeName) {
+    nodeName = normalizeElementName(nodeName)
+
     let meta = defaultViewMeta
     const entry = elementMap.get(nodeName.toLowerCase())
 
@@ -51,7 +57,9 @@ export function getViewMeta(nodeName) {
 }
 
 export function isKnownView(elementName) {
-    return elementMap.has(elementName.toLowerCase())
+    elementName = normalizeElementName(elementName)
+
+    return elementMap.has(elementName)
 }
 
 registerElement("AbsoluteLayout", () => require("ui/layouts/absolute-layout").AbsoluteLayout);
@@ -78,7 +86,9 @@ registerElement("ListPicker", () => require("ui/list-picker").ListPicker, {
     }
 });
 registerElement("NativeListView", () => require("ui/list-view").ListView);
-registerElement("Page", () => require("ui/page").Page);
+registerElement("Page", () => require("ui/page").Page, {
+    skipAddToDom: true
+});
 registerElement("Placeholder", () => require("ui/placeholder").Placeholder);
 registerElement("Progress", () => require("ui/progress").Progress);
 registerElement("ProxyViewContainer", () => require("ui/proxy-view-container").ProxyViewContainer);
@@ -132,3 +142,6 @@ registerElement("DetachedText", () => require("ui/placeholder").Placeholder, {
     skipAddToDom: true
 })
 registerElement("Comment", () => require("ui/placeholder").Placeholder)
+registerElement('Document', () => require('ui/proxy-view-container').ProxyViewContainer, {
+    skipAddToDom: true
+})

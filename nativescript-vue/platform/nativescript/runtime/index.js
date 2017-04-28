@@ -1,10 +1,15 @@
-import Vue from 'core/index'
 import {warn} from 'core/util/index'
-import {compileToFunctions} from '../compiler/index'
 import {patch} from './patch'
 import {mountComponent} from 'core/instance/lifecycle'
-import platformDirectives from './directives/index'
+import {compileToFunctions} from '../compiler/index'
+import {registerElement} from '../element-registry'
+
+import Vue from 'core/index'
+import DocumentNode from '../renderer2/DocumentNode'
 import platformComponents from './components/index'
+import platformDirectives from './directives/index'
+
+import {start} from 'application'
 
 import {
     mustUseProp,
@@ -16,17 +21,35 @@ Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
 Vue.config.isUnknownElement = isUnknownElement
 
+Vue.prototype.$document = new DocumentNode()
+
+Vue.registerElement = registerElement
+
 Vue.options.directives = platformDirectives
 Vue.options.components = platformComponents
 
 Vue.prototype.__patch__ = patch
 
 Vue.prototype.$start = function () {
-    this.$mount(true /* root */)
+    this.__is_root__ = true
+
+    const placeholder = this.$document.createComment('placeholder')
+    this.$document.documentElement.appendChild(placeholder)
+
+    this.$mount(placeholder)
 }
 
-const mount = function (root, hydrating) {
-    mountComponent(this, root ? this.$document.getRootView() : undefined, hydrating)
+const mount = function (el, hydrating) {
+    mountComponent(this, el, hydrating)
+
+    if (this.__is_root__) {
+        let view = this.$el.nativeView
+        start({
+            create() {
+                return view
+            }
+        })
+    }
 }
 
 Vue.prototype.$mount = function (el, hydrating) {

@@ -63,7 +63,7 @@ new Vue({
             layout.addChild(image)
 
             detailsPage.content = layout
-            this.$refs.page.view.showModal(detailsPage)
+            this.$refs.page.nativeView.showModal(detailsPage)
         },
 
         templateSelector(item) {

@@ -28,7 +28,7 @@ const aliases = {
 }
 
 export default {
-    entry: './index.js',
+    entry: './platform/nativescript/framework.js',
     format: 'cjs',
     dest: './dist/index.js',
     moduleName: 'NativeScript-Vue',

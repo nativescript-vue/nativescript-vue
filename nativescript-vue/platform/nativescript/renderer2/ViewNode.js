@@ -1,18 +1,32 @@
+import {getViewMeta} from '../element-registry'
+import * as viewUtil from './utils'
+
 const XML_ATTRIBUTES = Object.freeze(['style', 'rows', 'columns', 'fontAttributes'])
 
-export class ViewNode {
+export default class ViewNode {
 
     constructor() {
-        this.name = null
         this.nodeType = null
         this.tagName = null
         this.parentNode = null
         this.childNodes = []
         this.prevSibling = null
         this.nextSibling = null
-        this.ownerDocument = null
 
+        this._ownerDocument = null
         this._nativeView = null
+        this._meta = null
+
+        /* istanbul ignore next
+         * make vue happy :)
+         */
+        this.hasAttribute = this.removeAttribute = () => false
+    }
+
+
+    /* istanbul ignore next */
+    toString() {
+        return `${this.constructor.name}(${this.tagName})`
     }
 
     get firstChild() {
@@ -35,27 +49,71 @@ export class ViewNode {
         this._nativeView = view
     }
 
+    get meta() {
+        if (this._meta) {
+            return this._meta
+        }
+
+        return this._meta = getViewMeta(this.tagName)
+    }
+
+    /* istanbul ignore next */
+    get ownerDocument() {
+        if (this._ownerDocument) {
+            return this._ownerDocument
+        }
+
+        let el = this
+        while ((el = el.parentNode).nodeType !== 9) {
+            // do nothing
+        }
+
+        return this._ownerDocument = el
+    }
+
     /* istanbul ignore next */
     setAttribute(key, value) {
         try {
             if (XML_ATTRIBUTES.indexOf(key) !== -1) {
-                this.getNativeView()._applyXmlAttribute(key, value)
+                this.nativeView._applyXmlAttribute(key, value)
             } else {
-                this.getNativeView()[key] = value
+                this.nativeView[key] = value
             }
         } catch (e) {
-            throw new Error(`${this.tagName} has no property ${key}.`)
+            throw new Error(`${this.tagName} has no property ${key}. (${e})`)
+        }
+    }
+
+    /* istanbul ignore next */
+    setStyle(property, value) {
+        if (!(value = value.trim()).length) {
+            return
         }
 
+        if (property.endsWith('Align')) {
+            // NativeScript uses Alignment instead of Align, this ensures that text-align works
+            property += 'ment'
+        }
+        this.nativeView.style[property] = value
     }
 
     /* istanbul ignore next */
     setText(text) {
-        if (this.tagName === 'detached-text') {
+        if (this.nodeType === 3) {
             this.parentNode.setText(text)
         } else {
             this.setAttribute('text', text)
         }
+    }
+
+    /* istanbul ignore next */
+    addEventListener(event, handler) {
+        this.nativeView.on(event, handler)
+    }
+
+    /* istanbul ignore next */
+    removeEventListener(event) {
+        this.nativeView.off(event)
     }
 
     insertBefore(childNode, referenceNode) {
@@ -83,6 +141,8 @@ export class ViewNode {
 
         referenceNode.prevSibling = childNode
         this.childNodes.splice(index, 0, childNode)
+
+        viewUtil.insertChild(this, childNode, index)
     }
 
     appendChild(childNode) {
@@ -106,6 +166,8 @@ export class ViewNode {
         }
 
         this.childNodes.push(childNode)
+
+        viewUtil.insertChild(this, childNode, this.childNodes.length - 1)
     }
 
     removeChild(childNode) {
@@ -132,5 +194,7 @@ export class ViewNode {
         }
 
         this.childNodes = this.childNodes.filter(node => node !== childNode)
+
+        viewUtil.removeChild(this, childNode)
     }
 }

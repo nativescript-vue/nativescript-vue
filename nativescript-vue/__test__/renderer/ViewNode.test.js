@@ -1,4 +1,12 @@
-const ViewNode = require('renderer2/ViewNode').ViewNode
+import ViewNode from 'renderer2/ViewNode'
+import * as elReg from 'element-registry';
+
+jest.mock('renderer2/utils', () => {
+    return {
+        insertChild: jest.fn(),
+        removeChild: jest.fn(),
+    }
+})
 
 describe('ViewNode', () => {
 
@@ -236,5 +244,21 @@ describe('ViewNode', () => {
 
         expect(() => node.nativeView = dummyView).toThrow(`Can't override`)
         expect(node.nativeView).toEqual(dummyView)
+    })
+
+    it('meta should be fetched only once upon get', () => {
+        elReg.getViewMeta = jest.fn()
+        elReg.getViewMeta.mockReturnValue('meta')
+
+        let node = new ViewNode()
+        node.tagName = 'testing'
+
+        let meta = node.meta
+        let second_meta = node.meta
+
+        expect(elReg.getViewMeta).toHaveBeenCalledWith('testing')
+        expect(elReg.getViewMeta.mock.calls.length).toBe(1)
+        expect(meta).toEqual('meta')
+        expect(second_meta).toEqual('meta')
     })
 })
