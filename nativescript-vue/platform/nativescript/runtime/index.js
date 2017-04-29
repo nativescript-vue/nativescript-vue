@@ -79,7 +79,7 @@ Vue.prototype.$renderTemplate = function (template, context, oldVnode) {
         slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
     }
 
-    let vnode = slot.(context)[0]
+    let vnode = slot(context)[0]
     this.__patch__(oldVnode, vnode)
 
     return vnode
