@@ -22,6 +22,7 @@ export default class ElementNode extends ViewNode {
         if (childNode.nodeType === 3) {
             this.setText(childNode.text)
         }
+
     }
 
     insertBefore(childNode, referenceNode) {

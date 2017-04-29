@@ -97,12 +97,14 @@ export default {
             if (typeof this.templateSelector === 'function') {
                 template = this.templateSelector(context)
             }
+            //
+            // let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
+            // let vnode = slot(context)[0]
+            // this.__patch__(oldVnode, vnode)
+            //
+            // return vnode
 
-            let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
-            let vnode = slot(context)[0]
-            this.__patch__(oldVnode, vnode)
-
-            return vnode
+            return this.$renderTemplate(template, context, oldVnode)
         }
     }
 }

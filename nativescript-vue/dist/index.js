@@ -10,7 +10,6 @@
 var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
-require('ui/text-base');
 var application = require('application');
 
 /*  */
@@ -537,6 +536,7 @@ function handleError (err, vm, info) {
 /*  */
 /* globals MutationObserver */
 
+// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -1053,6 +1053,11 @@ function dependArray (value) {
 
 /*  */
 
+/**
+ * Option overwriting strategies are functions that handle
+ * how to merge a parent option value and a child option
+ * value into the final value.
+ */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -1691,7 +1696,6 @@ function isContentView(view) {
     return view instanceof ui_contentView.ContentView
 }
 
-
 function insertChild(parentNode, childNode, atIndex = -1) {
     if (!parentNode || childNode.meta.skipAddToDom) {
         return
@@ -1734,7 +1738,7 @@ function removeChild$1(parentNode, childNode) {
     if (isLayout(parentView)) {
         parentView.removeChild(childView);
     } else if (isContentView(parentView)) {
-        if(parentView.content === childView) {
+        if (parentView.content === childView) {
             parentView.content = null;
         }
 
@@ -1763,7 +1767,13 @@ class ViewNode {
         this._ownerDocument = null;
         this._nativeView = null;
         this._meta = null;
+
+        /* istanbul ignore next
+         * make vue happy :)
+         */
+        this.hasAttribute = this.removeAttribute = () => false;
     }
+
 
     /* istanbul ignore next */
     toString() {
@@ -1811,13 +1821,6 @@ class ViewNode {
 
         return this._ownerDocument = el
     }
-
-    // hasAttribute() {
-    //     return false
-    // }
-    //
-    // removeAttribute() {
-    // }
 
     /* istanbul ignore next */
     setAttribute(key, value) {
@@ -1968,6 +1971,7 @@ class ElementNode extends ViewNode {
         if (childNode.nodeType === 3) {
             this.setText(childNode.text);
         }
+
     }
 
     insertBefore(childNode, referenceNode) {
@@ -2863,6 +2867,18 @@ function checkProp (
 
 /*  */
 
+// The template compiler attempts to minimize the need for normalization by
+// statically analyzing the template at compile time.
+//
+// For plain HTML markup, normalization can be completely skipped because the
+// generated render function is guaranteed to return Array<VNode>. There are
+// two cases where extra normalization is needed:
+
+// 1. When the children contains components - because a functional component
+// may return an Array instead of a single root. In this case, just a simple
+// normalization is needed - if any child is an Array, we flatten the whole
+// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
+// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -4165,6 +4181,8 @@ var attrs = {
 
 /*  */
 
+// these are reserved for web because they are directly compiled away
+// during template compilation
 const isReservedAttr = makeMap('style,class');
 
 // attributes that should be using props for binding
@@ -4282,6 +4300,10 @@ const isSVG = makeMap(
 );
 
 /*  */
+
+/**
+ * Query an element selector if it's not an element already.
+ */
 
 function updateClass(oldVnode, vnode) {
     const el = vnode.elm;
@@ -4600,6 +4622,7 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
+// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -6125,6 +6148,7 @@ var baseDirectives = {
 
 /*  */
 
+// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -6526,6 +6550,8 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
+// these keywords should not appear inside expressions, but operators like
+// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -7427,6 +7453,7 @@ function mergeProps (to, from) {
 
 /*  */
 
+// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -7744,6 +7771,9 @@ function applyNS (vnode, ns) {
 
 /*  */
 
+/**
+ * Runtime helper for rendering v-for lists.
+ */
 function renderList (
   val,
   render
@@ -7772,6 +7802,9 @@ function renderList (
 
 /*  */
 
+/**
+ * Runtime helper for rendering <slot>
+ */
 function renderSlot (
   name,
   fallback,
@@ -7802,12 +7835,18 @@ function renderSlot (
 
 /*  */
 
+/**
+ * Runtime helper for resolving filters
+ */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
+/**
+ * Runtime helper for checking keyCodes from config.
+ */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -7823,6 +7862,9 @@ function checkKeyCodes (
 
 /*  */
 
+/**
+ * Runtime helper for merging v-bind="object" into a VNode's data.
+ */
 function bindObjectProps (
   data,
   tag,
@@ -7860,6 +7902,9 @@ function bindObjectProps (
 
 /*  */
 
+/**
+ * Runtime helper for rendering static trees.
+ */
 function renderStatic (
   index,
   isInFor
@@ -8576,12 +8621,14 @@ var ListView = {
             if (typeof this.templateSelector === 'function') {
                 template = this.templateSelector(context);
             }
+            //
+            // let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
+            // let vnode = slot(context)[0]
+            // this.__patch__(oldVnode, vnode)
+            //
+            // return vnode
 
-            let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default;
-            let vnode = slot(context)[0];
-            this.__patch__(oldVnode, vnode);
-
-            return vnode
+            return this.$renderTemplate(template, context, oldVnode)
         }
     }
 };
@@ -8660,6 +8707,18 @@ Vue$2.prototype.$mount = function (el, hydrating) {
         }
     }
     return mount.call(this, el, hydrating)
+};
+
+Vue$2.prototype.$renderTemplate = function (template, context, oldVnode) {
+    let slot = template;
+    if (typeof template !== 'function') {
+        slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default;
+    }
+
+    let vnode = slot.bind(context)(context)[0];
+    this.__patch__(oldVnode, vnode);
+
+    return vnode
 };
 
 module.exports = Vue$2;

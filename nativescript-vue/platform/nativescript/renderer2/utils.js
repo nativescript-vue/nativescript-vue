@@ -1,7 +1,6 @@
 import {View} from 'ui/core/view'
 import {ContentView} from 'ui/content-view'
 import {LayoutBase} from 'ui/layouts/layout-base'
-import {TextBase} from 'ui/text-base'
 
 export function isView(view) {
     return view instanceof View
@@ -11,9 +10,6 @@ export function isLayout(view) {
 }
 export function isContentView(view) {
     return view instanceof ContentView
-}
-export function isTextView(view) {
-    return view instanceof TextBase
 }
 
 export function insertChild(parentNode, childNode, atIndex = -1) {
@@ -58,7 +54,7 @@ export function removeChild(parentNode, childNode) {
     if (isLayout(parentView)) {
         parentView.removeChild(childView);
     } else if (isContentView(parentView)) {
-        if(parentView.content === childView) {
+        if (parentView.content === childView) {
             parentView.content = null
         }
 

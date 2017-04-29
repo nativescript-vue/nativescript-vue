@@ -73,4 +73,16 @@ Vue.prototype.$mount = function (el, hydrating) {
     return mount.call(this, el, hydrating)
 }
 
+Vue.prototype.$renderTemplate = function (template, context, oldVnode) {
+    let slot = template
+    if (typeof template !== 'function') {
+        slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
+    }
+
+    let vnode = slot.(context)[0]
+    this.__patch__(oldVnode, vnode)
+
+    return vnode
+}
+
 export default Vue
