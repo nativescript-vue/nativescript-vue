@@ -1650,12 +1650,17 @@ registerElement("Switch", () => require("ui/switch").Switch, {
         event: 'checkedChange'
     }
 });
-registerElement("TabView", () => require("ui/tab-view").TabView, {
+
+registerElement("NativeTabView", () => require("ui/tab-view").TabView, {
     model: {
         prop: 'selectedIndex',
         event: 'selectedIndexChange'
     }
 });
+registerElement("NativeTabViewItem", () => require("ui/tab-view").TabViewItem, {
+    skipAddToDom: true
+});
+
 registerElement("TextField", () => require("ui/text-field").TextField);
 registerElement("TextView", () => require("ui/text-view").TextView);
 registerElement("TimePicker", () => require("ui/time-picker").TimePicker, {
@@ -8599,8 +8604,54 @@ class ItemContext {
     }
 }
 
+var TabView = {
+    name: 'tab-view',
+
+    props: ['selectedTab'],
+
+    template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
+
+    data() {
+        return {
+            selectedIndex: 0
+        }
+    },
+
+    watch: {
+        'selectedTab'(index) {
+            this.selectedIndex = index;
+        }
+    },
+
+    methods: {
+        registerTab(tabView) {
+            let items = this.$refs.tabView.nativeView.items || [];
+
+            this.$refs.tabView.setAttribute('items', items.concat([tabView]));
+        }
+    }
+};
+
+var TabViewItem = {
+    name: 'tab-view-item',
+
+    template: `<native-tab-view-item ref="tabViewItem"><slot></slot></native-tab-view-item>`,
+
+    mounted() {
+        if (this.$el.childNodes.length > 1) {
+            warn('TabViewItem should contain only 1 root element', this);
+        }
+
+        let _nativeView = this.$refs.tabViewItem.nativeView;
+        _nativeView.view = this.$el.childNodes[0].nativeView;
+        this.$parent.registerTab(_nativeView);
+    }
+};
+
 var platformComponents = {
-    ListView
+    ListView,
+    TabView,
+    TabViewItem,
 };
 
 var platformDirectives$1 = {
@@ -8672,6 +8723,10 @@ Vue$2.prototype.$renderTemplate = function (template, context, oldVnode) {
     this.__patch__(oldVnode, vnode);
 
     return vnode
+};
+
+console.keys = function (object) {
+    console.dir(Object.keys(object));
 };
 
 module.exports = Vue$2;

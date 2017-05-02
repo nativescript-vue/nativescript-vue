@@ -116,12 +116,17 @@ registerElement("Switch", () => require("ui/switch").Switch, {
         event: 'checkedChange'
     }
 });
-registerElement("TabView", () => require("ui/tab-view").TabView, {
+
+registerElement("NativeTabView", () => require("ui/tab-view").TabView, {
     model: {
         prop: 'selectedIndex',
         event: 'selectedIndexChange'
     }
 });
+registerElement("NativeTabViewItem", () => require("ui/tab-view").TabViewItem, {
+    skipAddToDom: true
+});
+
 registerElement("TextField", () => require("ui/text-field").TextField);
 registerElement("TextView", () => require("ui/text-view").TextView);
 registerElement("TimePicker", () => require("ui/time-picker").TimePicker, {
