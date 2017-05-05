@@ -55,18 +55,18 @@ If you want to reload the application, every time the `nativescript-vue` module 
 
 `tns run android --syncAllFiles`
 
-# Porject Structure
+# Project Structure
 
 - `dist`: Directory for the bundled code
 - `nativescript-vue`: This folder is the root of the module.
   - `index.js`: Entry file for the rollup build
   - `rollup.config.js`: rollup config for the build
-  - `platform/nativescript`: Contains `nativescript` specific platform code  
+  - `platform/nativescript`: Contains `nativescript` specific platform code
     - `compiler`: This is where template compilation logic will go (vue template -> render function)
     - `renderer`: The renderer that handles rendering vdom into actual elements in {N}
-    - `runtime`: {N} specific Vue backend 
+    - `runtime`: {N} specific Vue backend
     - `util`: Utilities
     - `element-registry.js`: Registry of supported elements
     - `framework.js`: Entry file for the platform
-    
+
 - `vue-sample`: Sample {N} application for testing
