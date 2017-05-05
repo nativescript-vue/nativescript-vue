@@ -1,4 +1,4 @@
-import {default as document} from '../renderer2/DocumentNode'
+import {default as document} from '../renderer/DocumentNode'
 
 export const namespaceMap = {}
 

@@ -1,7 +1,7 @@
-import ViewNode from 'renderer2/ViewNode'
+import ViewNode from 'renderer/ViewNode'
 import * as elReg from 'element-registry';
 
-jest.mock('renderer2/utils', () => {
+jest.mock('renderer/utils', () => {
     return {
         insertChild: jest.fn(),
         removeChild: jest.fn(),

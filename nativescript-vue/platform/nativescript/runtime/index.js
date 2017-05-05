@@ -5,7 +5,7 @@ import {compileToFunctions} from '../compiler/index'
 import {registerElement} from '../element-registry'
 
 import Vue from 'core/index'
-import DocumentNode from '../renderer2/DocumentNode'
+import DocumentNode from '../renderer/DocumentNode'
 import platformComponents from './components/index'
 import platformDirectives from './directives/index'
 

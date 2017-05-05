@@ -6,13 +6,13 @@
   "nativescript": {
     "id": "org.nativescript.vuesample",
     "tns-android": {
-      "version": "3.0.0-rc.1"
+      "version": "3.0.0"
     }
   },
   "dependencies": {
     "nativescript-theme-core": "~1.0.2",
     "nativescript-vue": "file:../nativescript-vue",
-    "tns-core-modules": "^3.0.0-rc.2",
+    "tns-core-modules": "^3.0.0",
     "vue-router": "^2.4.0"
   },
   "devDependencies": {
