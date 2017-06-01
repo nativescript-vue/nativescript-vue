@@ -1,3 +1,4 @@
+import {start} from 'application'
 import {warn} from 'core/util/index'
 import {patch} from './patch'
 import {mountComponent} from 'core/instance/lifecycle'
@@ -8,8 +9,6 @@ import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
 import platformComponents from './components/index'
 import platformDirectives from './directives/index'
-
-import {start} from 'application'
 
 import {
     mustUseProp,
