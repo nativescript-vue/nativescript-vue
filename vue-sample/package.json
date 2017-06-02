@@ -7,6 +7,9 @@
     "id": "org.nativescript.vuesample",
     "tns-android": {
       "version": "3.0.0"
+    },
+    "tns-ios": {
+      "version": "3.0.1"
     }
   },
   "dependencies": {
