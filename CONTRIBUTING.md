@@ -70,3 +70,21 @@ If you want to reload the application, every time the `nativescript-vue` module 
     - `framework.js`: Entry file for the platform
 
 - `vue-sample`: Sample {N} application for testing
+
+# Troubleshooting
+
+#### 1. Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
+If you see an eror like this:
+```
+Transferring project files...
+Multiple errors were thrown:
+ENFILE: file table overflow, open '/Users/tiagoalves/Projects/ns-vue/(...)/file-name-resolver/package.json'
+```
+it means you have to increase the file limits (see: [http://stackoverflow.com/a/27982223](http://stackoverflow.com/a/27982223)). You can do that with:
+```
+echo kern.maxfiles=65536 | sudo tee -a /etc/sysctl.conf
+echo kern.maxfilesperproc=65536 | sudo tee -a /etc/sysctl.conf
+sudo sysctl -w kern.maxfiles=65536
+sudo sysctl -w kern.maxfilesperproc=65536
+ulimit -n 65536 65536
+```
