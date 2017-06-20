@@ -1,4 +1,4 @@
-const Vue = require('nativescript-vue/dist/index')
+const Vue = require('../dist/index')
 
 let app = new Vue({
     data: {

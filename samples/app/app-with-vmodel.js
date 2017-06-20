@@ -1,4 +1,4 @@
-const Vue = require('nativescript-vue/dist/index')
+const Vue = require('../dist/index')
 new Vue({
     data: {
         test: 'testing',
@@ -13,7 +13,7 @@ new Vue({
                 <text-field v-model="test"></text-field>
                 <slider v-model.number="test2"></slider>
                 <slider v-model.number="test3" minValue="-10" maxValue="50" style="margin-top: 15;"></slider>
-                
+
                 <label>{{ test }}</label>
                 <label>{{ test2 }}</label>
                 <label>{{ test3 }}</label>
