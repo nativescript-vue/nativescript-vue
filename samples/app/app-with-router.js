@@ -1,4 +1,4 @@
-const Vue = require('nativescript-vue/dist/index')
+const Vue = require('../dist/index')
 const VueRouter = require('vue-router')
 Vue.use(VueRouter)
 global.process = {env: {}} // hack! a build process should replace process.env's with static strings.
@@ -18,7 +18,7 @@ const Bar = {
         <button @tap="$router.replace('/bar/buzz')">and I like buttons</button>
         <button>as you may tell</button>
         <button>:)</button>
-        
+
         <router-view></router-view>
     </stack-layout>
 `
@@ -64,9 +64,9 @@ new Vue({
                     <button @tap="$router.replace('/foo')">Foo</button>
                     <button @tap="$router.replace('/bar')">Bar</button>
                 </stack-layout>
-                
+
                 <label style="text-align: center">Current route: {{ $route.fullPath }}</label>
-                
+
                 <router-view></router-view>
             </stack-layout>
         </page>

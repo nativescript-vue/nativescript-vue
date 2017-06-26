@@ -1,8 +1,8 @@
 .vscode
-nativescript-vue/coverage
-nativescript-vue/junit.xml
+coverage
+junit.xml
 npm-debug.log
 node_modules/
-vue-sample/platforms
-vue-sample/node_modules
+samples/platforms
+samples/node_modules
 

@@ -1,4 +1,4 @@
-const Vue = require('nativescript-vue/dist/index')
+const Vue = require('../dist/index')
 
 Vue.component('image-viewer', {
     props: ['imgSrc'],
@@ -14,8 +14,8 @@ Vue.component('image-viewer', {
             <image style="height: 200;" :src="img"></image>
             <scroll-view orientation="horizontal" style="height: 100">
                 <stack-layout orientation="horizontal">
-                    <image v-for="i in 10" key="i" 
-                    :src="i%2 ? '~/images/apple.jpg' : '~/images/vue.png'" 
+                    <image v-for="i in 10" key="i"
+                    :src="i%2 ? '~/images/apple.jpg' : '~/images/vue.png'"
                     @tap="img = i%2 ? '~/images/apple.jpg' : '~/images/vue.png'"></image>
                 </stack-layout>
             </scroll-view>
@@ -38,7 +38,7 @@ new Vue({
                             style="text-align: center; margin-top: 20; font-size: 40"
                             :text="showTrick ? 'Poof!' : 'Wait for it!'"></label>
                     <button @tap="showTrick = !showTrick">Tap to see a trick!</button>
-                    
+
                     <image-viewer v-if="showTrick" :imgSrc="imgSrc"></image-viewer>
                 </stack-layout>
             </scroll-view>
