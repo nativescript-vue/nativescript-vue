@@ -1,0 +1,7 @@
+.vscode
+coverage
+junit.xml
+npm-debug.log
+node_modules/
+samples/
+
