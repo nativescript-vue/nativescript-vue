@@ -4,19 +4,19 @@ machine:
 
 dependencies:
   cache_directories:
-    - nativescript-vue/node_modules
+    - node_modules
 
   override:
-    - cd nativescript-vue && npm install && npm install codecov
+    - npm install && npm install codecov
 
 general:
   artifacts:
-    - nativescript-vue/coverage
-    - nativescript-vue/junit.xml
+    - coverage
+    - junit.xml
 
 test:
   override:
-    - cd nativescript-vue && npm run test
-    - cd nativescript-vue && cat ./coverage/lcov.info | ./node_modules/.bin/codecov
+    - npm run test
+    - cat ./coverage/lcov.info | ./node_modules/.bin/codecov
     - mkdir -p $CIRCLE_TEST_REPORTS/reports
-    - cd nativescript-vue && mv ./junit.xml $CIRCLE_TEST_REPORTS/reports
+    - mv ./junit.xml $CIRCLE_TEST_REPORTS/reports
