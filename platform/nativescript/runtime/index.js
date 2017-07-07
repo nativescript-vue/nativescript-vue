@@ -39,15 +39,18 @@ Vue.prototype.$start = function () {
 }
 
 const mount = function (el, hydrating) {
-    mountComponent(this, el, hydrating)
-
     if (this.__is_root__) {
-        let view = this.$el.nativeView
+        const self = this
         start({
             create() {
-                return view
+                // Call mountComponent in the create callback when the IOS app loop has started
+                // https://github.com/rigor789/nativescript-vue/issues/24
+                mountComponent(self, el, hydrating)
+                return self.$el.nativeView;
             }
         })
+    } else {
+        mountComponent(this, el, hydrating)
     }
 }
 
