@@ -12,6 +12,8 @@ Vue.prototype.$http = http
 new Vue({
     data: {
         subreddit: '/r/funny',
+        page_num: 1,
+        last_page: '',
         items: []
     },
 
@@ -24,18 +26,14 @@ new Vue({
                         <stack-layout orientation="horizontal" class="list-group-item">
                             <image :src="item.image" class="thumb"></image>
                             <stack-layout>
-                                <label class="list-group-item-heading" :text="item.title" textWrap="true"></label>
-                                <label class="list-group-item-text" text="The rest of the content" textWrap="true"></label>
+                                <label class="list-group-item-heading" :text="item.title" text-wrap="true"></label>
+                                <label class="list-group-item-text" text="The rest of the content" text-wrap="true"></label>
                             </stack-layout>
                         </stack-layout>
                     </template>
-                    <template name="active" scope="item">
+                    <template name="page" scope="item">
                         <stack-layout orientation="horizontal" class="list-group-item active">
-                            <image :src="item.image" class="thumb"></image>
-                            <stack-layout>
-                                <label class="list-group-item-heading" :text="item.title" textWrap="true"></label>
-                                <label class="list-group-item-text" text="The rest of the content" textWrap="true"></label>
-                            </stack-layout>
+                            <label :text="item.title"></label>
                         </stack-layout>
                     </template>
                 </list-view>
@@ -80,26 +78,12 @@ new Vue({
         },
 
         onLoadMoreItems(e) {
-            console.log('Loading (3) more items')
-            this.items.push({
-                title: 'Foo loaded @ ' + new Date().toTimeString(),
-                image: this.items[0].image,
-                fullImage: this.items[0].fullImage
-            },
-            {
-                title: 'Bar loaded @ ' + new Date().toTimeString(),
-                image: this.items[1].image,
-                fullImage: this.items[1].fullImage
-            },
-            {
-                title: 'Baz loaded @ ' + new Date().toTimeString(),
-                image: this.items[2].image,
-                fullImage: this.items[2].fullImage
-            })
+            console.log('Loading more items')
+            return this.fetchItems()
         },
 
         templateSelector(item) {
-            return item.$index === 0 ? 'active' : 'default'
+            return item.type === 'page' ? 'page' : 'default'
         },
 
         chooseSubreddit() {
@@ -117,14 +101,23 @@ new Vue({
         },
 
         fetchItems() {
-            this.$http.getJSON(`https://www.reddit.com/${this.subreddit}.json`).then((res) => {
-                this.items = res.data.children.map((item) => {
-                    return {
+            this.$http.getJSON(`https://www.reddit.com/${this.subreddit}.json?limit=10&count=10&after=${this.last_page}`).then((res) => {
+                this.items.push({
+                    title: 'Page ' + this.page_num,
+                    type: 'page'
+                })
+                res.data.children.forEach((item) => {
+                    this.items.push({
                         title: item.data.title,
                         image: item.data.thumbnail,
-                        fullImage: item.data.preview.images[0].source.url
-                    }
+                        fullImage: item.data.preview.images[0].source.url,
+                        type: 'entry'
+                    })
                 })
+                this.last_page = res.data.after
+                this.page_num++;
+
+                console.log('Loaded more items')
             }).catch((err) => {
                 console.log('err..' + err)
             })
