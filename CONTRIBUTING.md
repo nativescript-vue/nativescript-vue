@@ -40,7 +40,7 @@ Inside the `nativescript-vue` folder run:
 
 This will create a symbolic link in your global node_modules folder, pointing to this location
 
-And then you will have to go into the `vue-sample` folder and run:
+And then you will have to go into the `samples` folder and run:
 
 `npm link nativescript-vue`
 

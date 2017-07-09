@@ -1,4 +1,5 @@
 .vscode
+.idea
 coverage
 junit.xml
 npm-debug.log

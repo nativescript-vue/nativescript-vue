@@ -1,9 +1,11 @@
-const Vue = require('../dist/index')
-const http = require("http")
+const Vue = require('nativescript-vue/dist/index')
+const http = require('http')
 const Page = require('ui/page').Page
 const StackLayout = require('ui/layouts/stack-layout').StackLayout
+const ScrollView = require('ui/scroll-view').ScrollView
 const Image = require('ui/image').Image
 const Label = require('ui/label').Label
+const Button = require('ui/button').Button
 
 Vue.prototype.$http = http
 
@@ -17,12 +19,12 @@ new Vue({
         <page ref="page">
             <stack-layout>
                 <button class="btn btn-primary" :text="subreddit" @tap="chooseSubreddit"></button>
-                <list-view :items="items" class="list-group" :templateSelector="templateSelector" @itemTap="onItemTap">
+                <list-view :items="items" class="list-group" :templateSelector="templateSelector" separatorColor="red" @itemTap="onItemTap" @loaded="onLoaded" @loadMoreItems="onLoadMoreItems">
                     <template scope="item">
                         <stack-layout orientation="horizontal" class="list-group-item">
                             <image :src="item.image" class="thumb"></image>
                             <stack-layout>
-                                <label class="list-group-item-heading" :text="item.title"></label>
+                                <label class="list-group-item-heading" :text="item.title" textWrap="true"></label>
                                 <label class="list-group-item-text" text="The rest of the content" textWrap="true"></label>
                             </stack-layout>
                         </stack-layout>
@@ -31,7 +33,7 @@ new Vue({
                         <stack-layout orientation="horizontal" class="list-group-item active">
                             <image :src="item.image" class="thumb"></image>
                             <stack-layout>
-                                <label class="list-group-item-heading" :text="item.title"></label>
+                                <label class="list-group-item-heading" :text="item.title" textWrap="true"></label>
                                 <label class="list-group-item-text" text="The rest of the content" textWrap="true"></label>
                             </stack-layout>
                         </stack-layout>
@@ -50,6 +52,8 @@ new Vue({
             let item = this.items[e.index]
             let detailsPage = new Page()
             let layout = new StackLayout()
+            let scroller = new ScrollView()
+            scroller.content = layout
 
             let label = new Label()
             label.text = item.title
@@ -59,11 +63,39 @@ new Vue({
             let image = new Image()
             image.src = item.fullImage
 
+            let closeButton = new Button()
+            closeButton.text = 'Close'
+            closeButton.on('tap', () => detailsPage.closeModal())
+
             layout.addChild(label)
             layout.addChild(image)
+            layout.addChild(closeButton)
 
-            detailsPage.content = layout
+            detailsPage.content = scroller
             this.$refs.page.nativeView.showModal(detailsPage)
+        },
+
+        onLoaded(e) {
+            console.log('The list has been loaded')
+        },
+
+        onLoadMoreItems(e) {
+            console.log('Loading (3) more items')
+            this.items.push({
+                title: 'Foo loaded @ ' + new Date().toTimeString(),
+                image: this.items[0].image,
+                fullImage: this.items[0].fullImage
+            },
+            {
+                title: 'Bar loaded @ ' + new Date().toTimeString(),
+                image: this.items[1].image,
+                fullImage: this.items[1].fullImage
+            },
+            {
+                title: 'Baz loaded @ ' + new Date().toTimeString(),
+                image: this.items[2].image,
+                fullImage: this.items[2].fullImage
+            })
         },
 
         templateSelector(item) {
@@ -74,8 +106,8 @@ new Vue({
             prompt({
                 title: 'Change subreddit:',
                 defaultText: this.subreddit,
-                okButtonText: "Ok",
-                cancelButtonText: "Cancel",
+                okButtonText: 'Ok',
+                cancelButtonText: 'Cancel',
             }).then((r) => {
                 if (r.result) {
                     this.subreddit = r.text
