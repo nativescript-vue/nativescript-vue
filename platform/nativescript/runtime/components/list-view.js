@@ -3,7 +3,14 @@ const VUE_VIEW = '__vueVNodeRef__'
 export default {
     name: 'list-view',
 
-    template: `<native-list-view ref="listView" @itemLoading="onItemLoading" @itemTap="onItemTap"></native-list-view>`,
+    template: `<native-list-view
+                    ref="listView"
+                    @itemLoading="onItemLoading"
+                    @itemTap="onItemTap"
+                    @loaded="onLoaded"
+                    @unloaded="onUnloaded"
+                    @loadMoreItems="onLoadMoreItems">
+               </native-list-view>`,
 
     props: {
         items: {
@@ -13,6 +20,9 @@ export default {
         templateSelector: {
             type: Function,
             default: () => 'default'
+        },
+        separatorColor: {
+            type: String
         }
     },
 
@@ -24,6 +34,10 @@ export default {
         this.setupTemplates()
 
         this.$refs.listView.setAttribute('items', this.items)
+
+        if (this.separatorColor) {
+            this.$refs.listView.setAttribute('separatorColor', this.separatorColor)
+        }
     },
 
     watch: {
@@ -36,6 +50,18 @@ export default {
     methods: {
         onItemTap(args) {
             this.$emit('itemTap', args)
+        },
+
+        onLoaded(args) {
+            this.$emit('loaded', args)
+        },
+
+        onUnloaded(args) {
+            this.$emit('unloaded', args)
+        },
+
+        onLoadMoreItems(args) {
+            this.$emit('loadMoreItems', args)
         },
 
         setupTemplates() {
