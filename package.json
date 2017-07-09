@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
-    "dev": "rollup -c -w"
+    "dev": "rollup -c -w",
+    "build": "rullup -c"
   },
   "repository": {
     "type": "git",
