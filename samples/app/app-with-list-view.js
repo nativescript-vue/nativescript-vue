@@ -26,8 +26,8 @@ new Vue({
                         <stack-layout orientation="horizontal" class="list-group-item">
                             <image :src="item.image" class="thumb"></image>
                             <stack-layout>
-                                <label class="list-group-item-heading" :text="item.title" text-wrap="true"></label>
-                                <label class="list-group-item-text" text="The rest of the content" text-wrap="true"></label>
+                                <label class="list-group-item-heading" :text="item.title" textWrap="true"></label>
+                                <label class="list-group-item-text" text="The rest of the content" textWrap="true"></label>
                             </stack-layout>
                         </stack-layout>
                     </template>
