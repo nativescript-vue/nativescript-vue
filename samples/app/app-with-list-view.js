@@ -1,5 +1,5 @@
 const Vue = require('nativescript-vue/dist/index')
-const http = require("http")
+const http = require('http')
 const Page = require('ui/page').Page
 const StackLayout = require('ui/layouts/stack-layout').StackLayout
 const ScrollView = require('ui/scroll-view').ScrollView
@@ -53,7 +53,7 @@ new Vue({
             let detailsPage = new Page()
             let layout = new StackLayout()
             let scroller = new ScrollView()
-            scroller.content = layout;
+            scroller.content = layout
 
             let label = new Label()
             label.text = item.title
@@ -64,8 +64,8 @@ new Vue({
             image.src = item.fullImage
 
             let closeButton = new Button()
-            closeButton.text = "Close";
-            closeButton.on("tap", () => detailsPage.closeModal())
+            closeButton.text = 'Close'
+            closeButton.on('tap', () => detailsPage.closeModal())
 
             layout.addChild(label)
             layout.addChild(image)
@@ -76,23 +76,23 @@ new Vue({
         },
 
         onLoaded(e) {
-            console.log("The list has been loaded");
+            console.log('The list has been loaded')
         },
 
         onLoadMoreItems(e) {
-            console.log("Loading (3) more items");
+            console.log('Loading (3) more items')
             this.items.push({
-                title: "Foo loaded @ " + new Date().toTimeString(),
+                title: 'Foo loaded @ ' + new Date().toTimeString(),
                 image: this.items[0].image,
                 fullImage: this.items[0].fullImage
             },
             {
-                title: "Bar loaded @ " + new Date().toTimeString(),
+                title: 'Bar loaded @ ' + new Date().toTimeString(),
                 image: this.items[1].image,
                 fullImage: this.items[1].fullImage
             },
             {
-                title: "Baz loaded @ " + new Date().toTimeString(),
+                title: 'Baz loaded @ ' + new Date().toTimeString(),
                 image: this.items[2].image,
                 fullImage: this.items[2].fullImage
             })
@@ -106,8 +106,8 @@ new Vue({
             prompt({
                 title: 'Change subreddit:',
                 defaultText: this.subreddit,
-                okButtonText: "Ok",
-                cancelButtonText: "Cancel",
+                okButtonText: 'Ok',
+                cancelButtonText: 'Cancel',
             }).then((r) => {
                 if (r.result) {
                     this.subreddit = r.text
