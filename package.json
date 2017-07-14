@@ -24,6 +24,18 @@
     "url": "https://github.com/rigor789/nativescript-vue/issues"
   },
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
+  "nativescript": {
+    "platforms": {
+      "android": "3.0.0",
+      "ios": "3.0.0"
+    },
+    "plugin": {
+      "vue": "true",
+      "pan": "false",
+      "core3": "true",
+      "category": "Developer"
+    }
+  },
   "dependencies": {
     "vue": "2.3.0"
   },
