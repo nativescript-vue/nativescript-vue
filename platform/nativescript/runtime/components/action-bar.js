@@ -37,10 +37,24 @@ export default {
 
     methods: {
         registerActionItem(actionItem) {
-            this.$refs.actionBar.nativeView.actionItems.addItem(actionItem)
+            if (actionItem.ios) {
+                this.$nextTick(() => {
+                    const page = this.$root.$el.nativeView
+                    page.actionBar.actionItems.addItem(actionItem)
+                })
+            } else {
+                this.$refs.actionBar.nativeView.actionItems.addItem(actionItem)
+            }
         },
         registerNavigationButton(navigationButton) {
-            this.$refs.actionBar.nativeView.navigationButton = navigationButton
+            if (navigationButton.ios) {
+                this.$nextTick(() => {
+                    const page = this.$root.$el.nativeView
+                    page.actionBar.navigationButton = navigationButton
+                })
+            } else {
+                this.$refs.actionBar.nativeView.navigationButton = navigationButton
+            }
         }
     }
 }
