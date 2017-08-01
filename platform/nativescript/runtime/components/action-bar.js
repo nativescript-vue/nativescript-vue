@@ -14,7 +14,7 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            if (this.$root.$el.tagName !== 'page') {
+            if (this.$root.$el.tagName.toLowerCase() !== 'page') {
                 warn('Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.')
                 return
             }
@@ -38,7 +38,7 @@ export default {
     methods: {
         registerActionItem(actionItem) {
             if (actionItem.ios) {
-                this.$nextTick(() => {
+                setTimeout(() => {
                     const page = this.$root.$el.nativeView
                     page.actionBar.actionItems.addItem(actionItem)
                 })
@@ -48,7 +48,7 @@ export default {
         },
         registerNavigationButton(navigationButton) {
             if (navigationButton.ios) {
-                this.$nextTick(() => {
+                setTimeout(() => {
                     const page = this.$root.$el.nativeView
                     page.actionBar.navigationButton = navigationButton
                 })
