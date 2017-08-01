@@ -18,7 +18,7 @@ new Vue({
     },
 
     template: `
-        <page>
+        <page ref="page">
             <action-bar :title="subreddit">
                 <!-- leaving this commented as an example on how to use the navigation button: -->
                 <!--<navigation-button text="Back!" android.systemIcon="ic_menu_back" @tap="navigationButtonPressed"></navigation-button>-->
