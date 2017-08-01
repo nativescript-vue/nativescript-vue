@@ -536,6 +536,7 @@ function handleError (err, vm, info) {
 /*  */
 /* globals MutationObserver */
 
+// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -1052,6 +1053,11 @@ function dependArray (value) {
 
 /*  */
 
+/**
+ * Option overwriting strategies are functions that handle
+ * how to merge a parent option value and a child option
+ * value into the final value.
+ */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -2866,6 +2872,18 @@ function checkProp (
 
 /*  */
 
+// The template compiler attempts to minimize the need for normalization by
+// statically analyzing the template at compile time.
+//
+// For plain HTML markup, normalization can be completely skipped because the
+// generated render function is guaranteed to return Array<VNode>. There are
+// two cases where extra normalization is needed:
+
+// 1. When the children contains components - because a functional component
+// may return an Array instead of a single root. In this case, just a simple
+// normalization is needed - if any child is an Array, we flatten the whole
+// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
+// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -4168,6 +4186,8 @@ var attrs = {
 
 /*  */
 
+// these are reserved for web because they are directly compiled away
+// during template compilation
 const isReservedAttr = makeMap('style,class');
 
 // attributes that should be using props for binding
@@ -4285,6 +4305,10 @@ const isSVG = makeMap(
 );
 
 /*  */
+
+/**
+ * Query an element selector if it's not an element already.
+ */
 
 function updateClass(oldVnode, vnode) {
     const el = vnode.elm;
@@ -4603,6 +4627,7 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
+// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -6128,6 +6153,7 @@ var baseDirectives = {
 
 /*  */
 
+// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -6529,6 +6555,8 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
+// these keywords should not appear inside expressions, but operators like
+// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -7430,6 +7458,7 @@ function mergeProps (to, from) {
 
 /*  */
 
+// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -7747,6 +7776,9 @@ function applyNS (vnode, ns) {
 
 /*  */
 
+/**
+ * Runtime helper for rendering v-for lists.
+ */
 function renderList (
   val,
   render
@@ -7775,6 +7807,9 @@ function renderList (
 
 /*  */
 
+/**
+ * Runtime helper for rendering <slot>
+ */
 function renderSlot (
   name,
   fallback,
@@ -7805,12 +7840,18 @@ function renderSlot (
 
 /*  */
 
+/**
+ * Runtime helper for resolving filters
+ */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
+/**
+ * Runtime helper for checking keyCodes from config.
+ */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -7826,6 +7867,9 @@ function checkKeyCodes (
 
 /*  */
 
+/**
+ * Runtime helper for merging v-bind="object" into a VNode's data.
+ */
 function bindObjectProps (
   data,
   tag,
@@ -7863,6 +7907,9 @@ function bindObjectProps (
 
 /*  */
 
+/**
+ * Runtime helper for rendering static trees.
+ */
 function renderStatic (
   index,
   isInFor
@@ -8485,7 +8532,14 @@ const VUE_VIEW = '__vueVNodeRef__';
 var ListView = {
     name: 'list-view',
 
-    template: `<native-list-view ref="listView" @itemLoading="onItemLoading" @itemTap="onItemTap"></native-list-view>`,
+    template: `<native-list-view
+                    ref="listView"
+                    @itemLoading="onItemLoading"
+                    @itemTap="onItemTap"
+                    @loaded="onLoaded"
+                    @unloaded="onUnloaded"
+                    @loadMoreItems="onLoadMoreItems">
+               </native-list-view>`,
 
     props: {
         items: {
@@ -8495,6 +8549,9 @@ var ListView = {
         templateSelector: {
             type: Function,
             default: () => 'default'
+        },
+        separatorColor: {
+            type: String
         }
     },
 
@@ -8506,6 +8563,10 @@ var ListView = {
         this.setupTemplates();
 
         this.$refs.listView.setAttribute('items', this.items);
+
+        if (this.separatorColor) {
+            this.$refs.listView.setAttribute('separatorColor', this.separatorColor);
+        }
     },
 
     watch: {
@@ -8518,6 +8579,18 @@ var ListView = {
     methods: {
         onItemTap(args) {
             this.$emit('itemTap', args);
+        },
+
+        onLoaded(args) {
+            this.$emit('loaded', args);
+        },
+
+        onUnloaded(args) {
+            this.$emit('unloaded', args);
+        },
+
+        onLoadMoreItems(args) {
+            this.$emit('loadMoreItems', args);
         },
 
         setupTemplates() {
@@ -8671,7 +8744,6 @@ Vue$2.options.components = platformComponents;
 Vue$2.prototype.__patch__ = patch;
 
 Vue$2.prototype.$start = function () {
-    console.log("----- start");
     this.__is_root__ = true;
 
     const placeholder = this.$document.createComment('placeholder');
@@ -8681,15 +8753,18 @@ Vue$2.prototype.$start = function () {
 };
 
 const mount = function (el, hydrating) {
-    mountComponent(this, el, hydrating);
-
     if (this.__is_root__) {
-        let view = this.$el.nativeView;
+        const self = this;
         application.start({
             create() {
-                return view
+                // Call mountComponent in the create callback when the IOS app loop has started
+                // https://github.com/rigor789/nativescript-vue/issues/24
+                mountComponent(self, el, hydrating);
+                return self.$el.nativeView;
             }
         });
+    } else {
+        mountComponent(this, el, hydrating);
     }
 };
 
@@ -8729,8 +8804,6 @@ Vue$2.prototype.$renderTemplate = function (template, context, oldVnode) {
 console.keys = function (object) {
     console.dir(Object.keys(object));
 };
-
-console.log("----- fwk");
 
 module.exports = Vue$2;
 //# sourceMappingURL=index.js.map
