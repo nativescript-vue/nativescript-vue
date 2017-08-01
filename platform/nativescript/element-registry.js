@@ -85,7 +85,10 @@ registerElement("ListPicker", () => require("ui/list-picker").ListPicker, {
         event: 'selectedIndexChange'
     }
 });
+registerElement("NativeActionBar", () => require("ui/action-bar").ActionBar);
+registerElement("NativeActionItem", () => require("ui/action-bar").ActionItem);
 registerElement("NativeListView", () => require("ui/list-view").ListView);
+registerElement("NativeNavigationButton", () => require("ui/action-bar").NavigationButton);
 registerElement("Page", () => require("ui/page").Page, {
     skipAddToDom: true
 });
