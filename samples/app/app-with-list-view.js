@@ -18,9 +18,14 @@ new Vue({
     },
 
     template: `
-        <page ref="page">
+        <page>
+            <action-bar :title="subreddit">
+                <!-- leaving this commented as an example on how to use the navigation button: -->
+                <!--<navigation-button text="Back!" android.systemIcon="ic_menu_back" @tap="navigationButtonPressed"></navigation-button>-->
+                <action-item android.systemIcon="ic_menu_refresh" ios.systemIcon="13" @tap="refresh"></action-item>
+                <action-item text="change" android.position="popup" ios.position="right" @tap="chooseSubreddit"></action-item>
+            </action-bar>
             <stack-layout>
-                <button class="btn btn-primary" :text="subreddit" @tap="chooseSubreddit"></button>
                 <list-view :items="items" class="list-group" :templateSelector="templateSelector" separatorColor="red" @itemTap="onItemTap" @loaded="onLoaded" @loadMoreItems="onLoadMoreItems">
                     <template scope="item">
                         <stack-layout orientation="horizontal" class="list-group-item">
@@ -86,6 +91,16 @@ new Vue({
             return item.type === 'page' ? 'page' : 'default'
         },
 
+        navigationButtonPressed() {
+            console.log(">>> navigation button pressed (but nothing to do really..)")
+        },
+
+        refresh() {
+            this.items = []
+            this.page_num = 1
+            this.fetchItems()
+        },
+
         chooseSubreddit() {
             prompt({
                 title: 'Change subreddit:',
@@ -95,7 +110,7 @@ new Vue({
             }).then((r) => {
                 if (r.result) {
                     this.subreddit = r.text
-                    this.fetchItems()
+                    this.refresh()
                 }
             })
         },
