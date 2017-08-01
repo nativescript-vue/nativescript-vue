@@ -1,4 +1,4 @@
-import {warn} from 'core/util/debug'
+import { warn } from 'core/util/debug'
 
 export default {
     name: 'action-bar',
@@ -13,20 +13,20 @@ export default {
     },
 
     mounted() {
-        const refKeys = Object.keys(this.$root.$refs)
+        this.$nextTick(() => {
+            if (this.$root.$el.tagName !== 'page') {
+                warn('Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.')
+                return
+            }
 
-        // TODO figure out how to find the Page object without using the $refs property
-        if (refKeys.length === 0) {
-            warn('Make sure the page element has a "ref" attribute like <page ref="page"> or <page ref="my-ref">, otherwise no action-bar will be shown!', this)
-            return
-        }
+            const page = this.$root.$el.nativeView
 
-        const page = this.$parent.$refs[refKeys[0]].nativeView
-        page.actionBar = this.$refs.actionBar.nativeView
-        page.actionBarHidden = false
-        if (this.title) {
-            this.$refs.actionBar.setAttribute('title', this.title)
-        }
+            page.actionBar = this.$refs.actionBar.nativeView
+            page.actionBarHidden = false
+            if (this.title) {
+                this.$refs.actionBar.setAttribute('title', this.title)
+            }
+        })
     },
 
     watch: {

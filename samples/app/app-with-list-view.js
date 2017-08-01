@@ -1,4 +1,4 @@
-const Vue = require('../dist/index')
+const Vue = require('nativescript-vue/dist/index')
 const http = require('http')
 const Page = require('ui/page').Page
 const StackLayout = require('ui/layouts/stack-layout').StackLayout
@@ -18,7 +18,7 @@ new Vue({
     },
 
     template: `
-        <page ref="page">
+        <page>
             <action-bar :title="subreddit">
                 <!-- leaving this commented as an example on how to use the navigation button: -->
                 <!--<navigation-button text="Back!" android.systemIcon="ic_menu_back" @tap="navigationButtonPressed"></navigation-button>-->
