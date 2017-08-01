@@ -57,18 +57,29 @@ router.replace('/foo')
 new Vue({
     router,
 
-    template: `
-        <page>
-            <stack-layout>
-                <stack-layout orientation="horizontal">
-                    <button @tap="$router.replace('/foo')">Foo</button>
-                    <button @tap="$router.replace('/bar')">Bar</button>
-                </stack-layout>
+    data: {
+        pageTitle: 'Current route: /foo'
+    },
 
-                <label style="text-align: center">Current route: {{ $route.fullPath }}</label>
+    template: `
+        <page ref="page">
+            <action-bar :title="pageTitle"></action-bar>
+            <stack-layout>
+                <stack-layout orientation="horizontal" horizontalAlignment="center" class="m-b-20">
+                    <button @tap="changeRoute('/foo')" class="m-10">Foo</button>
+                    <button @tap="changeRoute('/bar')" class="m-10">Bar</button>
+                </stack-layout>
 
                 <router-view></router-view>
             </stack-layout>
         </page>
     `,
+
+    methods: {
+        changeRoute(to) {
+            this.pageTitle = 'Current route: ' + to
+            router.replace(to)
+        }
+    }
+
 }).$start()
