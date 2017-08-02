@@ -1,5 +1,5 @@
 {
-  "main": "app-with-list-view.js",
+  "main": "dist/bundle.js",
   "name": "nativescript-template-tutorial",
   "version": "1.0.1"
 }

@@ -2,10 +2,7 @@
 
 /* Your CSS goes here */
 
-.even {
-    color: red;
+page {
+    background: #666;
 }
-
-.odd {
-    color: blue;
-}
+.btn-primary{background: blue}
