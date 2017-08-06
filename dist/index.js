@@ -11,6 +11,7 @@ var application = require('application');
 var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
+var ui_frame = require('ui/frame');
 
 /*  */
 
@@ -8497,12 +8498,12 @@ var ActionBar = {
 
     mounted() {
         this.$nextTick(() => {
-            if (this.$root.$el.tagName.toLowerCase() !== 'page') {
+            if (this.$parent.$el.tagName.toLowerCase() !== 'page') {
                 warn('Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.');
                 return
             }
 
-            const page = this.$root.$el.nativeView;
+            const page = this.$parent.$el.nativeView;
 
             page.actionBar = this.$refs.actionBar.nativeView;
             page.actionBarHidden = false;
@@ -8792,6 +8793,59 @@ var NavigationButton = {
     }
 };
 
+var RouterPage = {
+    name: 'router-page',
+
+    template: `
+        <detached-container>
+            <component v-if="routeComponent" ref="routeComponent" :is="routeComponent"></component>
+        </detached-container>
+`,
+
+    data() {
+        return {
+            routeComponent: null
+        }
+    },
+
+    watch: {
+        routeComponent() {
+            const self = this;
+
+            setTimeout(() => {
+                const frame = ui_frame.topmost();
+
+                frame.navigate({
+                    create() {
+                        return self.$refs.routeComponent.$el.nativeView
+                    }
+                });
+            });
+        }
+    },
+
+    created() {
+        this.routeComponent = this.$route.matched[0].components.default;
+        this.$router.afterEach((to) => {
+            this.routeComponent = to.matched[0].components.default;
+        });
+    },
+
+    beforeCreate() {
+        if (!this.$router) {
+            // error, this component requires VueRouter
+            warn('VueRouter is required to use <router-page>. Please install VueRouter.');
+
+            return
+        }
+
+        if (!this.$parent.__is_root__) {
+            // Router-page must be a direct child of the root vue instance
+            warn('<router-page> must be a direct child of the root Vue instance.');
+        }
+    }
+};
+
 var TabView = {
     name: 'tab-view',
 
@@ -8841,6 +8895,7 @@ var platformComponents = {
     ActionItem,
     ListView,
     NavigationButton,
+    RouterPage,
     TabView,
     TabViewItem,
 };

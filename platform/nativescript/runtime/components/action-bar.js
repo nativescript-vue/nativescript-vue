@@ -14,12 +14,12 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            if (this.$root.$el.tagName.toLowerCase() !== 'page') {
+            if (this.$parent.$el.tagName.toLowerCase() !== 'page') {
                 warn('Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.')
                 return
             }
 
-            const page = this.$root.$el.nativeView
+            const page = this.$parent.$el.nativeView
 
             page.actionBar = this.$refs.actionBar.nativeView
             page.actionBarHidden = false
