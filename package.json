@@ -8,7 +8,7 @@
     "tdd": "jest --watch",
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\""
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -66,5 +66,15 @@
     ],
     "collectCoverage": true,
     "testResultsProcessor": "./node_modules/jest-junit"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "lint-staged": {
+    "{{platform,__test__}/**/*.js,samples/app/*.js}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
