@@ -8,6 +8,7 @@ const Label = require('ui/label').Label
 const Button = require('ui/button').Button
 
 Vue.prototype.$http = http
+Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient);
 
 new Vue({
   data: {
@@ -26,7 +27,13 @@ new Vue({
                 <action-item text="change" android.position="popup" ios.position="right" @tap="chooseSubreddit"></action-item>
             </action-bar>
             <stack-layout>
-                <list-view :items="items" class="list-group" :templateSelector="templateSelector" separatorColor="red" @itemTap="onItemTap" @loaded="onLoaded" @loadMoreItems="onLoadMoreItems">
+
+                <gradient direction="to right" colors="#FF0077, red, #FF00FF" class="p-15">
+                  <label class="p-5 c-white" horizontalAlignment="center" text="My gradients are the best." textWrap="true"></label>
+                  <Label class="p-5 c-white" horizontalAlignment="center" text="It's true." textWrap="true"></Label>
+                </gradient>
+
+                  <list-view :items="items" class="list-group" :templateSelector="templateSelector" separatorColor="red" @itemTap="onItemTap" @loaded="onLoaded" @loadMoreItems="onLoadMoreItems">
                     <template scope="item">
                         <stack-layout orientation="horizontal" class="list-group-item">
                             <image :src="item.image" class="thumb"></image>
