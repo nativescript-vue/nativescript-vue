@@ -8,7 +8,7 @@ const Label = require('ui/label').Label
 const Button = require('ui/button').Button
 
 Vue.prototype.$http = http
-Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient);
+Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient)
 
 new Vue({
   data: {
