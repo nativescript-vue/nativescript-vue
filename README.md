@@ -1,5 +1,7 @@
 # NativeScript Vue Plugin
 
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+
 ![](logo.png)
 
 This plugin integrates [Vue](https://vuejs.org/) and [NativeScript](https://www.nativescript.org/), allowing you to build cross-platform iOS and Android apps using Vue.
