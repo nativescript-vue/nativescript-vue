@@ -1,12 +1,12 @@
 const Vue = require('../dist/index')
 new Vue({
-    data: {
-        test: 'testing',
-        test2: 50,
-        test3: 30
-    },
+  data: {
+    test: 'testing',
+    test2: 50,
+    test3: 30
+  },
 
-    template: `
+  template: `
         <page>
             <stack-layout>
                 <button @tap="onTap">whatever</button>
@@ -21,10 +21,10 @@ new Vue({
         </page>
     `,
 
-    methods: {
-        onTap() {
-            this.test = 'changed'
-            this.test2 = 42
-        }
+  methods: {
+    onTap() {
+      this.test = 'changed'
+      this.test2 = 42
     }
+  }
 }).$start()

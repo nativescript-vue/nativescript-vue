@@ -1,10 +1,10 @@
 const Vue = require('../dist/index')
 const VueRouter = require('vue-router')
 Vue.use(VueRouter)
-global.process = {env: {}} // hack! a build process should replace process.env's with static strings.
+global.process = { env: {} } // hack! a build process should replace process.env's with static strings.
 
 const Foo = {
-    template: `
+  template: `
     <stack-layout>
         <label style="text-align: center; color: #41b883; font-size: 30">Hi I'm foo!</label>
         <image src="~/images/vue.png" style="height: 200"></image>
@@ -12,7 +12,7 @@ const Foo = {
 `
 }
 const Bar = {
-    template: `
+  template: `
     <stack-layout>
         <button @tap="$router.replace('/bar/fizz')">I'm bar</button>
         <button @tap="$router.replace('/bar/buzz')">and I like buttons</button>
@@ -24,14 +24,14 @@ const Bar = {
 `
 }
 const Fizz = {
-    template: `
+  template: `
     <stack-layout>
         <label>Hi I'm fizz...</label>
     </stack-layout>
 `
 }
 const Buzz = {
-    template: `
+  template: `
     <stack-layout>
         <label>Hi I'm buzz...</label>
     </stack-layout>
@@ -39,29 +39,30 @@ const Buzz = {
 }
 
 const router = new VueRouter({
-    routes: [
-        {path: '/foo', component: Foo},
-        {
-            path: '/bar', component: Bar,
-            children: [
-                {path: 'fizz', component: Fizz},
-                {path: 'buzz', component: Buzz}
-            ]
-        },
-        {path: '*', redirect: '/foo'}
-    ]
+  routes: [
+    { path: '/foo', component: Foo },
+    {
+      path: '/bar',
+      component: Bar,
+      children: [
+        { path: 'fizz', component: Fizz },
+        { path: 'buzz', component: Buzz }
+      ]
+    },
+    { path: '*', redirect: '/foo' }
+  ]
 })
 
 router.replace('/foo')
 
 new Vue({
-    router,
+  router,
 
-    data: {
-        pageTitle: 'Current route: /foo'
-    },
+  data: {
+    pageTitle: 'Current route: /foo'
+  },
 
-    template: `
+  template: `
         <page ref="page">
             <action-bar :title="pageTitle"></action-bar>
             <stack-layout>
@@ -75,11 +76,10 @@ new Vue({
         </page>
     `,
 
-    methods: {
-        changeRoute(to) {
-            this.pageTitle = 'Current route: ' + to
-            router.replace(to)
-        }
+  methods: {
+    changeRoute(to) {
+      this.pageTitle = 'Current route: ' + to
+      router.replace(to)
     }
-
+  }
 }).$start()

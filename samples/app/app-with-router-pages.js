@@ -4,7 +4,7 @@ Vue.use(VueRouter)
 global.process = { env: {} } // hack! a build process should replace process.env's with static strings.
 
 const Foo = {
-    template: `
+  template: `
     <page>
         <action-bar :title="$route.path"></action-bar>
         <stack-layout>
@@ -16,7 +16,7 @@ const Foo = {
 `
 }
 const Bar = {
-    template: `
+  template: `
     <page>
         <action-bar :title="$route.path">
             <navigation-button text="Back!" android.systemIcon="ic_menu_back" @tap="$router.back()"></navigation-button>
@@ -28,7 +28,7 @@ const Bar = {
 `
 }
 const Baz = {
-    template: `    
+  template: `    
     <page>
         <action-bar :title="$route.path">
             <navigation-button text="Back!" android.systemIcon="ic_menu_back" @tap="$router.back()"></navigation-button>
@@ -41,19 +41,19 @@ const Baz = {
 }
 
 const router = new VueRouter({
-    routes: [
-        { path: '/foo', component: Foo },
-        { path: '/bar', component: Bar },
-        { path: '/baz', component: Baz },
-        { path: '*', redirect: '/foo' }
-    ]
+  routes: [
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar },
+    { path: '/baz', component: Baz },
+    { path: '*', redirect: '/foo' }
+  ]
 })
 
 router.push('/foo')
 
 new Vue({
-    router,
-    template: `
+  router,
+  template: `
         <page>
             <router-page/>
         </page>

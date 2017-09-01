@@ -1,16 +1,16 @@
 const Vue = require('../dist/index')
 
 let app = new Vue({
-    data: {
-        selectedTab: 0,
-        tabs: [
-            {title: 'First Tab', text: 'im the first tab'},
-            {title: 'Second Tab', text: 'im the second tab'},
-            {title: 'Third Tab', text: 'im the third tab'},
-        ]
-    },
+  data: {
+    selectedTab: 0,
+    tabs: [
+      { title: 'First Tab', text: 'im the first tab' },
+      { title: 'Second Tab', text: 'im the second tab' },
+      { title: 'Third Tab', text: 'im the third tab' }
+    ]
+  },
 
-    template: `
+  template: `
         <page>
             <stack-layout>
                 <button @tap="tabs.push({title: 'added', text: 'added tab'})">Click me!</button>
@@ -21,7 +21,7 @@ let app = new Vue({
                 </tab-view>
             </stack-layout>
         </page>
-    `,
+    `
 })
 
 app.$start()

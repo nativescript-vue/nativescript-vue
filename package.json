@@ -8,7 +8,7 @@
     "tdd": "jest --watch",
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app*.js}\""
+    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\""
   },
   "repository": {
     "type": "git",

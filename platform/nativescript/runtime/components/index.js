@@ -7,11 +7,11 @@ import TabView from './tab-view'
 import TabViewItem from './tab-view-item'
 
 export default {
-    ActionBar,
-    ActionItem,
-    ListView,
-    NavigationButton,
-    RouterPage,
-    TabView,
-    TabViewItem,
+  ActionBar,
+  ActionItem,
+  ListView,
+  NavigationButton,
+  RouterPage,
+  TabView,
+  TabViewItem
 }

@@ -1,15 +1,15 @@
 const Vue = require('../dist/index')
 
 Vue.component('image-viewer', {
-    props: ['imgSrc'],
+  props: ['imgSrc'],
 
-    data() {
-        return {
-            img: ''
-        }
-    },
+  data() {
+    return {
+      img: ''
+    }
+  },
 
-    template: `
+  template: `
         <stack-layout>
             <image style="height: 200;" :src="img"></image>
             <scroll-view orientation="horizontal" style="height: 100">
@@ -22,13 +22,13 @@ Vue.component('image-viewer', {
         </stack-layout>
     `,
 
-    mounted() {
-        this.img = this.imgSrc
-    }
+  mounted() {
+    this.img = this.imgSrc
+  }
 })
 
 new Vue({
-    template: `
+  template: `
         <page>
             <scroll-view>
                 <stack-layout>
@@ -45,15 +45,15 @@ new Vue({
         </page>
     `,
 
-    data: {
-        textRed: false,
-        showTrick: false,
-        imgSrc: '~/images/apple.jpg'
-    },
+  data: {
+    textRed: false,
+    showTrick: false,
+    imgSrc: '~/images/apple.jpg'
+  },
 
-    methods: {
-        onTap() {
-            alert('Nice Tap!')
-        }
+  methods: {
+    onTap() {
+      alert('Nice Tap!')
     }
+  }
 }).$start()
