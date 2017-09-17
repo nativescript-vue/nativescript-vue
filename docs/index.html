@@ -76,7 +76,25 @@
 </head>
 <body>
 <div id="app"></div>
+<script src="https://unpkg.com/marked@0.3.6/lib/marked.js"></script>
 <script src="https://unpkg.com/docute@3/dist/docute.js"></script>
+<script>
+    ((og_fetch) => {
+        fetch = (...args) => {
+            const promises = [
+                () => og_fetch.apply(this, args),
+                ...fetch.interceptors
+            ]
+            return promises.reduce((prev, curr) => {
+                return prev.then(curr)
+            }, Promise.resolve())
+        }
+
+        fetch.interceptors = []
+    })
+    (fetch)
+</script>
+<script src="nsdocs.js"></script>
 <script>
     docute.init({
         debug: true,
@@ -109,7 +127,8 @@
                         </div>
                     `,
                 })
-            }
+            },
+            NSDocs()
         ],
     })
 </script>
