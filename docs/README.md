@@ -23,6 +23,6 @@ If you are in the position where you want to create mobile applications, and jus
 
 
 # Ready to get started?
-<a router-link="/installation" class="docute-button docute-button-success">
-    Go to Installation
+<a router-link="/installation-nativescript" class="docute-button docute-button-success">
+    Go to Installation - NativeScript
 </a>
