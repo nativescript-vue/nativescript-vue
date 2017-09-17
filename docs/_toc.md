@@ -3,6 +3,7 @@
     - [Installation - NativeScript](/installation-nativescript)
     - [Installation - Vue Plugin](/installation-nativescript-vue)
     - [Quick Start](/installation)
+    - [Troubleshooting](/troubleshooting)
 - <span>Elements</span>
     - <small>Layout</small>
         - [AbsolueLayout](/elements/layout/absolute-layout)

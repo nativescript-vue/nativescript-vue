@@ -24,21 +24,19 @@ async function process(fetched_markdown, original_url) {
     original_markdown = parseMarkdownContent(original_markdown)
 
     const json = getCodes(fetched_markdown.markdown).find(({ lang }) => lang === 'json')
-    const rules = Object.assign({ rename: {}, remove: [] }, JSON.parse(json.code))
+    const rules = Object.assign({ rename: {}, remove: [] }, json ? JSON.parse(json.code) : {})
     const headings = getHeadings(original_markdown.markdown)
 
     headings.forEach(({ title, level }, index) => {
         const markdown_title = `${'#'.repeat(level)} ${title}`
 
         if (rules.rename.hasOwnProperty(markdown_title)) {
-            console.log('rename', markdown_title)
             // we want to rename a title
             const renamed_title = rules.rename[markdown_title]
             original_markdown.markdown = original_markdown.markdown.replace(markdown_title, renamed_title)
         }
 
         if (rules.remove.indexOf(markdown_title) !== -1) {
-            console.log('remove', markdown_title)
             // we want to remove a section
             const startIndex = original_markdown.markdown.search(markdown_title)
             let endIndex = original_markdown.markdown.length
@@ -50,16 +48,15 @@ async function process(fetched_markdown, original_url) {
                 endIndex = original_markdown.markdown.search(next_heading_markdown)
             }
 
-            console.log(startIndex, endIndex)
-
             const to_remove = original_markdown.markdown.substring(startIndex, endIndex)
 
-            console.log(original_markdown.markdown)
             original_markdown.markdown = original_markdown.markdown.replace(to_remove, '')
         }
     })
 
-    fetched_markdown.markdown = fetched_markdown.markdown.replace('```json\n' + json.code + '\n```', '')
+    if(json) {
+        fetched_markdown.markdown = fetched_markdown.markdown.replace('```json\n' + json.code + '\n```', '')
+    }
 
     return `${original_markdown.frontMatter}
 <p class="tip">
