@@ -1,6 +1,7 @@
 - [Introduction](/)
 - <span>Development</span>
-    - [Installation](/installation)
+    - [Installation - NativeScript](/installation-nativescript)
+    - [Installation - Vue Plugin](/installation-nativescript-vue)
     - [Quick Start](/installation)
 - <span>Elements</span>
     - <small>Layout</small>
