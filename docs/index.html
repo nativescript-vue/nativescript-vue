@@ -4,9 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-    <title>NativeScript Vue Documentation</title>
-    <link rel="stylesheet" href="https://unpkg.com/docute@3/dist/docute.css">
+    <title>{N}-Vue</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="description" content="NativeScript-Vue - an open-source plugin for using Vue.js to build native mobile applications in NativeScript.">
 
+    <link rel="stylesheet" href="https://unpkg.com/docute@3/dist/docute.css">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
@@ -132,5 +135,20 @@
         ],
     })
 </script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-106632905-1', 'auto');
+    ga('send', 'pageview');
+
+    docute.router.affterEach((to) => {
+        ga('set', 'page', to.fullPath)
+        ga('send', 'pageview')
+    })
+  
+  </script>
 </body>
 </html>
