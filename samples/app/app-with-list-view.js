@@ -29,8 +29,8 @@ new Vue({
             <stack-layout>
 
                 <gradient direction="to right" colors="#FF0077, red, #FF00FF" class="p-15">
-                  <label class="p-5 c-white" horizontalAlignment="center" text="My gradients are the best." textWrap="true"></label>
-                  <Label class="p-5 c-white" horizontalAlignment="center" text="It's true." textWrap="true"></Label>
+                  <label class="p-5 c-white" horizontalAlignment="center" text="You are browsing" textWrap="true"></label>
+                  <Label class="p-5 c-white" horizontalAlignment="center" :text="subreddit" textWrap="true"></Label>
                 </gradient>
 
                   <list-view :items="items" class="list-group" :templateSelector="templateSelector" separatorColor="red" @itemTap="onItemTap" @loaded="onLoaded" @loadMoreItems="onLoadMoreItems">
