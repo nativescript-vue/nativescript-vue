@@ -7,6 +7,7 @@
     "test": "jest",
     "tdd": "jest --watch",
     "dev": "rollup -c -w --o samples/app/nativescript-vue.js",
+    "samples": "node sample-runner.js",
     "build": "rollup -c",
     "precommit": "lint-staged"
   },
@@ -46,6 +47,8 @@
   "devDependencies": {
     "babel-jest": "^19.0.0",
     "babel-preset-env": "^1.4.0",
+    "chalk": "^2.1.0",
+    "inquirer": "^3.3.0",
     "jest": "^19.0.2",
     "jest-junit": "^1.5.1",
     "prettier": "^1.6.1",

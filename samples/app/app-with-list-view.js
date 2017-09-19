@@ -1,4 +1,4 @@
-const Vue = require('nativescript-vue/dist/index')
+const Vue = require('./nativescript-vue')
 const http = require('http')
 const Page = require('ui/page').Page
 const StackLayout = require('ui/layouts/stack-layout').StackLayout

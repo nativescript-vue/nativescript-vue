@@ -1,4 +1,4 @@
-const Vue = require('../dist/index')
+const Vue = require('./nativescript-vue')
 new Vue({
   data: {
     test: 'testing',
