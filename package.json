@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
-    "dev": "rollup -c -w",
+    "dev": "rollup -c -w --o samples/app/nativescript-vue.js",
     "build": "rollup -c",
     "precommit": "lint-staged"
   },

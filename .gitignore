@@ -5,5 +5,6 @@ junit.xml
 npm-debug.log
 node_modules/
 samples/platforms
-samples/node_modules
+samples/app/nativescript-vue.js
+samples/app/nativescript-vue.js.map
 
