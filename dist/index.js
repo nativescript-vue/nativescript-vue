@@ -537,6 +537,7 @@ function handleError (err, vm, info) {
 /*  */
 /* globals MutationObserver */
 
+// can we use __proto__?
 const hasProto = '__proto__' in {};
 
 // Browser environment sniffing
@@ -1053,6 +1054,11 @@ function dependArray (value) {
 
 /*  */
 
+/**
+ * Option overwriting strategies are functions that handle
+ * how to merge a parent option value and a child option
+ * value into the final value.
+ */
 const strats = config.optionMergeStrategies;
 
 /**
@@ -1533,599 +1539,650 @@ function isType (type, fn) {
   return false
 }
 
-const elementMap = new Map;
+const elementMap = new Map();
 
 const defaultViewMeta = {
-    skipAddToDom: false,
-    isUnaryTag: false,
-    tagNamespace: '',
-    canBeLeftOpen: false,
-    model: {
-        prop: 'text',
-        event: 'textChange'
-    }
+  skipAddToDom: false,
+  isUnaryTag: false,
+  tagNamespace: '',
+  canBeLeftOpen: false,
+  model: {
+    prop: 'text',
+    event: 'textChange'
+  }
 };
 
 function normalizeElementName(elementName) {
-    return elementName.replace(/-/g, '').toLowerCase()
+  return elementName.replace(/-/g, '').toLowerCase()
 }
 
 function registerElement(elementName, resolver, meta) {
-    elementName = normalizeElementName(elementName);
+  elementName = normalizeElementName(elementName);
 
-    meta = Object.assign({}, defaultViewMeta, meta);
+  meta = Object.assign({}, defaultViewMeta, meta);
 
-    if (elementMap.has(elementName)) {
-        throw new Error(`Element for ${elementName} already registered.`)
-    }
+  if (elementMap.has(elementName)) {
+    throw new Error(`Element for ${elementName} already registered.`)
+  }
 
-    const entry = {resolver: resolver, meta: meta};
-    elementMap.set(elementName.toLowerCase(), entry);
+  const entry = { resolver: resolver, meta: meta };
+  elementMap.set(elementName.toLowerCase(), entry);
 }
 
 function getViewClass(elementName) {
-    elementName = normalizeElementName(elementName);
-    const entry = elementMap.get(elementName.toLowerCase());
+  elementName = normalizeElementName(elementName);
+  const entry = elementMap.get(elementName.toLowerCase());
 
-    if (!entry) {
-        throw new TypeError(`No known component for element ${elementName}.`)
-    }
+  if (!entry) {
+    throw new TypeError(`No known component for element ${elementName}.`)
+  }
 
-    try {
-        return entry.resolver();
-    } catch (e) {
-        throw new TypeError(`Could not load view for: ${elementName}. ${e}`)
-    }
+  try {
+    return entry.resolver()
+  } catch (e) {
+    throw new TypeError(`Could not load view for: ${elementName}. ${e}`)
+  }
 }
 
 function getViewMeta(nodeName) {
-    nodeName = normalizeElementName(nodeName);
+  nodeName = normalizeElementName(nodeName);
 
-    let meta = defaultViewMeta;
-    const entry = elementMap.get(nodeName.toLowerCase());
+  let meta = defaultViewMeta;
+  const entry = elementMap.get(nodeName.toLowerCase());
 
-    if (entry && entry.meta) {
-        meta = entry.meta;
-    }
+  if (entry && entry.meta) {
+    meta = entry.meta;
+  }
 
-    return meta;
+  return meta
 }
 
 function isKnownView(elementName) {
-    elementName = normalizeElementName(elementName);
+  elementName = normalizeElementName(elementName);
 
-    return elementMap.has(elementName)
+  return elementMap.has(elementName)
 }
 
-registerElement("AbsoluteLayout", () => require("ui/layouts/absolute-layout").AbsoluteLayout);
-registerElement("ActivityIndicator", () => require("ui/activity-indicator").ActivityIndicator);
-registerElement("Border", () => require("ui/border").Border);
-registerElement("Button", () => require("ui/button").Button);
-registerElement("ContentView", () => require("ui/content-view").ContentView);
-registerElement("DatePicker", () => require("ui/date-picker").DatePicker, {
-    model: {
-        prop: 'date',
-        event: 'dateChange'
-    }
+registerElement(
+  'AbsoluteLayout',
+  () => require('ui/layouts/absolute-layout').AbsoluteLayout
+);
+registerElement(
+  'ActivityIndicator',
+  () => require('ui/activity-indicator').ActivityIndicator
+);
+registerElement('Border', () => require('ui/border').Border);
+registerElement('Button', () => require('ui/button').Button);
+registerElement('ContentView', () => require('ui/content-view').ContentView);
+registerElement('DatePicker', () => require('ui/date-picker').DatePicker, {
+  model: {
+    prop: 'date',
+    event: 'dateChange'
+  }
 });
-registerElement("DockLayout", () => require("ui/layouts/dock-layout").DockLayout);
-registerElement("GridLayout", () => require("ui/layouts/grid-layout").GridLayout);
-registerElement("HtmlView", () => require("ui/html-view").HtmlView);
-registerElement("Image", () => require("ui/image").Image);
-registerElement("img", () => require("ui/image").Image);
-registerElement("Label", () => require("ui/label").Label);
-registerElement("ListPicker", () => require("ui/list-picker").ListPicker, {
-    model: {
-        prop: 'selectedIndex',
-        event: 'selectedIndexChange'
-    }
+registerElement(
+  'DockLayout',
+  () => require('ui/layouts/dock-layout').DockLayout
+);
+registerElement(
+  'GridLayout',
+  () => require('ui/layouts/grid-layout').GridLayout
+);
+registerElement('HtmlView', () => require('ui/html-view').HtmlView);
+registerElement('Image', () => require('ui/image').Image);
+registerElement('img', () => require('ui/image').Image);
+registerElement('Label', () => require('ui/label').Label);
+registerElement('ListPicker', () => require('ui/list-picker').ListPicker, {
+  model: {
+    prop: 'selectedIndex',
+    event: 'selectedIndexChange'
+  }
 });
-registerElement("NativeActionBar", () => require("ui/action-bar").ActionBar);
-registerElement("NativeActionItem", () => require("ui/action-bar").ActionItem);
-registerElement("NativeListView", () => require("ui/list-view").ListView);
-registerElement("NativeNavigationButton", () => require("ui/action-bar").NavigationButton);
-registerElement("Page", () => require("ui/page").Page, {
-    skipAddToDom: true
+registerElement('NativeActionBar', () => require('ui/action-bar').ActionBar);
+registerElement('NativeActionItem', () => require('ui/action-bar').ActionItem);
+registerElement('NativeListView', () => require('ui/list-view').ListView);
+registerElement(
+  'NativeNavigationButton',
+  () => require('ui/action-bar').NavigationButton
+);
+registerElement('Page', () => require('ui/page').Page, {
+  skipAddToDom: true
 });
-registerElement("Placeholder", () => require("ui/placeholder").Placeholder);
-registerElement("Progress", () => require("ui/progress").Progress);
-registerElement("ProxyViewContainer", () => require("ui/proxy-view-container").ProxyViewContainer);
-registerElement("Repeater", () => require("ui/repeater").Repeater);
-registerElement("ScrollView", () => require("ui/scroll-view").ScrollView);
-registerElement("SearchBar", () => require("ui/search-bar").SearchBar);
-registerElement("SegmentedBar", () => require("ui/segmented-bar").SegmentedBar, {
+registerElement('Placeholder', () => require('ui/placeholder').Placeholder);
+registerElement('Progress', () => require('ui/progress').Progress);
+registerElement(
+  'ProxyViewContainer',
+  () => require('ui/proxy-view-container').ProxyViewContainer
+);
+registerElement('Repeater', () => require('ui/repeater').Repeater);
+registerElement('ScrollView', () => require('ui/scroll-view').ScrollView);
+registerElement('SearchBar', () => require('ui/search-bar').SearchBar);
+registerElement(
+  'SegmentedBar',
+  () => require('ui/segmented-bar').SegmentedBar,
+  {
     model: {
-        prop: 'selectedIndex',
-        event: 'selectedIndexChange'
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
     }
+  }
+);
+registerElement(
+  'SegmentedBarItem',
+  () => require('ui/segmented-bar').SegmentedBarItem
+);
+registerElement('Slider', () => require('ui/slider').Slider, {
+  model: {
+    prop: 'value',
+    event: 'valueChange'
+  }
 });
-registerElement("SegmentedBarItem", () => require("ui/segmented-bar").SegmentedBarItem);
-registerElement("Slider", () => require("ui/slider").Slider, {
-    model: {
-        prop: 'value',
-        event: 'valueChange'
-    }
-});
-registerElement("StackLayout", () => require("ui/layouts/stack-layout").StackLayout);
-registerElement("FlexboxLayout", () => require("ui/layouts/flexbox-layout").FlexboxLayout);
-registerElement("Switch", () => require("ui/switch").Switch, {
-    model: {
-        prop: 'checked',
-        event: 'checkedChange'
-    }
+registerElement(
+  'StackLayout',
+  () => require('ui/layouts/stack-layout').StackLayout
+);
+registerElement(
+  'FlexboxLayout',
+  () => require('ui/layouts/flexbox-layout').FlexboxLayout
+);
+registerElement('Switch', () => require('ui/switch').Switch, {
+  model: {
+    prop: 'checked',
+    event: 'checkedChange'
+  }
 });
 
-registerElement("NativeTabView", () => require("ui/tab-view").TabView, {
-    model: {
-        prop: 'selectedIndex',
-        event: 'selectedIndexChange'
-    }
+registerElement('NativeTabView', () => require('ui/tab-view').TabView, {
+  model: {
+    prop: 'selectedIndex',
+    event: 'selectedIndexChange'
+  }
 });
-registerElement("NativeTabViewItem", () => require("ui/tab-view").TabViewItem, {
-    skipAddToDom: true
+registerElement('NativeTabViewItem', () => require('ui/tab-view').TabViewItem, {
+  skipAddToDom: true
 });
 
-registerElement("TextField", () => require("ui/text-field").TextField);
-registerElement("TextView", () => require("ui/text-view").TextView);
-registerElement("TimePicker", () => require("ui/time-picker").TimePicker, {
-    model: {
-        prop: 'time',
-        event: 'timeChange'
-    }
+registerElement('TextField', () => require('ui/text-field').TextField);
+registerElement('TextView', () => require('ui/text-view').TextView);
+registerElement('TimePicker', () => require('ui/time-picker').TimePicker, {
+  model: {
+    prop: 'time',
+    event: 'timeChange'
+  }
 });
-registerElement("WebView", () => require("ui/web-view").WebView);
-registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout);
-registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
-registerElement("Span", () => require("text/span").Span);
+registerElement('WebView', () => require('ui/web-view').WebView);
+registerElement(
+  'WrapLayout',
+  () => require('ui/layouts/wrap-layout').WrapLayout
+);
+registerElement(
+  'FormattedString',
+  () => require('text/formatted-string').FormattedString
+);
+registerElement('Span', () => require('text/span').Span);
 
-registerElement('DetachedContainer', () => require('ui/proxy-view-container').ProxyViewContainer, {
+registerElement(
+  'DetachedContainer',
+  () => require('ui/proxy-view-container').ProxyViewContainer,
+  {
     skipAddToDom: true
+  }
+);
+registerElement('DetachedText', () => require('ui/placeholder').Placeholder, {
+  skipAddToDom: true
 });
-registerElement("DetachedText", () => require("ui/placeholder").Placeholder, {
+registerElement('Comment', () => require('ui/placeholder').Placeholder);
+registerElement(
+  'Document',
+  () => require('ui/proxy-view-container').ProxyViewContainer,
+  {
     skipAddToDom: true
-});
-registerElement("Comment", () => require("ui/placeholder").Placeholder);
-registerElement('Document', () => require('ui/proxy-view-container').ProxyViewContainer, {
-    skipAddToDom: true
-});
+  }
+);
 
 function isView(view) {
-    return view instanceof ui_core_view.View
+  return view instanceof ui_core_view.View
 }
 function isLayout(view) {
-    return view instanceof ui_layouts_layoutBase.LayoutBase
+  return view instanceof ui_layouts_layoutBase.LayoutBase
 }
 function isContentView(view) {
-    return view instanceof ui_contentView.ContentView
+  return view instanceof ui_contentView.ContentView
 }
 
 function insertChild(parentNode, childNode, atIndex = -1) {
-    if (!parentNode || childNode.meta.skipAddToDom) {
-        return
+  if (!parentNode || childNode.meta.skipAddToDom) {
+    return
+  }
+
+  const parentView = parentNode.nativeView;
+  const childView = childNode.nativeView;
+
+  if (isLayout(parentView)) {
+    if (childView.parent === parentView) {
+      let index = parentView.getChildIndex(childView);
+      if (index !== -1) {
+        parentView.removeChild(childView);
+      }
     }
-
-    const parentView = parentNode.nativeView;
-    const childView = childNode.nativeView;
-
-    if (isLayout(parentView)) {
-        if (childView.parent === parentView) {
-            let index = parentView.getChildIndex(childView);
-            if (index !== -1) {
-                parentView.removeChild(childView);
-            }
-        }
-        if (atIndex !== -1) {
-            parentView.insertChild(childView, atIndex);
-        } else {
-            parentView.addChild(childView);
-        }
-    } else if (isContentView(parentView)) {
-        if (childNode.nodeType === 8) {
-            parentView._addView(childView, atIndex);
-        } else {
-            parentView.content = childView;
-        }
+    if (atIndex !== -1) {
+      parentView.insertChild(childView, atIndex);
     } else {
-        // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
+      parentView.addChild(childView);
     }
+  } else if (isContentView(parentView)) {
+    if (childNode.nodeType === 8) {
+      parentView._addView(childView, atIndex);
+    } else {
+      parentView.content = childView;
+    }
+  } else {
+    // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
+  }
 }
 
 function removeChild$1(parentNode, childNode) {
-    if (!parentNode || childNode.meta.skipAddToDom) {
-        return
+  if (!parentNode || childNode.meta.skipAddToDom) {
+    return
+  }
+
+  const parentView = parentNode.nativeView;
+  const childView = childNode.nativeView;
+
+  if (isLayout(parentView)) {
+    parentView.removeChild(childView);
+  } else if (isContentView(parentView)) {
+    if (parentView.content === childView) {
+      parentView.content = null;
     }
 
-    const parentView = parentNode.nativeView;
-    const childView = childNode.nativeView;
-
-    if (isLayout(parentView)) {
-        parentView.removeChild(childView);
-    } else if (isContentView(parentView)) {
-        if (parentView.content === childView) {
-            parentView.content = null;
-        }
-
-        if (childNode.nodeType === 8) {
-            parentView._removeView(childView);
-        }
-    } else if (isView(parentView)) {
-        parentView._removeView(childView);
-    } else {
-        // throw new Error("Unknown parent type: " + parent);
+    if (childNode.nodeType === 8) {
+      parentView._removeView(childView);
     }
+  } else if (isView(parentView)) {
+    parentView._removeView(childView);
+  } else {
+    // throw new Error("Unknown parent type: " + parent);
+  }
 }
 
-const XML_ATTRIBUTES = Object.freeze(['style', 'rows', 'columns', 'fontAttributes']);
+const XML_ATTRIBUTES = Object.freeze([
+  'style',
+  'rows',
+  'columns',
+  'fontAttributes'
+]);
 
 class ViewNode {
+  constructor() {
+    this.nodeType = null;
+    this.tagName = null;
+    this.parentNode = null;
+    this.childNodes = [];
+    this.prevSibling = null;
+    this.nextSibling = null;
 
-    constructor() {
-        this.nodeType = null;
-        this.tagName = null;
-        this.parentNode = null;
-        this.childNodes = [];
-        this.prevSibling = null;
-        this.nextSibling = null;
+    this._ownerDocument = null;
+    this._nativeView = null;
+    this._meta = null;
 
-        this._ownerDocument = null;
-        this._nativeView = null;
-        this._meta = null;
-
-        /* istanbul ignore next
+    /* istanbul ignore next
          * make vue happy :)
          */
-        this.hasAttribute = this.removeAttribute = () => false;
+    this.hasAttribute = this.removeAttribute = () => false;
+  }
+
+  /* istanbul ignore next */
+  toString() {
+    return `${this.constructor.name}(${this.tagName})`
+  }
+
+  get firstChild() {
+    return this.childNodes.length ? this.childNodes[0] : null
+  }
+
+  get lastChild() {
+    return this.childNodes.length
+      ? this.childNodes[this.childNodes.length - 1]
+      : null
+  }
+
+  get nativeView() {
+    return this._nativeView
+  }
+
+  set nativeView(view) {
+    if (this._nativeView) {
+      throw new Error(`Can't override native view.`)
     }
 
+    this._nativeView = view;
+  }
 
-    /* istanbul ignore next */
-    toString() {
-        return `${this.constructor.name}(${this.tagName})`
+  get meta() {
+    if (this._meta) {
+      return this._meta
     }
 
-    get firstChild() {
-        return this.childNodes.length ? this.childNodes[0] : null
+    return (this._meta = getViewMeta(this.tagName))
+  }
+
+  /* istanbul ignore next */
+  get ownerDocument() {
+    if (this._ownerDocument) {
+      return this._ownerDocument
     }
 
-    get lastChild() {
-        return this.childNodes.length ? this.childNodes[this.childNodes.length - 1] : null
+    let el = this;
+    while ((el = el.parentNode).nodeType !== 9) {
+      // do nothing
     }
 
-    get nativeView() {
-        return this._nativeView
+    return (this._ownerDocument = el)
+  }
+
+  /* istanbul ignore next */
+  setAttribute(key, value) {
+    try {
+      if (XML_ATTRIBUTES.indexOf(key) !== -1) {
+        this.nativeView._applyXmlAttribute(key, value);
+      } else {
+        this.nativeView[key] = value;
+      }
+    } catch (e) {
+      throw new Error(`${this.tagName} has no property ${key}. (${e})`)
+    }
+  }
+
+  /* istanbul ignore next */
+  setStyle(property, value) {
+    if (!(value = value.trim()).length) {
+      return
     }
 
-    set nativeView(view) {
-        if (this._nativeView) {
-            throw new Error(`Can't override native view.`)
-        }
+    if (property.endsWith('Align')) {
+      // NativeScript uses Alignment instead of Align, this ensures that text-align works
+      property += 'ment';
+    }
+    this.nativeView.style[property] = value;
+  }
 
-        this._nativeView = view;
+  /* istanbul ignore next */
+  setText(text) {
+    if (this.nodeType === 3) {
+      this.parentNode.setText(text);
+    } else {
+      this.setAttribute('text', text);
+    }
+  }
+
+  /* istanbul ignore next */
+  addEventListener(event, handler) {
+    this.nativeView.on(event, handler);
+  }
+
+  /* istanbul ignore next */
+  removeEventListener(event) {
+    this.nativeView.off(event);
+  }
+
+  insertBefore(childNode, referenceNode) {
+    if (!childNode) {
+      throw new Error(`Can't insert child.`)
     }
 
-    get meta() {
-        if (this._meta) {
-            return this._meta
-        }
-
-        return this._meta = getViewMeta(this.tagName)
+    if (referenceNode && referenceNode.parentNode !== this) {
+      throw new Error(
+        `Can't insert child, because the reference node has a different parent.`
+      )
     }
 
-    /* istanbul ignore next */
-    get ownerDocument() {
-        if (this._ownerDocument) {
-            return this._ownerDocument
-        }
-
-        let el = this;
-        while ((el = el.parentNode).nodeType !== 9) {
-            // do nothing
-        }
-
-        return this._ownerDocument = el
+    if (childNode.parentNode && childNode.parentNode !== this) {
+      throw new Error(
+        `Can't insert child, because it already has a different parent.`
+      )
     }
 
-    /* istanbul ignore next */
-    setAttribute(key, value) {
-        try {
-            if (XML_ATTRIBUTES.indexOf(key) !== -1) {
-                this.nativeView._applyXmlAttribute(key, value);
-            } else {
-                this.nativeView[key] = value;
-            }
-        } catch (e) {
-            throw new Error(`${this.tagName} has no property ${key}. (${e})`)
-        }
+    if (childNode.parentNode === this) {
+      throw new Error(`Can't insert child, because it is already a child.`)
     }
 
-    /* istanbul ignore next */
-    setStyle(property, value) {
-        if (!(value = value.trim()).length) {
-            return
-        }
+    let index = this.childNodes.indexOf(referenceNode);
 
-        if (property.endsWith('Align')) {
-            // NativeScript uses Alignment instead of Align, this ensures that text-align works
-            property += 'ment';
-        }
-        this.nativeView.style[property] = value;
+    childNode.parentNode = this;
+    childNode.nextSibling = referenceNode;
+    childNode.prevSibling = this.childNodes[index - 1];
+
+    referenceNode.prevSibling = childNode;
+    this.childNodes.splice(index, 0, childNode);
+
+    insertChild(this, childNode, index);
+  }
+
+  appendChild(childNode) {
+    if (!childNode) {
+      throw new Error(`Can't append child.`)
     }
 
-    /* istanbul ignore next */
-    setText(text) {
-        if (this.nodeType === 3) {
-            this.parentNode.setText(text);
-        } else {
-            this.setAttribute('text', text);
-        }
+    if (childNode.parentNode && childNode.parentNode !== this) {
+      throw new Error(
+        `Can't append child, because it already has a different parent.`
+      )
     }
 
-    /* istanbul ignore next */
-    addEventListener(event, handler) {
-        this.nativeView.on(event, handler);
+    if (childNode.parentNode === this) {
+      throw new Error(`Can't append child, because it is already a child.`)
     }
 
-    /* istanbul ignore next */
-    removeEventListener(event) {
-        this.nativeView.off(event);
+    childNode.parentNode = this;
+
+    if (this.lastChild) {
+      childNode.prevSibling = this.lastChild;
+      this.lastChild.nextSibling = childNode;
     }
 
-    insertBefore(childNode, referenceNode) {
-        if (!childNode) {
-            throw new Error(`Can't insert child.`)
-        }
+    this.childNodes.push(childNode);
 
-        if (referenceNode && referenceNode.parentNode !== this) {
-            throw new Error(`Can't insert child, because the reference node has a different parent.`)
-        }
+    insertChild(this, childNode, this.childNodes.length - 1);
+  }
 
-        if (childNode.parentNode && childNode.parentNode !== this) {
-            throw new Error(`Can't insert child, because it already has a different parent.`)
-        }
-
-        if (childNode.parentNode === this) {
-            throw new Error(`Can't insert child, because it is already a child.`)
-        }
-
-        let index = this.childNodes.indexOf(referenceNode);
-
-        childNode.parentNode = this;
-        childNode.nextSibling = referenceNode;
-        childNode.prevSibling = this.childNodes[index - 1];
-
-        referenceNode.prevSibling = childNode;
-        this.childNodes.splice(index, 0, childNode);
-
-        insertChild(this, childNode, index);
+  removeChild(childNode) {
+    if (!childNode) {
+      throw new Error(`Can't remove child.`)
     }
 
-    appendChild(childNode) {
-        if (!childNode) {
-            throw new Error(`Can't append child.`)
-        }
-
-        if (childNode.parentNode && childNode.parentNode !== this) {
-            throw new Error(`Can't append child, because it already has a different parent.`)
-        }
-
-        if (childNode.parentNode === this) {
-            throw new Error(`Can't append child, because it is already a child.`)
-        }
-
-        childNode.parentNode = this;
-
-        if (this.lastChild) {
-            childNode.prevSibling = this.lastChild;
-            this.lastChild.nextSibling = childNode;
-        }
-
-        this.childNodes.push(childNode);
-
-        insertChild(this, childNode, this.childNodes.length - 1);
+    if (!childNode.parentNode) {
+      throw new Error(`Can't remove child, because it has no parent.`)
     }
 
-    removeChild(childNode) {
-        if (!childNode) {
-            throw new Error(`Can't remove child.`)
-        }
-
-        if (!childNode.parentNode) {
-            throw new Error(`Can't remove child, because it has no parent.`)
-        }
-
-        if (childNode.parentNode !== this) {
-            throw new Error(`Can't remove child, because it has a different parent.`)
-        }
-
-        childNode.parentNode = null;
-
-        if (childNode.prevSibling) {
-            childNode.prevSibling.nextSibling = childNode.nextSibling;
-        }
-
-        if (childNode.nextSibling) {
-            childNode.nextSibling.prevSibling = childNode.prevSibling;
-        }
-
-        this.childNodes = this.childNodes.filter(node => node !== childNode);
-
-        removeChild$1(this, childNode);
+    if (childNode.parentNode !== this) {
+      throw new Error(`Can't remove child, because it has a different parent.`)
     }
+
+    childNode.parentNode = null;
+
+    if (childNode.prevSibling) {
+      childNode.prevSibling.nextSibling = childNode.nextSibling;
+    }
+
+    if (childNode.nextSibling) {
+      childNode.nextSibling.prevSibling = childNode.prevSibling;
+    }
+
+    this.childNodes = this.childNodes.filter(node => node !== childNode);
+
+    removeChild$1(this, childNode);
+  }
 }
 
 const VUE_ELEMENT_REF = '__vue_element_ref__';
 
 class ElementNode extends ViewNode {
+  constructor(tagName) {
+    super();
 
-    constructor(tagName) {
-        super();
+    this.nodeType = 1;
+    this.tagName = tagName;
 
-        this.nodeType = 1;
-        this.tagName = tagName;
+    const viewClass = getViewClass(tagName);
+    this._nativeView = new viewClass();
+    this._nativeView[VUE_ELEMENT_REF] = this;
+  }
 
-        const viewClass = getViewClass(tagName);
-        this._nativeView = new viewClass;
-        this._nativeView[VUE_ELEMENT_REF] = this;
+  appendChild(childNode) {
+    super.appendChild(childNode);
+
+    if (childNode.nodeType === 3) {
+      this.setText(childNode.text);
     }
+  }
 
-    appendChild(childNode) {
-        super.appendChild(childNode);
+  insertBefore(childNode, referenceNode) {
+    super.insertBefore(childNode, referenceNode);
 
-        if (childNode.nodeType === 3) {
-            this.setText(childNode.text);
-        }
-
+    if (childNode.nodeType === 3) {
+      this.setText(childNode.text);
     }
+  }
 
-    insertBefore(childNode, referenceNode) {
-        super.insertBefore(childNode, referenceNode);
+  removeChild(childNode) {
+    super.removeChild(childNode);
 
-        if (childNode.nodeType === 3) {
-            this.setText(childNode.text);
-        }
+    if (childNode.nodeType === 3) {
+      this.setText('');
     }
-
-    removeChild(childNode) {
-        super.removeChild(childNode);
-
-        if (childNode.nodeType === 3) {
-            this.setText('');
-        }
-    }
-
+  }
 }
 
 class TextNode extends ElementNode {
+  constructor(text) {
+    super('comment');
 
-    constructor(text) {
-        super('comment');
-
-        this.nodeType = 8;
-        this.text = text;
-    }
-
+    this.nodeType = 8;
+    this.text = text;
+  }
 }
 
 class TextNode$1 extends ViewNode {
+  constructor(text) {
+    super();
 
-    constructor(text) {
-        super();
+    this.nodeType = 3;
+    this.text = text;
 
-        this.nodeType = 3;
-        this.text = text;
+    this._meta = {
+      skipAddToDom: true
+    };
+  }
 
-        this._meta = {
-            skipAddToDom: true
-        };
-    }
-
-    setText(text) {
-        this.text = text;
-        this.parentNode.setText(text);
-    }
-
+  setText(text) {
+    this.text = text;
+    this.parentNode.setText(text);
+  }
 }
 
 class DocumentNode extends ViewNode {
+  constructor() {
+    super();
 
-    constructor() {
-        super();
+    this.nodeType = 9;
+    this.documentElement = new ElementNode('document');
 
-        this.nodeType = 9;
-        this.documentElement = new ElementNode('document');
+    // make static methods accessible via this
+    this.createComment = this.constructor.createComment;
+    this.createElement = this.constructor.createElement;
+    this.createElementNS = this.constructor.createElementNS;
+    this.createTextNode = this.constructor.createTextNode;
+  }
 
-        // make static methods accessible via this
-        this.createComment = this.constructor.createComment;
-        this.createElement = this.constructor.createElement;
-        this.createElementNS = this.constructor.createElementNS;
-        this.createTextNode = this.constructor.createTextNode;
-    }
+  static createComment(text) {
+    return new TextNode(text)
+  }
 
-    static createComment(text) {
-        return new TextNode(text)
-    }
+  static createElement(tagName) {
+    return new ElementNode(tagName)
+  }
 
-    static createElement(tagName) {
-        return new ElementNode(tagName)
-    }
+  static createElementNS(namespace, tagName) {
+    return new ElementNode(namespace + ':' + tagName)
+  }
 
-    static createElementNS(namespace, tagName) {
-        return new ElementNode(namespace + ':' + tagName)
-    }
-
-    static createTextNode(text) {
-        return new TextNode$1(text)
-    }
+  static createTextNode(text) {
+    return new TextNode$1(text)
+  }
 }
 
 const namespaceMap = {};
 
 function createElement(tagName, vnode) {
-    console.log(`{NSVue} -> CreateElement(${tagName})`);
-    return DocumentNode.createElement(tagName)
+  console.log(`{NSVue} -> CreateElement(${tagName})`);
+  return DocumentNode.createElement(tagName)
 }
 
 function createElementNS(namespace, tagName) {
-    console.log(`{NSVue} -> CreateElementNS(${namespace}#${tagName})`);
-    return DocumentNode.createElementNS(namespace, tagName)
+  console.log(`{NSVue} -> CreateElementNS(${namespace}#${tagName})`);
+  return DocumentNode.createElementNS(namespace, tagName)
 }
 
 function createTextNode(text) {
-    console.log(`{NSVue} -> CreateTextNode(${text})`);
-    return DocumentNode.createTextNode(text)
+  console.log(`{NSVue} -> CreateTextNode(${text})`);
+  return DocumentNode.createTextNode(text)
 }
 
 function createComment(text) {
-    console.log(`{NSVue} -> CreateComment(${text})`);
+  console.log(`{NSVue} -> CreateComment(${text})`);
 
-    return DocumentNode.createComment(text)
+  return DocumentNode.createComment(text)
 }
 
 function insertBefore(parentNode, newNode, referenceNode) {
-    console.log(`{NSVue} -> InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`);
-    parentNode.insertBefore(newNode, referenceNode);
+  console.log(
+    `{NSVue} -> InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`
+  );
+  parentNode.insertBefore(newNode, referenceNode);
 }
 
 function removeChild(node, child) {
-    console.log(`{NSVue} -> RemoveChild(${node}, ${child})`);
-    node.removeChild(child);
+  console.log(`{NSVue} -> RemoveChild(${node}, ${child})`);
+  node.removeChild(child);
 }
 
 function appendChild(node, child) {
-    console.log(`{NSVue} -> AppendChild(${node}, ${child})`);
+  console.log(`{NSVue} -> AppendChild(${node}, ${child})`);
 
-    node.appendChild(child);
+  node.appendChild(child);
 }
 
 function parentNode(node) {
-    console.log(`{NSVue} -> ParentNode(${node})`);
+  console.log(`{NSVue} -> ParentNode(${node})`);
 
-    return node.parentNode
+  return node.parentNode
 }
 
 function nextSibling(node) {
-    console.log(`{NSVue} -> NextSibling(${node})`);
+  console.log(`{NSVue} -> NextSibling(${node})`);
 
-    return node.nextSibling
+  return node.nextSibling
 }
 
 function tagName(elementNode) {
-    console.log(`{NSVue} -> TagName(${elementNode})`);
+  console.log(`{NSVue} -> TagName(${elementNode})`);
 
-    return elementNode.tagName
+  return elementNode.tagName
 }
 
 function setTextContent(node, text) {
-    console.log(`{NSVue} -> SetTextContent(${node}, ${text})`);
+  console.log(`{NSVue} -> SetTextContent(${node}, ${text})`);
 
-    node.setText(text);
+  node.setText(text);
 }
 
 function setAttribute(node, key, val) {
-    console.log(`{NSVue} -> SetAttribute(${node}, ${key}, ${val})`);
+  console.log(`{NSVue} -> SetAttribute(${node}, ${key}, ${val})`);
 
-    node.setAttribute(key, val);
+  node.setAttribute(key, val);
 }
+
 
 var nodeOps = Object.freeze({
 	namespaceMap: namespaceMap,
@@ -2870,6 +2927,18 @@ function checkProp (
 
 /*  */
 
+// The template compiler attempts to minimize the need for normalization by
+// statically analyzing the template at compile time.
+//
+// For plain HTML markup, normalization can be completely skipped because the
+// generated render function is guaranteed to return Array<VNode>. There are
+// two cases where extra normalization is needed:
+
+// 1. When the children contains components - because a functional component
+// may return an Array instead of a single root. In this case, just a simple
+// normalization is needed - if any child is an Array, we flatten the whole
+// thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
+// because functional components already normalize their own children.
 function simpleNormalizeChildren (children) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -4138,40 +4207,42 @@ function createPatchFunction (backend) {
   }
 }
 
-function updateAttrs (oldVnode, vnode) {
-    if (!oldVnode.data.attrs && !vnode.data.attrs) {
-        return
-    }
-    let key, cur, old;
-    const elm = vnode.elm;
-    const oldAttrs = oldVnode.data.attrs || {};
-    let attrs = vnode.data.attrs || {};
-    // clone observed objects, as the user probably wants to mutate it
-    if (attrs.__ob__) {
-        attrs = vnode.data.attrs = extend({}, attrs);
-    }
+function updateAttrs(oldVnode, vnode) {
+  if (!oldVnode.data.attrs && !vnode.data.attrs) {
+    return
+  }
+  let key, cur, old;
+  const elm = vnode.elm;
+  const oldAttrs = oldVnode.data.attrs || {};
+  let attrs = vnode.data.attrs || {};
+  // clone observed objects, as the user probably wants to mutate it
+  if (attrs.__ob__) {
+    attrs = vnode.data.attrs = extend({}, attrs);
+  }
 
-    for (key in attrs) {
-        cur = attrs[key];
-        old = oldAttrs[key];
-        if (old !== cur) {
-            elm.setAttribute(key, cur);
-        }
+  for (key in attrs) {
+    cur = attrs[key];
+    old = oldAttrs[key];
+    if (old !== cur) {
+      elm.setAttribute(key, cur);
     }
-    for (key in oldAttrs) {
-        if (attrs[key] == null) {
-            elm.setAttribute(key);
-        }
+  }
+  for (key in oldAttrs) {
+    if (attrs[key] == null) {
+      elm.setAttribute(key);
     }
+  }
 }
 
 var attrs = {
-    create: updateAttrs,
-    update: updateAttrs
+  create: updateAttrs,
+  update: updateAttrs
 };
 
 /*  */
 
+// these are reserved for web because they are directly compiled away
+// during template compilation
 const isReservedAttr = makeMap('style,class');
 
 // attributes that should be using props for binding
@@ -4290,158 +4361,151 @@ const isSVG = makeMap(
 
 /*  */
 
+/**
+ * Query an element selector if it's not an element already.
+ */
+
 function updateClass(oldVnode, vnode) {
-    const el = vnode.elm;
-    const data = vnode.data;
-    const oldData = oldVnode.data;
-    if (!data.staticClass && !data.class &&
-        (!oldData || (!oldData.staticClass && !oldData.class))) {
-        return
-    }
+  const el = vnode.elm;
+  const data = vnode.data;
+  const oldData = oldVnode.data;
+  if (
+    !data.staticClass &&
+    !data.class &&
+    (!oldData || (!oldData.staticClass && !oldData.class))
+  ) {
+    return
+  }
 
-    let cls = genClassForVnode(vnode);
+  let cls = genClassForVnode(vnode);
 
-    // handle transition classes
-    const transitionClass = el._transitionClasses;
-    if (transitionClass) {
-        cls = concat(cls, stringifyClass(transitionClass));
-    }
+  // handle transition classes
+  const transitionClass = el._transitionClasses;
+  if (transitionClass) {
+    cls = concat(cls, stringifyClass(transitionClass));
+  }
 
-    // set the class
-    if (cls !== el._prevClass) {
-        el.setAttribute('class', cls);
-        el._prevClass = cls;
-    }
+  // set the class
+  if (cls !== el._prevClass) {
+    el.setAttribute('class', cls);
+    el._prevClass = cls;
+  }
 }
 
 var class_ = {
-    create: updateClass,
-    update: updateClass
+  create: updateClass,
+  update: updateClass
 };
 
 let target$1;
 
-function add$1 (
-    event,
-    handler,
-    once,
-    capture
-) {
-    if (capture) {
-        console.log('bubble phase not supported');
-        return
-    }
-    if (once) {
-        const oldHandler = handler;
-        const _target = target$1; // save current target element in closure
-        handler = function (ev) {
-            const res = arguments.length === 1
-                ? oldHandler(ev)
-                : oldHandler.apply(null, arguments);
-            if (res !== null) {
-                remove$2(event, null, null, _target);
-            }
-        };
-    }
-    target$1.addEventListener(event, handler);
+function add$1(event, handler, once, capture) {
+  if (capture) {
+    console.log('bubble phase not supported');
+    return
+  }
+  if (once) {
+    const oldHandler = handler;
+    const _target = target$1; // save current target element in closure
+    handler = function(ev) {
+      const res =
+        arguments.length === 1
+          ? oldHandler(ev)
+          : oldHandler.apply(null, arguments);
+      if (res !== null) {
+        remove$2(event, null, null, _target);
+      }
+    };
+  }
+  target$1.addEventListener(event, handler);
 }
 
-function remove$2 (
-    event,
-    handler,
-    capture,
-    _target
-) {
-    (_target || target$1).removeEventListener(event);
+function remove$2(event, handler, capture, _target) {
+  (_target || target$1).removeEventListener(event);
 }
 
-function updateDOMListeners (oldVnode, vnode) {
-    if (!oldVnode.data.on && !vnode.data.on) {
-        return
-    }
-    const on = vnode.data.on || {};
-    const oldOn = oldVnode.data.on || {};
-    target$1 = vnode.elm;
-    updateListeners(on, oldOn, add$1, remove$2, vnode.context);
+function updateDOMListeners(oldVnode, vnode) {
+  if (!oldVnode.data.on && !vnode.data.on) {
+    return
+  }
+  const on = vnode.data.on || {};
+  const oldOn = oldVnode.data.on || {};
+  target$1 = vnode.elm;
+  updateListeners(on, oldOn, add$1, remove$2, vnode.context);
 }
 
 var events = {
-    create: updateDOMListeners,
-    update: updateDOMListeners
+  create: updateDOMListeners,
+  update: updateDOMListeners
 };
 
 const normalize = cached(camelize);
 
 function createStyle(oldVnode, vnode) {
-    // console.log(`\t\t ===> createStyle(${oldVnode}, ${vnode})`)
-    if (!vnode.data.staticStyle) {
-        updateStyle(oldVnode, vnode);
-        return
-    }
-    const elm = vnode.elm;
-    const staticStyle = vnode.data.staticStyle;
-    for (const name in staticStyle) {
-        if (staticStyle[name]) {
-            elm.setStyle(normalize(name), staticStyle[name]);
-        }
-    }
+  // console.log(`\t\t ===> createStyle(${oldVnode}, ${vnode})`)
+  if (!vnode.data.staticStyle) {
     updateStyle(oldVnode, vnode);
+    return
+  }
+  const elm = vnode.elm;
+  const staticStyle = vnode.data.staticStyle;
+  for (const name in staticStyle) {
+    if (staticStyle[name]) {
+      elm.setStyle(normalize(name), staticStyle[name]);
+    }
+  }
+  updateStyle(oldVnode, vnode);
 }
 
 function updateStyle(oldVnode, vnode) {
-    if (!oldVnode.data.style && !vnode.data.style) {
-        return
-    }
-    let cur, name;
-    const elm = vnode.elm;
-    const oldStyle = oldVnode.data.style || {};
-    let style = vnode.data.style || {};
+  if (!oldVnode.data.style && !vnode.data.style) {
+    return
+  }
+  let cur, name;
+  const elm = vnode.elm;
+  const oldStyle = oldVnode.data.style || {};
+  let style = vnode.data.style || {};
 
-    const needClone = style.__ob__;
+  const needClone = style.__ob__;
 
-    // handle array syntax
-    if (Array.isArray(style)) {
-        style = vnode.data.style = toObject$1(style);
-    }
+  // handle array syntax
+  if (Array.isArray(style)) {
+    style = vnode.data.style = toObject$1(style);
+  }
 
-    // clone the style for future updates,
-    // in case the user mutates the style object in-place.
-    if (needClone) {
-        style = vnode.data.style = extend({}, style);
-    }
+  // clone the style for future updates,
+  // in case the user mutates the style object in-place.
+  if (needClone) {
+    style = vnode.data.style = extend({}, style);
+  }
 
-    for (name in oldStyle) {
-        if (!style[name]) {
-            elm.setStyle(normalize(name), '');
-        }
+  for (name in oldStyle) {
+    if (!style[name]) {
+      elm.setStyle(normalize(name), '');
     }
-    for (name in style) {
-        cur = style[name];
-        elm.setStyle(normalize(name), cur);
-    }
+  }
+  for (name in style) {
+    cur = style[name];
+    elm.setStyle(normalize(name), cur);
+  }
 }
 
 function toObject$1(arr) {
-    const res = {};
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i]) {
-            extend(res, arr[i]);
-        }
+  const res = {};
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      extend(res, arr[i]);
     }
-    return res
+  }
+  return res
 }
 
 var style = {
-    create: createStyle,
-    update: updateStyle
+  create: createStyle,
+  update: updateStyle
 };
 
-var platformModules = [
-    attrs,
-    class_,
-    events,
-    style
-];
+var platformModules = [attrs, class_, events, style];
 
 /*  */
 
@@ -4564,13 +4628,13 @@ var baseModules = [
 const modules = platformModules.concat(baseModules);
 
 const patch = createPatchFunction({
-    nodeOps,
-    modules
+  nodeOps,
+  modules
 });
 
 function decode(html) {
-    // todo?
-    return html
+  // todo?
+  return html
 }
 
 /*  */
@@ -4607,6 +4671,7 @@ const isNonPhrasingTag = makeMap(
  * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
+// Regular Expressions for parsing tags and attributes
 const singleAttrIdentifier = /([^\s"'<>/=]+)/;
 const singleAttrAssign = /(?:=)/;
 const singleAttrValues = [
@@ -6132,6 +6197,7 @@ var baseDirectives = {
 
 /*  */
 
+// configurable state
 let warn$2;
 let transforms$1;
 let dataGenFns;
@@ -6533,6 +6599,8 @@ function transformSpecialNewlines (text) {
 
 /*  */
 
+// these keywords should not appear inside expressions, but operators like
+// typeof, instanceof and in are allowed
 const prohibitedKeywordRE = new RegExp('\\b' + (
   'do,if,for,let,new,try,var,case,else,with,await,break,catch,class,const,' +
   'super,throw,while,yield,delete,export,import,return,switch,default,' +
@@ -6778,200 +6846,199 @@ function createCompiler (baseOptions) {
 }
 
 function transformNode(el, options) {
-    const warn = options.warn || baseWarn;
-    const staticClass = getAndRemoveAttr(el, 'class');
-    if ('development' !== 'production' && staticClass) {
-        const expression = parseText(staticClass, options.delimiters);
-        if (expression) {
-            warn(
-                `class="${staticClass}": ` +
-                'Interpolation inside attributes has been removed. ' +
-                'Use v-bind or the colon shorthand instead. For example, ' +
-                'instead of <div class="{{ val }}">, use <div :class="val">.'
-            );
-        }
+  const warn = options.warn || baseWarn;
+  const staticClass = getAndRemoveAttr(el, 'class');
+  if ('development' !== 'production' && staticClass) {
+    const expression = parseText(staticClass, options.delimiters);
+    if (expression) {
+      warn(
+        `class="${staticClass}": ` +
+          'Interpolation inside attributes has been removed. ' +
+          'Use v-bind or the colon shorthand instead. For example, ' +
+          'instead of <div class="{{ val }}">, use <div :class="val">.'
+      );
     }
-    if (staticClass) {
-        el.staticClass = JSON.stringify(staticClass);
-    }
-    const classBinding = getBindingAttr(el, 'class', false /* getStatic */);
-    if (classBinding) {
-        el.classBinding = classBinding;
-    }
+  }
+  if (staticClass) {
+    el.staticClass = JSON.stringify(staticClass);
+  }
+  const classBinding = getBindingAttr(el, 'class', false /* getStatic */);
+  if (classBinding) {
+    el.classBinding = classBinding;
+  }
 }
 
 function genData$1(el) {
-    let data = '';
-    if (el.staticClass) {
-        data += `staticClass:${el.staticClass},`;
-    }
-    if (el.classBinding) {
-        data += `class:${el.classBinding},`;
-    }
-    return data
+  let data = '';
+  if (el.staticClass) {
+    data += `staticClass:${el.staticClass},`;
+  }
+  if (el.classBinding) {
+    data += `class:${el.classBinding},`;
+  }
+  return data
 }
 
 var class_$1 = {
-    staticKeys: ['staticClass'],
-    transformNode,
-    genData: genData$1
+  staticKeys: ['staticClass'],
+  transformNode,
+  genData: genData$1
 };
 
 const normalize$1 = cached(camelize);
 
-function transformNode$1 (el, options) {
-    const warn = options.warn || baseWarn;
-    const staticStyle = getAndRemoveAttr(el, 'style');
-    const { dynamic, styleResult } = parseStaticStyle(staticStyle, options);
-    if ('development' !== 'production' && dynamic) {
-        warn(
-            `style="${String(staticStyle)}": ` +
-            'Interpolation inside attributes has been deprecated. ' +
-            'Use v-bind or the colon shorthand instead.'
-        );
-    }
-    if (!dynamic && styleResult) {
-        el.staticStyle = styleResult;
-    }
-    const styleBinding = getBindingAttr(el, 'style', false /* getStatic */);
-    if (styleBinding) {
-        el.styleBinding = styleBinding;
-    } else if (dynamic) {
-        el.styleBinding = styleResult;
-    }
+function transformNode$1(el, options) {
+  const warn = options.warn || baseWarn;
+  const staticStyle = getAndRemoveAttr(el, 'style');
+  const { dynamic, styleResult } = parseStaticStyle(staticStyle, options);
+  if ('development' !== 'production' && dynamic) {
+    warn(
+      `style="${String(staticStyle)}": ` +
+        'Interpolation inside attributes has been deprecated. ' +
+        'Use v-bind or the colon shorthand instead.'
+    );
+  }
+  if (!dynamic && styleResult) {
+    el.staticStyle = styleResult;
+  }
+  const styleBinding = getBindingAttr(el, 'style', false /* getStatic */);
+  if (styleBinding) {
+    el.styleBinding = styleBinding;
+  } else if (dynamic) {
+    el.styleBinding = styleResult;
+  }
 }
 
-function genData$2 (el) {
-    let data = '';
-    if (el.staticStyle) {
-        data += `staticStyle:${el.staticStyle},`;
-    }
-    if (el.styleBinding) {
-        data += `style:${el.styleBinding},`;
-    }
-    return data
+function genData$2(el) {
+  let data = '';
+  if (el.staticStyle) {
+    data += `staticStyle:${el.staticStyle},`;
+  }
+  if (el.styleBinding) {
+    data += `style:${el.styleBinding},`;
+  }
+  return data
 }
 
-function parseStaticStyle (staticStyle, options) {
-    // "width: 200px; height: 200px;" -> {width: 200, height: 200}
-    // "width: 200px; height: {{y}}" -> {width: 200, height: y}
-    let dynamic = false;
-    let styleResult = '';
-    if (staticStyle) {
-        const styleList = staticStyle.trim().split(';').map(style => {
-            const result = style.trim().split(':');
-            if (result.length !== 2) {
-                return
-            }
-            const key = normalize$1(result[0].trim());
-            const value = result[1].trim();
-            const dynamicValue = parseText(value, options.delimiters);
-            if (dynamicValue) {
-                dynamic = true;
-                return key + ':' + dynamicValue
-            }
-            return key + ':' + JSON.stringify(value)
-        }).filter(result => result);
-        if (styleList.length) {
-            styleResult = '{' + styleList.join(',') + '}';
+function parseStaticStyle(staticStyle, options) {
+  // "width: 200px; height: 200px;" -> {width: 200, height: 200}
+  // "width: 200px; height: {{y}}" -> {width: 200, height: y}
+  let dynamic = false;
+  let styleResult = '';
+  if (staticStyle) {
+    const styleList = staticStyle
+      .trim()
+      .split(';')
+      .map(style => {
+        const result = style.trim().split(':');
+        if (result.length !== 2) {
+          return
         }
+        const key = normalize$1(result[0].trim());
+        const value = result[1].trim();
+        const dynamicValue = parseText(value, options.delimiters);
+        if (dynamicValue) {
+          dynamic = true;
+          return key + ':' + dynamicValue
+        }
+        return key + ':' + JSON.stringify(value)
+      })
+      .filter(result => result);
+    if (styleList.length) {
+      styleResult = '{' + styleList.join(',') + '}';
     }
-    return { dynamic, styleResult }
+  }
+  return { dynamic, styleResult }
 }
 
 var style$1 = {
-    staticKeys: ['staticStyle'],
-    transformNode: transformNode$1,
-    genData: genData$2
+  staticKeys: ['staticStyle'],
+  transformNode: transformNode$1,
+  genData: genData$2
 };
 
 function preTransformNode(el, options) {
-    if (el.tag === 'template') {
-        let name = el.attrsMap.name;
+  if (el.tag === 'template') {
+    let name = el.attrsMap.name;
 
-        if (name) {
-            el.attrsMap['slot'] = name;
-            el.attrsList.push({
-                name: 'slot',
-                value: name
-            });
-        }
+    if (name) {
+      el.attrsMap['slot'] = name;
+      el.attrsList.push({
+        name: 'slot',
+        value: name
+      });
     }
+  }
 }
 var scopedSlots = {
-    preTransformNode
+  preTransformNode
 };
 
-var modules$1 = [
-    class_$1,
-    style$1,
-    scopedSlots
-];
+var modules$1 = [class_$1, style$1, scopedSlots];
 
 function model(el, dir, _warn) {
-    if (el.type === 1) {
-        genDefaultModel(el, dir.value, dir.modifiers);
-    } else {
-        genComponentModel(el, dir.value, dir.modifiers);
-    }
+  if (el.type === 1) {
+    genDefaultModel(el, dir.value, dir.modifiers);
+  } else {
+    genComponentModel(el, dir.value, dir.modifiers);
+  }
 }
 
 function genDefaultModel(el, value, modifiers) {
-    const {trim, number} = modifiers || {};
-    const {prop, event} = getViewMeta(el.tag).model;
+  const { trim, number } = modifiers || {};
+  const { prop, event } = getViewMeta(el.tag).model;
 
+  let valueExpression = `$event.value${trim ? '.trim()' : ''}`;
 
-    let valueExpression = `$event.value${trim ? '.trim()' : ''}`;
+  if (number) {
+    valueExpression = `_n(${valueExpression})`;
+  }
 
-    if (number) {
-        valueExpression = `_n(${valueExpression})`;
-    }
+  const code = genAssignmentCode(value, valueExpression);
 
-    const code = genAssignmentCode(value, valueExpression);
-
-    addAttr(el, prop, `(${value})`);
-    addHandler(el, event, code, null, true);
+  addAttr(el, prop, `(${value})`);
+  addHandler(el, event, code, null, true);
 }
 
 var directives$1 = {
-    model
+  model
 };
 
 const isReservedTag$1 = makeMap('template', true);
 
-const canBeLeftOpenTag$1 = function (el) {
-    return getViewMeta(el).canBeLeftOpenTag
+const canBeLeftOpenTag$1 = function(el) {
+  return getViewMeta(el).canBeLeftOpenTag
 };
 
-const isUnaryTag$1 = function (el) {
-    return getViewMeta(el).isUnaryTag
+const isUnaryTag$1 = function(el) {
+  return getViewMeta(el).isUnaryTag
 };
 
 function mustUseProp$1() {
-    // console.log('mustUseProp')
+  // console.log('mustUseProp')
 }
 
 function getTagNamespace$1(el) {
-    return getViewMeta(el).tagNamespace
+  return getViewMeta(el).tagNamespace
 }
 
 function isUnknownElement$1(el) {
-    return !isKnownView(el)
+  return !isKnownView(el)
 }
 
 const baseOptions = {
-    modules: modules$1,
-    directives: directives$1,
-    isUnaryTag: isUnaryTag$1,
-    mustUseProp: mustUseProp$1,
-    canBeLeftOpenTag: canBeLeftOpenTag$1,
-    isReservedTag: isReservedTag$1,
-    getTagNamespace: getTagNamespace$1,
-    preserveWhitespace: false,
-    staticKeys: genStaticKeys(modules$1)
+  modules: modules$1,
+  directives: directives$1,
+  isUnaryTag: isUnaryTag$1,
+  mustUseProp: mustUseProp$1,
+  canBeLeftOpenTag: canBeLeftOpenTag$1,
+  isReservedTag: isReservedTag$1,
+  getTagNamespace: getTagNamespace$1,
+  preserveWhitespace: false,
+  staticKeys: genStaticKeys(modules$1)
 };
 
-const {compile, compileToFunctions} = createCompiler(baseOptions);
+const { compile, compileToFunctions } = createCompiler(baseOptions);
 
 /* not type checking this file because flow doesn't play well with Proxy */
 
@@ -7434,6 +7501,7 @@ function mergeProps (to, from) {
 
 /*  */
 
+// hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
   init (
     vnode,
@@ -7751,6 +7819,9 @@ function applyNS (vnode, ns) {
 
 /*  */
 
+/**
+ * Runtime helper for rendering v-for lists.
+ */
 function renderList (
   val,
   render
@@ -7779,6 +7850,9 @@ function renderList (
 
 /*  */
 
+/**
+ * Runtime helper for rendering <slot>
+ */
 function renderSlot (
   name,
   fallback,
@@ -7809,12 +7883,18 @@ function renderSlot (
 
 /*  */
 
+/**
+ * Runtime helper for resolving filters
+ */
 function resolveFilter (id) {
   return resolveAsset(this.$options, 'filters', id, true) || identity
 }
 
 /*  */
 
+/**
+ * Runtime helper for checking keyCodes from config.
+ */
 function checkKeyCodes (
   eventKeyCode,
   key,
@@ -7830,6 +7910,9 @@ function checkKeyCodes (
 
 /*  */
 
+/**
+ * Runtime helper for merging v-bind="object" into a VNode's data.
+ */
 function bindObjectProps (
   data,
   tag,
@@ -7867,6 +7950,9 @@ function bindObjectProps (
 
 /*  */
 
+/**
+ * Runtime helper for rendering static trees.
+ */
 function renderStatic (
   index,
   isInFor
@@ -8485,124 +8571,126 @@ Object.defineProperty(Vue$2.prototype, '$isServer', {
 Vue$2.version = '__VERSION__';
 
 var ActionBar = {
-    name: 'action-bar',
+  name: 'action-bar',
 
-    template: `<native-action-bar ref="actionBar"><slot></slot></native-action-bar>`,
+  template: `<native-action-bar ref="actionBar"><slot></slot></native-action-bar>`,
 
-    props: {
-        title: {
-            type: String,
-            required: false
-        }
-    },
-
-    mounted() {
-        this.$nextTick(() => {
-            if (this.$parent.$el.tagName.toLowerCase() !== 'page') {
-                warn('Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.');
-                return
-            }
-
-            const page = this.$parent.$el.nativeView;
-
-            page.actionBar = this.$refs.actionBar.nativeView;
-            page.actionBarHidden = false;
-            if (this.title) {
-                this.$refs.actionBar.setAttribute('title', this.title);
-            }
-        });
-    },
-
-    watch: {
-        title(newVal) {
-            this.$refs.actionBar.setAttribute('title', newVal);
-        }
-    },
-
-    methods: {
-        registerActionItem(actionItem) {
-            if (actionItem.ios) {
-                setTimeout(() => {
-                    const page = this.$root.$el.nativeView;
-                    page.actionBar.actionItems.addItem(actionItem);
-                });
-            } else {
-                this.$refs.actionBar.nativeView.actionItems.addItem(actionItem);
-            }
-        },
-        registerNavigationButton(navigationButton) {
-            if (navigationButton.ios) {
-                setTimeout(() => {
-                    const page = this.$root.$el.nativeView;
-                    page.actionBar.navigationButton = navigationButton;
-                });
-            } else {
-                this.$refs.actionBar.nativeView.navigationButton = navigationButton;
-            }
-        }
+  props: {
+    title: {
+      type: String,
+      required: false
     }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      if (this.$parent.$el.tagName.toLowerCase() !== 'page') {
+        warn(
+          'Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.'
+        );
+        return
+      }
+
+      const page = this.$parent.$el.nativeView;
+
+      page.actionBar = this.$refs.actionBar.nativeView;
+      page.actionBarHidden = false;
+      if (this.title) {
+        this.$refs.actionBar.setAttribute('title', this.title);
+      }
+    });
+  },
+
+  watch: {
+    title(newVal) {
+      this.$refs.actionBar.setAttribute('title', newVal);
+    }
+  },
+
+  methods: {
+    registerActionItem(actionItem) {
+      if (actionItem.ios) {
+        setTimeout(() => {
+          const page = this.$root.$el.nativeView;
+          page.actionBar.actionItems.addItem(actionItem);
+        });
+      } else {
+        this.$refs.actionBar.nativeView.actionItems.addItem(actionItem);
+      }
+    },
+    registerNavigationButton(navigationButton) {
+      if (navigationButton.ios) {
+        setTimeout(() => {
+          const page = this.$root.$el.nativeView;
+          page.actionBar.navigationButton = navigationButton;
+        });
+      } else {
+        this.$refs.actionBar.nativeView.navigationButton = navigationButton;
+      }
+    }
+  }
 };
 
 var ActionItem = {
-    name: 'action-item',
+  name: 'action-item',
 
-    template: `<native-action-item
+  template: `<native-action-item
                     ref="actionItem"
                     @tap="onTap">
                </native-action-item>`,
 
-    props: {
-        text: {
-            type: String
-        },
-        icon: {
-            type: String
-        },
-        'android.position': {
-            type: String
-        },
-        'android.systemIcon': {
-            type: String
-        },
-        'ios.position': {
-            type: String
-        },
-        'ios.systemIcon': {
-            type: String | Number
-        }
+  props: {
+    text: {
+      type: String
     },
-
-    mounted() {
-        const _nativeView = this.$refs.actionItem.nativeView;
-
-        if (this.text) {
-            _nativeView.text = this.text;
-        }
-
-        if (_nativeView.android && this['android.systemIcon']) {
-            _nativeView.android.systemIcon = this['android.systemIcon'];
-        }
-
-        if (_nativeView.android && this['android.position']) {
-            _nativeView.android.position = this['android.position'];
-        }
-
-        if (_nativeView.ios && this['ios.systemIcon']) {
-            _nativeView.ios.systemIcon = this['ios.systemIcon'];
-        }
-
-        if (_nativeView.ios && this['ios.position']) {
-            _nativeView.ios.position = this['ios.position'];
-        }
-
-        this.$parent.registerActionItem(_nativeView);
+    icon: {
+      type: String
     },
-
-    methods: {
-        onTap(args) {
-            this.$emit('tap', args);
-        }
+    'android.position': {
+      type: String
+    },
+    'android.systemIcon': {
+      type: String
+    },
+    'ios.position': {
+      type: String
+    },
+    'ios.systemIcon': {
+      type: String | Number
     }
+  },
+
+  mounted() {
+    const _nativeView = this.$refs.actionItem.nativeView;
+
+    if (this.text) {
+      _nativeView.text = this.text;
+    }
+
+    if (_nativeView.android && this['android.systemIcon']) {
+      _nativeView.android.systemIcon = this['android.systemIcon'];
+    }
+
+    if (_nativeView.android && this['android.position']) {
+      _nativeView.android.position = this['android.position'];
+    }
+
+    if (_nativeView.ios && this['ios.systemIcon']) {
+      _nativeView.ios.systemIcon = this['ios.systemIcon'];
+    }
+
+    if (_nativeView.ios && this['ios.position']) {
+      _nativeView.ios.position = this['ios.position'];
+    }
+
+    this.$parent.registerActionItem(_nativeView);
+  },
+
+  methods: {
+    onTap(args) {
+      this.$emit('tap', args);
+    }
+  }
 };
 
 const VUE_VIEW = '__vueVNodeRef__';
@@ -8648,9 +8736,13 @@ var ListView = {
     },
 
     watch: {
-        items(newVal) {
-            this.$refs.listView.setAttribute('items', newVal);
-            this.$refs.listView.nativeView.refresh();
+        items: {
+            handler(newVal) {
+                console.log('changed items..');
+                this.$refs.listView.setAttribute('items', newVal);
+                this.$refs.listView.nativeView.refresh();
+            },
+            deep: true,
         }
     },
 
@@ -8675,13 +8767,13 @@ var ListView = {
             const self = this;
             const slots = Object.keys(this.$scopedSlots);
 
-            slots.forEach((slotName) => {
+            slots.forEach(slotName => {
                 const keyedTemplate = {
                     key: slotName,
                     createView() {
                         let vnode = self.getItemTemplate('', 0);
                         vnode.elm.nativeView[VUE_VIEW] = vnode;
-                        return vnode.elm.nativeView;
+                        return vnode.elm.nativeView
                     }
                 };
                 this._templateMap.set(slotName, keyedTemplate);
@@ -8699,16 +8791,22 @@ var ListView = {
             this.$refs.listView.setAttribute('_itemTemplatesInternal', templates);
 
             if (typeof this.templateSelector === 'function') {
-                this.$refs.listView.setAttribute('_itemTemplateSelector', (item, index, items) => {
-                    return this.templateSelector(new ItemContext(item, index))
-                });
+                this.$refs.listView.setAttribute(
+                    '_itemTemplateSelector',
+                    (item, index, items) => {
+                        return this.templateSelector(new ItemContext(item, index))
+                    }
+                );
             }
         },
 
         onItemLoading(args) {
             const index = args.index;
             const items = args.object.items;
-            const currentItem = typeof items.getItem === 'function' ? items.getItem(index) : items[index];
+            const currentItem =
+                typeof items.getItem === 'function'
+                    ? items.getItem(index)
+                    : items[index];
 
             let vnode;
             if (args.view) {
@@ -8745,7 +8843,7 @@ var ListView = {
 class ItemContext {
     constructor(item, index) {
         this.$index = index;
-        if (typeof  item === 'object') {
+        if (typeof item === 'object') {
             Object.assign(this, item);
         } else {
             this.value = item;
@@ -8756,152 +8854,153 @@ class ItemContext {
 }
 
 var NavigationButton = {
-    name: 'navigation-button',
+  name: 'navigation-button',
 
-    template: `<native-navigation-button
+  template: `<native-navigation-button
                     ref="navigationButton"
                     @tap="onTap">
                </native-navigation-button>`,
 
-    props: {
-        text: {
-            type: String
-        },
-        'android.systemIcon': {
-            type: String
-        }
+  props: {
+    text: {
+      type: String
     },
-
-    mounted() {
-        const _nativeView = this.$refs.navigationButton.nativeView;
-
-        if (this.text) {
-            _nativeView.text = this.text;
-        }
-
-        if (_nativeView.android && this['android.systemIcon']) {
-            _nativeView.android.systemIcon = this['android.systemIcon'];
-        }
-
-        this.$parent.registerNavigationButton(_nativeView);
-    },
-
-    methods: {
-        onTap(args) {
-            this.$emit('tap', args);
-        }
+    'android.systemIcon': {
+      type: String
     }
+  },
+
+  mounted() {
+    const _nativeView = this.$refs.navigationButton.nativeView;
+
+    if (this.text) {
+      _nativeView.text = this.text;
+    }
+
+    if (_nativeView.android && this['android.systemIcon']) {
+      _nativeView.android.systemIcon = this['android.systemIcon'];
+    }
+
+    this.$parent.registerNavigationButton(_nativeView);
+  },
+
+  methods: {
+    onTap(args) {
+      this.$emit('tap', args);
+    }
+  }
 };
 
 var RouterPage = {
-    name: 'router-page',
+  name: 'router-page',
 
-    template: `
+  template: `
         <detached-container>
             <component v-if="routeComponent" ref="routeComponent" :is="routeComponent"></component>
         </detached-container>
 `,
 
-    data() {
-        return {
-            routeComponent: null
-        }
-    },
-
-    watch: {
-        routeComponent() {
-            const self = this;
-
-            setTimeout(() => {
-                const frame = ui_frame.topmost();
-
-                frame.navigate({
-                    create() {
-                        return self.$refs.routeComponent.$el.nativeView
-                    }
-                });
-            });
-        }
-    },
-
-    created() {
-        this.routeComponent = this.$route.matched[0].components.default;
-        this.$router.afterEach((to) => {
-            this.routeComponent = to.matched[0].components.default;
-        });
-    },
-
-    beforeCreate() {
-        if (!this.$router) {
-            // error, this component requires VueRouter
-            warn('VueRouter is required to use <router-page>. Please install VueRouter.');
-
-            return
-        }
-
-        if (!this.$parent.__is_root__) {
-            // Router-page must be a direct child of the root vue instance
-            warn('<router-page> must be a direct child of the root Vue instance.');
-        }
+  data() {
+    return {
+      routeComponent: null
     }
+  },
+
+  watch: {
+    routeComponent() {
+      const self = this;
+
+      setTimeout(() => {
+        const frame = ui_frame.topmost();
+
+        frame.navigate({
+          create() {
+            return self.$refs.routeComponent.$el.nativeView
+          }
+        });
+      });
+    }
+  },
+
+  created() {
+    this.routeComponent = this.$route.matched[0].components.default;
+    this.$router.afterEach(to => {
+      this.routeComponent = to.matched[0].components.default;
+    });
+  },
+
+  beforeCreate() {
+    if (!this.$router) {
+      // error, this component requires VueRouter
+      warn(
+        'VueRouter is required to use <router-page>. Please install VueRouter.'
+      );
+
+      return
+    }
+
+    if (!this.$parent.__is_root__) {
+      // Router-page must be a direct child of the root vue instance
+      warn('<router-page> must be a direct child of the root Vue instance.');
+    }
+  }
 };
 
 var TabView = {
-    name: 'tab-view',
+  name: 'tab-view',
 
-    props: ['selectedTab'],
+  props: ['selectedTab'],
 
-    template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
+  template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
 
-    data() {
-        return {
-            selectedIndex: 0
-        }
-    },
-
-    watch: {
-        'selectedTab'(index) {
-            this.selectedIndex = index;
-        }
-    },
-
-    methods: {
-        registerTab(tabView) {
-            let items = this.$refs.tabView.nativeView.items || [];
-
-            this.$refs.tabView.setAttribute('items', items.concat([tabView]));
-        }
+  data() {
+    return {
+      selectedIndex: 0
     }
+  },
+
+  watch: {
+    selectedTab(index) {
+      this.selectedIndex = index;
+    }
+  },
+
+  methods: {
+    registerTab(tabView) {
+      let items = this.$refs.tabView.nativeView.items || [];
+
+      this.$refs.tabView.setAttribute('items', items.concat([tabView]));
+    }
+  }
 };
 
 var TabViewItem = {
-    name: 'tab-view-item',
+  name: 'tab-view-item',
 
-    template: `<native-tab-view-item ref="tabViewItem"><slot></slot></native-tab-view-item>`,
+  template: `<native-tab-view-item ref="tabViewItem"><slot></slot></native-tab-view-item>`,
 
-    mounted() {
-        if (this.$el.childNodes.length > 1) {
-            warn('TabViewItem should contain only 1 root element', this);
-        }
-
-        let _nativeView = this.$refs.tabViewItem.nativeView;
-        _nativeView.view = this.$el.childNodes[0].nativeView;
-        this.$parent.registerTab(_nativeView);
+  mounted() {
+    if (this.$el.childNodes.length > 1) {
+      warn('TabViewItem should contain only 1 root element', this);
     }
+
+    let _nativeView = this.$refs.tabViewItem.nativeView;
+    _nativeView.view = this.$el.childNodes[0].nativeView;
+    this.$parent.registerTab(_nativeView);
+  }
 };
 
 var platformComponents = {
-    ActionBar,
-    ActionItem,
-    ListView,
-    NavigationButton,
-    RouterPage,
-    TabView,
-    TabViewItem,
+  ActionBar,
+  ActionItem,
+  ListView,
+  NavigationButton,
+  RouterPage,
+  TabView,
+  TabViewItem
 };
 
-var platformDirectives$1 = {
-};
+var platformDirectives$1 = {};
 
 Vue$2.config.mustUseProp = mustUseProp$1;
 Vue$2.config.isReservedTag = isReservedTag$1;
@@ -8916,66 +9015,72 @@ Vue$2.options.components = platformComponents;
 
 Vue$2.prototype.__patch__ = patch;
 
-Vue$2.prototype.$start = function () {
-    this.__is_root__ = true;
+Vue$2.prototype.$start = function() {
+  this.__is_root__ = true;
 
-    const placeholder = this.$document.createComment('placeholder');
-    this.$document.documentElement.appendChild(placeholder);
+  const placeholder = this.$document.createComment('placeholder');
+  this.$document.documentElement.appendChild(placeholder);
 
-    this.$mount(placeholder);
+  this.$mount(placeholder);
 };
 
-const mount = function (el, hydrating) {
-    if (this.__is_root__) {
-        const self = this;
-        application.start({
-            create() {
-                // Call mountComponent in the create callback when the IOS app loop has started
-                // https://github.com/rigor789/nativescript-vue/issues/24
-                mountComponent(self, el, hydrating);
-                return self.$el.nativeView;
-            }
-        });
-    } else {
-        mountComponent(this, el, hydrating);
-    }
+const mount = function(el, hydrating) {
+  if (this.__is_root__) {
+    const self = this;
+    application.start({
+      create() {
+        // Call mountComponent in the create callback when the IOS app loop has started
+        // https://github.com/rigor789/nativescript-vue/issues/24
+        mountComponent(self, el, hydrating);
+        return self.$el.nativeView
+      }
+    });
+  } else {
+    mountComponent(this, el, hydrating);
+  }
 };
 
-Vue$2.prototype.$mount = function (el, hydrating) {
-    const options = this.$options;
-    // resolve template/el and convert to render function
-    if (!options.render) {
-        let template = options.template;
-        if (template && typeof template !== 'string') {
-            warn('invalid template option: ' + template, this);
-            return this
-        }
-
-        if (template) {
-            const {render, staticRenderFns} = compileToFunctions(template, {
-                delimiters: options.delimiters
-            }, this);
-            options.render = render;
-            options.staticRenderFns = staticRenderFns;
-        }
-    }
-    return mount.call(this, el, hydrating)
-};
-
-Vue$2.prototype.$renderTemplate = function (template, context, oldVnode) {
-    let slot = template;
-    if (typeof template !== 'function') {
-        slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default;
+Vue$2.prototype.$mount = function(el, hydrating) {
+  const options = this.$options;
+  // resolve template/el and convert to render function
+  if (!options.render) {
+    let template = options.template;
+    if (template && typeof template !== 'string') {
+      warn('invalid template option: ' + template, this);
+      return this
     }
 
-    let vnode = slot(context)[0];
-    this.__patch__(oldVnode, vnode);
-
-    return vnode
+    if (template) {
+      const { render, staticRenderFns } = compileToFunctions(
+        template,
+        {
+          delimiters: options.delimiters
+        },
+        this
+      );
+      options.render = render;
+      options.staticRenderFns = staticRenderFns;
+    }
+  }
+  return mount.call(this, el, hydrating)
 };
 
-console.keys = function (object) {
-    console.dir(Object.keys(object));
+Vue$2.prototype.$renderTemplate = function(template, context, oldVnode) {
+  let slot = template;
+  if (typeof template !== 'function') {
+    slot = this.$scopedSlots[template]
+      ? this.$scopedSlots[template]
+      : this.$scopedSlots.default;
+  }
+
+  let vnode = slot(context)[0];
+  this.__patch__(oldVnode, vnode);
+
+  return vnode
+};
+
+console.keys = function(object) {
+  console.dir(Object.keys(object));
 };
 
 module.exports = Vue$2;
