@@ -34,6 +34,10 @@ export default {
       _nativeView.text = this.text
     }
 
+    if(this.icon) {
+      _nativeView.icon = this.icon
+    }
+
     if (_nativeView.android && this['android.systemIcon']) {
       _nativeView.android.systemIcon = this['android.systemIcon']
     }
