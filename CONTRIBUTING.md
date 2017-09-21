@@ -10,6 +10,12 @@ If you feel like contributing to this project, that is awesome! This guide shoul
 
 We will re-iterate these guidelines as the project matures.
 
+# Contributing to docs
+
+For the docs, we are using [docute.js](https://docute.js.org/#/home)
+
+docute is very simple, so skim through their documentation to get started with it.
+
 # Development setup
 You will need Node.js installed, as well as Nativescript
 
