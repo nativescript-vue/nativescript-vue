@@ -144,7 +144,7 @@
     ga('create', 'UA-106632905-1', 'auto');
     ga('send', 'pageview');
 
-    docute.router.affterEach((to) => {
+    docute.router.afterEach((to) => {
         ga('set', 'page', to.fullPath)
         ga('send', 'pageview')
     })
