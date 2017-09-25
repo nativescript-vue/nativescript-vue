@@ -1,5 +1,10 @@
-console.keys = function(object) {
-  console.dir(Object.keys(object))
+console.keys = function (object) {
+    console.dir(Object.keys(object))
 }
 
-export { default } from './runtime/index'
+import Vue from './runtime/index'
+import ModalPlugin from './modal-plugin'
+
+Vue.use(ModalPlugin)
+
+export default Vue

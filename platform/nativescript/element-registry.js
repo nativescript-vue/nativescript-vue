@@ -59,7 +59,7 @@ export function getViewMeta(nodeName) {
 export function isKnownView(elementName) {
   elementName = normalizeElementName(elementName)
 
-  return elementMap.has(elementName)
+  return elementMap.has(elementName.toLowerCase())
 }
 
 registerElement(
