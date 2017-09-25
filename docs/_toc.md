@@ -2,11 +2,16 @@
 - <span>Development</span>
     - [Installation - NativeScript](/installation-nativescript)
     - [Installation - Vue Plugin](/installation-nativescript-vue)
-    - [Quick Start](/installation)
+    - [Quick Start](/quick-start)
+    - [Using NativeScript Plugins](/using-nativescript-plugins)
+    - [Using Vue Modules](/using-vue-modules)
+    - [Templates](/templates)
+    - [Articles](/articles)
     - [Troubleshooting](/troubleshooting)
+    - [Contributing](/contributing)
 - <span>Elements</span>
     - <small>Layout</small>
-        - [AbsolueLayout](/elements/layout/absolute-layout)
+        - [AbsoluteLayout](/elements/layout/absolute-layout)
         - [DockLayout](/elements/layout/dock-layout)
         - [GridLayout](/elements/layout/grid-layout)
         - [StackLayout](/elements/layout/stack-layout)
