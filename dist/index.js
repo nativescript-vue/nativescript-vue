@@ -1600,7 +1600,7 @@ function getViewMeta(nodeName) {
 function isKnownView(elementName) {
   elementName = normalizeElementName(elementName);
 
-  return elementMap.has(elementName)
+  return elementMap.has(elementName.toLowerCase())
 }
 
 registerElement(
@@ -8239,19 +8239,19 @@ function dedupe (latest, extended, sealed) {
   }
 }
 
-function Vue$2 (options) {
+function Vue$3 (options) {
   if ('development' !== 'production' &&
-    !(this instanceof Vue$2)) {
+    !(this instanceof Vue$3)) {
     warn('Vue is a constructor and should be called with the `new` keyword');
   }
   this._init(options);
 }
 
-initMixin(Vue$2);
-stateMixin(Vue$2);
-eventsMixin(Vue$2);
-lifecycleMixin(Vue$2);
-renderMixin(Vue$2);
+initMixin(Vue$3);
+stateMixin(Vue$3);
+eventsMixin(Vue$3);
+lifecycleMixin(Vue$3);
+renderMixin(Vue$3);
 
 /*  */
 
@@ -8562,13 +8562,13 @@ function initGlobalAPI (Vue) {
   initAssetRegisters(Vue);
 }
 
-initGlobalAPI(Vue$2);
+initGlobalAPI(Vue$3);
 
-Object.defineProperty(Vue$2.prototype, '$isServer', {
+Object.defineProperty(Vue$3.prototype, '$isServer', {
   get: isServerRendering
 });
 
-Vue$2.version = '__VERSION__';
+Vue$3.version = '__VERSION__';
 
 var ActionBar = {
   name: 'action-bar',
@@ -8665,6 +8665,10 @@ var ActionItem = {
 
     if (this.text) {
       _nativeView.text = this.text;
+    }
+
+    if(this.icon) {
+      _nativeView.icon = this.icon;
     }
 
     if (_nativeView.android && this['android.systemIcon']) {
@@ -9002,20 +9006,20 @@ var platformComponents = {
 
 var platformDirectives$1 = {};
 
-Vue$2.config.mustUseProp = mustUseProp$1;
-Vue$2.config.isReservedTag = isReservedTag$1;
-Vue$2.config.isUnknownElement = isUnknownElement$1;
+Vue$3.config.mustUseProp = mustUseProp$1;
+Vue$3.config.isReservedTag = isReservedTag$1;
+Vue$3.config.isUnknownElement = isUnknownElement$1;
 
-Vue$2.prototype.$document = new DocumentNode();
+Vue$3.prototype.$document = new DocumentNode();
 
-Vue$2.registerElement = registerElement;
+Vue$3.registerElement = registerElement;
 
-Vue$2.options.directives = platformDirectives$1;
-Vue$2.options.components = platformComponents;
+Vue$3.options.directives = platformDirectives$1;
+Vue$3.options.components = platformComponents;
 
-Vue$2.prototype.__patch__ = patch;
+Vue$3.prototype.__patch__ = patch;
 
-Vue$2.prototype.$start = function() {
+Vue$3.prototype.$start = function() {
   this.__is_root__ = true;
 
   const placeholder = this.$document.createComment('placeholder');
@@ -9040,7 +9044,7 @@ const mount = function(el, hydrating) {
   }
 };
 
-Vue$2.prototype.$mount = function(el, hydrating) {
+Vue$3.prototype.$mount = function(el, hydrating) {
   const options = this.$options;
   // resolve template/el and convert to render function
   if (!options.render) {
@@ -9065,7 +9069,7 @@ Vue$2.prototype.$mount = function(el, hydrating) {
   return mount.call(this, el, hydrating)
 };
 
-Vue$2.prototype.$renderTemplate = function(template, context, oldVnode) {
+Vue$3.prototype.$renderTemplate = function(template, context, oldVnode) {
   let slot = template;
   if (typeof template !== 'function') {
     slot = this.$scopedSlots[template]
@@ -9079,9 +9083,35 @@ Vue$2.prototype.$renderTemplate = function(template, context, oldVnode) {
   return vnode
 };
 
-console.keys = function(object) {
-  console.dir(Object.keys(object));
+const Page = require('ui/page').Page;
+
+var ModalPlugin = {
+    install(Vue) {
+        Vue.prototype.$showModal = function (component) {
+            const modalPage = new Page();
+            const placeholder = this.$document.createComment('placeholder');
+
+            const content = Vue.extend(Object.assign({}, component));
+            content.prototype.$modal = {
+                close() {
+                    modalPage.closeModal();
+                }
+            };
+
+            const vm = new content;
+            vm.$mount(placeholder);
+            modalPage.content = vm.$el.nativeView;
+
+            this.$root.$el.nativeView.showModal(modalPage);
+        };
+    }
 };
 
-module.exports = Vue$2;
+console.keys = function (object) {
+    console.dir(Object.keys(object));
+};
+
+Vue$3.use(ModalPlugin);
+
+module.exports = Vue$3;
 //# sourceMappingURL=index.js.map
