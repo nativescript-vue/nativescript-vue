@@ -59,7 +59,7 @@ new Vue({
 
     methods: {
         onItemTap(e) {
-            let item = this.items[e.index]
+            let item = e.item
             if(item.type === 'page') {
                 return alert('You shall not pass.')
             }

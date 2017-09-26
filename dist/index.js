@@ -8742,7 +8742,6 @@ var ListView = {
     watch: {
         items: {
             handler(newVal) {
-                console.log('changed items..');
                 this.$refs.listView.setAttribute('items', newVal);
                 this.$refs.listView.nativeView.refresh();
             },
@@ -8752,7 +8751,7 @@ var ListView = {
 
     methods: {
         onItemTap(args) {
-            this.$emit('itemTap', args);
+            this.$emit('itemTap', Object.assign({ item: this.items[args.index] }, args));
         },
 
         onLoaded(args) {
