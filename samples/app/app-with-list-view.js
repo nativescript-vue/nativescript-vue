@@ -60,15 +60,27 @@ new Vue({
     methods: {
         onItemTap(e) {
             let item = this.items[e.index]
+            if(item.type === 'page') {
+                return alert('You shall not pass.')
+            }
 
             this.$showModal({
                 template: `
+                <page style="background-color: rgba(0, 0, 0, .6);">
                     <stack-layout>
-                        <label class="h2" textAlignment="center" text="${item.title}"></label>
-                        <img src="${item.fullImage}"/>
-                        <button @tap="$modal.close" text="Close"></button>                    
+                        <label class="h2" textAlignment="center" textWrap="true"
+                         text="${item.title}" style="color: #fff; margin-top: 20"></label>
+                        <grid-layout rows="*, 60">
+                            <activity-indicator row="0" :busy="true" height="100"></activity-indicator>
+                            <img row="0" src="${item.fullImage}"/>
+                            <button row="1" @tap="$modal.close" text="Close"></button>                    
+                        </grid-layout>
                     </stack-layout>
+                </page>
                 `
+            }, { fullscreen: true }).then((res) => {
+                console.log('Modal closed')
+                console.dir(res)
             })
         },
 
