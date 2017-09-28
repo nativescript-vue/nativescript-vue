@@ -8895,86 +8895,102 @@ var NavigationButton = {
 };
 
 var RouterPage = {
-  name: 'router-page',
+    name: 'router-page',
 
-  template: `
+    template: `
         <detached-container>
             <component v-if="routeComponent" ref="routeComponent" :is="routeComponent"></component>
         </detached-container>
 `,
 
-  data() {
-    return {
-      routeComponent: null
-    }
-  },
+    data() {
+        return {
+            routeComponent: null
+        }
+    },
 
-  watch: {
-    routeComponent() {
-      const self = this;
+    watch: {
+        routeComponent() {
+            const self = this;
 
-      setTimeout(() => {
-        const frame = ui_frame.topmost();
+            setTimeout(() => {
+                const frame = ui_frame.topmost();
 
-        frame.navigate({
-          create() {
-            return self.$refs.routeComponent.$el.nativeView
-          }
+                frame.navigate({
+                    create() {
+                        return self.$refs.routeComponent.$el.nativeView
+                    },
+                    animated: true,
+                    transition: {
+                        name: "slide",
+                        duration: 200,
+                        curve: "linear"
+                    }
+                });
+            });
+        }
+    },
+
+    created() {
+        this.routeComponent = this.$route.matched[0].components.default;
+        this.$router.afterEach(to => {
+            this.routeComponent = to.matched[0].components.default;
         });
-      });
+    },
+
+    beforeCreate() {
+        if (!this.$router) {
+            // error, this component requires VueRouter
+            warn(
+                'VueRouter is required to use <router-page>. Please install VueRouter.'
+            );
+
+            return
+        }
+
+        if (!this.$parent.__is_root__) {
+            // Router-page must be a direct child of the root vue instance
+            warn('<router-page> must be a direct child of the root Vue instance.');
+        }
+
+        if (application.android) {
+            application.android.on(application.AndroidApplication.activityBackPressedEvent, data => {
+                this.$router.back();
+                data.cancel = true;
+            });
+        }
     }
-  },
-
-  created() {
-    this.routeComponent = this.$route.matched[0].components.default;
-    this.$router.afterEach(to => {
-      this.routeComponent = to.matched[0].components.default;
-    });
-  },
-
-  beforeCreate() {
-    if (!this.$router) {
-      // error, this component requires VueRouter
-      warn(
-        'VueRouter is required to use <router-page>. Please install VueRouter.'
-      );
-
-      return
-    }
-
-    if (!this.$parent.__is_root__) {
-      // Router-page must be a direct child of the root vue instance
-      warn('<router-page> must be a direct child of the root Vue instance.');
-    }
-  }
 };
 
 var TabView = {
-  name: 'tab-view',
+    name: 'tab-view',
 
-  props: ['selectedTab'],
+    props: ['selectedTab'],
 
-  template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
+    template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
 
-  data() {
-    return {
-      selectedIndex: 0
+    data() {
+        return {
+            selectedIndex: 0
+        }
+    },
+
+    watch: {
+        selectedTab(index) {
+            this.selectedIndex = index;
+        },
+        selectedIndex(index) {
+            this.$emit('tabChange', index);
+        }
+    },
+
+    methods: {
+        registerTab(tabView) {
+            let items = this.$refs.tabView.nativeView.items || [];
+
+            this.$refs.tabView.setAttribute('items', items.concat([tabView]));
+        }
     }
-  },
-
-  watch: {
-    selectedTab(index) {
-      this.selectedIndex = index;
-    }
-  },
-
-  methods: {
-    registerTab(tabView) {
-      let items = this.$refs.tabView.nativeView.items || [];
-
-      this.$refs.tabView.setAttribute('items', items.concat([tabView]));
-    }
-  }
 };
 
 var TabViewItem = {
