@@ -2,13 +2,9 @@ const Vue = require('./nativescript-vue')
 
 const App = {
     template: `
-        <page>
-            <action-bar title="App with pages"></action-bar>
-            
-            <stack-layout>
-                <button text="Open page" @tap="openPage"></button>
-            </stack-layout>
-        </page>
+        <stack-layout>
+            <button text="Open page" @tap="openPage"></button>
+        </stack-layout>
     `,
 
     methods: {
