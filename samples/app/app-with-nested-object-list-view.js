@@ -1,7 +1,7 @@
 const Vue = require('./nativescript-vue')
 
 new Vue({
-    template: `
+  template: `
         <page>
             <list-view :items="items">
                 <template scope="item">
@@ -15,20 +15,20 @@ new Vue({
             </list-view>
         </page>
     `,
-    data: {
-        items: [
-            {
-                text: 'text 1',
-                user: { name: 'John', meta: { age: 10 } }
-            },
-            {
-                text: 'text 2',
-                user: { name: 'Lucy', meta: { age: 14 } }
-            },
-            {
-                text: 'text 3',
-                user: { name: 'Nick', meta: { age: 10 }}
-            }
-        ]
-    }
+  data: {
+    items: [
+      {
+        text: 'text 1',
+        user: { name: 'John', meta: { age: 10 } }
+      },
+      {
+        text: 'text 2',
+        user: { name: 'Lucy', meta: { age: 14 } }
+      },
+      {
+        text: 'text 3',
+        user: { name: 'Nick', meta: { age: 10 } }
+      }
+    ]
+  }
 }).$start()

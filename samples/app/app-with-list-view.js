@@ -11,14 +11,14 @@ Vue.prototype.$http = http
 Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient)
 
 new Vue({
-    data: {
-        subreddit: '/r/funny',
-        page_num: 1,
-        last_page: '',
-        items: []
-    },
+  data: {
+    subreddit: '/r/funny',
+    page_num: 1,
+    last_page: '',
+    items: []
+  },
 
-    template: `
+  template: `
         <page ref="page">
             <action-bar :title="subreddit">
                 <!-- leaving this commented as an example on how to use the navigation button: -->
@@ -53,19 +53,20 @@ new Vue({
         </page>
     `,
 
-    created() {
-        this.fetchItems()
-    },
+  created() {
+    this.fetchItems()
+  },
 
-    methods: {
-        onItemTap(e) {
-            let item = e.item
-            if(item.type === 'page') {
-                return alert('You shall not pass.')
-            }
+  methods: {
+    onItemTap(e) {
+      let item = e.item
+      if (item.type === 'page') {
+        return alert('You shall not pass.')
+      }
 
-            this.$showModal({
-                template: `
+      this.$showModal(
+        {
+          template: `
                 <page style="background-color: rgba(0, 0, 0, .6);">
                     <stack-layout>
                         <label class="h2" textAlignment="center" textWrap="true"
@@ -78,76 +79,77 @@ new Vue({
                     </stack-layout>
                 </page>
                 `
-            }, { fullscreen: true }).then((res) => {
-                console.log('Modal closed')
-                console.dir(res)
-            })
         },
+        { fullscreen: true }
+      ).then(res => {
+        console.log('Modal closed')
+        console.dir(res)
+      })
+    },
 
-        onLoaded(e) {
-            console.log('The list has been loaded')
-        },
+    onLoaded(e) {
+      console.log('The list has been loaded')
+    },
 
-        onLoadMoreItems(e) {
-            console.log('Loading more items')
-            return this.fetchItems()
-        },
+    onLoadMoreItems(e) {
+      console.log('Loading more items')
+      return this.fetchItems()
+    },
 
-        templateSelector(item) {
-            return item.type === 'page' ? 'page' : 'default'
-        },
+    templateSelector(item) {
+      return item.type === 'page' ? 'page' : 'default'
+    },
 
-        navigationButtonPressed() {
-            console.log('>>> navigation button pressed (but nothing to do really..)')
-        },
+    navigationButtonPressed() {
+      console.log('>>> navigation button pressed (but nothing to do really..)')
+    },
 
-        refresh() {
-            this.items = []
-            this.page_num = 1
-            this.fetchItems()
-        },
+    refresh() {
+      this.items = []
+      this.page_num = 1
+      this.fetchItems()
+    },
 
-        chooseSubreddit() {
-            prompt({
-                title: 'Change subreddit:',
-                defaultText: this.subreddit,
-                okButtonText: 'Ok',
-                cancelButtonText: 'Cancel'
-            }).then(r => {
-                if (r.result) {
-                    this.subreddit = r.text
-                    this.refresh()
-                }
-            })
-        },
-
-        fetchItems() {
-            this.$http
-                .getJSON(
-                    `https://www.reddit.com/${this
-                        .subreddit}.json?limit=10&count=10&after=${this.last_page}`
-                )
-                .then(res => {
-                    this.items.push({
-                        title: 'Page ' + this.page_num,
-                        type: 'page'
-                    })
-                    res.data.children.forEach(item => {
-                        this.items.push({
-                            title: item.data.title,
-                            image: item.data.thumbnail,
-                            fullImage: item.data.preview.images[0].source.url,
-                            type: 'entry'
-                        })
-                    })
-                    this.last_page = res.data.after
-                    this.page_num++
-
-                    console.log('Loaded more items')
-                })
-                .catch(err => {
-                    console.log('err..' + err)
-                })
+    chooseSubreddit() {
+      prompt({
+        title: 'Change subreddit:',
+        defaultText: this.subreddit,
+        okButtonText: 'Ok',
+        cancelButtonText: 'Cancel'
+      }).then(r => {
+        if (r.result) {
+          this.subreddit = r.text
+          this.refresh()
         }
+      })
+    },
+
+    fetchItems() {
+      this.$http
+        .getJSON(
+          `https://www.reddit.com/${this.subreddit}.json?limit=10&count=10&after=${this.last_page}`
+        )
+        .then(res => {
+          this.items.push({
+            title: 'Page ' + this.page_num,
+            type: 'page'
+          })
+          res.data.children.forEach(item => {
+            this.items.push({
+              title: item.data.title,
+              image: item.data.thumbnail,
+              fullImage: item.data.preview.images[0].source.url,
+              type: 'entry'
+            })
+          })
+          this.last_page = res.data.after
+          this.page_num++
+
+          console.log('Loaded more items')
+        })
+        .catch(err => {
+          console.log('err..' + err)
+        })
     }
+  }
 }).$start()

@@ -4,7 +4,7 @@ Vue.use(VueRouter)
 global.process = { env: {} } // hack! a build process should replace process.env's with static strings.
 
 const TabComponent = {
-    template: `
+  template: `
     <tab-view @tabChange="onTabChange" :selectedTab="selectedTab">
         <tab-view-item title="First">
             <stack-layout>
@@ -21,35 +21,34 @@ const TabComponent = {
     </tab-view>
     `,
 
-    computed: {
-      selectedTab() {
-          return this.$route.params.id;
-      }
-    },
-
-    methods: {
-        onTabChange(index) {
-            console.log('Tab changed ' + index);
-            this.$route.params.id = index
-        }
+  computed: {
+    selectedTab() {
+      return this.$route.params.id
     }
+  },
+
+  methods: {
+    onTabChange(index) {
+      console.log('Tab changed ' + index)
+      this.$route.params.id = index
+    }
+  }
 }
 
 const router = new VueRouter({
-    routes: [
-        { path: '/tab/:id', component: TabComponent },
-        { path: '*', redirect: '/tab/0' }
-    ]
+  routes: [
+    { path: '/tab/:id', component: TabComponent },
+    { path: '*', redirect: '/tab/0' }
+  ]
 })
 
 setTimeout(() => {
-    router.replace('/tab/1')
+  router.replace('/tab/1')
 })
 
-
 new Vue({
-    router,
-    template: `
+  router,
+  template: `
         <page>
             <action-bar title="Tab Routing"></action-bar>
             

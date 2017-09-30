@@ -34,7 +34,7 @@ export default {
       _nativeView.text = this.text
     }
 
-    if(this.icon) {
+    if (this.icon) {
       _nativeView.icon = this.icon
     }
 

@@ -1,5 +1,5 @@
-console.keys = function (object) {
-    console.dir(Object.keys(object))
+console.keys = function(object) {
+  console.dir(Object.keys(object))
 }
 
 import Vue from './runtime/index'
