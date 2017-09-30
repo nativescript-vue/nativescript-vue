@@ -39,6 +39,7 @@
     }
   },
   "dependencies": {
+    "lint-staged": "^4.2.3",
     "vue": "2.3.0"
   },
   "peerDependencies": {
