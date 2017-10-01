@@ -5,9 +5,11 @@ import { LayoutBase } from 'ui/layouts/layout-base'
 export function isView(view) {
   return view instanceof View
 }
+
 export function isLayout(view) {
   return view instanceof LayoutBase
 }
+
 export function isContentView(view) {
   return view instanceof ContentView
 }
@@ -38,6 +40,8 @@ export function insertChild(parentNode, childNode, atIndex = -1) {
     } else {
       parentView.content = childView
     }
+  } else if (parentView && parentView._addChildFromBuilder) {
+    parentView._addChildFromBuilder(childNode.tagName, childView)
   } else {
     // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
   }
