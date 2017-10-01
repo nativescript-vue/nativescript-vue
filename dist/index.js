@@ -11,6 +11,7 @@ var application = require('application');
 var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
+var ui_page = require('ui/page');
 var ui_frame = require('ui/frame');
 
 /*  */
@@ -1743,9 +1744,11 @@ registerElement(
 function isView(view) {
   return view instanceof ui_core_view.View
 }
+
 function isLayout(view) {
   return view instanceof ui_layouts_layoutBase.LayoutBase
 }
+
 function isContentView(view) {
   return view instanceof ui_contentView.ContentView
 }
@@ -1776,6 +1779,8 @@ function insertChild(parentNode, childNode, atIndex = -1) {
     } else {
       parentView.content = childView;
     }
+  } else if (parentView && parentView._addChildFromBuilder) {
+    parentView._addChildFromBuilder(childNode.tagName, childView);
   } else {
     // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
   }
@@ -4408,10 +4413,9 @@ function add$1(event, handler, once, capture) {
     const oldHandler = handler;
     const _target = target$1; // save current target element in closure
     handler = function(ev) {
-      const res =
-        arguments.length === 1
-          ? oldHandler(ev)
-          : oldHandler.apply(null, arguments);
+      const res = arguments.length === 1
+        ? oldHandler(ev)
+        : oldHandler.apply(null, arguments);
       if (res !== null) {
         remove$2(event, null, null, _target);
       }
@@ -8667,7 +8671,7 @@ var ActionItem = {
       _nativeView.text = this.text;
     }
 
-    if(this.icon) {
+    if (this.icon) {
       _nativeView.icon = this.icon;
     }
 
@@ -8700,9 +8704,9 @@ var ActionItem = {
 const VUE_VIEW = '__vueVNodeRef__';
 
 var ListView = {
-    name: 'list-view',
+  name: 'list-view',
 
-    template: `<native-list-view
+  template: `<native-list-view
                     ref="listView"
                     @itemLoading="onItemLoading"
                     @itemTap="onItemTap"
@@ -8711,149 +8715,151 @@ var ListView = {
                     @loadMoreItems="onLoadMoreItems">
                </native-list-view>`,
 
-    props: {
-        items: {
-            type: Array,
-            required: true
-        },
-        templateSelector: {
-            type: Function,
-            default: () => 'default'
-        },
-        separatorColor: {
-            type: String
-        }
+  props: {
+    items: {
+      type: Array,
+      required: true
     },
-
-    created() {
-        this._templateMap = new Map();
+    templateSelector: {
+      type: Function,
+      default: () => 'default'
     },
-
-    mounted() {
-        this.setupTemplates();
-
-        this.$refs.listView.setAttribute('items', this.items);
-
-        if (this.separatorColor) {
-            this.$refs.listView.setAttribute('separatorColor', this.separatorColor);
-        }
-    },
-
-    watch: {
-        items: {
-            handler(newVal) {
-                this.$refs.listView.setAttribute('items', newVal);
-                this.$refs.listView.nativeView.refresh();
-            },
-            deep: true,
-        }
-    },
-
-    methods: {
-        onItemTap(args) {
-            this.$emit('itemTap', Object.assign({ item: this.items[args.index] }, args));
-        },
-
-        onLoaded(args) {
-            this.$emit('loaded', args);
-        },
-
-        onUnloaded(args) {
-            this.$emit('unloaded', args);
-        },
-
-        onLoadMoreItems(args) {
-            this.$emit('loadMoreItems', args);
-        },
-
-        setupTemplates() {
-            const self = this;
-            const slots = Object.keys(this.$scopedSlots);
-
-            slots.forEach(slotName => {
-                const keyedTemplate = {
-                    key: slotName,
-                    createView() {
-                        let vnode = self.getItemTemplate('', 0);
-                        vnode.elm.nativeView[VUE_VIEW] = vnode;
-                        return vnode.elm.nativeView
-                    }
-                };
-                this._templateMap.set(slotName, keyedTemplate);
-            });
-
-            this.setItemTemplates();
-        },
-
-        setItemTemplates() {
-            const templates = [];
-            this._templateMap.forEach(value => {
-                templates.push(value);
-            });
-
-            this.$refs.listView.setAttribute('_itemTemplatesInternal', templates);
-
-            if (typeof this.templateSelector === 'function') {
-                this.$refs.listView.setAttribute(
-                    '_itemTemplateSelector',
-                    (item, index, items) => {
-                        return this.templateSelector(new ItemContext(item, index))
-                    }
-                );
-            }
-        },
-
-        onItemLoading(args) {
-            const index = args.index;
-            const items = args.object.items;
-            const currentItem =
-                typeof items.getItem === 'function'
-                    ? items.getItem(index)
-                    : items[index];
-
-            let vnode;
-            if (args.view) {
-                vnode = args.view[VUE_VIEW];
-
-                if (!vnode) {
-                    console.log('Cant reuse view...');
-                }
-            }
-
-            vnode = this.getItemTemplate(currentItem, index, vnode);
-            args.view = vnode.elm.nativeView;
-            args.view[VUE_VIEW] = vnode;
-        },
-
-        getItemTemplate(item, index, oldVnode) {
-            let context = new ItemContext(item, index);
-            let template = 'default';
-            if (typeof this.templateSelector === 'function') {
-                template = this.templateSelector(context);
-            }
-            //
-            // let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
-            // let vnode = slot(context)[0]
-            // this.__patch__(oldVnode, vnode)
-            //
-            // return vnode
-
-            return this.$renderTemplate(template, context, oldVnode)
-        }
+    separatorColor: {
+      type: String
     }
+  },
+
+  created() {
+    this._templateMap = new Map();
+  },
+
+  mounted() {
+    this.setupTemplates();
+
+    this.$refs.listView.setAttribute('items', this.items);
+
+    if (this.separatorColor) {
+      this.$refs.listView.setAttribute('separatorColor', this.separatorColor);
+    }
+  },
+
+  watch: {
+    items: {
+      handler(newVal) {
+        this.$refs.listView.setAttribute('items', newVal);
+        this.$refs.listView.nativeView.refresh();
+      },
+      deep: true
+    }
+  },
+
+  methods: {
+    onItemTap(args) {
+      this.$emit(
+        'itemTap',
+        Object.assign({ item: this.items[args.index] }, args)
+      );
+    },
+
+    onLoaded(args) {
+      this.$emit('loaded', args);
+    },
+
+    onUnloaded(args) {
+      this.$emit('unloaded', args);
+    },
+
+    onLoadMoreItems(args) {
+      this.$emit('loadMoreItems', args);
+    },
+
+    setupTemplates() {
+      const self = this;
+      const slots = Object.keys(this.$scopedSlots);
+
+      slots.forEach(slotName => {
+        const keyedTemplate = {
+          key: slotName,
+          createView() {
+            let vnode = self.getItemTemplate('', 0);
+            vnode.elm.nativeView[VUE_VIEW] = vnode;
+            return vnode.elm.nativeView
+          }
+        };
+        this._templateMap.set(slotName, keyedTemplate);
+      });
+
+      this.setItemTemplates();
+    },
+
+    setItemTemplates() {
+      const templates = [];
+      this._templateMap.forEach(value => {
+        templates.push(value);
+      });
+
+      this.$refs.listView.setAttribute('_itemTemplatesInternal', templates);
+
+      if (typeof this.templateSelector === 'function') {
+        this.$refs.listView.setAttribute(
+          '_itemTemplateSelector',
+          (item, index, items) => {
+            return this.templateSelector(new ItemContext(item, index))
+          }
+        );
+      }
+    },
+
+    onItemLoading(args) {
+      const index = args.index;
+      const items = args.object.items;
+      const currentItem = typeof items.getItem === 'function'
+        ? items.getItem(index)
+        : items[index];
+
+      let vnode;
+      if (args.view) {
+        vnode = args.view[VUE_VIEW];
+
+        if (!vnode) {
+          console.log('Cant reuse view...');
+        }
+      }
+
+      vnode = this.getItemTemplate(currentItem, index, vnode);
+      args.view = vnode.elm.nativeView;
+      args.view[VUE_VIEW] = vnode;
+    },
+
+    getItemTemplate(item, index, oldVnode) {
+      let context = new ItemContext(item, index);
+      let template = 'default';
+      if (typeof this.templateSelector === 'function') {
+        template = this.templateSelector(context);
+      }
+      //
+      // let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
+      // let vnode = slot(context)[0]
+      // this.__patch__(oldVnode, vnode)
+      //
+      // return vnode
+
+      return this.$renderTemplate(template, context, oldVnode)
+    }
+  }
 };
 
 class ItemContext {
-    constructor(item, index) {
-        this.$index = index;
-        if (typeof item === 'object') {
-            Object.assign(this, item);
-        } else {
-            this.value = item;
-        }
-        this.even = index % 2 === 0;
-        this.odd = !this.even;
+  constructor(item, index) {
+    this.$index = index;
+    if (typeof item === 'object') {
+      Object.assign(this, item);
+    } else {
+      this.value = item;
     }
+    this.even = index % 2 === 0;
+    this.odd = !this.even;
+  }
 }
 
 var NavigationButton = {
@@ -8895,102 +8901,102 @@ var NavigationButton = {
 };
 
 var RouterPage = {
-    name: 'router-page',
+  name: 'router-page',
 
-    template: `
+  template: `
         <detached-container>
             <component v-if="routeComponent" ref="routeComponent" :is="routeComponent"></component>
         </detached-container>
 `,
 
-    data() {
-        return {
-            routeComponent: null
-        }
-    },
-
-    watch: {
-        routeComponent() {
-            const self = this;
-
-            setTimeout(() => {
-                const frame = ui_frame.topmost();
-
-                frame.navigate({
-                    create() {
-                        return self.$refs.routeComponent.$el.nativeView
-                    },
-                    animated: true,
-                    transition: {
-                        name: "slide",
-                        duration: 200,
-                        curve: "linear"
-                    }
-                });
-            });
-        }
-    },
-
-    created() {
-        this.routeComponent = this.$route.matched[0].components.default;
-        this.$router.afterEach(to => {
-            this.routeComponent = to.matched[0].components.default;
-        });
-    },
-
-    beforeCreate() {
-        if (!this.$router) {
-            // error, this component requires VueRouter
-            warn(
-                'VueRouter is required to use <router-page>. Please install VueRouter.'
-            );
-
-            return
-        }
-
-        if (!this.$parent.__is_root__) {
-            // Router-page must be a direct child of the root vue instance
-            warn('<router-page> must be a direct child of the root Vue instance.');
-        }
-
-        if (application.android) {
-            application.android.on(application.AndroidApplication.activityBackPressedEvent, data => {
-                this.$router.back();
-                data.cancel = true;
-            });
-        }
+  data() {
+    return {
+      routeComponent: null
     }
+  },
+
+  watch: {
+    routeComponent() {
+      const self = this;
+
+      setTimeout(() => {
+        const frame = ui_frame.topmost();
+
+        frame.navigate({
+          create() {
+            return self.$refs.routeComponent.$el.nativeView
+          },
+          animated: true,
+          transition: {
+            name: 'slide',
+            duration: 200,
+            curve: 'linear'
+          }
+        });
+      });
+    }
+  },
+
+  created() {
+    this.routeComponent = this.$route.matched[0].components.default;
+    this.$router.afterEach(to => {
+      this.routeComponent = to.matched[0].components.default;
+    });
+  },
+
+  beforeCreate() {
+    if (!this.$router) {
+      // error, this component requires VueRouter
+      warn(
+        'VueRouter is required to use <router-page>. Please install VueRouter.'
+      );
+
+      return
+    }
+
+    if (!this.$parent.__is_root__) {
+      // Router-page must be a direct child of the root vue instance
+      warn('<router-page> must be a direct child of the root Vue instance.');
+    }
+
+    if (application.android) {
+      application.android.on(application.AndroidApplication.activityBackPressedEvent, data => {
+        this.$router.back();
+        data.cancel = true;
+      });
+    }
+  }
 };
 
 var TabView = {
-    name: 'tab-view',
+  name: 'tab-view',
 
-    props: ['selectedTab'],
+  props: ['selectedTab'],
 
-    template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
+  template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
 
-    data() {
-        return {
-            selectedIndex: 0
-        }
-    },
-
-    watch: {
-        selectedTab(index) {
-            this.selectedIndex = index;
-        },
-        selectedIndex(index) {
-            this.$emit('tabChange', index);
-        }
-    },
-
-    methods: {
-        registerTab(tabView) {
-            let items = this.$refs.tabView.nativeView.items || [];
-
-            this.$refs.tabView.setAttribute('items', items.concat([tabView]));
-        }
+  data() {
+    return {
+      selectedIndex: 0
     }
+  },
+
+  watch: {
+    selectedTab(index) {
+      this.selectedIndex = index;
+    },
+    selectedIndex(index) {
+      this.$emit('tabChange', index);
+    }
+  },
+
+  methods: {
+    registerTab(tabView) {
+      let items = this.$refs.tabView.nativeView.items || [];
+
+      this.$refs.tabView.setAttribute('items', items.concat([tabView]));
+    }
+  }
 };
 
 var TabViewItem = {
@@ -9038,7 +9044,6 @@ Vue$3.prototype.$start = function() {
   this.__is_root__ = true;
 
   const placeholder = this.$document.createComment('placeholder');
-  this.$document.documentElement.appendChild(placeholder);
 
   this.$mount(placeholder);
 };
@@ -9051,7 +9056,15 @@ const mount = function(el, hydrating) {
         // Call mountComponent in the create callback when the IOS app loop has started
         // https://github.com/rigor789/nativescript-vue/issues/24
         mountComponent(self, el, hydrating);
-        return self.$el.nativeView
+
+        const isPage = self.$el.tagName === 'page';
+        const page = isPage ? self.$el.nativeView : new ui_page.Page();
+
+        if (!isPage) {
+          page.content = self.$el.nativeView;
+        }
+
+        return page
       }
     });
   } else {
@@ -9098,47 +9111,93 @@ Vue$3.prototype.$renderTemplate = function(template, context, oldVnode) {
   return vnode
 };
 
-const Page = require('ui/page').Page;
+const Page$1 = require('ui/page').Page;
 
 var ModalPlugin = {
-    install(Vue) {
-        Vue.prototype.$showModal = function (component, options = { context: null, fullscreen: false }) {
-            return new Promise((resolve) => {
-                    const placeholder = this.$document.createComment('placeholder');
+  install(Vue) {
+    Vue.prototype.$showModal = function(
+      component,
+      options = { context: null, fullscreen: false }
+    ) {
+      return new Promise(resolve => {
+        const placeholder = this.$document.createComment('placeholder');
 
-                    const contentComponent = Vue.extend(component);
-                    const vm = new contentComponent(options.context);
+        const contentComponent = Vue.extend(component);
+        const vm = new contentComponent(options.context);
 
-                    contentComponent.prototype.$modal = {
-                        close(data) {
-                            resolve(data);
-                            modalPage.closeModal();
-                            setTimeout(() => {
-                                vm.$destroy();
-                            });
-                        }
-                    };
-
-                    vm.$mount(placeholder);
-                    const isPage = vm.$el.tagName === 'page';
-                    const modalPage = isPage ? vm.$el.nativeView : new Page();
-
-                    if (!isPage) {
-                        modalPage.content = vm.$el.nativeView;
-                    }
-
-                    this.$root.$el.nativeView.showModal(modalPage, null, resolve, options.fullscreen);
-                }
-            )
+        contentComponent.prototype.$modal = {
+          close(data) {
+            resolve(data);
+            modalPage.closeModal();
+            setTimeout(() => {
+              vm.$destroy();
+            });
+          }
         };
-    }
+
+        vm.$mount(placeholder);
+        const isPage = vm.$el.tagName === 'page';
+        const modalPage = isPage ? vm.$el.nativeView : new Page$1();
+
+        if (!isPage) {
+          modalPage.content = vm.$el.nativeView;
+        }
+
+        this.$root.$el.nativeView.showModal(
+          modalPage,
+          null,
+          resolve,
+          options.fullscreen
+        );
+      })
+    };
+  }
 };
 
-console.keys = function (object) {
-    console.dir(Object.keys(object));
+const Page$2 = require('ui/page').Page;
+const topmost$1 = require('ui/frame').topmost;
+
+var NavigatorPlugin = {
+  install(Vue) {
+    Vue.prototype.$navigateBack = function() {
+      return topmost$1().goBack()
+    };
+    Vue.prototype.$navigateTo = function(
+      component,
+      options = {
+        context: null,
+        animated: true,
+        transition: null
+      }
+    ) {
+      const placeholder = this.$document.createComment('placeholder');
+
+      const contentComponent = Vue.extend(component);
+      const vm = new contentComponent(options.context);
+      vm.$mount(placeholder);
+
+      const isPage = vm.$el.tagName === 'page';
+      const toPage = isPage ? vm.$el.nativeView : new Page$2();
+
+      if (!isPage) {
+        toPage.content = vm.$el.nativeView;
+      }
+
+      topmost$1().navigate({
+        create: () => toPage,
+        animated: options.animated,
+        transition: options.transition
+      });
+    };
+  }
+};
+
+console.keys = function(object) {
+  console.dir(Object.keys(object));
 };
 
 Vue$3.use(ModalPlugin);
+Vue$3.use(NavigatorPlugin);
 
 module.exports = Vue$3;
 //# sourceMappingURL=index.js.map
