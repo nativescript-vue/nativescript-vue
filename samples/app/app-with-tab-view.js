@@ -12,6 +12,16 @@ let app = new Vue({
 
   template: `
         <page>
+            <action-bar title="test">
+              <stack-layout orientation="horizontal" horizontalAlignment="center">
+                <Label style="font-size: 20">
+                  <FormattedString>
+                    <Span text="Tab" fontWeight="Bold"></Span>
+                    <Span text="Views"></Span>
+                  </FormattedString>
+                </Label>
+              </stack-layout>
+            </action-bar>
             <stack-layout>
                 <button @tap="tabs.push({title: 'added', text: 'added tab'})">Click me!</button>
                 <tab-view :selectedIndex="selectedTab">
