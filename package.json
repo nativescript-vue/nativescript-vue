@@ -10,7 +10,11 @@
     "samples": "node sample-runner.js",
     "build": "rollup -c",
     "precommit": "lint-staged",
-    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\""
+    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
+
+    "preversion": "npm test",
+    "version": "npm run build && git add -A && git add -f dist/index.js dist/index.js.map",
+    "postversion": "git push origin master && git push --tags"
   },
   "repository": {
     "type": "git",

@@ -7,5 +7,4 @@ node_modules/
 samples/platforms
 samples/app/nativescript-vue.js
 samples/app/nativescript-vue.js.map
-dist/index.js
-dist/index.js.map
+dist/
