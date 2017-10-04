@@ -11,7 +11,6 @@
     "build": "rollup -c",
     "precommit": "lint-staged",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
-    "release": "bash release.sh",
     "preversion": "npm test",
     "version": "npm run build && git add -A && git add -f dist/index.js dist/index.js.map",
     "postversion": "git push origin master && git push --tags"
