@@ -1,4 +1,4 @@
-import { getViewMeta } from '../element-registry'
+import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
 
 const XML_ATTRIBUTES = Object.freeze([
@@ -11,7 +11,7 @@ const XML_ATTRIBUTES = Object.freeze([
 export default class ViewNode {
   constructor() {
     this.nodeType = null
-    this.tagName = null
+    this._tagName = null
     this.parentNode = null
     this.childNodes = []
     this.prevSibling = null
@@ -30,6 +30,14 @@ export default class ViewNode {
   /* istanbul ignore next */
   toString() {
     return `${this.constructor.name}(${this.tagName})`
+  }
+
+  set tagName(name) {
+    this._tagName = normalizeElementName(name)
+  }
+
+  get tagName() {
+    return this._tagName
   }
 
   get firstChild() {
