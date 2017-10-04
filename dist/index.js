@@ -1780,7 +1780,10 @@ function insertChild(parentNode, childNode, atIndex = -1) {
       parentView.content = childView;
     }
   } else if (parentView && parentView._addChildFromBuilder) {
-    parentView._addChildFromBuilder(childNode.tagName, childView);
+    parentView._addChildFromBuilder(
+      childNode._nativeView.constructor.name,
+      childView
+    );
   } else {
     // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
   }
@@ -1821,7 +1824,7 @@ const XML_ATTRIBUTES = Object.freeze([
 class ViewNode {
   constructor() {
     this.nodeType = null;
-    this.tagName = null;
+    this._tagName = null;
     this.parentNode = null;
     this.childNodes = [];
     this.prevSibling = null;
@@ -1840,6 +1843,14 @@ class ViewNode {
   /* istanbul ignore next */
   toString() {
     return `${this.constructor.name}(${this.tagName})`
+  }
+
+  set tagName(name) {
+    this._tagName = normalizeElementName(name);
+  }
+
+  get tagName() {
+    return this._tagName
   }
 
   get firstChild() {
@@ -4413,9 +4424,10 @@ function add$1(event, handler, once, capture) {
     const oldHandler = handler;
     const _target = target$1; // save current target element in closure
     handler = function(ev) {
-      const res = arguments.length === 1
-        ? oldHandler(ev)
-        : oldHandler.apply(null, arguments);
+      const res =
+        arguments.length === 1
+          ? oldHandler(ev)
+          : oldHandler.apply(null, arguments);
       if (res !== null) {
         remove$2(event, null, null, _target);
       }
@@ -7030,6 +7042,10 @@ function isUnknownElement$1(el) {
   return !isKnownView(el)
 }
 
+function isPage(el) {
+  return el && el.tagName === 'page'
+}
+
 const baseOptions = {
   modules: modules$1,
   directives: directives$1,
@@ -8577,7 +8593,11 @@ Vue$3.version = '__VERSION__';
 var ActionBar = {
   name: 'action-bar',
 
-  template: `<native-action-bar ref="actionBar"><slot></slot></native-action-bar>`,
+  template: `
+    <native-action-bar ref="actionBar" :title="title">
+        <slot></slot>
+    </native-action-bar>
+  `,
 
   props: {
     title: {
@@ -8588,7 +8608,7 @@ var ActionBar = {
 
   mounted() {
     this.$nextTick(() => {
-      if (this.$parent.$el.tagName.toLowerCase() !== 'page') {
+      if (this.$parent.$el.tagName !== 'page') {
         warn(
           'Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.'
         );
@@ -8599,39 +8619,7 @@ var ActionBar = {
 
       page.actionBar = this.$refs.actionBar.nativeView;
       page.actionBarHidden = false;
-      if (this.title) {
-        this.$refs.actionBar.setAttribute('title', this.title);
-      }
     });
-  },
-
-  watch: {
-    title(newVal) {
-      this.$refs.actionBar.setAttribute('title', newVal);
-    }
-  },
-
-  methods: {
-    registerActionItem(actionItem) {
-      if (actionItem.ios) {
-        setTimeout(() => {
-          const page = this.$root.$el.nativeView;
-          page.actionBar.actionItems.addItem(actionItem);
-        });
-      } else {
-        this.$refs.actionBar.nativeView.actionItems.addItem(actionItem);
-      }
-    },
-    registerNavigationButton(navigationButton) {
-      if (navigationButton.ios) {
-        setTimeout(() => {
-          const page = this.$root.$el.nativeView;
-          page.actionBar.navigationButton = navigationButton;
-        });
-      } else {
-        this.$refs.actionBar.nativeView.navigationButton = navigationButton;
-      }
-    }
   }
 };
 
@@ -8690,8 +8678,6 @@ var ActionItem = {
     if (_nativeView.ios && this['ios.position']) {
       _nativeView.ios.position = this['ios.position'];
     }
-
-    this.$parent.registerActionItem(_nativeView);
   },
 
   methods: {
@@ -8813,9 +8799,10 @@ var ListView = {
     onItemLoading(args) {
       const index = args.index;
       const items = args.object.items;
-      const currentItem = typeof items.getItem === 'function'
-        ? items.getItem(index)
-        : items[index];
+      const currentItem =
+        typeof items.getItem === 'function'
+          ? items.getItem(index)
+          : items[index];
 
       let vnode;
       if (args.view) {
@@ -8889,8 +8876,6 @@ var NavigationButton = {
     if (_nativeView.android && this['android.systemIcon']) {
       _nativeView.android.systemIcon = this['android.systemIcon'];
     }
-
-    this.$parent.registerNavigationButton(_nativeView);
   },
 
   methods: {
@@ -8973,7 +8958,11 @@ var TabView = {
 
   props: ['selectedTab'],
 
-  template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
+  template: `
+    <native-tab-view ref="tabView" v-model="selectedIndex">
+        <slot></slot>
+    </native-tab-view>
+  `,
 
   data() {
     return {
@@ -9057,10 +9046,9 @@ const mount = function(el, hydrating) {
         // https://github.com/rigor789/nativescript-vue/issues/24
         mountComponent(self, el, hydrating);
 
-        const isPage = self.$el.tagName === 'page';
-        const page = isPage ? self.$el.nativeView : new ui_page.Page();
+        const page = isPage(self.$el) ? self.$el.nativeView : new ui_page.Page();
 
-        if (!isPage) {
+        if (!isPage(self.$el)) {
           page.content = self.$el.nativeView;
         }
 
@@ -9111,8 +9099,6 @@ Vue$3.prototype.$renderTemplate = function(template, context, oldVnode) {
   return vnode
 };
 
-const Page$1 = require('ui/page').Page;
-
 var ModalPlugin = {
   install(Vue) {
     Vue.prototype.$showModal = function(
@@ -9136,10 +9122,9 @@ var ModalPlugin = {
         };
 
         vm.$mount(placeholder);
-        const isPage = vm.$el.tagName === 'page';
-        const modalPage = isPage ? vm.$el.nativeView : new Page$1();
+        const modalPage = isPage(vm.$el) ? vm.$el.nativeView : new ui_page.Page();
 
-        if (!isPage) {
+        if (!isPage(vm.$el)) {
           modalPage.content = vm.$el.nativeView;
         }
 
@@ -9154,13 +9139,10 @@ var ModalPlugin = {
   }
 };
 
-const Page$2 = require('ui/page').Page;
-const topmost$1 = require('ui/frame').topmost;
-
 var NavigatorPlugin = {
   install(Vue) {
     Vue.prototype.$navigateBack = function() {
-      return topmost$1().goBack()
+      return ui_frame.topmost().goBack()
     };
     Vue.prototype.$navigateTo = function(
       component,
@@ -9176,14 +9158,13 @@ var NavigatorPlugin = {
       const vm = new contentComponent(options.context);
       vm.$mount(placeholder);
 
-      const isPage = vm.$el.tagName === 'page';
-      const toPage = isPage ? vm.$el.nativeView : new Page$2();
+      const toPage = isPage(vm.$el) ? vm.$el.nativeView : new ui_page.Page();
 
-      if (!isPage) {
+      if (!isPage(vm.$el)) {
         toPage.content = vm.$el.nativeView;
       }
 
-      topmost$1().navigate({
+      ui_frame.topmost().navigate({
         create: () => toPage,
         animated: options.animated,
         transition: options.transition
