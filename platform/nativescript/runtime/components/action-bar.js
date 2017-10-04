@@ -14,7 +14,7 @@ export default {
 
   mounted() {
     this.$nextTick(() => {
-      if (this.$parent.$el.tagName.toLowerCase() !== 'page') {
+      if (this.$parent.$el.tagName !== 'page') {
         warn(
           'Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.'
         )
