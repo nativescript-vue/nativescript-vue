@@ -11,9 +11,10 @@ function add(event, handler, once, capture) {
     const oldHandler = handler
     const _target = target // save current target element in closure
     handler = function(ev) {
-      const res = arguments.length === 1
-        ? oldHandler(ev)
-        : oldHandler.apply(null, arguments)
+      const res =
+        arguments.length === 1
+          ? oldHandler(ev)
+          : oldHandler.apply(null, arguments)
       if (res !== null) {
         remove(event, null, null, _target)
       }

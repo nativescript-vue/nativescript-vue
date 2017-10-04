@@ -41,7 +41,10 @@ export function insertChild(parentNode, childNode, atIndex = -1) {
       parentView.content = childView
     }
   } else if (parentView && parentView._addChildFromBuilder) {
-    parentView._addChildFromBuilder(childNode._nativeView.constructor.name, childView)
+    parentView._addChildFromBuilder(
+      childNode._nativeView.constructor.name,
+      childView
+    )
   } else {
     // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
   }

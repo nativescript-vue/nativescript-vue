@@ -1,16 +1,16 @@
 const Vue = require('./nativescript-vue')
 
 let app = new Vue({
-    data: {
-        selectedTab: 0,
-        tabs: [
-            { title: 'First Tab', text: 'im the first tab' },
-            { title: 'Second Tab', text: 'im the second tab' },
-            { title: 'Third Tab', text: 'im the third tab' }
-        ]
-    },
+  data: {
+    selectedTab: 0,
+    tabs: [
+      { title: 'First Tab', text: 'im the first tab' },
+      { title: 'Second Tab', text: 'im the second tab' },
+      { title: 'Third Tab', text: 'im the third tab' }
+    ]
+  },
 
-    template: `
+  template: `
         <page>
             <action-bar title="test">
               <stack-layout orientation="horizontal" horizontalAlignment="center">

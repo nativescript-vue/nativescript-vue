@@ -30,5 +30,5 @@ export default {
       page.actionBar = this.$refs.actionBar.nativeView
       page.actionBarHidden = false
     })
-  },
+  }
 }

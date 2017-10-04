@@ -9,7 +9,8 @@
     "dev": "rollup -c -w --o samples/app/nativescript-vue.js",
     "samples": "node sample-runner.js",
     "build": "rollup -c",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\""
   },
   "repository": {
     "type": "git",

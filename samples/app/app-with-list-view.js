@@ -127,7 +127,8 @@ new Vue({
     fetchItems() {
       this.$http
         .getJSON(
-          `https://www.reddit.com/${this.subreddit}.json?limit=10&count=10&after=${this.last_page}`
+          `https://www.reddit.com/${this
+            .subreddit}.json?limit=10&count=10&after=${this.last_page}`
         )
         .then(res => {
           this.items.push({

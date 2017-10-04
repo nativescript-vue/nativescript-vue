@@ -110,9 +110,10 @@ export default {
     onItemLoading(args) {
       const index = args.index
       const items = args.object.items
-      const currentItem = typeof items.getItem === 'function'
-        ? items.getItem(index)
-        : items[index]
+      const currentItem =
+        typeof items.getItem === 'function'
+          ? items.getItem(index)
+          : items[index]
 
       let vnode
       if (args.view) {
