@@ -90,7 +90,7 @@ export default class ViewNode {
     try {
       if (XML_ATTRIBUTES.indexOf(key) !== -1) {
         this.nativeView._applyXmlAttribute(key, value)
-      } else if(key === 'text') {
+      } else if (key === 'text') {
         this.nativeView[key] = decode(value)
       } else {
         this.nativeView[key] = value
