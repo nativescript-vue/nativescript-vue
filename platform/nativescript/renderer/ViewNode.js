@@ -1,5 +1,6 @@
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
+import { decode } from 'he'
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
@@ -89,6 +90,8 @@ export default class ViewNode {
     try {
       if (XML_ATTRIBUTES.indexOf(key) !== -1) {
         this.nativeView._applyXmlAttribute(key, value)
+      } else if(key === 'text') {
+        this.nativeView[key] = decode(value)
       } else {
         this.nativeView[key] = value
       }

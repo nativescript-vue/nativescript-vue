@@ -8,7 +8,7 @@ const banner = `
 /*!
  * NativeScript-Vue
  * (c) 2017 rigor789
- * Released under MIT license.
+ * Released under the MIT license.
  */
 `
 
@@ -23,7 +23,8 @@ const aliases = {
   core: resolveVue('core'),
   shared: resolveVue('shared'),
   sfc: resolveVue('sfc'),
-  he: path.resolve(__dirname, 'platform/nativescript/util/entity-decoder')
+  //he: path.resolve(__dirname, 'platform/nativescript/util/entity-decoder'),
+  he: path.resolve(__dirname, 'node_modules', 'he', 'he')
 }
 
 export default {
@@ -42,7 +43,14 @@ export default {
     }),
     alias(aliases),
     commonjs({
-      include: [path.resolve(__dirname, 'node_modules', 'vue') + '/**']
+      include: [
+        path.resolve(__dirname, 'node_modules', 'vue') + '/**',
+        path.resolve(__dirname, 'node_modules', 'he') + '/**',
+      ],
+
+      namedExports: {
+        'he': ['decode']
+      }
     })
   ],
   external(id) {

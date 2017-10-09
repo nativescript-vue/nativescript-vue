@@ -14,6 +14,8 @@ import platformDirectives from './directives/index'
 
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
 
+export const VUE_VM_REF = '__vue_vm_ref__'
+
 Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
 Vue.config.isUnknownElement = isUnknownElement
