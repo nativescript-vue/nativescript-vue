@@ -39,15 +39,7 @@ inquirer
 
     tns.stdout.on('data', chunk => {
       const line = chunk.toString().trim()
-
-      const [prefix, message] = line.split(' {NSVue} -> ')
-      if (prefix && message) {
-        console.log(
-          `${prefix} ${chalk.keyword('gray')('{')}${chalk.keyword('yellow')('NSVue')}${chalk.keyword('gray')('}')} -> ${message}`
-        )
-      } else {
-        console.log(line)
-      }
+      console.log(line)
     })
   })
 

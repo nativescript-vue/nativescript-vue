@@ -4,6 +4,9 @@ import replace from 'rollup-plugin-replace'
 import flow from 'rollup-plugin-flow-no-whitespace'
 import path from 'path'
 
+const Vue = require('vue/package.json')
+const NSVue = require('./package.json')
+
 const banner = `
 /*!
  * NativeScript-Vue
@@ -39,7 +42,9 @@ export default {
     replace({
       __WEEX__: false,
       'process.env.NODE_ENV': "'development'",
-      'let _isServer': 'let _isServer = false'
+      'let _isServer': 'let _isServer = false',
+      'process.env.VUE_VERSION': `'${Vue.version}'`,
+      'process.env.NS_VUE_VERSION': `'${NSVue.version}'`
     }),
     alias(aliases),
     commonjs({
