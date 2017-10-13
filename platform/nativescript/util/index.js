@@ -3,11 +3,11 @@ import { isKnownView, getViewMeta } from '../element-registry'
 
 export const isReservedTag = makeMap('template', true)
 
-export const canBeLeftOpenTag = function (el) {
+export const canBeLeftOpenTag = function(el) {
   return getViewMeta(el).canBeLeftOpenTag
 }
 
-export const isUnaryTag = function (el) {
+export const isUnaryTag = function(el) {
   return getViewMeta(el).isUnaryTag
 }
 
@@ -31,9 +31,11 @@ export function query(el, renderer, document) {
   // Todo
 }
 
-export const VUE_VERSION = process.env.VUE_VERSION;
-export const NS_VUE_VERSION = process.env.NS_VUE_VERSION;
+export const VUE_VERSION = process.env.VUE_VERSION
+export const NS_VUE_VERSION = process.env.NS_VUE_VERSION
 
 export function trace(message) {
-  console.log(`{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`)
+  console.log(
+    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
+  )
 }

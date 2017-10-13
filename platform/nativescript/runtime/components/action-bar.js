@@ -35,5 +35,5 @@ export default {
     title(newVal) {
       this.$refs.actionBar.setAttribute('title', newVal)
     }
-  },
+  }
 }
