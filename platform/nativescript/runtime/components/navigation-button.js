@@ -25,8 +25,6 @@ export default {
     if (_nativeView.android && this['android.systemIcon']) {
       _nativeView.android.systemIcon = this['android.systemIcon']
     }
-
-    this.$parent.registerNavigationButton(_nativeView)
   },
 
   methods: {
