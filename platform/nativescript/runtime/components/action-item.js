@@ -1,10 +1,7 @@
 export default {
   name: 'action-item',
 
-  template: `<native-action-item
-                    ref="actionItem"
-                    @tap="onTap">
-               </native-action-item>`,
+  template: `<native-action-item ref="actionItem" @tap="onTap" />`,
 
   props: {
     text: {
@@ -53,8 +50,6 @@ export default {
     if (_nativeView.ios && this['ios.position']) {
       _nativeView.ios.position = this['ios.position']
     }
-
-    this.$parent.registerActionItem(_nativeView)
   },
 
   methods: {

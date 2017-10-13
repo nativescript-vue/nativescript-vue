@@ -3,7 +3,11 @@ import { warn } from 'core/util/debug'
 export default {
   name: 'action-bar',
 
-  template: `<native-action-bar ref="actionBar"><slot></slot></native-action-bar>`,
+  template: `
+    <native-action-bar ref="actionBar">
+        <slot></slot>
+    </native-action-bar>
+  `,
 
   props: {
     title: {
@@ -34,29 +38,6 @@ export default {
   watch: {
     title(newVal) {
       this.$refs.actionBar.setAttribute('title', newVal)
-    }
-  },
-
-  methods: {
-    registerActionItem(actionItem) {
-      if (actionItem.ios) {
-        setTimeout(() => {
-          const page = this.$root.$el.nativeView
-          try {
-            page.actionBar.actionItems.addItem(actionItem)
-          } catch (e) {
-            // ignore
-          }
-        })
-      }
-    },
-    registerNavigationButton(navigationButton) {
-      if (navigationButton.ios) {
-        setTimeout(() => {
-          const page = this.$root.$el.nativeView
-          page.actionBar.navigationButton = navigationButton
-        })
-      }
     }
   }
 }

@@ -1,10 +1,7 @@
 export default {
   name: 'navigation-button',
 
-  template: `<native-navigation-button
-                    ref="navigationButton"
-                    @tap="onTap">
-               </native-navigation-button>`,
+  template: `<native-navigation-button ref="navigationButton" @tap="onTap" />`,
 
   props: {
     text: {
@@ -25,8 +22,6 @@ export default {
     if (_nativeView.android && this['android.systemIcon']) {
       _nativeView.android.systemIcon = this['android.systemIcon']
     }
-
-    this.$parent.registerNavigationButton(_nativeView)
   },
 
   methods: {
