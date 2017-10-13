@@ -35,5 +35,28 @@ export default {
     title(newVal) {
       this.$refs.actionBar.setAttribute('title', newVal)
     }
+  },
+
+  methods: {
+    registerActionItem(actionItem) {
+      if (actionItem.ios) {
+        setTimeout(() => {
+          const page = this.$root.$el.nativeView
+          try {
+            page.actionBar.actionItems.addItem(actionItem)
+          } catch (e) {
+            // ignore
+          }
+        })
+      }
+    },
+    registerNavigationButton(navigationButton) {
+      if (navigationButton.ios) {
+        setTimeout(() => {
+          const page = this.$root.$el.nativeView
+          page.actionBar.navigationButton = navigationButton
+        })
+      }
+    }
   }
 }
