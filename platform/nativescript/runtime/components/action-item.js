@@ -53,6 +53,8 @@ export default {
     if (_nativeView.ios && this['ios.position']) {
       _nativeView.ios.position = this['ios.position']
     }
+
+    this.$parent.registerActionItem(_nativeView)
   },
 
   methods: {

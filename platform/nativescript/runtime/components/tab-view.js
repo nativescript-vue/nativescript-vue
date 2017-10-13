@@ -3,11 +3,7 @@ export default {
 
   props: ['selectedTab'],
 
-  template: `
-    <native-tab-view ref="tabView" v-model="selectedIndex">
-        <slot></slot>
-    </native-tab-view>
-  `,
+  template: `<native-tab-view ref="tabView" v-model="selectedIndex"><slot></slot></native-tab-view>`,
 
   data() {
     return {
