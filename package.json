@@ -55,6 +55,7 @@
     "babel-jest": "^19.0.0",
     "babel-preset-env": "^1.4.0",
     "chalk": "^2.1.0",
+    "husky": "^0.14.3",
     "inquirer": "^3.3.0",
     "jest": "^19.0.2",
     "jest-junit": "^1.5.1",
@@ -83,9 +84,11 @@
     "singleQuote": true
   },
   "lint-staged": {
-    "{{platform,__test__}/**/*.js,samples/app/*.js}": [
-      "prettier --write",
-      "git add"
-    ]
+    "linters": {
+      "{{platform,__test__}/**/*.js,samples/app/*.js}": [
+        "prettier --write",
+        "git add"
+      ]
+    }
   }
 }
