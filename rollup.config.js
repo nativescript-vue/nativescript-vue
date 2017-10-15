@@ -1,5 +1,6 @@
 import alias from 'rollup-plugin-alias'
 import commonjs from 'rollup-plugin-commonjs'
+import buble from 'rollup-plugin-buble'
 import replace from 'rollup-plugin-replace'
 import flow from 'rollup-plugin-flow-no-whitespace'
 import path from 'path'
@@ -9,7 +10,8 @@ const NSVue = require('./package.json')
 
 const banner = `
 /*!
- * NativeScript-Vue
+ * NativeScript-Vue v${NSVue.version}
+ * (Using Vue v${Vue.version})
  * (c) 2017 rigor789
  * Released under the MIT license.
  */
@@ -26,7 +28,6 @@ const aliases = {
   core: resolveVue('core'),
   shared: resolveVue('shared'),
   sfc: resolveVue('sfc'),
-  //he: path.resolve(__dirname, 'platform/nativescript/util/entity-decoder'),
   he: path.resolve(__dirname, 'node_modules', 'he', 'he')
 }
 
@@ -41,10 +42,36 @@ export default {
     flow(),
     replace({
       __WEEX__: false,
+      __VERSION__: Vue.version,
       'process.env.NODE_ENV': "'development'",
       'let _isServer': 'let _isServer = false',
       'process.env.VUE_VERSION': `'${Vue.version}'`,
       'process.env.NS_VUE_VERSION': `'${NSVue.version}'`
+    }),
+    buble({
+      transforms: {
+        arrow: false,
+        classes: false,
+        collections: false,
+        computedProperty: false,
+        conciseMethodProperty: false,
+        constLoop: false,
+        dangerousForOf: false,
+        dangerousTaggedTemplateString: false,
+        defaultParameter: false,
+        destructuring: false,
+        forOf: false,
+        generator: false,
+        letConst: true,
+        modules: false,
+        numericLiteral: false,
+        parameterDestructuring: false,
+        reservedProperties: false,
+        spreadRest: false,
+        stickyRegExp: false,
+        templateString: false,
+        unicodeRegExp: false,
+      }
     }),
     alias(aliases),
     commonjs({
