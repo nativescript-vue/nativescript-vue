@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.21
+ * NativeScript-Vue v0.1.22
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -2463,7 +2463,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.21';
+var NS_VUE_VERSION = '0.1.22';
 
 function trace(message) {
   console.log(
@@ -10394,6 +10394,11 @@ var DecoderPlugin = {
 console.keys = function(object) {
   console.dir(Object.keys(object));
 };
+
+// This is required because some of the third party plugins rely on this
+// and cause errors since there is no process variable in {N}.
+global.process = global.process || {};
+global.process.env = global.process.env || {};
 
 Vue$3.use(ModalPlugin);
 Vue$3.use(NavigatorPlugin);
