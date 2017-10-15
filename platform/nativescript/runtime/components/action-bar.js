@@ -17,7 +17,7 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
+    setTimeout(() => {
       if (this.$parent.$el.tagName !== 'page') {
         warn(
           'Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.'
