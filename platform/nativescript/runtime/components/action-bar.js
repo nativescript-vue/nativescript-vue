@@ -3,11 +3,7 @@ import { warn } from 'core/util/debug'
 export default {
   name: 'action-bar',
 
-  template: `
-    <native-action-bar ref="actionBar">
-        <slot></slot>
-    </native-action-bar>
-  `,
+  template: `<native-action-bar ref="actionBar"><slot></slot></native-action-bar>`,
 
   props: {
     title: {
@@ -17,7 +13,7 @@ export default {
   },
 
   mounted() {
-    setTimeout(() => {
+    this.$nextTick(() => {
       if (this.$parent.$el.tagName !== 'page') {
         warn(
           'Make sure you are placing the <ActionBar> component as a direct child of a <Page> element.'
@@ -32,6 +28,7 @@ export default {
       if (this.title) {
         this.$refs.actionBar.setAttribute('title', this.title)
       }
+      page.actionBar.update()
     })
   },
 
