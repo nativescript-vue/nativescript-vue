@@ -1,7 +1,11 @@
 export default {
   name: 'action-item',
 
-  template: `<native-action-item ref="actionItem" @tap="onTap" />`,
+  template: `
+    <native-action-item ref="actionItem" @tap="onTap">
+      <slot></slot>
+    </native-action-item>
+  `,
 
   props: {
     text: {
