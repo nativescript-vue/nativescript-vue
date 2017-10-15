@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.19
+ * NativeScript-Vue v0.1.20
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -2463,7 +2463,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.19';
+var NS_VUE_VERSION = '0.1.20';
 
 function trace(message) {
   console.log(
@@ -9824,7 +9824,11 @@ var ActionBar = {
 var ActionItem = {
   name: 'action-item',
 
-  template: `<native-action-item ref="actionItem" @tap="onTap" />`,
+  template: `
+    <native-action-item ref="actionItem" @tap="onTap">
+      <slot></slot>
+    </native-action-item>
+  `,
 
   props: {
     text: {
