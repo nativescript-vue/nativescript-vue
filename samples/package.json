@@ -16,7 +16,8 @@
     "nativescript-gradient": "^2.0.0",
     "nativescript-theme-core": "~1.0.2",
     "tns-core-modules": "^3.0.0",
-    "vue-router": "^2.4.0"
+    "vue-router": "^2.4.0",
+    "vuex": "^3.0.0"
   },
   "devDependencies": {
     "babel-traverse": "6.24.1",

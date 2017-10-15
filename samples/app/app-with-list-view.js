@@ -1,11 +1,6 @@
 const Vue = require('./nativescript-vue')
 const http = require('http')
 const Page = require('ui/page').Page
-const StackLayout = require('ui/layouts/stack-layout').StackLayout
-const ScrollView = require('ui/scroll-view').ScrollView
-const Image = require('ui/image').Image
-const Label = require('ui/label').Label
-const Button = require('ui/button').Button
 
 Vue.prototype.$http = http
 Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient)

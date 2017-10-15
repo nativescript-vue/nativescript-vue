@@ -1,7 +1,6 @@
 const Vue = require('./nativescript-vue')
 const VueRouter = require('vue-router')
 Vue.use(VueRouter)
-global.process = { env: {} } // hack! a build process should replace process.env's with static strings.
 
 const TabComponent = {
   template: `
