@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.20
+ * NativeScript-Vue v0.1.21
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -2463,7 +2463,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.20';
+var NS_VUE_VERSION = '0.1.21';
 
 function trace(message) {
   console.log(
@@ -9782,11 +9782,7 @@ Vue$3.version = '2.5.2';
 var ActionBar = {
   name: 'action-bar',
 
-  template: `
-    <native-action-bar ref="actionBar">
-        <slot></slot>
-    </native-action-bar>
-  `,
+  template: `<native-action-bar ref="actionBar"><slot></slot></native-action-bar>`,
 
   props: {
     title: {
@@ -9811,6 +9807,7 @@ var ActionBar = {
       if (this.title) {
         this.$refs.actionBar.setAttribute('title', this.title);
       }
+      page.actionBar.update();
     });
   },
 
