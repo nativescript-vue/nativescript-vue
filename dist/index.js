@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.17
+ * NativeScript-Vue v0.1.18
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -2822,7 +2822,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.17';
+var NS_VUE_VERSION = '0.1.18';
 
 function trace(message) {
   console.log(
