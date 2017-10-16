@@ -16,8 +16,10 @@ export default {
     router.afterEach(({ matched }) => {
       const component = matched[0].components.default
 
-      parent.$navigateTo(component, {
-        context: { router }
+      parent.$nextTick(() => {
+        parent.$navigateTo(component, {
+          context: { router }
+        })
       })
     })
 
