@@ -1,6 +1,4 @@
 import { warn } from 'core/util/debug'
-import { topmost } from 'ui/frame'
-import { android, AndroidApplication } from 'application'
 
 export default {
   name: 'router-page',
@@ -11,21 +9,6 @@ export default {
       warn('<router-page> should be a direct child of the root instance.')
     }
 
-    const router = parent.$router
-
-    router.afterEach(({ matched }) => {
-      const component = matched[0].components.default
-
-      parent.$navigateTo(component, {
-        context: { router }
-      })
-    })
-
-    if (android) {
-      android.on(AndroidApplication.activityBackPressedEvent, e => {
-        e.cancel = true
-        router.back()
-      })
-    }
+    parent.$options.pageRouting = true
   }
 }
