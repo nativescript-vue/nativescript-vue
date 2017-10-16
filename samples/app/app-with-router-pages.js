@@ -48,9 +48,9 @@ const router = new VueRouter({
   ]
 })
 
-router.push('/foo')
+router.replace('/foo')
 
 new Vue({
   router,
-  render: h => h(Foo)
+  template: `<router-page />`
 }).$start()

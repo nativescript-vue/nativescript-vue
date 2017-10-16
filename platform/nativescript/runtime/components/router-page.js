@@ -1,70 +1,30 @@
 import { warn } from 'core/util/debug'
 import { topmost } from 'ui/frame'
-import { start, android, AndroidApplication } from 'application'
+import { android, AndroidApplication } from 'application'
 
 export default {
   name: 'router-page',
+  functional: true,
 
-  template: `
-        <detached-container>
-            <component v-if="routeComponent" ref="routeComponent" :is="routeComponent"></component>
-        </detached-container>
-`,
-
-  data() {
-    return {
-      routeComponent: null
+  render(h, { parent }) {
+    if (!parent.__is_root__) {
+      warn('<router-page> should be a direct child of the root instance.')
     }
-  },
 
-  watch: {
-    routeComponent() {
-      const self = this
+    const router = parent.$router
 
-      setTimeout(() => {
-        const frame = topmost()
+    router.afterEach(({ matched }) => {
+      const component = matched[0].components.default
 
-        frame.navigate({
-          create() {
-            return self.$refs.routeComponent.$el.nativeView
-          },
-          animated: true,
-          transition: {
-            name: 'slide',
-            duration: 200,
-            curve: 'linear'
-          }
-        })
+      parent.$navigateTo(component, {
+        context: { router }
       })
-    }
-  },
-
-  created() {
-    this.routeComponent = this.$route.matched[0].components.default
-    this.$router.afterEach(to => {
-      this.routeComponent = to.matched[0].components.default
     })
-  },
-
-  beforeCreate() {
-    if (!this.$router) {
-      // error, this component requires VueRouter
-      warn(
-        'VueRouter is required to use <router-page>. Please install VueRouter.'
-      )
-
-      return
-    }
-
-    if (!this.$parent.__is_root__) {
-      // Router-page must be a direct child of the root vue instance
-      warn('<router-page> must be a direct child of the root Vue instance.')
-    }
 
     if (android) {
-      android.on(AndroidApplication.activityBackPressedEvent, data => {
-        this.$router.back()
-        data.cancel = true
+      android.on(AndroidApplication.activityBackPressedEvent, e => {
+        e.cancel = true
+        router.back()
       })
     }
   }

@@ -1,11 +1,12 @@
 import { isPage } from './util/index'
 import { Page } from 'ui/page'
 import { topmost } from 'ui/frame'
+import { start } from 'application'
 import { VUE_VM_REF } from './runtime/index'
 
 export default {
   install(Vue) {
-    Vue.prototype.$navigateBack = function() {
+    Vue.navigateBack = Vue.prototype.$navigateBack = function() {
       const frame = topmost()
       frame.eachChildView(child => {
         const vm = child[VUE_VM_REF]
@@ -17,15 +18,8 @@ export default {
 
       return frame.goBack()
     }
-    Vue.prototype.$navigateTo = function(
-      component,
-      options = {
-        context: null,
-        animated: true,
-        transition: null
-      }
-    ) {
-      const placeholder = this.$document.createComment('placeholder')
+    Vue.navigateTo = Vue.prototype.$navigateTo = function(component, options) {
+      const placeholder = Vue.$document.createComment('placeholder')
 
       const contentComponent = Vue.extend(component)
       const vm = new contentComponent(options.context)
@@ -39,11 +33,18 @@ export default {
 
       toPage[VUE_VM_REF] = vm
 
-      topmost().navigate({
-        create: () => toPage,
-        animated: options.animated,
-        transition: options.transition
-      })
+      const frame = topmost()
+      const navigate = frame ? frame.navigate : start
+
+      navigate.call(
+        frame,
+        Object.assign(
+          {
+            create: () => toPage
+          },
+          options
+        )
+      )
     }
   }
 }

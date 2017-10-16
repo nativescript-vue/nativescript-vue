@@ -1,5 +1,5 @@
 {
-  "main": "app-with-list-view.js",
+  "main": "app-with-router-pages.js",
   "name": "nativescript-template-tutorial",
   "version": "1.0.1"
 }

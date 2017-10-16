@@ -11,9 +11,11 @@ import Vue from './runtime/index'
 import ModalPlugin from './modal-plugin'
 import NavigatorPlugin from './navigator-plugin'
 import DecoderPlugin from './decoder-plugin'
+import RouterPlugin from './router-plugin'
 
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
 Vue.use(DecoderPlugin)
+Vue.use(RouterPlugin)
 
 export default Vue
