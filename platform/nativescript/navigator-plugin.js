@@ -41,7 +41,7 @@ export default {
           frame,
           Object.assign(
             {
-              create() {
+              create: () => {
                 resolve(toPage)
                 return toPage
               }
