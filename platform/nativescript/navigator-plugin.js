@@ -19,32 +19,37 @@ export default {
       return frame.goBack()
     }
     Vue.navigateTo = Vue.prototype.$navigateTo = function(component, options) {
-      const placeholder = Vue.$document.createComment('placeholder')
+      return new Promise(resolve => {
+        const placeholder = Vue.$document.createComment('placeholder')
 
-      const contentComponent = Vue.extend(component)
-      const vm = new contentComponent(options.context)
-      vm.$mount(placeholder)
+        const contentComponent = Vue.extend(component)
+        const vm = new contentComponent(options.context)
+        vm.$mount(placeholder)
 
-      const toPage = isPage(vm.$el) ? vm.$el.nativeView : new Page()
+        const toPage = isPage(vm.$el) ? vm.$el.nativeView : new Page()
 
-      if (!isPage(vm.$el)) {
-        toPage.content = vm.$el.nativeView
-      }
+        if (!isPage(vm.$el)) {
+          toPage.content = vm.$el.nativeView
+        }
 
-      toPage[VUE_VM_REF] = vm
+        toPage[VUE_VM_REF] = vm
 
-      const frame = topmost()
-      const navigate = frame ? frame.navigate : start
+        const frame = topmost()
+        const navigate = frame ? frame.navigate : start
 
-      navigate.call(
-        frame,
-        Object.assign(
-          {
-            create: () => toPage
-          },
-          options
+        navigate.call(
+          frame,
+          Object.assign(
+            {
+              create: () => {
+                resolve(toPage)
+                return toPage
+              }
+            },
+            options
+          )
         )
-      )
+      })
     }
   }
 }

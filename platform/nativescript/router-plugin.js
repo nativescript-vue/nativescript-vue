@@ -44,13 +44,13 @@ export default {
             this.$navigateTo(initial, {
               context: { router },
               clearHistory: true
-            })
+            }).then(() => {
+              // Mount the root component (Should be <router-page>) to register router hooks
+              this.$nextTick(() => {
+                const placeholder = this.$document.createComment('placeholder')
 
-            // Mount the root component (Should be <router-page>) to register router hooks
-            this.$nextTick(() => {
-              const placeholder = this.$document.createComment('placeholder')
-
-              this.$mount(placeholder)
+                this.$mount(placeholder)
+              })
             })
           }
         }
