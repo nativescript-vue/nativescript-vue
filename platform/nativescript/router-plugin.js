@@ -33,6 +33,7 @@ export default {
         if (this.$options.router) {
           this.__is_router__ = true
           const router = this.$options.router
+          const self = this
 
           patchGo(router)
 
@@ -46,11 +47,8 @@ export default {
               clearHistory: true
             }).then(() => {
               // Mount the root component (Should be <router-page>) to register router hooks
-              this.$nextTick(() => {
-                const placeholder = this.$document.createComment('placeholder')
-
-                this.$mount(placeholder)
-              })
+              const placeholder = Vue.$document.createComment('placeholder')
+              self.$mount(placeholder)
             })
           }
         }
