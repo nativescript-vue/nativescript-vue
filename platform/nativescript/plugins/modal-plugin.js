@@ -1,4 +1,4 @@
-import { isPage } from './util/index'
+import { isPage } from '../util/index'
 import { Page } from 'ui/page'
 
 export default {
