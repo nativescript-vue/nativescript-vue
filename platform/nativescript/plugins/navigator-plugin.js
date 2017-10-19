@@ -3,21 +3,14 @@ import { Page } from 'ui/page'
 import { topmost } from 'ui/frame'
 import { start } from 'application'
 import { VUE_VM_REF } from '../runtime/index'
+import { after } from '../util'
 
 export default {
   install(Vue) {
     Vue.navigateBack = Vue.prototype.$navigateBack = function() {
-      const frame = topmost()
-      frame.eachChildView(child => {
-        const vm = child[VUE_VM_REF]
-
-        if (vm && !vm.__is_root__) {
-          vm.$destroy()
-        }
-      })
-
-      return frame.goBack()
+      return topmost().goBack()
     }
+
     Vue.navigateTo = Vue.prototype.$navigateTo = function(component, options) {
       return new Promise(resolve => {
         const placeholder = Vue.$document.createComment('placeholder')
@@ -42,6 +35,16 @@ export default {
           Object.assign(
             {
               create: () => {
+                if (frame) {
+                  toPage.disposeNativeView = after(
+                    toPage.disposeNativeView,
+                    toPage,
+                    () => {
+                      vm.$destroy()
+                    }
+                  )
+                }
+
                 resolve(toPage)
                 return toPage
               }

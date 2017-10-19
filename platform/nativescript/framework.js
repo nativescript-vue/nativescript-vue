@@ -10,12 +10,12 @@ global.process.env = global.process.env || {}
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
-import DecoderPlugin from './plugins/decoder-plugin'
+// import DecoderPlugin from './plugins/decoder-plugin'
 import RouterPlugin from './plugins/router-plugin'
 
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
-Vue.use(DecoderPlugin)
+// Vue.use(DecoderPlugin)
 Vue.use(RouterPlugin)
 
 export default Vue

@@ -39,3 +39,21 @@ export function trace(message) {
     `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
   )
 }
+
+export function before(original, thisArg, wrap) {
+  const __slice = Array.prototype.slice
+  return function() {
+    const args = __slice.call(arguments)
+    wrap.apply(null, args)
+    original.apply(thisArg, args)
+  }
+}
+
+export function after(original, thisArg, wrap) {
+  const __slice = Array.prototype.slice
+  return function() {
+    const args = __slice.call(arguments)
+    wrap.apply(null, args)
+    original.apply(thisArg, args)
+  }
+}

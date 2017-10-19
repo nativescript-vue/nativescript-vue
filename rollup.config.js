@@ -28,7 +28,8 @@ const aliases = {
   core: resolveVue('core'),
   shared: resolveVue('shared'),
   sfc: resolveVue('sfc'),
-  he: path.resolve(__dirname, 'node_modules', 'he', 'he')
+  //he: path.resolve(__dirname, 'node_modules', 'he', 'he')
+  he: path.resolve(__dirname, 'platform/nativescript/util/entity-decoder')
 }
 
 export default {
@@ -77,7 +78,7 @@ export default {
     commonjs({
       include: [
         path.resolve(__dirname, 'node_modules', 'vue') + '/**',
-        path.resolve(__dirname, 'node_modules', 'he') + '/**',
+        //path.resolve(__dirname, 'node_modules', 'he') + '/**',
       ],
 
       namedExports: {
