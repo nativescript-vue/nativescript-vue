@@ -9,3 +9,9 @@ title: Using NativeScript Plugins
 ## Vuex
 
 ...
+
+# What's next?
+
+<a router-link="/templates" class="docute-button docute-button-success">
+    Go to Templates
+</a>
