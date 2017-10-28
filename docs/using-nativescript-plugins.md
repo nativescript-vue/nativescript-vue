@@ -26,3 +26,9 @@ Then in your view template, add this to recreated the gradient in the sample:
   <Label class="p-5 c-white" horizontalAlignment="center" text="It's true." textWrap="true"></Label>
 </gradient>
 ```
+
+# What's next?
+
+<a router-link="/using-vue-modules" class="docute-button docute-button-success">
+    Go to Using Vue Modules
+</a>
