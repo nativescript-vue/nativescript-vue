@@ -22,20 +22,28 @@
             border-top: 1px solid #e2e2e2;
         }
 
-        .logo {
-            width: 100%;
-            padding: 1em;
+        .Logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 200px;
+            background-color: #35495e;
         }
 
-        .logo img {
-            width: 100%;
+        .Logo img {
+            width: 200px;
+            height: auto;
+            position: absolute;
+            transition: opacity .5s ease-in-out;
         }
 
-        .logo h1 {
-            text-align: center;
-            margin: 0;
-            color: #99a9bf;
-            font-family: 'Roboto Mono', monospace;
+        .Logo:hover img:last-child {
+            opacity: 0;
+        }
+
+        .sidebar {
+            /*background-color: #35495e;*/
         }
 
         .sidebar span {
@@ -123,10 +131,9 @@
             ({ registerComponent }) => {
                 registerComponent('sidebar:start', {
                     template: `
-                        <div class="logo" router-link="/">
-                            <img src="https://raw.githubusercontent.com/rigor789/nativescript-vue/master/logo.png"/>
-
-                            <h1>{N}-Vue</h1>
+                        <div class="Logo" router-link="/">
+                            <img src="https://raw.githubusercontent.com/rigor789/nativescript-vue-artwork/master/NativeScript-Vue-Green-White.png" alt="NativeScript-Vue">
+                            <img src="https://raw.githubusercontent.com/rigor789/nativescript-vue-artwork/master/NativeScript-Vue-White-Green.png" alt="NativeScript-Vue">
                         </div>
                     `,
                 })
@@ -140,7 +147,7 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  
+
     ga('create', 'UA-106632905-1', 'auto');
     ga('send', 'pageview');
 
@@ -148,7 +155,7 @@
         ga('set', 'page', to.fullPath)
         ga('send', 'pageview')
     })
-  
+
   </script>
 </body>
 </html>
