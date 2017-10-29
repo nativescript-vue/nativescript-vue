@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/rigor789/nativescript-vue-artwork/master/NativeScript-Vue.svg">
+    <img src="https://raw.githubusercontent.com/rigor789/nativescript-vue-artwork/master/NativeScript-Vue.png">
 </p>
 
 <p align="center">
