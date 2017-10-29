@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://art.nativescript-vue.org/NativeScript-Vue.svg">
+    <img src="https://art.nativescript-vue.org/NativeScript-Vue.svg" width="270">
 </p>
 
 <p align="center">
