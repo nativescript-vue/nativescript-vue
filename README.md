@@ -8,6 +8,15 @@
     <a href="https://github.com/prettier/prettier">
        <img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="styled with prettier">
     </a>
+    <a href="https://www.npmjs.com/package/nativescript-vue">
+       <img src="https://img.shields.io/npm/v/nativescript-vue.svg" alt="npm">
+    </a>
+    <a href="https://github.com/rigor789/nativescript-vue/blob/master/LICENSE">
+       <img src="https://img.shields.io/github/license/rigor789/nativescript-vue.svg" alt="license">
+    </a>
+    <a href="https://circleci.com/gh/rigor789/nativescript-vue/tree/master">
+       <img src="https://img.shields.io/circleci/project/github/rigor789/nativescript-vue.svg" alt="CircleCI">
+    </a>
 </p>
 
 # NativeScript Vue Plugin
