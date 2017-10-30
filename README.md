@@ -17,6 +17,9 @@
     <a href="https://circleci.com/gh/rigor789/nativescript-vue/tree/master">
        <img src="https://img.shields.io/circleci/project/github/rigor789/nativescript-vue.svg" alt="CircleCI">
     </a>
+    <a href="https://codecov.io/gh/rigor789/nativescript-vue">
+       <img src="https://img.shields.io/codecov/c/github/rigor789/nativescript-vue.svg" alt="Codecov">
+    </a>
 </p>
 
 # NativeScript Vue Plugin
