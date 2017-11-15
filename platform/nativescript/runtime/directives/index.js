@@ -1,5 +1,7 @@
+import show from './show'
 import view from './view'
 
 export default {
-  view: view
+  show,
+  view
 }
