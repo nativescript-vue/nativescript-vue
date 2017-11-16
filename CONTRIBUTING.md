@@ -30,38 +30,15 @@ After cloning the repo, run:
 # Commonly used NPM scripts
 
 ```bash
-# watch and auto re-build dist/index.js
+# watch and auto re-build samples/app/nativescript-vue.js
 $ npm run dev
 ```
 
-# Testing with the sample application
+# Testing with the sample application(s)
 
-First, **[link](https://docs.npmjs.com/cli/link) the development version** to make it available globally.
+To test the sample applications provided in the repository, you need to `npm run dev` in the root directory. This will watch for changes, and rebuild nativescript-vue, which in dev mode will be generated into the samples/app directory (this has been done to reduce the required steps of linking local packages, which had many issues with the recent releases of npm).
 
-```
-cd nativescript-vue
-npm link
-```
-
-This will create a symbolic link in your global `node_modules` folder, pointing to this location.
-
-Then, **run the sample app** after linking it to the development code.
-
-```
-cd samples
-npm link nativescript-vue
-```
-
-If all went well, `samples/node_modules/nativescript-vue` should be a link to your global `node_modules/nativescript` folder, which is is also a link to the actual package.
-
-Finally, run the application :
-
-```
-npm install
-tns run android --syncAllFiles
-```
-
-The `--syncAllFiles` option reloads the application every time the `nativescript-vue` module changes.
+Next, open up a new terminal window and run `npm run samples`. This will bring up a list of all the available sample applications which you can choose from with your arrow keys. Pressing enter/return will select that sample, and prompt you to choose the platform you'd like to run the sample on. After selecting the platform the application should start on your emulator, and the output will be in your terminal.
 
 # Project Structure
 
@@ -93,3 +70,40 @@ sudo sysctl -w kern.maxfiles=65536
 sudo sysctl -w kern.maxfilesperproc=65536
 ulimit -n 65536 65536
 ```
+
+#### 2. Using XCode 8
+Check if xcodeproj is installed
+- `sudo gem install xcodeproj -v 1.4.1`
+You may need to enable system ruby (macos)
+- `rvm use system` // now using system ruby
+- repeat `sudo gem install xcodeproj -v 1.4.1`
+- tns run ios
+
+You will probably get an error:
+`No profiles for 'org.nativescript.MyApp' were found: Xcode couldn't find a provisioning profile matching 'org.nativescript.MyApp'`
+
+- Open the project
+- nav to app/iOS/build.xcconfig
+- include `PROVISIONING_PROFILE = testapp;`
+
+Change app.js to
+```
+const Vue = require('nativescript-vue');
+
+new Vue({
+
+  data: {
+	message: "Hello Vue!"
+  },
+
+  template: `
+    <page>
+      <stack-layout>
+        <label v-model="message"></label>
+      </stack-layout>
+    </page>
+  `,
+
+}).$start()
+```
+
