@@ -8,6 +8,7 @@
     "tdd": "jest --watch",
     "dev": "rollup -c -w --o samples/app/nativescript-vue.js",
     "samples": "node sample-runner.js",
+    "build:docs": "cd docs && npm run build",
     "build": "rollup -c",
     "precommit": "lint-staged",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
@@ -87,6 +88,10 @@
     "linters": {
       "{{platform,__test__}/**/*.js,samples/app/*.js}": [
         "prettier --write",
+        "git add"
+      ],
+      "docs/**/*.js": [
+        "npm run build:docs",
         "git add"
       ]
     }
