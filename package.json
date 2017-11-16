@@ -90,7 +90,7 @@
         "prettier --write",
         "git add"
       ],
-      "docs/**/*.js": [
+      "docs/src/**/*.js": [
         "npm run build:docs",
         "git add"
       ]

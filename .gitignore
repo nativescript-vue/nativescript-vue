@@ -8,3 +8,4 @@ samples/platforms
 samples/app/nativescript-vue.js
 samples/app/nativescript-vue.js.map
 dist/
+!docs/dist/
