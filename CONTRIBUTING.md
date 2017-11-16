@@ -111,7 +111,7 @@ You will probably get an error:
 
 Change app.js to
 ```
-const Vue = require('nativescript-vue/dist/index');
+const Vue = require('nativescript-vue');
 
 new Vue({
 
