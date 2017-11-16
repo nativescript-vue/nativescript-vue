@@ -45,13 +45,15 @@ new Vue({
   template: `
     <page>
       <stack-layout>
-        <label text="{{ message }}"></label>
+        <label :text="message"></label>
       </stack-layout>
     </page>
   `,
 
   data() {
-    message: "Hello Vue!",
+    return {
+      message: "Hello Vue!",
+    };
   },
 
 }).$start();
