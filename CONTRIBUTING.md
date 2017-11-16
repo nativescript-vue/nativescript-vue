@@ -93,3 +93,40 @@ sudo sysctl -w kern.maxfiles=65536
 sudo sysctl -w kern.maxfilesperproc=65536
 ulimit -n 65536 65536
 ```
+
+#### 2. Using XCode 8
+Check if xcodeproj is installed
+- `sudo gem install xcodeproj -v 1.4.1`
+You may need to enable system ruby (macos)
+- `rvm use system` // now using system ruby
+- repeat `sudo gem install xcodeproj -v 1.4.1`
+- tns run ios
+
+You will probably get an error:
+`No profiles for 'org.nativescript.MyApp' were found: Xcode couldn't find a provisioning profile matching 'org.nativescript.MyApp'`
+
+- Open the project
+- nav to app/iOS/build.xcconfig
+- include `PROVISIONING_PROFILE = testapp;`
+
+Change app.js to
+```
+const Vue = require('nativescript-vue');
+
+new Vue({
+
+  data: {
+	message: "Hello Vue!"
+  },
+
+  template: `
+    <page>
+      <stack-layout>
+        <label v-model="message"></label>
+      </stack-layout>
+    </page>
+  `,
+
+}).$start()
+```
+
