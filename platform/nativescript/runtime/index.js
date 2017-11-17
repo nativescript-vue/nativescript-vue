@@ -31,34 +31,17 @@ Vue.prototype.__patch__ = patch
 
 Vue.prototype.$start = function() {
   this.__is_root__ = true
+  this.__started__ = true
 
   const placeholder = this.$document.createComment('placeholder')
 
-  this.$mount(placeholder)
+  const vm = this.$mount(placeholder)
+
+  this.$navigateTo(vm, { clearHistory: true })
 }
 
 const mount = function(el, hydrating) {
-  if (this.__is_root__ && !this.__started__) {
-    const self = this
-    start({
-      create() {
-        // Call mountComponent in the create callback when the IOS app loop has started
-        // https://github.com/rigor789/nativescript-vue/issues/24
-        mountComponent(self, el, hydrating)
-        self.__started__ = true
-
-        const page = isPage(self.$el) ? self.$el.nativeView : new Page()
-
-        if (!isPage(self.$el)) {
-          page.content = self.$el.nativeView
-        }
-
-        return page
-      }
-    })
-  } else {
-    mountComponent(this, el, hydrating)
-  }
+  return mountComponent(this, el, hydrating)
 }
 
 Vue.prototype.$mount = function(el, hydrating) {

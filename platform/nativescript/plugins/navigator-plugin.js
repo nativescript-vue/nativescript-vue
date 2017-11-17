@@ -2,6 +2,7 @@ import { isPage } from '../util/index'
 import { Page } from 'ui/page'
 import { topmost } from 'ui/frame'
 import { start } from 'application'
+import application from 'application'
 import { VUE_VM_REF } from '../runtime/index'
 import { after } from '../util'
 
@@ -13,15 +14,20 @@ export default {
 
     Vue.navigateTo = Vue.prototype.$navigateTo = function(
       component,
-      options,
+      options = {},
       pageCb = () => {}
     ) {
       return new Promise(resolve => {
         const placeholder = Vue.$document.createComment('placeholder')
 
-        const contentComponent = Vue.extend(component)
-        const vm = new contentComponent(options.context)
-        vm.$mount(placeholder)
+        let vm
+        if (component.__is_root__) {
+          vm = component
+        } else {
+          const contentComponent = Vue.extend(component)
+          vm = new contentComponent(options.context)
+          vm.$mount(placeholder)
+        }
 
         const toPage = isPage(vm.$el) ? vm.$el.nativeView : new Page()
 
