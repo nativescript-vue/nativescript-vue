@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.23
+ * NativeScript-Vue v0.1.24
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -8,7 +8,10 @@
 
 'use strict';
 
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
 var application = require('application');
+var application__default = _interopDefault(application);
 var ui_core_view = require('ui/core/view');
 var ui_contentView = require('ui/content-view');
 var ui_layouts_layoutBase = require('ui/layouts/layout-base');
@@ -2463,7 +2466,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.23';
+var NS_VUE_VERSION = '0.1.24';
 
 function trace(message) {
   console.log(
@@ -7625,13 +7628,42 @@ function preTransformNode(el, options) {
         value: name
       });
     }
+
+    var isListView = normalizeElementName(el.parent.tag) === 'listview';
+    var scope = el.attrsMap.scope;
+    if (scope && isListView) {
+      delete el.attrsMap.scope;
+      el.attrsList = el.attrsList.filter(attr => attr.name !== 'scope');
+
+      el.attrsMap['slot-scope'] = scope;
+      el.attrsList.push({
+        name: 'slot-scope',
+        value: scope
+      });
+    }
   }
 }
+
 var scopedSlots = {
   preTransformNode
 };
 
-var modules$1 = [class_$1, style$1, scopedSlots];
+// transforms ~test -> v-view:test
+function transformNode$2(el) {
+  var attr = Object.keys(el.attrsMap).find(attr => attr.startsWith('~'));
+
+  if (attr) {
+    var attrName = attr.substr(1);
+    getAndRemoveAttr(el, attr);
+    addDirective(el, 'view', `v-view:${attrName}`, '', attrName);
+  }
+}
+
+var view = {
+  transformNode: transformNode$2
+};
+
+var modules$1 = [class_$1, style$1, scopedSlots, view];
 
 function model(el, dir, _warn) {
   if (el.type === 1) {
@@ -9822,7 +9854,33 @@ var platformComponents = {
   TabViewItem
 };
 
-var platformDirectives = {};
+function show(el, show) {
+  el.setAttribute('visibility', show ? 'visible' : 'collapsed');
+}
+
+var show$1 = {
+  inserted(el, { value }) {
+    show(el, value);
+  },
+  update(el, { value }) {
+    show(el, value);
+  }
+};
+
+var view$1 = {
+  inserted(el, { arg }) {
+    var parent = el.parentNode;
+
+    if (parent) {
+      parent.setAttribute(arg, el.nativeView);
+    }
+  }
+};
+
+var platformDirectives = {
+  show: show$1,
+  view: view$1
+};
 
 var VUE_VM_REF = '__vue_vm_ref__';
 
@@ -9841,34 +9899,17 @@ Vue$3.prototype.__patch__ = patch;
 
 Vue$3.prototype.$start = function() {
   this.__is_root__ = true;
+  this.__started__ = true;
 
   var placeholder = this.$document.createComment('placeholder');
 
-  this.$mount(placeholder);
+  var vm = this.$mount(placeholder);
+
+  this.$navigateTo(vm, { clearHistory: true });
 };
 
 var mount = function(el, hydrating) {
-  if (this.__is_root__ && !this.__started__) {
-    var self = this;
-    application.start({
-      create() {
-        // Call mountComponent in the create callback when the IOS app loop has started
-        // https://github.com/rigor789/nativescript-vue/issues/24
-        mountComponent(self, el, hydrating);
-        self.__started__ = true;
-
-        var page = isPage(self.$el) ? self.$el.nativeView : new ui_page.Page();
-
-        if (!isPage(self.$el)) {
-          page.content = self.$el.nativeView;
-        }
-
-        return page
-      }
-    });
-  } else {
-    mountComponent(this, el, hydrating);
-  }
+  return mountComponent(this, el, hydrating)
 };
 
 Vue$3.prototype.$mount = function(el, hydrating) {
@@ -9956,13 +9997,22 @@ var NavigatorPlugin = {
       return ui_frame.topmost().goBack()
     };
 
-    Vue.navigateTo = Vue.prototype.$navigateTo = function(component, options) {
+    Vue.navigateTo = Vue.prototype.$navigateTo = function(
+      component,
+      options = {},
+      pageCb = () => {}
+    ) {
       return new Promise(resolve => {
         var placeholder = Vue.$document.createComment('placeholder');
 
-        var contentComponent = Vue.extend(component);
-        var vm = new contentComponent(options.context);
-        vm.$mount(placeholder);
+        var vm;
+        if (component.__is_root__) {
+          vm = component;
+        } else {
+          var contentComponent = Vue.extend(component);
+          vm = new contentComponent(options.context);
+          vm.$mount(placeholder);
+        }
 
         var toPage = isPage(vm.$el) ? vm.$el.nativeView : new ui_page.Page();
 
@@ -9974,6 +10024,8 @@ var NavigatorPlugin = {
 
         var frame = ui_frame.topmost();
         var navigate = frame ? frame.navigate : application.start;
+
+        pageCb(toPage);
 
         navigate.call(
           frame,
@@ -10014,16 +10066,55 @@ function patchRouter(router, Vue) {
   // This fixes it, since it allows the router.go logic to run
   router.history.index = 0;
 
+  // initial navigation states
+  router.isBackNavigation = false;
+  router.shouldNavigate = true;
+  router.pageStack = [];
+
+  router._beginBackNavigation = (shouldNavigate = true) => {
+    if (router.isBackNavigation) {
+      throw new Error(
+        'router._beginBackNavigation was called while already navigating back.'
+      )
+    }
+
+    router.isBackNavigation = true;
+    router.shouldNavigate = shouldNavigate;
+  };
+
+  router._finishBackNavigation = () => {
+    if (!router.isBackNavigation) {
+      throw new Error(
+        'router._finishBackNavigation was called while there was no back navigation.'
+      )
+    }
+
+    router.isBackNavigation = false;
+  };
+
   router.go = before(router.go, router, n => {
-    if (n === -1) {
-      router.isBackNavigation = true;
-      Vue.navigateBack();
+    if (n === -1 && !router.isBackNavigation) {
+      router._beginBackNavigation();
     }
   });
 
   router.afterEach(() => {
     if (router.isBackNavigation) {
-      router.isBackNavigation = false;
+      if (router.shouldNavigate) {
+        Vue.navigateBack();
+      }
+      router.pageStack.pop();
+      var page = router.pageStack[router.pageStack.length - 1];
+
+      var callback = ({ isBackNavigation }) => {
+        if (isBackNavigation) {
+          router._finishBackNavigation();
+        }
+        page.off(ui_page.Page.navigatedToEvent, callback);
+      };
+
+      page.on(ui_page.Page.navigatedToEvent, callback);
+
       return
     }
 
@@ -10032,9 +10123,11 @@ function patchRouter(router, Vue) {
     Vue.navigateTo(component, {
       context: { router }
     }).then(page => {
-      page.off(ui_page.Page.navigatingFromEvent);
-      page.on(ui_page.Page.navigatingFromEvent, args => {
-        if (args.isBackNavigation) {
+      router.pageStack.push(page);
+
+      page.on(ui_page.Page.navigatedFromEvent, ({ isBackNavigation }) => {
+        if (isBackNavigation && !router.isBackNavigation) {
+          router._beginBackNavigation(false);
           router.back();
         }
       });
@@ -10067,10 +10160,16 @@ var RouterPlugin = {
 
           var initial = router.getMatchedComponents()[0];
 
-          this.$navigateTo(initial, {
-            context: { router },
-            clearHistory: true
-          });
+          this.$navigateTo(
+            initial,
+            {
+              context: { router },
+              clearHistory: true
+            },
+            page => {
+              router.pageStack.push(page);
+            }
+          );
         };
       }
     });
