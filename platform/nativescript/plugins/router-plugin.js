@@ -107,13 +107,16 @@ export default {
 
           const initial = router.getMatchedComponents()[0]
 
-          this.$navigateTo(initial, {
-            context: { router },
-            clearHistory: true
-          }).then(page => {
-            // Todo: this callback never fires on iOS and causes an issue
-            router.pageStack.push(page)
-          })
+          this.$navigateTo(
+            initial,
+            {
+              context: { router },
+              clearHistory: true
+            },
+            page => {
+              router.pageStack.push(page)
+            }
+          )
         }
       }
     })

@@ -11,7 +11,11 @@ export default {
       return topmost().goBack()
     }
 
-    Vue.navigateTo = Vue.prototype.$navigateTo = function(component, options) {
+    Vue.navigateTo = Vue.prototype.$navigateTo = function(
+      component,
+      options,
+      pageCb = () => {}
+    ) {
       return new Promise(resolve => {
         const placeholder = Vue.$document.createComment('placeholder')
 
@@ -29,6 +33,8 @@ export default {
 
         const frame = topmost()
         const navigate = frame ? frame.navigate : start
+
+        pageCb(toPage)
 
         navigate.call(
           frame,
