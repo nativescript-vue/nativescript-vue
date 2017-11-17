@@ -1,5 +1,6 @@
 import { Page } from 'ui/page'
-import { before, trace } from '../util/index'
+import { topmost } from 'ui/frame'
+import { before } from '../util/index'
 
 export function patchRouter(router, Vue) {
   if (router.__patched_for_page_routing__) {
@@ -13,16 +14,55 @@ export function patchRouter(router, Vue) {
   // This fixes it, since it allows the router.go logic to run
   router.history.index = 0
 
+  // initial navigation states
+  router.isBackNavigation = false
+  router.shouldNavigate = true
+  router.pageStack = []
+
+  router._beginBackNavigation = (shouldNavigate = true) => {
+    if (router.isBackNavigation) {
+      throw new Error(
+        'router._beginBackNavigation was called while already navigating back.'
+      )
+    }
+
+    router.isBackNavigation = true
+    router.shouldNavigate = shouldNavigate
+  }
+
+  router._finishBackNavigation = () => {
+    if (!router.isBackNavigation) {
+      throw new Error(
+        'router._finishBackNavigation was called while there was no back navigation.'
+      )
+    }
+
+    router.isBackNavigation = false
+  }
+
   router.go = before(router.go, router, n => {
-    if (n === -1) {
-      router.isBackNavigation = true
-      Vue.navigateBack()
+    if (n === -1 && !router.isBackNavigation) {
+      router._beginBackNavigation()
     }
   })
 
   router.afterEach(() => {
     if (router.isBackNavigation) {
-      router.isBackNavigation = false
+      if (router.shouldNavigate) {
+        Vue.navigateBack()
+      }
+      router.pageStack.pop()
+      const page = router.pageStack[router.pageStack.length - 1]
+
+      const callback = ({ isBackNavigation }) => {
+        if (isBackNavigation) {
+          router._finishBackNavigation()
+        }
+        page.off(Page.navigatedToEvent, callback)
+      }
+
+      page.on(Page.navigatedToEvent, callback)
+
       return
     }
 
@@ -31,9 +71,11 @@ export function patchRouter(router, Vue) {
     Vue.navigateTo(component, {
       context: { router }
     }).then(page => {
-      page.off(Page.navigatingFromEvent)
-      page.on(Page.navigatingFromEvent, args => {
-        if (args.isBackNavigation) {
+      router.pageStack.push(page)
+
+      page.on(Page.navigatedFromEvent, ({ isBackNavigation }) => {
+        if (isBackNavigation && !router.isBackNavigation) {
+          router._beginBackNavigation(false)
           router.back()
         }
       })
@@ -69,6 +111,9 @@ export default {
           this.$navigateTo(initial, {
             context: { router },
             clearHistory: true
+          }).then(page => {
+            // Todo: this callback never fires on iOS and causes an issue
+            router.pageStack.push(page)
           })
         }
       }
