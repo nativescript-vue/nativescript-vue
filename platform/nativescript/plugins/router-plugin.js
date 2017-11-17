@@ -1,5 +1,4 @@
 import { Page } from 'ui/page'
-import { topmost } from 'ui/frame'
 import { before } from '../util/index'
 
 export function patchRouter(router, Vue) {
