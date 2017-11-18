@@ -115,7 +115,12 @@ registerElement(
 )
 registerElement('Repeater', () => require('ui/repeater').Repeater)
 registerElement('ScrollView', () => require('ui/scroll-view').ScrollView)
-registerElement('SearchBar', () => require('ui/search-bar').SearchBar)
+registerElement('SearchBar', () => require('ui/search-bar').SearchBar, {
+  model: {
+    prop: 'text',
+    event: 'textChange'
+  }
+})
 registerElement(
   'SegmentedBar',
   () => require('ui/segmented-bar').SegmentedBar,
