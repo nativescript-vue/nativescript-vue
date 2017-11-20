@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.24
+ * NativeScript-Vue v0.1.25
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -1966,7 +1966,12 @@ registerElement(
 );
 registerElement('Repeater', () => require('ui/repeater').Repeater);
 registerElement('ScrollView', () => require('ui/scroll-view').ScrollView);
-registerElement('SearchBar', () => require('ui/search-bar').SearchBar);
+registerElement('SearchBar', () => require('ui/search-bar').SearchBar, {
+  model: {
+    prop: 'text',
+    event: 'textChange'
+  }
+});
 registerElement(
   'SegmentedBar',
   () => require('ui/segmented-bar').SegmentedBar,
@@ -2466,7 +2471,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.24';
+var NS_VUE_VERSION = '0.1.25';
 
 function trace(message) {
   console.log(
@@ -9899,17 +9904,34 @@ Vue$3.prototype.__patch__ = patch;
 
 Vue$3.prototype.$start = function() {
   this.__is_root__ = true;
-  this.__started__ = true;
 
   var placeholder = this.$document.createComment('placeholder');
 
-  var vm = this.$mount(placeholder);
-
-  this.$navigateTo(vm, { clearHistory: true });
+  this.$mount(placeholder);
 };
 
 var mount = function(el, hydrating) {
-  return mountComponent(this, el, hydrating)
+  if (this.__is_root__ && !this.__started__) {
+    var self = this;
+    application.start({
+      create() {
+        // Call mountComponent in the create callback when the IOS app loop has started
+        // https://github.com/rigor789/nativescript-vue/issues/24
+        mountComponent(self, el, hydrating);
+        self.__started__ = true;
+
+        var page = isPage(self.$el) ? self.$el.nativeView : new ui_page.Page();
+
+        if (!isPage(self.$el)) {
+          page.content = self.$el.nativeView;
+        }
+
+        return page
+      }
+    });
+  } else {
+    mountComponent(this, el, hydrating);
+  }
 };
 
 Vue$3.prototype.$mount = function(el, hydrating) {
