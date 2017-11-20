@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.1.25
+ * NativeScript-Vue v0.2.0
  * (Using Vue v2.5.2)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -2471,7 +2471,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.2';
-var NS_VUE_VERSION = '0.1.25';
+var NS_VUE_VERSION = '0.2.0';
 
 function trace(message) {
   console.log(
@@ -10025,12 +10025,21 @@ var NavigatorPlugin = {
       pageCb = () => {}
     ) {
       return new Promise(resolve => {
+        var frame = ui_frame.topmost();
+        var navigate = frame ? frame.navigate : application.start;
+
+        if (isPage(component)) {
+          return navigate({
+            create() {
+              return component
+            }
+          })
+        }
+
         var placeholder = Vue.$document.createComment('placeholder');
 
-        var vm;
-        if (component.__is_root__) {
-          vm = component;
-        } else {
+        var vm = component;
+        if (!component.__is_root__) {
           var contentComponent = Vue.extend(component);
           vm = new contentComponent(options.context);
           vm.$mount(placeholder);
@@ -10043,11 +10052,6 @@ var NavigatorPlugin = {
         }
 
         toPage[VUE_VM_REF] = vm;
-
-        var frame = ui_frame.topmost();
-        var navigate = frame ? frame.navigate : application.start;
-
-        pageCb(toPage);
 
         navigate.call(
           frame,
@@ -10064,6 +10068,7 @@ var NavigatorPlugin = {
                   );
                 }
 
+                pageCb(toPage);
                 resolve(toPage);
                 return toPage
               }
