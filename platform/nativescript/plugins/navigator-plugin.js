@@ -18,12 +18,21 @@ export default {
       pageCb = () => {}
     ) {
       return new Promise(resolve => {
+        const frame = topmost()
+        const navigate = frame ? frame.navigate : start
+
+        if (isPage(component)) {
+          return navigate({
+            create() {
+              return component
+            }
+          })
+        }
+
         const placeholder = Vue.$document.createComment('placeholder')
 
-        let vm
-        if (component.__is_root__) {
-          vm = component
-        } else {
+        let vm = component
+        if (!component.__is_root__) {
           const contentComponent = Vue.extend(component)
           vm = new contentComponent(options.context)
           vm.$mount(placeholder)
@@ -36,11 +45,6 @@ export default {
         }
 
         toPage[VUE_VM_REF] = vm
-
-        const frame = topmost()
-        const navigate = frame ? frame.navigate : start
-
-        pageCb(toPage)
 
         navigate.call(
           frame,
@@ -57,6 +61,7 @@ export default {
                   )
                 }
 
+                pageCb(toPage)
                 resolve(toPage)
                 return toPage
               }
