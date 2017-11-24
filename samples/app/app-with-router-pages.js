@@ -55,5 +55,8 @@ router.replace('/foo')
 
 new Vue({
   router,
-  template: `<router-page />`
+  template: `<router-page />`,
+  created() {
+    // this.$setPageTransition('slide', 1000)
+  }
 }).$start()

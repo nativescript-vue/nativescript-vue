@@ -17,6 +17,19 @@ export function patchRouter(router, Vue) {
   router.isBackNavigation = false
   router.shouldNavigate = true
   router.pageStack = []
+  router.pageTransition = null
+
+  router.setPageTransition = (transition, duration, curve) => {
+    if (typeof transition === 'string') {
+      return (router.pageTransition = {
+        name: transition,
+        duration,
+        curve
+      })
+    }
+
+    router.pageTransition = transition
+  }
 
   router._beginBackNavigation = (shouldNavigate = true) => {
     if (router.isBackNavigation) {
@@ -68,7 +81,9 @@ export function patchRouter(router, Vue) {
     const component = router.getMatchedComponents()[0]
 
     Vue.navigateTo(component, {
-      context: { router }
+      context: { router },
+      transition: router.pageTransition
+      // Todo: add transitionAndroid and transitionIOS
     }).then(page => {
       router.pageStack.push(page)
 
