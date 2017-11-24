@@ -17,11 +17,18 @@ export function patchRouter(router, Vue) {
   router.isBackNavigation = false
   router.shouldNavigate = true
   router.pageStack = []
-  router.pageTransition = {
-    curve: null,
-    instance: null,
-    duration: null,
-    name: null
+  router.pageTransition = null
+
+  router.setPageTransition = (transition, duration, curve) => {
+    if (typeof transition === 'string') {
+      return (router.pageTransition = {
+        name: transition,
+        duration,
+        curve
+      })
+    }
+
+    router.pageTransition = transition
   }
 
   router._beginBackNavigation = (shouldNavigate = true) => {
@@ -97,15 +104,6 @@ export default {
         if (!this.$options.router) {
           // If there is no router, we don't care
           return
-        }
-
-        Vue.prototype.$setPageTransition = (transition, duration = null) => {
-          if (typeof transition === 'string') {
-            router.pageTransition.name = transition
-            router.pageTransition.duration = duration
-          }
-
-          router.pageTransition = transition
         }
 
         const router = this.$options.router
