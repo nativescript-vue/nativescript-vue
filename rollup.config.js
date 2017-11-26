@@ -40,7 +40,6 @@ export default {
   sourceMap: true,
 
   plugins: [
-    flow(),
     replace({
       __WEEX__: false,
       __VERSION__: Vue.version,
@@ -49,31 +48,8 @@ export default {
       'process.env.VUE_VERSION': `'${Vue.version}'`,
       'process.env.NS_VUE_VERSION': `'${NSVue.version}'`
     }),
-    buble({
-      transforms: {
-        arrow: false,
-        classes: false,
-        collections: false,
-        computedProperty: false,
-        conciseMethodProperty: false,
-        constLoop: false,
-        dangerousForOf: false,
-        dangerousTaggedTemplateString: false,
-        defaultParameter: false,
-        destructuring: false,
-        forOf: false,
-        generator: false,
-        letConst: true,
-        modules: false,
-        numericLiteral: false,
-        parameterDestructuring: false,
-        reservedProperties: false,
-        spreadRest: false,
-        stickyRegExp: false,
-        templateString: false,
-        unicodeRegExp: false,
-      }
-    }),
+    flow(),
+    buble(),
     alias(aliases),
     commonjs({
       include: [
@@ -84,7 +60,7 @@ export default {
       namedExports: {
         'he': ['decode']
       }
-    })
+    }),
   ],
   external(id) {
     return id.startsWith('ui/') || id.startsWith('application')
