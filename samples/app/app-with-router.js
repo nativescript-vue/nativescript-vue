@@ -67,7 +67,7 @@ new Vue({
             <stack-layout>
                 <stack-layout orientation="horizontal" horizontalAlignment="center" class="m-b-20">
                     <button @tap="changeRoute('/foo')" class="m-10">Foo</button>
-                    <button @tap="changeRoute('/bar')" class="m-10">Bar</button>
+                    <button @tap="changeRoute('/bar/fizz')" class="m-10">Bar</button>
                 </stack-layout>
 
                 <router-view></router-view>
