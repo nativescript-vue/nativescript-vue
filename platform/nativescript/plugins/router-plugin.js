@@ -1,5 +1,6 @@
 import { Page } from 'ui/page'
 import { before } from '../util/index'
+import { start } from 'application'
 
 export function patchRouter(router, Vue) {
   if (router.__patched_for_page_routing__) {
@@ -63,8 +64,14 @@ export function patchRouter(router, Vue) {
       if (router.shouldNavigate) {
         Vue.navigateBack()
       }
+
       router.pageStack.pop()
       const page = router.pageStack[router.pageStack.length - 1]
+
+      if (!page) {
+        router.isBackNavigation = false
+        return
+      }
 
       const callback = ({ isBackNavigation }) => {
         if (isBackNavigation) {
@@ -82,7 +89,11 @@ export function patchRouter(router, Vue) {
 
     Vue.navigateTo(component, {
       context: { router },
-      transition: router.pageTransition
+      transition: router.pageTransition,
+      onComponent(component) {
+        //only use page navigation if matched component is a page
+        return component.$el.tagName === 'page'
+      }
       // Todo: add transitionAndroid and transitionIOS
     }).then(page => {
       router.pageStack.push(page)
@@ -120,18 +131,33 @@ export default {
           const placeholder = Vue.$document.createComment('placeholder')
           self.$mount(placeholder)
 
-          const initial = router.getMatchedComponents()[0]
+          //Create root component
+          var vm = self
 
-          this.$navigateTo(
-            initial,
-            {
-              context: { router },
-              clearHistory: true
-            },
-            page => {
-              router.pageStack.push(page)
+          if (self.$options.pageRouting) {
+            //a router-page has been used as root element
+            const initial = router.getMatchedComponents()[0]
+            const contentComponent = Vue.extend(initial)
+            vm = new contentComponent({ router })
+            vm.$mount(placeholder)
+          }
+
+          //Create page element
+          var page = vm.$el.nativeView
+
+          if (vm.$el.tagName !== 'page') {
+            page = new Page()
+            page.content = vm.$el.nativeView
+          }
+
+          router.pageStack.push(page)
+
+          //Start the app
+          start({
+            create() {
+              return page
             }
-          )
+          })
         }
       }
     })

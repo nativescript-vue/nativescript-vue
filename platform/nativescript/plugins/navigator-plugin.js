@@ -37,6 +37,10 @@ export default {
           vm.$mount(placeholder)
         }
 
+        if (options.onComponent) {
+          if (options.onComponent(vm) === false) return //Stop navigation
+        }
+
         const toPage = isPage(vm.$el) ? vm.$el.nativeView : new Page()
 
         if (!isPage(vm.$el)) {

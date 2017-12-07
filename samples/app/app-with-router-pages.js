@@ -10,7 +10,7 @@ const Foo = {
             <label :text="$route.path" textWrap="true"></label>
             <label style="text-align: center; color: #41b883; font-size: 30">Hi I'm foo!</label>
             <button @tap="$router.push('/bar')">Bar</button>
-            <button @tap="$router.push('/baz')">Baz</button>
+            <router-link to="/baz">Baz</router-link>
         </stack-layout>
     </page>
 `
@@ -23,7 +23,7 @@ const Bar = {
         </action-bar>
         <stack-layout>
             <label style="text-align: center; color: #41b883; font-size: 30">Hi I'm  bar!</label>
-            <button @tap="$router.push('/baz')">Baz</button>
+            <router-link to="/baz">Baz</router-link>
         </stack-layout>
     </page>
 `
@@ -36,7 +36,7 @@ const Baz = {
         </action-bar>
         <stack-layout>
             <label style="text-align: center; color: #41b883; font-size: 30">Hi I'm baz!</label>
-            <button @tap="$router.push('/bar')">Bar</button>
+            <router-link to="/bar">Baz</router-link>
         </stack-layout>
     </page>
 `
