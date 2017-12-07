@@ -1,5 +1,6 @@
 import { makeMap } from 'shared/util'
 import { isKnownView, getViewMeta } from '../element-registry'
+import Vue from '../runtime/index'
 
 export const isReservedTag = makeMap('template', true)
 
@@ -35,9 +36,11 @@ export const VUE_VERSION = process.env.VUE_VERSION
 export const NS_VUE_VERSION = process.env.NS_VUE_VERSION
 
 export function trace(message) {
-  console.log(
-    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
-  )
+  if (Vue.config.ns_debug) {
+    console.log(
+      `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
+    )
+  }
 }
 
 export function before(original, thisArg, wrap) {
