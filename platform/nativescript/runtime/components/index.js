@@ -5,6 +5,7 @@ import NavigationButton from './navigation-button'
 import RouterPage from './router-page'
 import TabView from './tab-view'
 import TabViewItem from './tab-view-item'
+import VTemplate from './v-template'
 
 export default {
   ActionBar,
@@ -13,5 +14,6 @@ export default {
   NavigationButton,
   RouterPage,
   TabView,
-  TabViewItem
+  TabViewItem,
+  VTemplate
 }
