@@ -1,5 +1,6 @@
-import { cloneVNode } from 'core/vdom/vnode'
 import { patch } from '../patch'
+
+export const VUE_VIEW = '__vueVNodeRef__'
 
 export default {
   name: 'v-template',
@@ -15,8 +16,8 @@ export default {
     }
   },
 
-  created() {
-    if (!this.$slots.default) {
+  mounted() {
+    if (!this.$scopedSlots.default) {
       return
     }
 
@@ -24,7 +25,7 @@ export default {
     this.$parent.$templates.registerTemplate(
       this.$props.name,
       this.$props.if,
-      this.$slots.default[0]
+      this.$scopedSlots.default
     )
   },
 
@@ -36,12 +37,12 @@ export class TemplateBag {
     this._templateMap = new Map()
   }
 
-  registerTemplate(name, condition, vnode) {
+  registerTemplate(name, condition, scopedFn) {
     this._templateMap.set(name, {
       condition,
       conditionFn: this.getConditionFn(condition),
-      vnode,
-      keyedTemplate: new VueKeyedTemplate(name, vnode)
+      scopedFn,
+      keyedTemplate: new VueKeyedTemplate(name, scopedFn)
     })
   }
 
@@ -68,12 +69,28 @@ export class TemplateBag {
     const { keyedTemplate } = this._templateMap.get(name)
     return keyedTemplate
   }
+
+  patchTemplate(name, context, oldVnode) {
+    const { scopedFn } = this._templateMap.get(name)
+
+    return patch(oldVnode, scopedFn(context)).nativeView
+  }
+
+  getAvailable() {
+    return Array.from(this._templateMap.keys())
+  }
+
+  getKeyedTemplates() {
+    return Array.from(this._templateMap.values()).map(
+      ({ keyedTemplate }) => keyedTemplate
+    )
+  }
 }
 
 export class VueKeyedTemplate /* implements KeyedTemplate */ {
-  constructor(key, vnode) {
+  constructor(key, scopedFn) {
     this._key = key
-    this._vnode = vnode
+    this._scopedFn = scopedFn
   }
 
   get key() {
@@ -81,6 +98,22 @@ export class VueKeyedTemplate /* implements KeyedTemplate */ {
   }
 
   createView() {
-    return patch(null, cloneVNode(this._vnode)).nativeView
+    const vnode = this._scopedFn(deepProxy({}))
+    const nativeView = patch(null, vnode).nativeView
+    nativeView[VUE_VIEW] = vnode
+
+    console.log('CREATE_NEW_VIEW')
+    return nativeView
   }
+}
+
+function deepProxy(object, depth = 0) {
+  return new Proxy(object, {
+    get() {
+      if (depth > 10) {
+        throw new Error('deep proxy over 10 deep.')
+      }
+      return deepProxy({}, depth + 1)
+    }
+  })
 }

@@ -1,49 +1,49 @@
 const Vue = require('./nativescript-vue')
 
-Vue.component('test', {
-  mounted() {
-    if (!this.$templates) {
-      return
-    }
-
-    let selectorFn = this.$templates.selectorFn
-
-    console.log(selectorFn({}))
-    console.log(selectorFn({ cool: true }))
-    console.log(selectorFn({ cool: true, featured: true }))
-
-    let item = {
-      cool: true
-    }
-
-    let keyedTemplate = this.$templates.getKeyedTemplate(selectorFn(item))
-
-    console.log(keyedTemplate.createView())
-    console.log(keyedTemplate.createView())
-    console.log(keyedTemplate.createView())
-    console.log(keyedTemplate.createView())
-  },
-
-  template: `<detached-container><slot /></detached-container>`
-  //template: `<detached-container></detached-container>`
-})
-
 new Vue({
+  data() {
+    return {
+      items: [
+        'this',
+        'is',
+        'a',
+        'list',
+        'of',
+        'random',
+        'words',
+        'to',
+        'test',
+        'the',
+        'list',
+        'view',
+        'with',
+        'multiple',
+        'templates',
+        'using',
+        'the new',
+        'v-template',
+        'syntax',
+        'pretty',
+        'cool',
+        'huh?'
+      ]
+    }
+  },
   template: `
     <Page>
-        <ActionBar title="v-template" />
         <StackLayout>
-            <test>
+            <list-view :items="items">
                 <v-template>
-                    <Label text="foobar" />
+                    <StackLayout style="padding: 50;">
+                        <Label :text="item.value" style="color: blue;"/>
+                    </StackLayout>
                 </v-template>
-                <v-template name="fool" if="item.featured && item.cool">
-                    <Label text="foolbar" />
+                <v-template name="test" if="item.odd">
+                    <StackLayout style="padding: 50;">
+                        <Label :text="item.value" style="color: red;"/>
+                    </StackLayout>
                 </v-template>
-                <v-template name="cool" if="item.cool">
-                    <Label text="coolbar" />
-                </v-template>
-            </test>
+            </list-view>
         </StackLayout>
     </Page>
   `
