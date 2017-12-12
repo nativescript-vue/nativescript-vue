@@ -2,13 +2,13 @@ import { patch } from '../patch'
 
 export const VUE_VIEW = '__vueVNodeRef__'
 
+let tid = 0
 export default {
   name: 'v-template',
 
   props: {
     name: {
-      type: String,
-      default: 'default'
+      type: String
     },
 
     if: {
@@ -23,7 +23,7 @@ export default {
 
     this.$parent.$templates = this.$parent.$templates || new TemplateBag()
     this.$parent.$templates.registerTemplate(
-      this.$props.name,
+      this.$props.name || (this.$props.if ? `v-template-${tid++}` : 'default'),
       this.$props.if,
       this.$scopedSlots.default
     )

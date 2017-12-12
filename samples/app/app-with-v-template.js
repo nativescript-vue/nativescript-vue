@@ -38,7 +38,12 @@ new Vue({
                         <Label :text="item.value" style="color: blue;"/>
                     </StackLayout>
                 </v-template>
-                <v-template name="test" if="item.odd">
+                <v-template if="item.value.length == 2">
+                    <StackLayout style="padding: 50;">
+                        <Label :text="item.value" style="color: green;"/>
+                    </StackLayout>
+                </v-template>
+                <v-template if="item.odd">
                     <StackLayout style="padding: 50;">
                         <Label :text="item.value" style="color: red;"/>
                     </StackLayout>
