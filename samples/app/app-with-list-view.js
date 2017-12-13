@@ -65,7 +65,9 @@ new Vue({
                 <page style="background-color: rgba(0, 0, 0, .6);">
                     <stack-layout>
                         <label class="h2" textAlignment="center" textWrap="true"
-                         text="${item.title}" style="color: #fff; margin-top: 20"></label>
+                         text="${
+                           item.title
+                         }" style="color: #fff; margin-top: 20"></label>
                         <grid-layout rows="*, 60">
                             <activity-indicator row="0" :busy="true" height="100"></activity-indicator>
                             <img row="0" src="${item.fullImage}"/>
@@ -122,8 +124,9 @@ new Vue({
     fetchItems() {
       this.$http
         .getJSON(
-          `https://www.reddit.com/${this
-            .subreddit}.json?limit=10&count=10&after=${this.last_page}`
+          `https://www.reddit.com/${
+            this.subreddit
+          }.json?limit=10&count=10&after=${this.last_page}`
         )
         .then(res => {
           this.items.push({
