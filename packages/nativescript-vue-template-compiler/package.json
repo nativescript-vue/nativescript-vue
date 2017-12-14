@@ -1,0 +1,24 @@
+{
+  "name": "nativescript-vue-template-compiler",
+  "version": "0.4.0",
+  "description": "template compiler for nativescript-vue",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rigor789/nativescript-vue.git"
+  },
+  "keywords": [
+    "nativescript-vue",
+    "compiler"
+  ],
+  "author": "rigor789",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rigor789/nativescript-vue/issues"
+  },
+  "homepage": "https://github.com/rigor789/nativescript-vue/tree/master/packages/nativescript-vue-template-compiler#readme",
+  "dependencies": {
+    "he": "^1.1.0",
+    "de-indent": "^1.0.2"
+  }
+}

@@ -1,19 +1,19 @@
 
 /*!
- * NativeScript-Vue v0.3.1
+ * NativeScript-Vue v0.4.0
  * (Using Vue v2.5.8)
- * (c) 2017 rigor789
+ * (c) 2017-2017 rigor789
  * Released under the MIT license.
  */
 
 'use strict';
 
 var application = require('application');
-var ui_core_view = require('ui/core/view');
-var ui_contentView = require('ui/content-view');
-var ui_layouts_layoutBase = require('ui/layouts/layout-base');
-var ui_page = require('ui/page');
-var ui_frame = require('ui/frame');
+var view = require('ui/core/view');
+var contentView = require('ui/content-view');
+var layoutBase = require('ui/layouts/layout-base');
+var page = require('ui/page');
+var frame = require('ui/frame');
 
 /*  */
 
@@ -385,14 +385,14 @@ var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 // Firefox has a "watch" function on Object.prototype...
 var nativeWatch = ({}).watch;
 
-var supportsPassive = false;
+
 if (inBrowser) {
   try {
     var opts = {};
     Object.defineProperty(opts, 'passive', ({
       get: function get () {
         /* istanbul ignore next */
-        supportsPassive = true;
+        
       }
     })); // https://github.com/facebook/flow/issues/285
     window.addEventListener('test-passive', null, opts);
@@ -561,7 +561,7 @@ var config = ({
    * Exposed for legacy reasons
    */
   _lifecycleHooks: LIFECYCLE_HOOKS
-});
+})
 
 /*  */
 
@@ -894,7 +894,7 @@ var Observer = function Observer (value) {
 Observer.prototype.walk = function walk (obj) {
   var keys = Object.keys(obj);
   for (var i = 0; i < keys.length; i++) {
-    defineReactive$$1(obj, keys[i], obj[keys[i]]);
+    defineReactive(obj, keys[i], obj[keys[i]]);
   }
 };
 
@@ -961,7 +961,7 @@ function observe (value, asRootData) {
 /**
  * Define a reactive property on an Object.
  */
-function defineReactive$$1 (
+function defineReactive (
   obj,
   key,
   val,
@@ -1044,7 +1044,7 @@ function set (target, key, val) {
     target[key] = val;
     return val
   }
-  defineReactive$$1(ob.value, key, val);
+  defineReactive(ob.value, key, val);
   ob.dep.notify();
   return val
 }
@@ -2026,16 +2026,16 @@ registerElement(
   }
 );
 
-function isView(view) {
-  return view instanceof ui_core_view.View
+function isView(view$$1) {
+  return view$$1 instanceof view.View
 }
 
-function isLayout(view) {
-  return view instanceof ui_layouts_layoutBase.LayoutBase
+function isLayout(view$$1) {
+  return view$$1 instanceof layoutBase.LayoutBase
 }
 
-function isContentView(view) {
-  return view instanceof ui_contentView.ContentView
+function isContentView(view$$1) {
+  return view$$1 instanceof contentView.ContentView
 }
 
 function insertChild(parentNode, childNode, atIndex) {
@@ -2155,12 +2155,12 @@ prototypeAccessors$1.nativeView.get = function () {
   return this._nativeView
 };
 
-prototypeAccessors$1.nativeView.set = function (view) {
+prototypeAccessors$1.nativeView.set = function (view$$1) {
   if (this._nativeView) {
     throw new Error("Can't override native view.")
   }
 
-  this._nativeView = view;
+  this._nativeView = view$$1;
 };
 
 prototypeAccessors$1.meta.get = function () {
@@ -2290,7 +2290,7 @@ ViewNode.prototype.appendChild = function appendChild (childNode) {
   insertChild(this, childNode, this.childNodes.length - 1);
 };
 
-ViewNode.prototype.removeChild = function removeChild$$1 (childNode) {
+ViewNode.prototype.removeChild = function removeChild (childNode) {
   if (!childNode) {
     throw new Error("Can't remove child.")
   }
@@ -2470,7 +2470,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.8';
-var NS_VUE_VERSION = '0.3.1';
+var NS_VUE_VERSION = '0.4.0';
 
 function trace(message) {
   console.log(
@@ -2597,7 +2597,7 @@ var ref = {
   destroy: function destroy (vnode) {
     registerRef(vnode, true);
   }
-};
+}
 
 function registerRef (vnode, isRemoval) {
   var key = vnode.data.ref;
@@ -3456,8 +3456,8 @@ function initEvents (vm) {
 
 var target;
 
-function add (event, fn, once$$1) {
-  if (once$$1) {
+function add (event, fn, once) {
+  if (once) {
     target.$once(event, fn);
   } else {
     target.$on(event, fn);
@@ -4065,13 +4065,13 @@ function createPatchFunction (backend) {
   }
 
   function createRmCb (childElm, listeners) {
-    function remove$$1 () {
-      if (--remove$$1.listeners === 0) {
+    function remove () {
+      if (--remove.listeners === 0) {
         removeNode(childElm);
       }
     }
-    remove$$1.listeners = listeners;
-    return remove$$1
+    remove.listeners = listeners;
+    return remove
   }
 
   function removeNode (el) {
@@ -4082,7 +4082,7 @@ function createPatchFunction (backend) {
     }
   }
 
-  function isUnknownElement$$1 (vnode, inVPre) {
+  function isUnknownElement (vnode, inVPre) {
     return (
       !inVPre &&
       !vnode.ns &&
@@ -4113,7 +4113,7 @@ function createPatchFunction (backend) {
         if (data && data.pre) {
           creatingElmInVPre++;
         }
-        if (isUnknownElement$$1(vnode, creatingElmInVPre)) {
+        if (isUnknownElement(vnode, creatingElmInVPre)) {
           warn(
             'Unknown custom element: <' + tag + '> - did you ' +
             'register the component correctly? For recursive components, ' +
@@ -4209,11 +4209,11 @@ function createPatchFunction (backend) {
     insert(parentElm, vnode.elm, refElm);
   }
 
-  function insert (parent, elm, ref) {
+  function insert (parent, elm, ref$$1) {
     if (isDef(parent)) {
-      if (isDef(ref)) {
-        if (ref.parentNode === parent) {
-          nodeOps.insertBefore(parent, elm, ref);
+      if (isDef(ref$$1)) {
+        if (ref$$1.parentNode === parent) {
+          nodeOps.insertBefore(parent, elm, ref$$1);
         }
       } else {
         nodeOps.appendChild(parent, elm);
@@ -4598,7 +4598,7 @@ function createPatchFunction (backend) {
   function assertNodeMatch (node, vnode, inVPre) {
     if (isDef(vnode.tag)) {
       return vnode.tag.indexOf('vue-component') === 0 || (
-        !isUnknownElement$$1(vnode, inVPre) &&
+        !isUnknownElement(vnode, inVPre) &&
         vnode.tag.toLowerCase() === (node.tagName && node.tagName.toLowerCase())
       )
     } else {
@@ -4741,7 +4741,7 @@ function updateAttrs(oldVnode, vnode) {
 var attrs = {
   create: updateAttrs,
   update: updateAttrs
-};
+}
 
 /*  */
 
@@ -4881,7 +4881,7 @@ function updateClass(oldVnode, vnode) {
 var class_ = {
   create: updateClass,
   update: updateClass
-};
+}
 
 var target$1;
 
@@ -4923,7 +4923,7 @@ function updateDOMListeners(oldVnode, vnode) {
 var events = {
   create: updateDOMListeners,
   update: updateDOMListeners
-};
+}
 
 var normalize = cached(camelize);
 
@@ -4989,9 +4989,9 @@ function toObject$1(arr) {
 var style = {
   create: createStyle,
   update: updateStyle
-};
+}
 
-var platformModules = [attrs, class_, events, style];
+var platformModules = [attrs, class_, events, style]
 
 /*  */
 
@@ -5001,7 +5001,7 @@ var directives = {
   destroy: function unbindDirectives (vnode) {
     updateDirectives(vnode, emptyNode);
   }
-};
+}
 
 function updateDirectives (oldVnode, vnode) {
   if (oldVnode.data.directives || vnode.data.directives) {
@@ -5109,7 +5109,7 @@ function callHook$1 (dir, hook, vnode, oldVnode, isDestroy) {
 var baseModules = [
   ref,
   directives
-];
+]
 
 var modules = platformModules.concat(baseModules);
 
@@ -5120,7 +5120,7 @@ var patch = createPatchFunction({
 
 var he = {
   decode: decode
-};
+}
 
 function decode(html) {
   // todo?
@@ -5206,8 +5206,8 @@ function decodeAttr (value, shouldDecodeNewlines) {
 function parseHTML (html, options) {
   var stack = [];
   var expectHTML = options.expectHTML;
-  var isUnaryTag$$1 = options.isUnaryTag || no;
-  var canBeLeftOpenTag$$1 = options.canBeLeftOpenTag || no;
+  var isUnaryTag = options.isUnaryTag || no;
+  var canBeLeftOpenTag = options.canBeLeftOpenTag || no;
   var index = 0;
   var last, lastTag;
   while (html) {
@@ -5365,12 +5365,12 @@ function parseHTML (html, options) {
       if (lastTag === 'p' && isNonPhrasingTag(tagName)) {
         parseEndTag(lastTag);
       }
-      if (canBeLeftOpenTag$$1(tagName) && lastTag === tagName) {
+      if (canBeLeftOpenTag(tagName) && lastTag === tagName) {
         parseEndTag(tagName);
       }
     }
 
-    var unary = isUnaryTag$$1(tagName) || !!unarySlash;
+    var unary = isUnaryTag(tagName) || !!unarySlash;
 
     var l = match.attrs.length;
     var attrs = new Array(l);
@@ -6806,7 +6806,7 @@ var baseDirectives = {
   on: on,
   bind: bind$1,
   cloak: noop
-};
+}
 
 /*  */
 
@@ -7563,7 +7563,7 @@ var class_$1 = {
   staticKeys: ['staticClass'],
   transformNode: transformNode,
   genData: genData$1
-};
+}
 
 var normalize$1 = cached(camelize);
 
@@ -7637,38 +7637,17 @@ var style$1 = {
   staticKeys: ['staticStyle'],
   transformNode: transformNode$1,
   genData: genData$2
-};
+}
 
-function preTransformNode(el, options) {
-  if (el.tag === 'template') {
-    var name = el.attrsMap.name;
-
-    if (name) {
-      el.attrsMap['slot'] = name;
-      el.attrsList.push({
-        name: 'slot',
-        value: name
-      });
-    }
-
-    var isListView = normalizeElementName(el.parent.tag) === 'listview';
-    var scope = el.attrsMap.scope;
-    if (scope && isListView) {
-      delete el.attrsMap.scope;
-      el.attrsList = el.attrsList.filter(function (attr) { return attr.name !== 'scope'; });
-
-      el.attrsMap['slot-scope'] = scope;
-      el.attrsList.push({
-        name: 'slot-scope',
-        value: scope
-      });
-    }
+function preTransformNode(el) {
+  if (el.parent && el.parent.tag === 'v-template') {
+    el.slotScope = 'item';
   }
 }
 
 var scopedSlots = {
   preTransformNode: preTransformNode
-};
+}
 
 // transforms ~test -> v-view:test
 function transformNode$2(el) {
@@ -7681,11 +7660,11 @@ function transformNode$2(el) {
   }
 }
 
-var view = {
+var view$1 = {
   transformNode: transformNode$2
-};
+}
 
-var modules$1 = [class_$1, style$1, scopedSlots, view];
+var modules$1 = [class_$1, style$1, scopedSlots, view$1]
 
 function model(el, dir, _warn) {
   if (el.type === 1) {
@@ -7717,7 +7696,7 @@ function genDefaultModel(el, value, modifiers) {
 
 var directives$1 = {
   model: model
-};
+}
 
 var baseOptions = {
   modules: modules$1,
@@ -7867,7 +7846,7 @@ function initProps (vm, propsOptions) {
           vm
         );
       }
-      defineReactive$$1(props, key, value, function () {
+      defineReactive(props, key, value, function () {
         if (vm.$parent && !isUpdatingChildComponent) {
           warn(
             "Avoid mutating a prop directly since the value will be " +
@@ -8154,7 +8133,7 @@ function initInjections (vm) {
     Object.keys(result).forEach(function (key) {
       /* istanbul ignore else */
       {
-        defineReactive$$1(vm, key, result[key], function () {
+        defineReactive(vm, key, result[key], function () {
           warn(
             "Avoid mutating an injected value directly since the changes will be " +
             "overwritten whenever the provided component re-renders. " +
@@ -8958,10 +8937,10 @@ function initRender (vm) {
 
   /* istanbul ignore else */
   {
-    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, function () {
+    defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, function () {
       !isUpdatingChildComponent && warn("$attrs is readonly.", vm);
     }, true);
-    defineReactive$$1(vm, '$listeners', options._parentListeners || emptyObject, function () {
+    defineReactive(vm, '$listeners', options._parentListeners || emptyObject, function () {
       !isUpdatingChildComponent && warn("$listeners is readonly.", vm);
     }, true);
   }
@@ -9480,11 +9459,11 @@ var KeepAlive = {
     }
     return vnode || (slot && slot[0])
   }
-};
+}
 
 var builtInComponents = {
   KeepAlive: KeepAlive
-};
+}
 
 /*  */
 
@@ -9508,7 +9487,7 @@ function initGlobalAPI (Vue) {
     warn: warn,
     extend: extend,
     mergeOptions: mergeOptions,
-    defineReactive: defineReactive$$1
+    defineReactive: defineReactive
   };
 
   Vue.set = set;
@@ -9570,14 +9549,14 @@ var ActionBar = {
         return
       }
 
-      var page = this$1.$parent.$el.nativeView;
+      var page$$1 = this$1.$parent.$el.nativeView;
 
-      page.actionBar = this$1.$refs.actionBar.nativeView;
-      page.actionBarHidden = false;
+      page$$1.actionBar = this$1.$refs.actionBar.nativeView;
+      page$$1.actionBarHidden = false;
       if (this$1.title) {
         this$1.$refs.actionBar.setAttribute('title', this$1.title);
       }
-      page.actionBar.update();
+      page$$1.actionBar.update();
     });
   },
 
@@ -9586,7 +9565,7 @@ var ActionBar = {
       this.$refs.actionBar.setAttribute('title', newVal);
     }
   }
-};
+}
 
 var ActionItem = {
   name: 'action-item',
@@ -9647,41 +9626,179 @@ var ActionItem = {
       this.$emit('tap', args);
     }
   }
-};
+}
 
 var VUE_VIEW = '__vueVNodeRef__';
 
+var tid = 0;
+var VTemplate = {
+  name: 'v-template',
+
+  props: {
+    name: {
+      type: String
+    },
+
+    if: {
+      type: String
+    }
+  },
+
+  mounted: function mounted() {
+    if (!this.$scopedSlots.default) {
+      return
+    }
+
+    this.$templates = this.$el.parentNode.$templates = this.$parent.$templates =
+      this.$parent.$templates || new TemplateBag();
+    this.$templates.registerTemplate(
+      this.$props.name || (this.$props.if ? ("v-template-" + (tid++)) : 'default'),
+      this.$props.if,
+      this.$scopedSlots.default
+    );
+  },
+
+  render: function render(h) {}
+}
+
+var TemplateBag = function TemplateBag() {
+  this._templateMap = new Map();
+};
+
+var prototypeAccessors$2 = { selectorFn: { configurable: true } };
+
+TemplateBag.prototype.registerTemplate = function registerTemplate (name, condition, scopedFn) {
+  this._templateMap.set(name, {
+    condition: condition,
+    conditionFn: this.getConditionFn(condition),
+    scopedFn: scopedFn,
+    keyedTemplate: new VueKeyedTemplate(name, scopedFn)
+  });
+};
+
+prototypeAccessors$2.selectorFn.get = function () {
+  var self = this;
+  return function templateSelectorFn(item) {
+    var iterator = self._templateMap.entries();
+    var curr;
+    while ((curr = iterator.next().value)) {
+      var name = curr[0];
+        var conditionFn = curr[1].conditionFn;
+      if (conditionFn(item)) {
+        return name
+      }
+    }
+    return 'default'
+  }
+};
+
+TemplateBag.prototype.getConditionFn = function getConditionFn (condition) {
+  return new Function('item', ("return !!(" + condition + ")"))
+};
+
+TemplateBag.prototype.getKeyedTemplate = function getKeyedTemplate (name) {
+  var ref = this._templateMap.get(name);
+    var keyedTemplate = ref.keyedTemplate;
+  return keyedTemplate
+};
+
+TemplateBag.prototype.patchTemplate = function patchTemplate (name, context, oldVnode) {
+  var ref = this._templateMap.get(name);
+    var scopedFn = ref.scopedFn;
+
+  var vnode = scopedFn(context);
+  var nativeView = patch(oldVnode, vnode).nativeView;
+  nativeView[VUE_VIEW] = vnode;
+
+  return nativeView
+};
+
+TemplateBag.prototype.getAvailable = function getAvailable () {
+  return Array.from(this._templateMap.keys())
+};
+
+TemplateBag.prototype.getKeyedTemplates = function getKeyedTemplates () {
+  return Array.from(this._templateMap.values()).map(
+    function (ref) {
+        var keyedTemplate = ref.keyedTemplate;
+
+        return keyedTemplate;
+    }
+  )
+};
+
+Object.defineProperties( TemplateBag.prototype, prototypeAccessors$2 );
+
+var VueKeyedTemplate = function VueKeyedTemplate(key, scopedFn) {
+  this._key = key;
+  this._scopedFn = scopedFn;
+};
+
+var prototypeAccessors$1$1 = { key: { configurable: true } };
+
+prototypeAccessors$1$1.key.get = function () {
+  return this._key
+};
+
+VueKeyedTemplate.prototype.createView = function createView () {
+  var vnode = this._scopedFn(deepProxy({}));
+  var nativeView = patch(null, vnode).nativeView;
+  nativeView[VUE_VIEW] = vnode;
+
+  return nativeView
+};
+
+Object.defineProperties( VueKeyedTemplate.prototype, prototypeAccessors$1$1 );
+
+function deepProxy(object, depth) {
+  if ( depth === void 0 ) depth = 0;
+
+  return new Proxy(object, {
+    get: function get() {
+      if (depth > 10) {
+        throw new Error('deepProxy over 10 deep.')
+      }
+      return deepProxy({}, depth + 1)
+    }
+  })
+}
+
 var ListView = {
   name: 'list-view',
-
-  template: "<native-list-view\n                    ref=\"listView\"\n                    @itemLoading=\"onItemLoading\"\n                    @itemTap=\"onItemTap\"\n                    @loaded=\"onLoaded\"\n                    @unloaded=\"onUnloaded\"\n                    @loadMoreItems=\"onLoadMoreItems\">\n               </native-list-view>",
-
   props: {
     items: {
       type: Array,
       required: true
-    },
-    templateSelector: {
-      type: Function,
-      default: function () { return 'default'; }
     },
     separatorColor: {
       type: String
     }
   },
 
-  created: function created() {
-    this._templateMap = new Map();
-  },
+  render: function render(h) {
+    var this$1 = this;
 
-  mounted: function mounted() {
-    this.setupTemplates();
-
-    this.$refs.listView.setAttribute('items', this.items);
-
-    if (this.separatorColor) {
-      this.$refs.listView.setAttribute('separatorColor', this.separatorColor);
-    }
+    return h(
+      'native-list-view',
+      {
+        ref: 'listView',
+        on: {
+          itemLoading: this.onItemLoading,
+          itemTap: function (args) { return this$1.$emit(
+              'itemTap',
+              Object.assign({ item: this$1.items[args.index] }, args)
+            ); },
+          loaded: function (args) { return this$1.$emit('loaded', args); },
+          unloaded: function (args) { return this$1.$emit('unloaded', args); },
+          loadMoreItems: function (args) { return this$1.$emit('loadMoreItems', args); }
+        },
+        domProps: {
+          items: this.items,
+          separatorColor: this.separatorColor
+        }
+      },
+      this.$slots.default
+    )
   },
 
   watch: {
@@ -9694,106 +9811,40 @@ var ListView = {
     }
   },
 
+  mounted: function mounted() {
+    var this$1 = this;
+
+    this.$refs.listView.setAttribute('items', this.items);
+    this.$refs.listView.setAttribute(
+      '_itemTemplatesInternal',
+      this.$templates.getKeyedTemplates()
+    );
+    this.$refs.listView.setAttribute('_itemTemplateSelector', function (
+      item,
+      index /*items*/
+    ) {
+      return this$1.$templates.selectorFn(new ItemContext(item, index))
+    });
+  },
+
   methods: {
-    onItemTap: function onItemTap(args) {
-      this.$emit(
-        'itemTap',
-        Object.assign({ item: this.items[args.index] }, args)
-      );
-    },
-
-    onLoaded: function onLoaded(args) {
-      this.$emit('loaded', args);
-    },
-
-    onUnloaded: function onUnloaded(args) {
-      this.$emit('unloaded', args);
-    },
-
-    onLoadMoreItems: function onLoadMoreItems(args) {
-      this.$emit('loadMoreItems', args);
-    },
-
-    setupTemplates: function setupTemplates() {
-      var this$1 = this;
-
-      var self = this;
-      var slots = Object.keys(this.$scopedSlots);
-
-      slots.forEach(function (slotName) {
-        var keyedTemplate = {
-          key: slotName,
-          createView: function createView() {
-            var vnode = self.getItemTemplate('', 0);
-            vnode.elm.nativeView[VUE_VIEW] = vnode;
-            return vnode.elm.nativeView
-          }
-        };
-        this$1._templateMap.set(slotName, keyedTemplate);
-      });
-
-      this.setItemTemplates();
-    },
-
-    setItemTemplates: function setItemTemplates() {
-      var this$1 = this;
-
-      var templates = [];
-      this._templateMap.forEach(function (value) {
-        templates.push(value);
-      });
-
-      this.$refs.listView.setAttribute('_itemTemplatesInternal', templates);
-
-      if (typeof this.templateSelector === 'function') {
-        this.$refs.listView.setAttribute(
-          '_itemTemplateSelector',
-          function (item, index, items) {
-            return this$1.templateSelector(new ItemContext(item, index))
-          }
-        );
-      }
-    },
-
     onItemLoading: function onItemLoading(args) {
       var index = args.index;
       var items = args.object.items;
+
       var currentItem =
         typeof items.getItem === 'function'
           ? items.getItem(index)
           : items[index];
 
-      var vnode;
-      if (args.view) {
-        vnode = args.view[VUE_VIEW];
+      var context = new ItemContext(currentItem, index);
+      var name = args.object._itemTemplateSelector(context, index, items);
 
-        if (!vnode) {
-          console.log('Cant reuse view...');
-        }
-      }
-
-      vnode = this.getItemTemplate(currentItem, index, vnode);
-      args.view = vnode.elm.nativeView;
-      args.view[VUE_VIEW] = vnode;
-    },
-
-    getItemTemplate: function getItemTemplate(item, index, oldVnode) {
-      var context = new ItemContext(item, index);
-      var template = 'default';
-      if (typeof this.templateSelector === 'function') {
-        template = this.templateSelector(context);
-      }
-      //
-      // let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
-      // let vnode = slot(context)[0]
-      // this.__patch__(oldVnode, vnode)
-      //
-      // return vnode
-
-      return this.$renderTemplate(template, context, oldVnode)
+      var oldVnode = args.view && args.view[VUE_VIEW];
+      args.view = this.$templates.patchTemplate(name, context, oldVnode);
     }
   }
-};
+}
 
 var ItemContext = function ItemContext(item, index) {
   this.$index = index;
@@ -9837,7 +9888,7 @@ var NavigationButton = {
       this.$emit('tap', args);
     }
   }
-};
+}
 
 var RouterPage = {
   name: 'router-page',
@@ -9852,7 +9903,7 @@ var RouterPage = {
 
     parent.$options.pageRouting = true;
   }
-};
+}
 
 var TabView = {
   name: 'tab-view',
@@ -9883,7 +9934,7 @@ var TabView = {
       this.$refs.tabView.setAttribute('items', items.concat([tabView]));
     }
   }
-};
+}
 
 var TabViewItem = {
   name: 'tab-view-item',
@@ -9899,7 +9950,7 @@ var TabViewItem = {
     _nativeView.view = this.$el.childNodes[0].nativeView;
     this.$parent.registerTab(_nativeView);
   }
-};
+}
 
 var platformComponents = {
   ActionBar: ActionBar,
@@ -9908,8 +9959,9 @@ var platformComponents = {
   NavigationButton: NavigationButton,
   RouterPage: RouterPage,
   TabView: TabView,
-  TabViewItem: TabViewItem
-};
+  TabViewItem: TabViewItem,
+  VTemplate: VTemplate
+}
 
 function show(el, show) {
   el.setAttribute('visibility', show ? 'visible' : 'collapsed');
@@ -9926,9 +9978,9 @@ var show$1 = {
 
     show(el, value);
   }
-};
+}
 
-var view$1 = {
+var view$2 = {
   inserted: function inserted(el, ref) {
     var arg = ref.arg;
 
@@ -9938,12 +9990,12 @@ var view$1 = {
       parent.setAttribute(arg, el.nativeView);
     }
   }
-};
+}
 
 var platformDirectives = {
   show: show$1,
-  view: view$1
-};
+  view: view$2
+}
 
 var VUE_VM_REF = '__vue_vm_ref__';
 
@@ -9978,13 +10030,13 @@ var mount = function(el, hydrating) {
         mountComponent(self, el, hydrating);
         self.__started__ = true;
 
-        var page = isPage(self.$el) ? self.$el.nativeView : new ui_page.Page();
+        var page$$1 = isPage(self.$el) ? self.$el.nativeView : new page.Page();
 
         if (!isPage(self.$el)) {
-          page.content = self.$el.nativeView;
+          page$$1.content = self.$el.nativeView;
         }
 
-        return page
+        return page$$1
       }
     });
   } else {
@@ -10059,7 +10111,7 @@ var ModalPlugin = {
         };
 
         vm.$mount(placeholder);
-        var modalPage = isPage(vm.$el) ? vm.$el.nativeView : new ui_page.Page();
+        var modalPage = isPage(vm.$el) ? vm.$el.nativeView : new page.Page();
 
         if (!isPage(vm.$el)) {
           modalPage.content = vm.$el.nativeView;
@@ -10074,12 +10126,12 @@ var ModalPlugin = {
       })
     };
   }
-};
+}
 
 var NavigatorPlugin = {
   install: function install(Vue) {
     Vue.navigateBack = Vue.prototype.$navigateBack = function() {
-      return ui_frame.topmost().goBack()
+      return frame.topmost().goBack()
     };
 
     Vue.navigateTo = Vue.prototype.$navigateTo = function(
@@ -10091,8 +10143,8 @@ var NavigatorPlugin = {
       if ( pageCb === void 0 ) pageCb = function () {};
 
       return new Promise(function (resolve) {
-        var frame = ui_frame.topmost();
-        var navigate = frame ? frame.navigate : application.start;
+        var frame$$1 = frame.topmost();
+        var navigate = frame$$1 ? frame$$1.navigate : application.start;
 
         if (isPage(component)) {
           return navigate({
@@ -10111,7 +10163,7 @@ var NavigatorPlugin = {
           vm.$mount(placeholder);
         }
 
-        var toPage = isPage(vm.$el) ? vm.$el.nativeView : new ui_page.Page();
+        var toPage = isPage(vm.$el) ? vm.$el.nativeView : new page.Page();
 
         if (!isPage(vm.$el)) {
           toPage.content = vm.$el.nativeView;
@@ -10120,11 +10172,11 @@ var NavigatorPlugin = {
         toPage[VUE_VM_REF] = vm;
 
         navigate.call(
-          frame,
+          frame$$1,
           Object.assign(
             {
               create: function () {
-                if (frame) {
+                if (frame$$1) {
                   toPage.disposeNativeView = after(
                     toPage.disposeNativeView,
                     toPage,
@@ -10145,7 +10197,7 @@ var NavigatorPlugin = {
       })
     };
   }
-};
+}
 
 function patchRouter(router, Vue) {
   if (router.__patched_for_page_routing__) {
@@ -10212,7 +10264,7 @@ function patchRouter(router, Vue) {
         Vue.navigateBack();
       }
       router.pageStack.pop();
-      var page = router.pageStack[router.pageStack.length - 1];
+      var page$$1 = router.pageStack[router.pageStack.length - 1];
 
       var callback = function (ref) {
         var isBackNavigation = ref.isBackNavigation;
@@ -10220,10 +10272,10 @@ function patchRouter(router, Vue) {
         if (isBackNavigation) {
           router._finishBackNavigation();
         }
-        page.off(ui_page.Page.navigatedToEvent, callback);
+        page$$1.off(page.Page.navigatedToEvent, callback);
       };
 
-      page.on(ui_page.Page.navigatedToEvent, callback);
+      page$$1.on(page.Page.navigatedToEvent, callback);
 
       return
     }
@@ -10234,10 +10286,10 @@ function patchRouter(router, Vue) {
       context: { router: router },
       transition: router.pageTransition
       // Todo: add transitionAndroid and transitionIOS
-    }).then(function (page) {
-      router.pageStack.push(page);
+    }).then(function (page$$1) {
+      router.pageStack.push(page$$1);
 
-      page.on(ui_page.Page.navigatedFromEvent, function (ref) {
+      page$$1.on(page.Page.navigatedFromEvent, function (ref) {
         var isBackNavigation = ref.isBackNavigation;
 
         if (isBackNavigation && !router.isBackNavigation) {
@@ -10282,15 +10334,15 @@ var RouterPlugin = {
               context: { router: router },
               clearHistory: true
             },
-            function (page) {
-              router.pageStack.push(page);
+            function (page$$1) {
+              router.pageStack.push(page$$1);
             }
           );
         };
       }
     });
   }
-};
+}
 
 console.keys = function(object) {
   console.dir(Object.keys(object));
@@ -10308,4 +10360,3 @@ Vue$3.use(NavigatorPlugin);
 Vue$3.use(RouterPlugin);
 
 module.exports = Vue$3;
-//# sourceMappingURL=index.js.map
