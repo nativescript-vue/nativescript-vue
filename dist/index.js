@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue v0.3.1
+ * NativeScript-Vue v0.4.0
  * (Using Vue v2.5.8)
  * (c) 2017 rigor789
  * Released under the MIT license.
@@ -2470,7 +2470,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.8';
-var NS_VUE_VERSION = '0.3.1';
+var NS_VUE_VERSION = '0.4.0';
 
 function trace(message) {
   console.log(
@@ -7639,30 +7639,9 @@ var style$1 = {
   genData: genData$2
 };
 
-function preTransformNode(el, options) {
-  if (el.tag === 'template') {
-    var name = el.attrsMap.name;
-
-    if (name) {
-      el.attrsMap['slot'] = name;
-      el.attrsList.push({
-        name: 'slot',
-        value: name
-      });
-    }
-
-    var isListView = normalizeElementName(el.parent.tag) === 'listview';
-    var scope = el.attrsMap.scope;
-    if (scope && isListView) {
-      delete el.attrsMap.scope;
-      el.attrsList = el.attrsList.filter(function (attr) { return attr.name !== 'scope'; });
-
-      el.attrsMap['slot-scope'] = scope;
-      el.attrsList.push({
-        name: 'slot-scope',
-        value: scope
-      });
-    }
+function preTransformNode(el) {
+  if (el.parent && el.parent.tag === 'v-template') {
+    el.slotScope = 'item';
   }
 }
 
@@ -9651,37 +9630,175 @@ var ActionItem = {
 
 var VUE_VIEW = '__vueVNodeRef__';
 
+var tid = 0;
+var VTemplate = {
+  name: 'v-template',
+
+  props: {
+    name: {
+      type: String
+    },
+
+    if: {
+      type: String
+    }
+  },
+
+  mounted: function mounted() {
+    if (!this.$scopedSlots.default) {
+      return
+    }
+
+    this.$templates = this.$el.parentNode.$templates = this.$parent.$templates =
+      this.$parent.$templates || new TemplateBag();
+    this.$templates.registerTemplate(
+      this.$props.name || (this.$props.if ? ("v-template-" + (tid++)) : 'default'),
+      this.$props.if,
+      this.$scopedSlots.default
+    );
+  },
+
+  render: function render(h) {}
+};
+
+var TemplateBag = function TemplateBag() {
+  this._templateMap = new Map();
+};
+
+var prototypeAccessors$2 = { selectorFn: { configurable: true } };
+
+TemplateBag.prototype.registerTemplate = function registerTemplate (name, condition, scopedFn) {
+  this._templateMap.set(name, {
+    condition: condition,
+    conditionFn: this.getConditionFn(condition),
+    scopedFn: scopedFn,
+    keyedTemplate: new VueKeyedTemplate(name, scopedFn)
+  });
+};
+
+prototypeAccessors$2.selectorFn.get = function () {
+  var self = this;
+  return function templateSelectorFn(item) {
+    var iterator = self._templateMap.entries();
+    var curr;
+    while ((curr = iterator.next().value)) {
+      var name = curr[0];
+        var conditionFn = curr[1].conditionFn;
+      if (conditionFn(item)) {
+        return name
+      }
+    }
+    return 'default'
+  }
+};
+
+TemplateBag.prototype.getConditionFn = function getConditionFn (condition) {
+  return new Function('item', ("return !!(" + condition + ")"))
+};
+
+TemplateBag.prototype.getKeyedTemplate = function getKeyedTemplate (name) {
+  var ref = this._templateMap.get(name);
+    var keyedTemplate = ref.keyedTemplate;
+  return keyedTemplate
+};
+
+TemplateBag.prototype.patchTemplate = function patchTemplate (name, context, oldVnode) {
+  var ref = this._templateMap.get(name);
+    var scopedFn = ref.scopedFn;
+
+  var vnode = scopedFn(context);
+  var nativeView = patch(oldVnode, vnode).nativeView;
+  nativeView[VUE_VIEW] = vnode;
+
+  return nativeView
+};
+
+TemplateBag.prototype.getAvailable = function getAvailable () {
+  return Array.from(this._templateMap.keys())
+};
+
+TemplateBag.prototype.getKeyedTemplates = function getKeyedTemplates () {
+  return Array.from(this._templateMap.values()).map(
+    function (ref) {
+        var keyedTemplate = ref.keyedTemplate;
+
+        return keyedTemplate;
+    }
+  )
+};
+
+Object.defineProperties( TemplateBag.prototype, prototypeAccessors$2 );
+
+var VueKeyedTemplate = function VueKeyedTemplate(key, scopedFn) {
+  this._key = key;
+  this._scopedFn = scopedFn;
+};
+
+var prototypeAccessors$1$1 = { key: { configurable: true } };
+
+prototypeAccessors$1$1.key.get = function () {
+  return this._key
+};
+
+VueKeyedTemplate.prototype.createView = function createView () {
+  var vnode = this._scopedFn(deepProxy({}));
+  var nativeView = patch(null, vnode).nativeView;
+  nativeView[VUE_VIEW] = vnode;
+
+  return nativeView
+};
+
+Object.defineProperties( VueKeyedTemplate.prototype, prototypeAccessors$1$1 );
+
+function deepProxy(object, depth) {
+  if ( depth === void 0 ) depth = 0;
+
+  return new Proxy(object, {
+    get: function get() {
+      if (depth > 10) {
+        throw new Error('deepProxy over 10 deep.')
+      }
+      return deepProxy({}, depth + 1)
+    }
+  })
+}
+
 var ListView = {
   name: 'list-view',
-
-  template: "<native-list-view\n                    ref=\"listView\"\n                    @itemLoading=\"onItemLoading\"\n                    @itemTap=\"onItemTap\"\n                    @loaded=\"onLoaded\"\n                    @unloaded=\"onUnloaded\"\n                    @loadMoreItems=\"onLoadMoreItems\">\n               </native-list-view>",
-
   props: {
     items: {
       type: Array,
       required: true
-    },
-    templateSelector: {
-      type: Function,
-      default: function () { return 'default'; }
     },
     separatorColor: {
       type: String
     }
   },
 
-  created: function created() {
-    this._templateMap = new Map();
-  },
+  render: function render(h) {
+    var this$1 = this;
 
-  mounted: function mounted() {
-    this.setupTemplates();
-
-    this.$refs.listView.setAttribute('items', this.items);
-
-    if (this.separatorColor) {
-      this.$refs.listView.setAttribute('separatorColor', this.separatorColor);
-    }
+    return h(
+      'native-list-view',
+      {
+        ref: 'listView',
+        on: {
+          itemLoading: this.onItemLoading,
+          itemTap: function (args) { return this$1.$emit(
+              'itemTap',
+              Object.assign({ item: this$1.items[args.index] }, args)
+            ); },
+          loaded: function (args) { return this$1.$emit('loaded', args); },
+          unloaded: function (args) { return this$1.$emit('unloaded', args); },
+          loadMoreItems: function (args) { return this$1.$emit('loadMoreItems', args); }
+        },
+        domProps: {
+          items: this.items,
+          separatorColor: this.separatorColor
+        }
+      },
+      this.$slots.default
+    )
   },
 
   watch: {
@@ -9694,103 +9811,37 @@ var ListView = {
     }
   },
 
+  mounted: function mounted() {
+    var this$1 = this;
+
+    this.$refs.listView.setAttribute('items', this.items);
+    this.$refs.listView.setAttribute(
+      '_itemTemplatesInternal',
+      this.$templates.getKeyedTemplates()
+    );
+    this.$refs.listView.setAttribute('_itemTemplateSelector', function (
+      item,
+      index /*items*/
+    ) {
+      return this$1.$templates.selectorFn(new ItemContext(item, index))
+    });
+  },
+
   methods: {
-    onItemTap: function onItemTap(args) {
-      this.$emit(
-        'itemTap',
-        Object.assign({ item: this.items[args.index] }, args)
-      );
-    },
-
-    onLoaded: function onLoaded(args) {
-      this.$emit('loaded', args);
-    },
-
-    onUnloaded: function onUnloaded(args) {
-      this.$emit('unloaded', args);
-    },
-
-    onLoadMoreItems: function onLoadMoreItems(args) {
-      this.$emit('loadMoreItems', args);
-    },
-
-    setupTemplates: function setupTemplates() {
-      var this$1 = this;
-
-      var self = this;
-      var slots = Object.keys(this.$scopedSlots);
-
-      slots.forEach(function (slotName) {
-        var keyedTemplate = {
-          key: slotName,
-          createView: function createView() {
-            var vnode = self.getItemTemplate('', 0);
-            vnode.elm.nativeView[VUE_VIEW] = vnode;
-            return vnode.elm.nativeView
-          }
-        };
-        this$1._templateMap.set(slotName, keyedTemplate);
-      });
-
-      this.setItemTemplates();
-    },
-
-    setItemTemplates: function setItemTemplates() {
-      var this$1 = this;
-
-      var templates = [];
-      this._templateMap.forEach(function (value) {
-        templates.push(value);
-      });
-
-      this.$refs.listView.setAttribute('_itemTemplatesInternal', templates);
-
-      if (typeof this.templateSelector === 'function') {
-        this.$refs.listView.setAttribute(
-          '_itemTemplateSelector',
-          function (item, index, items) {
-            return this$1.templateSelector(new ItemContext(item, index))
-          }
-        );
-      }
-    },
-
     onItemLoading: function onItemLoading(args) {
       var index = args.index;
       var items = args.object.items;
+
       var currentItem =
         typeof items.getItem === 'function'
           ? items.getItem(index)
           : items[index];
 
-      var vnode;
-      if (args.view) {
-        vnode = args.view[VUE_VIEW];
+      var context = new ItemContext(currentItem, index);
+      var name = args.object._itemTemplateSelector(context, index, items);
 
-        if (!vnode) {
-          console.log('Cant reuse view...');
-        }
-      }
-
-      vnode = this.getItemTemplate(currentItem, index, vnode);
-      args.view = vnode.elm.nativeView;
-      args.view[VUE_VIEW] = vnode;
-    },
-
-    getItemTemplate: function getItemTemplate(item, index, oldVnode) {
-      var context = new ItemContext(item, index);
-      var template = 'default';
-      if (typeof this.templateSelector === 'function') {
-        template = this.templateSelector(context);
-      }
-      //
-      // let slot = this.$scopedSlots[template] ? this.$scopedSlots[template] : this.$scopedSlots.default
-      // let vnode = slot(context)[0]
-      // this.__patch__(oldVnode, vnode)
-      //
-      // return vnode
-
-      return this.$renderTemplate(template, context, oldVnode)
+      var oldVnode = args.view && args.view[VUE_VIEW];
+      args.view = this.$templates.patchTemplate(name, context, oldVnode);
     }
   }
 };
@@ -9908,7 +9959,8 @@ var platformComponents = {
   NavigationButton: NavigationButton,
   RouterPage: RouterPage,
   TabView: TabView,
-  TabViewItem: TabViewItem
+  TabViewItem: TabViewItem,
+  VTemplate: VTemplate
 };
 
 function show(el, show) {
