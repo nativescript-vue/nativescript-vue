@@ -21,7 +21,7 @@ export default {
       return
     }
 
-    this.$templates = this.$parent.$templates =
+    this.$templates = this.$el.parentNode.$templates = this.$parent.$templates =
       this.$parent.$templates || new TemplateBag()
     this.$templates.registerTemplate(
       this.$props.name || (this.$props.if ? `v-template-${tid++}` : 'default'),
@@ -74,7 +74,11 @@ export class TemplateBag {
   patchTemplate(name, context, oldVnode) {
     const { scopedFn } = this._templateMap.get(name)
 
-    return patch(oldVnode, scopedFn(context)).nativeView
+    const vnode = scopedFn(context)
+    const nativeView = patch(oldVnode, vnode).nativeView
+    nativeView[VUE_VIEW] = vnode
+
+    return nativeView
   }
 
   getAvailable() {
@@ -103,7 +107,6 @@ export class VueKeyedTemplate /* implements KeyedTemplate */ {
     const nativeView = patch(null, vnode).nativeView
     nativeView[VUE_VIEW] = vnode
 
-    console.log('CREATE_NEW_VIEW')
     return nativeView
   }
 }
@@ -112,7 +115,7 @@ function deepProxy(object, depth = 0) {
   return new Proxy(object, {
     get() {
       if (depth > 10) {
-        throw new Error('deep proxy over 10 deep.')
+        throw new Error('deepProxy over 10 deep.')
       }
       return deepProxy({}, depth + 1)
     }
