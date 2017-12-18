@@ -5,13 +5,13 @@ const replace = require('rollup-plugin-replace')
 const flow = require('rollup-plugin-flow-no-whitespace')
 const path = require('path')
 
-const Vue = require('vue/package.json')
-const NSVue = require('../package.json')
+const VueVersion = require('vue/package.json').version
+const NSVueVersion = process.env.VERSION || require('../package.json').version
 
 const banner = (name, version) => `
 /*!
- * ${name} v${version || NSVue.version}
- * (Using Vue v${Vue.version})
+ * ${name} v${version || NSVueVersion}
+ * (Using Vue v${VueVersion})
  * (c) 2017-${new Date().getFullYear()} rigor789
  * Released under the MIT license.
  */
@@ -64,11 +64,11 @@ const genConfig = (name) => {
     plugins: [
       replace({
         __WEEX__: false,
-        __VERSION__: Vue.version,
+        __VERSION__: VueVersion,
         'process.env.NODE_ENV': "'development'",
         'let _isServer': 'let _isServer = false',
-        'process.env.VUE_VERSION': `'${Vue.version}'`,
-        'process.env.NS_VUE_VERSION': `'${NSVue.version}'`
+        'process.env.VUE_VERSION': `'${VueVersion}'`,
+        'process.env.NS_VUE_VERSION': `'${NSVueVersion}'`
       }),
       flow(),
       buble(),

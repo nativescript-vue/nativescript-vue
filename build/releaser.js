@@ -40,7 +40,7 @@ inquirer
       echo "Running tests..."
       npm run test
       echo "Starting build..."
-      npm run build
+      VERSION=${version} npm run build
       echo "Build Successful. Updating packages"
       cd packages/nativescript-vue-template-compiler && npm version ${version} && npm publish
       git add -A
