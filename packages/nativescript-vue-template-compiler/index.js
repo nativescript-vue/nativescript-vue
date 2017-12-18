@@ -563,7 +563,7 @@ var isSpecialTag = makeMap('script,style,template', true);
 /**
  * Parse a single-file component (*.vue) file into an SFC Descriptor Object.
  */
-function parseComponent (
+function parseComponent(
   content,
   options
 ) {
@@ -580,7 +580,7 @@ function parseComponent (
   var depth = 0;
   var currentBlock = null;
 
-  function start (
+  function start(
     tag,
     attrs,
     unary,
@@ -609,7 +609,8 @@ function parseComponent (
         } else if (tag === 'template') {
           sfc.templates.push(currentBlock);
         }
-      } else { // custom blocks
+      } else {
+        // custom blocks
         sfc.customBlocks.push(currentBlock);
       }
     }
@@ -618,7 +619,7 @@ function parseComponent (
     }
   }
 
-  function checkAttrs (block, attrs) {
+  function checkAttrs(block, attrs) {
     for (var i = 0; i < attrs.length; i++) {
       var attr = attrs[i];
       if (attr.name === 'lang') {
@@ -636,7 +637,7 @@ function parseComponent (
     }
   }
 
-  function end (tag, start, end) {
+  function end(tag, start, end) {
     if (depth === 1 && currentBlock) {
       currentBlock.end = start;
       var text = deindent(content.slice(currentBlock.start, currentBlock.end));
@@ -651,14 +652,12 @@ function parseComponent (
     depth--;
   }
 
-  function padContent (block, pad) {
+  function padContent(block, pad) {
     if (pad === 'space') {
       return content.slice(0, block.start).replace(replaceRE, ' ')
     } else {
       var offset = content.slice(0, block.start).split(splitRE).length;
-      var padChar = block.type === 'script' && !block.lang
-        ? '//\n'
-        : '\n';
+      var padChar = block.type === 'script' && !block.lang ? '//\n' : '\n';
       return Array(offset).join(padChar)
     }
   }
