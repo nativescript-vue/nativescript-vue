@@ -31,9 +31,9 @@ inquirer
     })
   })
   .then(version => {
-    console.log(`Releasing v${version}...`)
+    console.log(blue(`Releasing v${version}...`))
+    console.log(blue('-'.repeat(80)))
 
-    // build
     const buildMessage = `build: ${version}`
     const releaseMessage = `release: ${version}`
     return runCommands(`
@@ -56,31 +56,23 @@ inquirer
       `)
   })
   .then(() => {
+    console.log(blue('-'.repeat(80)))
     console.log(blue('Release complete.'))
   })
   .catch(err => {
+    console.log(blue('-'.repeat(80)))
+    console.log(err)
+    console.log(blue('-'.repeat(80)))
     console.log(blue('Release has been canceled.'))
   })
 
 function runCommands(commands) {
-  const promises = commands.split('\n')
+  return commands.split('\n')
     .map(c => c.trim())
     .filter(c => c.length)
-    .map((command) => {
-      return runCommand(command.trim())
-    })
-
-  return new Promise(async (resolve, reject) => {
-    try {
-      const res = []
-      for (let promise of promises) {
-        res.push(await promise)
-      }
-      resolve(res)
-    } catch (err) {
-      reject(err)
-    }
-  })
+    .reduce((promise, command) => {
+      return promise.then(() => runCommand(command))
+    }, Promise.resolve())
 }
 
 function runCommand(command) {
