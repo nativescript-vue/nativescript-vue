@@ -69,7 +69,18 @@ function runCommands(commands) {
     .map((command) => {
       return runCommand(command.trim())
     })
-  return Promise.all(promises)
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = []
+      for (let promise of promises) {
+        res.push(await promise)
+      }
+      resolve(res)
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 function runCommand(command) {
