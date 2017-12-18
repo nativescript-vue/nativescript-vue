@@ -12,9 +12,7 @@
     "build": "node build/build.js",
     "precommit": "lint-staged",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
-    "release": "node build/releaser.js",
-    "version": "npm run build && git add -A && git add -f dist/index.js dist/index.js.map",
-    "postversion": "git push origin master && git push --tags && npm publish"
+    "release": "node build/releaser.js"
   },
   "repository": {
     "type": "git",
