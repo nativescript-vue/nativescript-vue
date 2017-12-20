@@ -22,11 +22,27 @@
     </a>
 </p>
 
+<h2 align="center">Supporting NativeScript-Vue</h2>
+NativeScript-Vue is an MIT-licensed open source project made possible by
+these awesome backers:
+
+- Tiago Alves
+- Kamen Bundev
+
+If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
+
+A huge thank you for all of the backers / sponsors!
+
+---
+
 # NativeScript Vue Plugin
 
 This plugin integrates [Vue](https://vuejs.org/) and [NativeScript](https://www.nativescript.org/), allowing you to build cross-platform iOS and Android apps using Vue.
 
-This project is in its very early stages, so please don't try to use it for any actual applications—yet 😄
+This project is **not stable**, while testing and feedback is appreciated,
+we do not recommend relying on the project for production-ready
+applications yet.
+
 
 ## Contributing
 
