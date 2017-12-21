@@ -3,15 +3,15 @@ const Vue = require('./nativescript-vue')
 new Vue({
   template: `
         <page>
-            <list-view :items="items">
-                <template scope="item">
+            <list-view for="item in items">
+                <v-template >
                     <flexbox-layout class="line">
-                        <label :text="item.$index" ></label>
+                        <label :text="$index" ></label>
                         <label :text="item.text" ></label>
                         <label :text="item.user.name" ></label>
                         <label :text="item.user.meta.age" ></label>
                     </flexbox-layout>
-                </template>
+                </v-template>
             </list-view>
         </page>
     `,
