@@ -32,20 +32,20 @@ new Vue({
   template: `
     <Page>
         <StackLayout>
-            <list-view :items="items">
+            <list-view for="line in items">
                 <v-template>
                     <StackLayout style="padding: 50;">
-                        <Label :text="item.value" style="color: blue;"/>
+                        <Label :text="line" style="color: blue;"/>
                     </StackLayout>
                 </v-template>
-                <v-template if="item.value.length == 2">
+                <v-template if="line.value.length == 2">
                     <StackLayout style="padding: 50;">
-                        <Label :text="item.value" style="color: green;"/>
+                        <Label :text="line" style="color: green;"/>
                     </StackLayout>
                 </v-template>
-                <v-template if="item.odd">
+                <v-template if="line.odd">
                     <StackLayout style="padding: 50;">
-                        <Label :text="item.value" style="color: red;"/>
+                        <Label :text="line" style="color: red;"/>
                     </StackLayout>
                 </v-template>
             </list-view>
