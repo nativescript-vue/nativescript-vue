@@ -62,6 +62,9 @@ const genConfig = (name) => {
             banner: opts.banner,
             name: opts.moduleName
         },
+        treeshake: {
+            pureExternalModules: id => id.startsWith('weex')
+        },
         plugins: [
             replace({
                 __WEEX__: false,
