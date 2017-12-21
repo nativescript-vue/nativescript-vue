@@ -45,7 +45,7 @@
     "he": "^1.1.1",
     "lint-staged": "^4.3.0",
     "util-inspect": "^0.1.8",
-    "vue": "^2.5.8"
+    "vue": "^2.5.13"
   },
   "peerDependencies": {
     "tns-core-modules": "^3.0.0"
