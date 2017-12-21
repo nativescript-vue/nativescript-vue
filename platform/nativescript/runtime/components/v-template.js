@@ -10,14 +10,8 @@ export default {
     name: {
       type: String
     },
-
     if: {
       type: String
-    },
-
-    '+alias': {
-      type: String,
-      default: 'item'
     }
   },
 
@@ -31,7 +25,6 @@ export default {
     this.$templates.registerTemplate(
       this.$props.name || (this.$props.if ? `v-template-${tid++}` : 'default'),
       this.$props.if,
-      this.$props['+alias'],
       this.$scopedSlots.default
     )
   },
@@ -44,12 +37,10 @@ export class TemplateBag {
     this._templateMap = new Map()
   }
 
-  registerTemplate(name, condition, alias, scopedFn) {
+  registerTemplate(name, condition, scopedFn) {
     this._templateMap.set(name, {
-      condition,
-      alias,
-      conditionFn: this.getConditionFn(condition, alias),
       scopedFn,
+      conditionFn: this.getConditionFn(condition),
       keyedTemplate: new VueKeyedTemplate(name, scopedFn)
     })
   }
@@ -69,19 +60,16 @@ export class TemplateBag {
     }
   }
 
-  getConditionFn(condition, alias) {
-    return new Function(alias, `return !!(${condition})`)
+  getConditionFn(condition) {
+    return new Function('ctx', `with(ctx) { return !!(${condition}) }`)
   }
 
   getKeyedTemplate(name) {
-    const { keyedTemplate } = this._templateMap.get(name)
-    return keyedTemplate
+    return this._templateMap.get(name).keyedTemplate
   }
 
   patchTemplate(name, context, oldVnode) {
-    const { scopedFn } = this._templateMap.get(name)
-
-    const vnode = scopedFn(context)
+    const vnode = this._templateMap.get(name).scopedFn(context)
     const nativeView = patch(oldVnode, vnode).nativeView
     nativeView[VUE_VIEW] = vnode
 
@@ -113,7 +101,6 @@ export class VueKeyedTemplate /* implements KeyedTemplate */ {
     const vnode = this._scopedFn(deepProxy({}))
     const nativeView = patch(null, vnode).nativeView
     nativeView[VUE_VIEW] = vnode
-
     return nativeView
   }
 }

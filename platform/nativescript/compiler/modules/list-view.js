@@ -14,6 +14,10 @@ function preTransformNode(el) {
 
   addRawAttr(el, ':items', res.for)
   addRawAttr(el, '+alias', res.alias)
+
+  if (res.iterator1) {
+    addRawAttr(el, '+index', res.iterator1)
+  }
 }
 
 export default {

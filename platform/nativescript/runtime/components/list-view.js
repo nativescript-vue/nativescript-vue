@@ -9,6 +9,13 @@ export default {
     },
     separatorColor: {
       type: String
+    },
+    '+alias': {
+      type: String,
+      default: 'item'
+    },
+    '+index': {
+      type: String
     }
   },
 
@@ -48,16 +55,16 @@ export default {
   },
 
   mounted() {
+    this.getItemContext = (item, index) =>
+      getItemContext(item, index, this.$props['+alias'], this.$props['+index'])
+
     this.$refs.listView.setAttribute('items', this.items)
     this.$refs.listView.setAttribute(
       '_itemTemplatesInternal',
       this.$templates.getKeyedTemplates()
     )
-    this.$refs.listView.setAttribute('_itemTemplateSelector', (
-      item,
-      index /*,items*/
-    ) => {
-      return this.$templates.selectorFn(new ItemContext(item, index))
+    this.$refs.listView.setAttribute('_itemTemplateSelector', (item, index) => {
+      return this.$templates.selectorFn(this.getItemContext(item, index))
     })
   },
 
@@ -71,28 +78,20 @@ export default {
           ? items.getItem(index)
           : items[index]
 
-      const context = new ItemContext(currentItem, index)
       const name = args.object._itemTemplateSelector(context, index, items)
+      const context = this.getItemContext(currentItem, index)
+      const oldVnode = args.view && args.view[VUE_VIEW]
 
-      let oldVnode = args.view && args.view[VUE_VIEW]
       args.view = this.$templates.patchTemplate(name, context, oldVnode)
     }
   }
 }
 
-class ItemContext {
-  constructor(item, index) {
-    this.$index = index
-    if (typeof item === 'object') {
-      Object.assign(this, item)
-    } else {
-      this.value = item
-    }
-    this.even = index % 2 === 0
-    this.odd = !this.even
-  }
-
-  toString() {
-    return this.value && this.value.toString()
+function getItemContext(item, index, alias, index_alias) {
+  return {
+    [alias]: item,
+    [index_alias || '$index']: index,
+    $even: index % 2 === 0,
+    $odd: index % 2 !== 0
   }
 }
