@@ -86,6 +86,7 @@ Vue.prototype.$mount = function(el, hydrating) {
   return mount.call(this, el, hydrating)
 }
 
+Vue.compile = compileToFunctions
 Vue.prototype.$renderTemplate = function(template, context, oldVnode) {
   let slot = template
   if (typeof template !== 'function') {

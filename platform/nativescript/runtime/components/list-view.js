@@ -91,4 +91,8 @@ class ItemContext {
     this.even = index % 2 === 0
     this.odd = !this.even
   }
+
+  toString() {
+    return this.value && this.value.toString()
+  }
 }

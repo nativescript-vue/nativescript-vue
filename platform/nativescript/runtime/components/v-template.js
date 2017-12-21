@@ -13,6 +13,11 @@ export default {
 
     if: {
       type: String
+    },
+
+    '+alias': {
+      type: String,
+      default: 'item'
     }
   },
 
@@ -26,6 +31,7 @@ export default {
     this.$templates.registerTemplate(
       this.$props.name || (this.$props.if ? `v-template-${tid++}` : 'default'),
       this.$props.if,
+      this.$props['+alias'],
       this.$scopedSlots.default
     )
   },
@@ -38,10 +44,11 @@ export class TemplateBag {
     this._templateMap = new Map()
   }
 
-  registerTemplate(name, condition, scopedFn) {
+  registerTemplate(name, condition, alias, scopedFn) {
     this._templateMap.set(name, {
       condition,
-      conditionFn: this.getConditionFn(condition),
+      alias,
+      conditionFn: this.getConditionFn(condition, alias),
       scopedFn,
       keyedTemplate: new VueKeyedTemplate(name, scopedFn)
     })
@@ -62,8 +69,8 @@ export class TemplateBag {
     }
   }
 
-  getConditionFn(condition) {
-    return new Function('item', `return !!(${condition})`)
+  getConditionFn(condition, alias) {
+    return new Function(alias, `return !!(${condition})`)
   }
 
   getKeyedTemplate(name) {
