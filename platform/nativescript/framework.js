@@ -1,5 +1,18 @@
+import inspect from 'util-inspect'
+
+console.log = (function(log, inspect) {
+  return function() {
+    return log.apply(
+      this,
+      Array.prototype.map.call(arguments, function(arg) {
+        return inspect(arg, { depth: 1, colors: true })
+      })
+    )
+  }
+})(console.log, inspect)
+
 console.keys = function(object) {
-  console.dir(Object.keys(object))
+  console.log(Object.keys(object))
 }
 
 // This is required because some of the third party plugins rely on this
