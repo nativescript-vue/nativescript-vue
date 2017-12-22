@@ -24,17 +24,7 @@ export default {
       'native-list-view',
       {
         ref: 'listView',
-        on: {
-          itemLoading: this.onItemLoading,
-          itemTap: args =>
-            this.$emit(
-              'itemTap',
-              Object.assign({ item: this.items[args.index] }, args)
-            ),
-          loaded: args => this.$emit('loaded', args),
-          unloaded: args => this.$emit('unloaded', args),
-          loadMoreItems: args => this.$emit('loadMoreItems', args)
-        },
+        on: this._on,
         domProps: {
           items: this.items,
           separatorColor: this.separatorColor
@@ -51,6 +41,20 @@ export default {
         this.$refs.listView.nativeView.refresh()
       },
       deep: true
+    }
+  },
+
+  created() {
+    this._on = {
+      itemLoading: this.onItemLoading,
+      itemTap: args =>
+        this.$emit(
+          'itemTap',
+          Object.assign({ item: this.items[args.index] }, args)
+        ),
+      loaded: args => this.$emit('loaded', args),
+      unloaded: args => this.$emit('unloaded', args),
+      loadMoreItems: args => this.$emit('loadMoreItems', args)
     }
   },
 
