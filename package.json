@@ -6,10 +6,10 @@
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
+    "samples": "node build/sample-runner.js",
     "dev": "rollup -c build/config.js -w --o samples/app/nativescript-vue.js --environment TARGET:nativescript-vue",
-    "samples": "node sample-runner.js",
-    "build:docs": "cd docs && npm run build",
     "build": "node build/build.js",
+    "build:docs": "cd docs && npm run build",
     "precommit": "lint-staged",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js"

@@ -1,14 +1,14 @@
 const inquirer = require('inquirer')
-const chalk = require('chalk')
 const fs = require('fs')
+const path = require('path')
 const { spawn } = require('child_process')
-const samplePackage = require('./samples/app/package.json')
+const samplePackage = require('../samples/app/package.json')
 const originalMain = samplePackage.main
 
 let tns
 
 const files = fs
-  .readdirSync('./samples/app')
+  .readdirSync(path.resolve(__dirname, '../samples/app'))
   .filter(file => file.endsWith('.js'))
   .filter(file => !file.startsWith('nativescript-vue'))
 
@@ -30,17 +30,11 @@ inquirer
   .then(res => {
     setMain(res.sample)
     tns = spawn('tns', ['run', res.platform], {
-      cwd: './samples'
+      cwd: path.resolve(__dirname, '../samples')
     })
 
-    tns.on('error', err => {
-      console.log(err)
-    })
-
-    tns.stdout.on('data', chunk => {
-      const line = chunk.toString().trim()
-      console.log(line)
-    })
+    tns.on('error', err => console.log(err))
+    tns.stdout.on('data', data => process.stdout.write(data))
   })
 
 function shutDown() {
@@ -58,7 +52,7 @@ function shutDown() {
 function setMain(file) {
   samplePackage.main = file
   fs.writeFileSync(
-    './samples/app/package.json',
+    path.resolve(__dirname, '../samples/app/package.json'),
     JSON.stringify(samplePackage, null, 2)
   )
 }
