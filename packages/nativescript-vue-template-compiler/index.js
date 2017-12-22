@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.0
+ * NativeScript-Vue-Template-Compiler v0.7.1
  * (Using Vue v2.5.13)
  * (c) 2017-2017 rigor789
  * Released under the MIT license.
@@ -4053,6 +4053,10 @@ function preTransformNode(el) {
 
   addRawAttr(el, ':items', res.for);
   addRawAttr(el, '+alias', res.alias);
+
+  if (res.iterator1) {
+    addRawAttr(el, '+index', res.iterator1);
+  }
 }
 
 var listView = {
@@ -4060,20 +4064,19 @@ var listView = {
 }
 
 function preTransformNode$1(el) {
-  if (el.tag === 'v-template') {
-    // set +alias property on the v-template component
-    var alias = el.parent.attrsMap['+alias'] || 'item';
-    addRawAttr(el, '+alias', alias);
-  }
-
   if (el.parent && el.parent.tag === 'v-template') {
-    // set the slot scope to the list-view +alias attribute
-    el.slotScope = el.parent.parent.attrsMap['+alias'] || 'item';
+    var alias = el.parent.parent.attrsMap['+alias'] || 'item';
+    var index = el.parent.parent.attrsMap['+index'] || '$index';
+    el.slotScope = buildScopeString(alias, index);
   }
 }
 
 var vTemplate = {
   preTransformNode: preTransformNode$1
+}
+
+function buildScopeString(alias, index) {
+  return ("{ " + alias + ", " + index + ", $even, $odd }")
 }
 
 // transforms ~test -> v-view:test
