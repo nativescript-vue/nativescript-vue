@@ -1,4 +1,5 @@
 import { patch } from '../patch'
+import { deepProxy } from '../../util'
 
 export const VUE_VIEW = '__vueVNodeRef__'
 
@@ -52,9 +53,11 @@ export class TemplateBag {
       let curr
       while ((curr = iterator.next().value)) {
         const [name, { conditionFn }] = curr
-        if (conditionFn(item)) {
-          return name
-        }
+        try {
+          if (conditionFn(item)) {
+            return name
+          }
+        } catch (err) {}
       }
       return 'default'
     }
@@ -103,15 +106,4 @@ export class VueKeyedTemplate /* implements KeyedTemplate */ {
     nativeView[VUE_VIEW] = vnode
     return nativeView
   }
-}
-
-function deepProxy(object, depth = 0) {
-  return new Proxy(object, {
-    get() {
-      if (depth > 10) {
-        throw new Error('deepProxy over 10 deep.')
-      }
-      return deepProxy({}, depth + 1)
-    }
-  })
 }

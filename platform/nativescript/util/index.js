@@ -57,3 +57,14 @@ export function after(original, thisArg, wrap) {
     original.apply(thisArg, args)
   }
 }
+
+export function deepProxy(object, depth = 0) {
+  return new Proxy(object, {
+    get() {
+      if (depth > 10) {
+        throw new Error('deepProxy over 10 deep.')
+      }
+      return deepProxy({}, depth + 1)
+    }
+  })
+}
