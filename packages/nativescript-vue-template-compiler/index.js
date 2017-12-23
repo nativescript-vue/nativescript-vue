@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.1
+ * NativeScript-Vue-Template-Compiler v0.7.2
  * (Using Vue v2.5.13)
  * (c) 2017-2017 rigor789
  * Released under the MIT license.
@@ -4045,11 +4045,27 @@ function preTransformNode(el) {
   if (normalizeElementName(el.tag) !== 'listview') {
     return
   }
-  var exp = getAndRemoveAttr(el, 'for');
+
+  var vfor = getAndRemoveAttr(el, 'v-for');
+  delete el.attrsMap['v-for'];
+  if ('development' !== 'production' && vfor) {
+    warn$1(
+      "The v-for directive is not supported on a " + (el.tag) + ", " +
+        'Use the "for" attribute instead. For example, instead of ' +
+        "<" + (el.tag) + " v-for=\"" + vfor + "\"> use <" + (el.tag) + " for=\"" + vfor + "\">."
+    );
+  }
+
+  var exp = getAndRemoveAttr(el, 'for') || vfor;
   if (!exp) { return }
 
   var res = parseFor(exp);
-  if (!res) { return }
+  if (!res) {
+    {
+      warn$1(("Invalid for expression: " + exp));
+    }
+    return
+  }
 
   addRawAttr(el, ':items', res.for);
   addRawAttr(el, '+alias', res.alias);
@@ -4097,7 +4113,7 @@ var view = {
 var modules = [class_, style, vTemplate, listView, view]
 
 function model(el, dir, _warn) {
-  if (el.type === 1) {
+  if (el.type === 1 && el.plain) {
     genDefaultModel(el, dir.value, dir.modifiers);
   } else {
     genComponentModel(el, dir.value, dir.modifiers);
