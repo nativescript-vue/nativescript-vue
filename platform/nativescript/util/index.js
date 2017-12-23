@@ -1,5 +1,6 @@
-import { makeMap } from 'shared/util'
+import { makeMap, once } from 'shared/util'
 import { isKnownView, getViewMeta } from '../element-registry'
+import Vue from '../framework'
 
 export const isReservedTag = makeMap('template', true)
 
@@ -34,7 +35,17 @@ export function query(el, renderer, document) {
 export const VUE_VERSION = process.env.VUE_VERSION
 export const NS_VUE_VERSION = process.env.NS_VUE_VERSION
 
+const infoTrace = once(() => {
+  console.log(
+    `NativeScript-Vue has "Vue.config.silent" set to true, to see output logs set it to false.`
+  )
+})
+
 export function trace(message) {
+  if (Vue.config.silent) {
+    return infoTrace()
+  }
+
   console.log(
     `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
   )
