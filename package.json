@@ -12,6 +12,7 @@
     "build:docs": "cd docs && npm run build",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js",
+    "release:notes": "node build/gen-release-notes.js",
     "commit": "git-cz"
   },
   "repository": {
@@ -57,6 +58,7 @@
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
     "commitizen": "^2.9.6",
+    "conventional-changelog": "^1.1.7",
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^0.15.0-beta.16",
     "inquirer": "^3.3.0",

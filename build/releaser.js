@@ -46,6 +46,7 @@ inquirer
       git add -A
       git add -f dist/index.js dist/index.js.map packages/nativescript-vue-template-compiler/index.js
       git commit -m "${buildMessage}"
+      npm run release:notes
       npm version ${version} -m "${releaseMessage}"
       echo "Pushing to git"
       git push origin refs/tags/v${version}

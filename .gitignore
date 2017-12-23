@@ -10,3 +10,4 @@ samples/app/nativescript-vue.js.map
 dist/
 packages/nativescript-vue-template-compiler/index.js
 !docs/dist/
+RELEASE_NOTES*.md
