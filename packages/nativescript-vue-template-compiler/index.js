@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.3
+ * NativeScript-Vue-Template-Compiler v0.7.4
  * (Using Vue v2.5.13)
  * (c) 2017-2017 rigor789
  * Released under the MIT license.
