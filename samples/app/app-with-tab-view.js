@@ -1,8 +1,8 @@
 const Vue = require('./nativescript-vue')
-
+Vue.config.debug = true
 let app = new Vue({
   data: {
-    selectedTab: 0,
+    activeTab: 1,
     tabs: [
       { title: 'First Tab', text: 'im the first tab' },
       { title: 'Second Tab', text: 'im the second tab' },
@@ -24,9 +24,11 @@ let app = new Vue({
               </stack-layout>
             </action-bar>
             <stack-layout>
+                <Label :text="activeTab"/>
                 <button @tap="tabs.push({title: 'added', text: 'added tab'})">Click me!</button>
-                <tab-view :selectedIndex="selectedTab">
-                    <tab-view-item  v-for="(tab, i) in tabs" key="i" :title="tab.title">
+                <button @tap="activeTab = tabs.length - 1">Go to last!</button>
+                <tab-view v-model="activeTab">
+                    <tab-view-item v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title">
                         <label>{{ tab.text }}</label>
                     </tab-view-item>
                 </tab-view>

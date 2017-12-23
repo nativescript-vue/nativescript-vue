@@ -2,10 +2,8 @@ import { addHandler, addAttr } from 'compiler/helpers'
 import { genComponentModel, genAssignmentCode } from 'compiler/directives/model'
 import { getViewMeta } from '../../element-registry'
 
-const valueTypes = ['text', 'value', 'checked', 'date', 'selectedIndex', 'time']
-
 export default function model(el, dir, _warn) {
-  if (el.type === 1) {
+  if (el.type === 1 && el.plain) {
     genDefaultModel(el, dir.value, dir.modifiers)
   } else {
     genComponentModel(el, dir.value, dir.modifiers)

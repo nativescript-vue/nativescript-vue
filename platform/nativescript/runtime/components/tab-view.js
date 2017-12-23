@@ -1,32 +1,37 @@
 export default {
   name: 'tab-view',
 
-  props: ['selectedTab'],
+  model: {
+    prop: 'tab',
+    event: 'tabChange'
+  },
 
-  template: `
-    <native-tab-view ref="tabView" v-model="selectedIndex">
-      <slot></slot>
-    </native-tab-view>
-  `,
-
-  data() {
-    return {
-      selectedIndex: 0
+  props: {
+    tab: {
+      type: Number,
+      default: 0
     }
   },
 
-  watch: {
-    selectedTab(index) {
-      this.selectedIndex = index
-    },
-    selectedIndex(index) {
-      this.$emit('tabChange', index)
-    }
+  render(h) {
+    return h(
+      'native-tab-view',
+      {
+        ref: 'tabView',
+        on: {
+          selectedIndexChange: ({ value }) => this.$emit('tabChange', value)
+        },
+        attrs: {
+          selectedIndex: this.$props.tab
+        }
+      },
+      this.$slots.default
+    )
   },
 
   methods: {
     registerTab(tabView) {
-      let items = this.$refs.tabView.nativeView.items || []
+      const items = this.$refs.tabView.nativeView.items || []
 
       this.$refs.tabView.setAttribute('items', items.concat([tabView]))
     }
