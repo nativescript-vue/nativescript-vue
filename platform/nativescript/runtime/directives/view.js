@@ -1,9 +1,13 @@
 export default {
-  inserted(el, { arg }) {
-    const parent = el.parentNode
+  inserted(el, { arg, modifiers }) {
+    const parent = el.parentNode.nativeView
 
     if (parent) {
-      parent.setAttribute(arg, el.nativeView)
+      if (modifiers.array) {
+        parent[arg] = (parent[arg] || []).push(el.nativeView)
+      } else {
+        parent[arg] = el.nativeView
+      }
     }
   }
 }

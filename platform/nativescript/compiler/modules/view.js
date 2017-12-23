@@ -6,8 +6,13 @@ function transformNode(el) {
 
   if (attr) {
     const attrName = attr.substr(1)
+    let [arg, ...modifiers] = attrName.split('.')
+    modifiers = modifiers.reduce((mods, mod) => {
+      mods[mod] = true
+      return mods
+    }, {})
     getAndRemoveAttr(el, attr)
-    addDirective(el, 'view', `v-view:${attrName}`, '', attrName)
+    addDirective(el, 'view', `v-view:${attrName}`, '', arg, modifiers)
   }
 }
 
