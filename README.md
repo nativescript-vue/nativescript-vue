@@ -29,6 +29,7 @@ these awesome backers:
 - Tiago Alves
 - Kamen Bundev
 - Jan Weller
+- OpenLitterMap
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
