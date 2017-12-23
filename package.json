@@ -42,15 +42,7 @@
       "category": "Developer"
     }
   },
-  "dependencies": {
-    "he": "^1.1.1",
-    "lint-staged": "^4.3.0",
-    "util-inspect": "^0.1.8",
-    "vue": "^2.5.13"
-  },
-  "peerDependencies": {
-    "tns-core-modules": "^3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^5.2.6",
     "@commitlint/config-conventional": "^5.2.3",
@@ -64,6 +56,7 @@
     "inquirer": "^3.3.0",
     "jest": "^19.0.2",
     "jest-junit": "^1.5.1",
+    "lint-staged": "^6.0.0",
     "prettier": "^1.8.2",
     "rollup": "^0.52.2",
     "rollup-plugin-alias": "^1.4.0",
@@ -75,7 +68,9 @@
     "rollup-plugin-resolve-aliases": "^0.2.0",
     "rollup-watch": "^3.2.2",
     "semver": "^5.4.1",
-    "tns-core-modules": "^3.3.0"
+    "tns-core-modules": "^3.3.0",
+    "util-inspect": "^0.1.8",
+    "vue": "^2.5.13"
   },
   "jest": {
     "verbose": true,
