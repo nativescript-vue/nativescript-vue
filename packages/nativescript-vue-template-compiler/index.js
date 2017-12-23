@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.4
+ * NativeScript-Vue-Template-Compiler v0.7.5
  * (Using Vue v2.5.13)
  * (c) 2017-2017 rigor789
  * Released under the MIT license.
@@ -4101,8 +4101,15 @@ function transformNode$2(el) {
 
   if (attr) {
     var attrName = attr.substr(1);
+    var ref = attrName.split('.');
+    var arg = ref[0];
+    var modifiers = ref.slice(1);
+    modifiers = modifiers.reduce(function (mods, mod) {
+      mods[mod] = true;
+      return mods
+    }, {});
     getAndRemoveAttr(el, attr);
-    addDirective(el, 'view', ("v-view:" + attrName), '', attrName);
+    addDirective(el, 'view', ("v-view:" + attrName), '', arg, modifiers);
   }
 }
 
