@@ -10,7 +10,6 @@
     "dev": "rollup -c build/config.js -w --o samples/app/nativescript-vue.js --environment TARGET:nativescript-vue",
     "build": "node build/build.js",
     "build:docs": "cd docs && npm run build",
-    "precommit": "lint-staged",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js",
     "commit": "git-cz"
@@ -52,12 +51,14 @@
     "tns-core-modules": "^3.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^5.2.6",
+    "@commitlint/config-conventional": "^5.2.3",
     "babel-jest": "^19.0.0",
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
     "commitizen": "^2.9.6",
     "cz-conventional-changelog": "^2.1.0",
-    "husky": "^0.14.3",
+    "husky": "^0.15.0-beta.16",
     "inquirer": "^3.3.0",
     "jest": "^19.0.2",
     "jest-junit": "^1.5.1",
@@ -85,6 +86,12 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -e $GIT_PARAMS"
+    }
   },
   "lint-staged": {
     "linters": {
