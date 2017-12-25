@@ -31,6 +31,7 @@ these awesome backers:
 - Jan Weller
 - OpenLitterMap
 - Aparajita Fishman
+- Hajnalka Molnár Csikós
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
