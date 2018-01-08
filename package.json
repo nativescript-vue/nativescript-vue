@@ -79,7 +79,7 @@
       "<rootDir>/platform/nativescript"
     ],
     "collectCoverageFrom": [
-      "**/*.js",
+      "platform/**/*.js",
       "!**/node_modules/**"
     ],
     "moduleDirectories": [
