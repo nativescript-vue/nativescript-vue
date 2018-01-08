@@ -24,7 +24,7 @@
     "nativescript",
     "integration"
   ],
-  "author": "rigor789",
+  "author": "Igor Randjelovic",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rigor789/nativescript-vue/issues"
@@ -47,6 +47,7 @@
     "@commitlint/cli": "^5.2.6",
     "@commitlint/config-conventional": "^5.2.3",
     "babel-jest": "^19.0.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
     "commitizen": "^2.9.6",
@@ -54,7 +55,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^0.15.0-beta.16",
     "inquirer": "^3.3.0",
-    "jest": "^19.0.2",
+    "jest": "^22.0.4",
     "jest-junit": "^1.5.1",
     "lint-staged": "^6.0.0",
     "prettier": "^1.8.2",
@@ -77,8 +78,18 @@
     "modulePaths": [
       "<rootDir>/platform/nativescript"
     ],
-    "collectCoverage": true,
-    "testResultsProcessor": "./node_modules/jest-junit"
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/node_modules/tns-core-modules"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/samples"
+    ],
+    "collectCoverage": true
   },
   "prettier": {
     "semi": false,
