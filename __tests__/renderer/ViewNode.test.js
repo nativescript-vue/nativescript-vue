@@ -1,21 +1,19 @@
 import ViewNode from 'renderer/ViewNode'
 import * as elReg from 'element-registry'
 
-jest.mock('renderer/utils', () => {
-  return {
-    insertChild: jest.fn(),
-    removeChild: jest.fn()
-  }
-})
+jest.mock('renderer/utils', () => ({
+  insertChild: jest.fn(),
+  removeChild: jest.fn()
+}))
 
 describe('ViewNode', () => {
-  it('firstChild returns null initially', () => {
+  test('firstChild returns null initially', () => {
     let node = new ViewNode()
 
     expect(node.firstChild).toBeNull()
   })
 
-  it('firstChild returns the only child', () => {
+  test('firstChild returns the only child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
 
@@ -24,7 +22,7 @@ describe('ViewNode', () => {
     expect(node.firstChild).toEqual(childNode)
   })
 
-  it('firstChild returns the correct child', () => {
+  test('firstChild returns the correct child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     let otherChildNode = new ViewNode()
@@ -34,13 +32,13 @@ describe('ViewNode', () => {
     expect(node.firstChild).toEqual(childNode)
   })
 
-  it('lastChild returns null initially', () => {
+  test('lastChild returns null initially', () => {
     let node = new ViewNode()
 
     expect(node.lastChild).toBeNull()
   })
 
-  it('lastChild returns the only child', () => {
+  test('lastChild returns the only child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
 
@@ -49,7 +47,7 @@ describe('ViewNode', () => {
     expect(node.lastChild).toEqual(childNode)
   })
 
-  it('lastChild returns the correct child', () => {
+  test('lastChild returns the correct child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     let otherChildNode = new ViewNode()
@@ -59,13 +57,13 @@ describe('ViewNode', () => {
     expect(node.lastChild).toEqual(childNode)
   })
 
-  it('insertBefore throws if no childNode is given', () => {
+  test('insertBefore throws if no childNode is given', () => {
     let node = new ViewNode()
 
     expect(node.insertBefore).toThrow(`Can't insert child.`)
   })
 
-  it('insertBefore throws if childNode has a different parent', () => {
+  test('insertBefore throws if childNode has a different parent', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = new ViewNode()
@@ -75,7 +73,7 @@ describe('ViewNode', () => {
     )
   })
 
-  it('insertBefore throws if childNode is already a child', () => {
+  test('insertBefore throws if childNode is already a child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = node
@@ -83,7 +81,7 @@ describe('ViewNode', () => {
     expect(() => node.insertBefore(childNode)).toThrow(`already a child`)
   })
 
-  it('insertBefore throws if reference node has a different parent', () => {
+  test('insertBefore throws if reference node has a different parent', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     let refNode = new ViewNode()
@@ -95,7 +93,7 @@ describe('ViewNode', () => {
     )
   })
 
-  it('insertBefore sets the correct node relations', () => {
+  test('insertBefore sets the correct node relations', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     let refNode = new ViewNode()
@@ -112,13 +110,13 @@ describe('ViewNode', () => {
     expect(refNode.nextSibling).toBeFalsy()
   })
 
-  it('appendChild throws if no childNode is given', () => {
+  test('appendChild throws if no childNode is given', () => {
     let node = new ViewNode()
 
     expect(node.appendChild).toThrow(`Can't append child.`)
   })
 
-  it('appendChild throws if childNode has a different parent', () => {
+  test('appendChild throws if childNode has a different parent', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = new ViewNode()
@@ -128,7 +126,7 @@ describe('ViewNode', () => {
     )
   })
 
-  it('appendChild throws if childNode is already a child', () => {
+  test('appendChild throws if childNode is already a child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = node
@@ -136,7 +134,7 @@ describe('ViewNode', () => {
     expect(() => node.appendChild(childNode)).toThrow(`already a child`)
   })
 
-  it('appendChild sets the correct node relations for only child', () => {
+  test('appendChild sets the correct node relations for only child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
 
@@ -147,7 +145,7 @@ describe('ViewNode', () => {
     expect(childNode.prevSibling).toBeFalsy()
   })
 
-  it('appendChild sets the correct node relations for multiple children', () => {
+  test('appendChild sets the correct node relations for multiple children', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     let prevChildNode = new ViewNode()
@@ -160,13 +158,13 @@ describe('ViewNode', () => {
     expect(prevChildNode.nextSibling).toEqual(childNode)
   })
 
-  it('removeChild throws if no childNode is given', () => {
+  test('removeChild throws if no childNode is given', () => {
     let node = new ViewNode()
 
     expect(node.removeChild).toThrow(`Can't remove child.`)
   })
 
-  it('removeChild throws if childNode has a different parent', () => {
+  test('removeChild throws if childNode has a different parent', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = new ViewNode()
@@ -174,14 +172,14 @@ describe('ViewNode', () => {
     expect(() => node.removeChild(childNode)).toThrow(`different parent.`)
   })
 
-  it('removeChild throws if childNode has no parent', () => {
+  test('removeChild throws if childNode has no parent', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
 
     expect(() => node.removeChild(childNode)).toThrow(`no parent.`)
   })
 
-  it('removeChild sets the correct node relations for firstChild', () => {
+  test('removeChild sets the correct node relations for firstChild', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     let nextChildNode = new ViewNode()
@@ -196,7 +194,7 @@ describe('ViewNode', () => {
     expect(nextChildNode.prevSibling).toBeNull()
   })
 
-  it('removeChild sets the correct node relations for lastChild', () => {
+  test('removeChild sets the correct node relations for lastChild', () => {
     let node = new ViewNode()
     let prevChildNode = new ViewNode()
     let childNode = new ViewNode()
@@ -211,7 +209,7 @@ describe('ViewNode', () => {
     expect(prevChildNode.nextSibling).toBeNull()
   })
 
-  it('removeChild sets the correct node relations for prevChildNode and nextChildNode', () => {
+  test('removeChild sets the correct node relations for prevChildNode and nextChildNode', () => {
     let node = new ViewNode()
     let prevChildNode = new ViewNode()
     let childNode = new ViewNode()
@@ -232,9 +230,9 @@ describe('ViewNode', () => {
     expect(childNode.parentNode).toBeNull()
   })
 
-  it('nativeView can be set once', () => {
+  test('nativeView can be set once', () => {
     let node = new ViewNode()
-    let dummyView = { name: 'dummy' }
+    let dummyView = {name: 'dummy'}
     node.nativeView = dummyView
 
     expect(node.nativeView).toEqual(dummyView)
@@ -242,14 +240,14 @@ describe('ViewNode', () => {
 
   it("nativeView can't be set multiple times", () => {
     let node = new ViewNode()
-    let dummyView = { name: 'dummy' }
+    let dummyView = {name: 'dummy'}
     node.nativeView = dummyView
 
     expect(() => (node.nativeView = dummyView)).toThrow(`Can't override`)
     expect(node.nativeView).toEqual(dummyView)
   })
 
-  it('meta should be fetched only once upon get', () => {
+  test('meta should be fetched only once upon get', () => {
     elReg.getViewMeta = jest.fn()
     elReg.getViewMeta.mockReturnValue('meta')
 
@@ -265,7 +263,7 @@ describe('ViewNode', () => {
     expect(second_meta).toEqual('meta')
   })
 
-  it('tagName should be normalized', () => {
+  test('tagName should be normalized', () => {
     let node = new ViewNode()
 
     node.tagName = 'Testing'
