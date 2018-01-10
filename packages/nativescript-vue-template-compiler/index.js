@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.6
+ * NativeScript-Vue-Template-Compiler v0.7.7
  * (Using Vue v2.5.13)
  * (c) 2017-2018 rigor789
  * Released under the MIT license.
@@ -12078,9 +12078,7 @@ console.keys = function(object) {
 application__default.on(application__default.exitEvent, function () {
   var frame$$1 = frame.topmost();
   if (frame$$1) {
-    console.log(frame$$1);
     frame$$1.eachChildView(function (child) {
-      console.log('found child');
       var vm = child[VUE_VM_REF];
 
       if (vm) {
@@ -12090,6 +12088,27 @@ application__default.on(application__default.exitEvent, function () {
     });
   }
 });
+
+global.__onLiveSyncCore = function () {
+  var frame$$1 = frame.topmost();
+  if (frame$$1) {
+    if (frame$$1.currentPage && frame$$1.currentPage.modal) {
+      frame$$1.currentPage.modal.closeModal();
+    }
+    // Todo: make sure that the before-livesync hook is installed, because otherwise the page will always get reloaded.
+    // const currentEntry = frame._currentEntry && frame._currentEntry.entry
+    // if (currentEntry) {
+
+    // const newEntry = {
+    //   animated: false,
+    //   clearHistory: true,
+    //   create: () => {  } ,
+    //   backstackVisible: currentEntry.backstackVisible
+    // }
+    // frame.navigate(newEntry)
+    // }
+  }
+};
 
 var isReservedTag = makeMap('template', true);
 
@@ -12120,7 +12139,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.13';
-var NS_VUE_VERSION = '0.7.6';
+var NS_VUE_VERSION = '0.7.7';
 
 var infoTrace = once(function () {
   console.log(
