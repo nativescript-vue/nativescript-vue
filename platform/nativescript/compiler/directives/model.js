@@ -1,9 +1,9 @@
 import { addHandler, addAttr } from 'compiler/helpers'
 import { genComponentModel, genAssignmentCode } from 'compiler/directives/model'
-import { getViewMeta } from '../../element-registry'
+import { isKnownView, getViewMeta } from '../../element-registry'
 
 export default function model(el, dir, _warn) {
-  if (el.type === 1 && el.plain) {
+  if (el.type === 1 && isKnownView(el.tag)) {
     genDefaultModel(el, dir.value, dir.modifiers)
   } else {
     genComponentModel(el, dir.value, dir.modifiers)
