@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.7
+ * NativeScript-Vue-Template-Compiler v0.7.8
  * (Using Vue v2.5.13)
  * (c) 2017-2018 rigor789
  * Released under the MIT license.
@@ -4811,7 +4811,7 @@ var view$1 = {
 var modules = [class_, style, vTemplate, listView, view$1]
 
 function model(el, dir, _warn) {
-  if (el.type === 1 && el.plain) {
+  if (el.type === 1 && isKnownView(el.tag)) {
     genDefaultModel(el, dir.value, dir.modifiers);
   } else {
     genComponentModel(el, dir.value, dir.modifiers);
@@ -12139,7 +12139,7 @@ function isPage(el) {
 
 
 var VUE_VERSION = '2.5.13';
-var NS_VUE_VERSION = '0.7.7';
+var NS_VUE_VERSION = '0.7.8';
 
 var infoTrace = once(function () {
   console.log(
