@@ -21,11 +21,13 @@ export default {
         const navigate = frame ? frame.navigate : start
 
         if (isPage(component)) {
-          return navigate({
-            create() {
-              return component
-            }
-          })
+          return navigate(
+            Object.assign(options, {
+              create() {
+                return component
+              }
+            })
+          )
         }
 
         const placeholder = Vue.$document.createComment('placeholder')

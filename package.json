@@ -69,7 +69,7 @@
     "rollup-plugin-resolve-aliases": "^0.2.0",
     "rollup-watch": "^3.2.2",
     "semver": "^5.4.1",
-    "tns-core-modules": "^3.3.0",
+    "tns-core-modules": "^3.4.0",
     "util-inspect": "^0.1.8",
     "vue": "^2.5.13"
   },
@@ -83,8 +83,7 @@
       "!**/node_modules/**"
     ],
     "moduleDirectories": [
-      "node_modules",
-      "<rootDir>/node_modules/tns-core-modules"
+      "node_modules"
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/samples"

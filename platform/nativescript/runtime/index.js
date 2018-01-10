@@ -53,6 +53,8 @@ const mount = function(el, hydrating) {
           page.content = self.$el.nativeView
         }
 
+        page[VUE_VM_REF] = self
+
         return page
       }
     })
