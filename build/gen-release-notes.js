@@ -5,6 +5,7 @@ const fileStream = require('fs').createWriteStream(file)
 
 cc({
   preset: 'angular',
+  releaseCount: 2,
   pkg: {
     transform(pkg) {
       if (version) {
