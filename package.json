@@ -3,6 +3,10 @@
   "version": "0.7.6",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
+  "files": [
+    "dist/index.js",
+    "platform/nativescript/hooks/"
+  ],
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
