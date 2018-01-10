@@ -39,9 +39,7 @@ console.keys = function(object) {
 application.on(application.exitEvent, () => {
   const frame = topmost()
   if (frame) {
-    console.log(frame)
     frame.eachChildView(child => {
-      console.log('found child')
       const vm = child[VUE_VM_REF]
 
       if (vm) {
@@ -51,5 +49,26 @@ application.on(application.exitEvent, () => {
     })
   }
 })
+
+global.__onLiveSyncCore = () => {
+  const frame = topmost()
+  if (frame) {
+    if (frame.currentPage && frame.currentPage.modal) {
+      frame.currentPage.modal.closeModal()
+    }
+    // Todo: make sure that the before-livesync hook is installed, because otherwise the page will always get reloaded.
+    // const currentEntry = frame._currentEntry && frame._currentEntry.entry
+    // if (currentEntry) {
+
+    // const newEntry = {
+    //   animated: false,
+    //   clearHistory: true,
+    //   create: () => {  } ,
+    //   backstackVisible: currentEntry.backstackVisible
+    // }
+    // frame.navigate(newEntry)
+    // }
+  }
+}
 
 export default Vue
