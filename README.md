@@ -33,6 +33,7 @@ these awesome backers:
 - Aparajita Fishman
 - Hajnalka Molnár Csikós
 - Jen Looper
+- Packy Tagliaferro
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
