@@ -1,8 +1,13 @@
 import { makeMap, once } from 'shared/util'
 import { isKnownView, getViewMeta } from '../element-registry'
-import Vue from '../framework'
 
 export const isReservedTag = makeMap('template', true)
+
+let _Vue
+
+export function setVue(Vue) {
+  _Vue = Vue
+}
 
 export const canBeLeftOpenTag = function(el) {
   return getViewMeta(el).canBeLeftOpenTag
@@ -42,7 +47,7 @@ const infoTrace = once(() => {
 })
 
 export function trace(message) {
-  if (Vue.config.silent) {
+  if (_Vue && _Vue.config.silent) {
     return infoTrace()
   }
 

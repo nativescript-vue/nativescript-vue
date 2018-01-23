@@ -13,6 +13,9 @@ import NavigatorPlugin from './plugins/navigator-plugin'
 // import DecoderPlugin from './plugins/decoder-plugin'
 import RouterPlugin from './plugins/router-plugin'
 
+import { setVue } from './util'
+setVue(Vue)
+
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
 // Vue.use(DecoderPlugin)
