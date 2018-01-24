@@ -107,7 +107,13 @@ export default {
         }
 
         const router = this.$options.router
+        const isPageRouting = router.options.pageRouting
         const self = this
+
+        if (!isPageRouting) {
+          // if not in page mode, we don't care
+          return
+        }
 
         patchRouter(router, Vue)
 
@@ -115,6 +121,7 @@ export default {
         this.$start = () => {
           this.__is_root__ = true
           this.__started__ = true // skips the default start procedure
+          this.$options.render = () => {} // removes warning for no render / template
 
           // Mount the root component
           const placeholder = Vue.$document.createComment('placeholder')

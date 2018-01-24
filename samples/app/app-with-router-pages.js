@@ -43,6 +43,7 @@ const Baz = {
 }
 
 const router = new VueRouter({
+  pageRouting: true,
   routes: [
     { path: '/foo', component: Foo },
     { path: '/bar', component: Bar },
@@ -54,9 +55,5 @@ const router = new VueRouter({
 router.replace('/foo')
 
 new Vue({
-  router,
-  template: `<router-page />`,
-  created() {
-    // this.$setPageTransition('slide', 1000)
-  }
+  router
 }).$start()
