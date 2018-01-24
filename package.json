@@ -4,8 +4,7 @@
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "files": [
-    "dist/index.js",
-    "platform/nativescript/hooks/"
+    "dist/index.js"
   ],
   "scripts": {
     "test": "jest",
