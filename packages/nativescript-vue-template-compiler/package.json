@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue-template-compiler",
-  "version": "0.7.10",
+  "version": "0.7.11",
   "description": "template compiler for nativescript-vue",
   "main": "index.js",
   "repository": {
