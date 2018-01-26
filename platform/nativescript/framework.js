@@ -14,6 +14,7 @@ import NavigatorPlugin from './plugins/navigator-plugin'
 import RouterPlugin from './plugins/router-plugin'
 
 import { setVue } from './util'
+
 setVue(Vue)
 
 Vue.use(ModalPlugin)
@@ -26,7 +27,11 @@ console.log = (function(log, inspect, Vue) {
     return log.apply(
       this,
       Array.prototype.map.call(arguments, function(arg) {
-        return inspect(arg, { depth: 1, colors: Vue.config.debug })
+        return inspect(arg, {
+          depth: 2,
+          colors: Vue.config.debug,
+          showHidden: true
+        }).replace(/\\n/g, '\n')
       })
     )
   }
