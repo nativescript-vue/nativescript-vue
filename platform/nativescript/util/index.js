@@ -76,7 +76,11 @@ export function after(original, thisArg, wrap) {
 
 export function deepProxy(object, depth = 0) {
   return new Proxy(object, {
-    get() {
+    get(target, key) {
+      if (key === 'toString') {
+        return () => ''
+      }
+
       if (depth > 10) {
         throw new Error('deepProxy over 10 deep.')
       }
