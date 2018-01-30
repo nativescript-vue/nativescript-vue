@@ -62,18 +62,10 @@ global.__onLiveSyncCore = () => {
     if (frame.currentPage && frame.currentPage.modal) {
       frame.currentPage.modal.closeModal()
     }
-    // Todo: make sure that the before-livesync hook is installed, because otherwise the page will always get reloaded.
-    // const currentEntry = frame._currentEntry && frame._currentEntry.entry
-    // if (currentEntry) {
 
-    // const newEntry = {
-    //   animated: false,
-    //   clearHistory: true,
-    //   create: () => {  } ,
-    //   backstackVisible: currentEntry.backstackVisible
-    // }
-    // frame.navigate(newEntry)
-    // }
+    if (frame.currentPage) {
+      frame.currentPage.addCssFile(application.getCssFileName())
+    }
   }
 }
 
