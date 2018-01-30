@@ -95,7 +95,7 @@ export default class ViewNode {
         set(this.nativeView, key, value)
       }
     } catch (e) {
-      // throw new Error(`${this.tagName} has no property ${key}. (${e})`)
+      // ignore
     }
   }
 
