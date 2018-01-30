@@ -72,6 +72,7 @@
     "rollup-plugin-resolve-aliases": "^0.2.0",
     "rollup-watch": "^3.2.2",
     "semver": "^5.4.1",
+    "set-value": "^2.0.0",
     "tns-core-modules": "^3.4.0",
     "util-inspect": "^0.1.8",
     "vue": "^2.5.13"

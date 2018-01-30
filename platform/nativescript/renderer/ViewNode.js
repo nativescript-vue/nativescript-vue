@@ -1,3 +1,5 @@
+import set from 'set-value'
+
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
 
@@ -90,10 +92,10 @@ export default class ViewNode {
       if (XML_ATTRIBUTES.indexOf(key) !== -1) {
         this.nativeView._applyXmlAttribute(key, value)
       } else {
-        this.nativeView[key] = value
+        set(this.nativeView, key, value)
       }
     } catch (e) {
-      throw new Error(`${this.tagName} has no property ${key}. (${e})`)
+      // throw new Error(`${this.tagName} has no property ${key}. (${e})`)
     }
   }
 
