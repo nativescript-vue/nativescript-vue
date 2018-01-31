@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rigor789/nativescript-vue.git"
+    "url": "git+https://github.com/nativescript-vue/nativescript-vue.git"
   },
   "keywords": [
     "vuejs",
