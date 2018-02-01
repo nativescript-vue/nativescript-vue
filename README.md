@@ -11,14 +11,14 @@
     <a href="https://www.npmjs.com/package/nativescript-vue">
        <img src="https://img.shields.io/npm/v/nativescript-vue.svg" alt="npm">
     </a>
-    <a href="https://github.com/rigor789/nativescript-vue/blob/master/LICENSE">
-       <img src="https://img.shields.io/github/license/rigor789/nativescript-vue.svg" alt="license">
+    <a href="https://github.com/nativescript-vue/nativescript-vue/blob/master/LICENSE">
+       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
     </a>
-    <a href="https://circleci.com/gh/rigor789/nativescript-vue/tree/master">
-       <img src="https://img.shields.io/circleci/project/github/rigor789/nativescript-vue.svg" alt="CircleCI">
+    <a href="https://circleci.com/gh/nativescript-vue/nativescript-vue/tree/master">
+       <img src="https://img.shields.io/circleci/project/github/nativescript-vue/nativescript-vue.svg" alt="CircleCI">
     </a>
-    <a href="https://codecov.io/gh/rigor789/nativescript-vue">
-       <img src="https://img.shields.io/codecov/c/github/rigor789/nativescript-vue.svg" alt="Codecov">
+    <a href="https://codecov.io/gh/nativescript-vue/nativescript-vue">
+       <img src="https://img.shields.io/codecov/c/github/nativescript-vue/nativescript-vue.svg" alt="Codecov">
     </a>
 </p>
 
