@@ -1,7 +1,7 @@
 const Vue = require('./nativescript-vue')
 const http = require('http')
-const Page = require('ui/page').Page
 
+Vue.config.debug = true
 Vue.prototype.$http = http
 Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient)
 
@@ -14,47 +14,52 @@ new Vue({
   },
 
   template: `
-        <page ref="page">
-            <action-bar :title="subreddit">
-                <!-- leaving this commented as an example on how to use the navigation button: -->
-                <!--<navigation-button text="Back!" android.systemIcon="ic_menu_back" @tap="navigationButtonPressed"></navigation-button>-->
-                <action-item android.systemIcon="ic_menu_refresh" ios.systemIcon="13" @tap="refresh"></action-item>
-                <action-item text="change" android.position="popup" ios.position="right" @tap="chooseSubreddit"></action-item>
-            </action-bar>
-            <stack-layout>
+    <Page ref="page">
+      <ActionBar :title="subreddit">
+        <ActionItem android.systemIcon="ic_menu_refresh" ios.systemIcon="13" @tap="refresh" />
+        <ActionItem text="change" android.position="popup" ios.position="right" @tap="chooseSubreddit" />
+      </ActionBar>
+            
+      <StackLayout>
+        <Gradient direction="to right" colors="#FF0077, red, #FF00FF" class="p-15">
+          <Label class="p-5 c-white" horizontalAlignment="center" text="You are browsing" textWrap="true" />
+          <Label class="p-5 c-white" horizontalAlignment="center" :text="subreddit" textWrap="true" />
+        </Gradient>
 
-                <gradient direction="to right" colors="#FF0077, red, #FF00FF" class="p-15">
-                  <label class="p-5 c-white" horizontalAlignment="center" text="You are browsing" textWrap="true"></label>
-                  <Label class="p-5 c-white" horizontalAlignment="center" :text="subreddit" textWrap="true"></Label>
-                </gradient>
-
-                  <list-view :items="items" class="list-group" :templateSelector="templateSelector" separatorColor="red" @itemTap="onItemTap" @loaded="onLoaded" @loadMoreItems="onLoadMoreItems">
-                    <template scope="item">
-                        <stack-layout orientation="horizontal" class="list-group-item">
-                            <image :src="item.image" class="thumb"></image>
-                            <stack-layout>
-                                <label class="list-group-item-heading" :text="item.title" textWrap="true"></label>
-                                <label class="list-group-item-text" text="The rest of the content" textWrap="true"></label>
-                            </stack-layout>
-                        </stack-layout>
-                    </template>
-                    <template name="page" scope="item">
-                        <stack-layout orientation="horizontal" class="list-group-item active">
-                            <label :text="item.title"></label>
-                        </stack-layout>
-                    </template>
-                </list-view>
-            </stack-layout>
-        </page>
-    `,
+        <ListView for="item in items" 
+            class="list-group"
+            separatorColor="red"
+            @itemTap="onItemTap"
+            @loaded="onLoaded"
+            @loadMoreItems="onLoadMoreItems"
+        >
+          <v-template>
+            <StackLayout orientation="horizontal" class="list-group-item">
+              <Image :src="item.image" class="thumb" />
+              <StackLayout>
+                <Label class="list-group-item-heading" :text="item.title" textWrap="true" />
+                <Label class="list-group-item-text" text="The rest of the content" textWrap="true" />
+              </StackLayout>
+            </StackLayout>
+          </v-template>
+          
+          <v-template if="item.type === 'page'">
+            <WrapLayout orientation="horizontal" class="list-group-item active">
+              <Label :text="'>>>>>>>' + item.title" style="color: red;" />
+            </WrapLayout>
+          </v-template>
+          
+        </ListView>
+      </StackLayout>
+    </Page>
+  `,
 
   created() {
     this.fetchItems()
   },
 
   methods: {
-    onItemTap(e) {
-      let item = e.item
+    onItemTap({ item }) {
       if (item.type === 'page') {
         return alert('You shall not pass.')
       }
@@ -62,22 +67,23 @@ new Vue({
       this.$showModal(
         {
           template: `
-                <page style="background-color: rgba(0, 0, 0, .6);">
-                    <stack-layout>
-                        <label class="h2" textAlignment="center" textWrap="true"
-                         text="${
-                           item.title
-                         }" style="color: #fff; margin-top: 20"></label>
-                        <grid-layout rows="*, 60">
-                            <activity-indicator row="0" :busy="true" height="100"></activity-indicator>
-                            <img row="0" src="${item.fullImage}"/>
-                            <button row="1" @tap="$modal.close" text="Close"></button>                    
-                        </grid-layout>
-                    </stack-layout>
-                </page>
-                `
+            <Page style="background-color: rgba(0, 0, 0, .6);">
+              <StackLayout>
+                <Label class="h2" textAlignment="center" textWrap="true" text="${
+                  item.title
+                }" style="color: #fff; margin-top: 20" />
+                <GridLayout rows="*, 60">
+                  <ActivityIndicator row="0" :busy="true" height="100" />
+                  <Image row="0" src="${item.fullImage}" />
+                  <Button row="1" @tap="$modal.close" text="Close" />                    
+                </GridLayout>
+              </StackLayout>
+            </Page>
+          `
         },
-        { fullscreen: true }
+        {
+          fullscreen: true
+        }
       ).then(res => {
         console.log('Modal closed')
         console.dir(res)
@@ -91,14 +97,6 @@ new Vue({
     onLoadMoreItems(e) {
       console.log('Loading more items')
       return this.fetchItems()
-    },
-
-    templateSelector(item) {
-      return item.type === 'page' ? 'page' : 'default'
-    },
-
-    navigationButtonPressed() {
-      console.log('>>> navigation button pressed (but nothing to do really..)')
     },
 
     refresh() {
