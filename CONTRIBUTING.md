@@ -86,7 +86,7 @@ export JAVA_HOME=`/usr/libexec/java_home -v1.8`
 ```
 
 #### 3. Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
-If you see an eror like this:
+If you see an error like this:
 ```
 Transferring project files...
 Multiple errors were thrown:
