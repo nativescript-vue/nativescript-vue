@@ -13,18 +13,18 @@
     }
   },
   "dependencies": {
-    "nativescript-gradient": "^2.0.0",
-    "nativescript-pro-ui": "^3.2.0",
-    "nativescript-theme-core": "~1.0.2",
+    "nativescript-gradient": "^2.0.1",
+    "nativescript-pro-ui": "^3.3.0",
+    "nativescript-theme-core": "^1.0.4",
     "tns-core-modules": "^3.4.0",
-    "vue-router": "^2.4.0",
-    "vuex": "^3.0.0"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "babel-traverse": "6.24.1",
-    "babel-types": "6.24.1",
-    "babylon": "6.16.1",
-    "lazy": "1.0.11",
-    "nativescript-dev-android-snapshot": "^0.*.*"
+    "babel-traverse": "6.26.0",
+    "babel-types": "6.26.0",
+    "babylon": "^6.18.0",
+    "lazy": "^1.0.11",
+    "nativescript-dev-android-snapshot": "^0.0.11"
   }
 }
