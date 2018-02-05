@@ -4,6 +4,7 @@ Vue.component('comment', {
   props: ['comment'],
   template: `<label :text="comment.content"/>`
 })
+
 new Vue({
   data: {
     comments: [
@@ -14,15 +15,15 @@ new Vue({
     ]
   },
   template: `
-    <page class="page">
-      <action-bar title="Home" class="action-bar"></action-bar>
-        <stack-layout class="home-panel">
-          <list-view for="comment in comments">
+    <Page class="page">
+      <ActionBar title="Home" class="action-bar" />
+        <StackLayout class="home-panel">
+          <ListView for="comment in comments">
             <v-template>
-              <comment :comment="comment"/>
+              <Comment :comment="comment" />
             </v-template>
-          </list-view>
-        </stack-layout>
-    </page>
+          </ListView>
+        </StackLayout>
+    </Page>
   `
 }).$start()

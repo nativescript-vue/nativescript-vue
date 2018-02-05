@@ -2,19 +2,20 @@ const Vue = require('./nativescript-vue')
 
 new Vue({
   template: `
-        <page>
-            <list-view for="item in items">
-                <v-template >
-                    <flexbox-layout class="line">
-                        <label :text="$index" ></label>
-                        <label :text="item.text" ></label>
-                        <label :text="item.user.name" ></label>
-                        <label :text="item.user.meta.age" ></label>
-                    </flexbox-layout>
-                </v-template>
-            </list-view>
-        </page>
-    `,
+    <Page>
+      <ListView for="item in items">
+        <v-template>
+          <FlexboxLayout class="line">
+            <Label :text="$index" />
+            <Label :text="item.text" />
+            <Label :text="item.user.name" />
+            <Label :text="item.user.meta.age" />
+          </FlexboxLayout>
+        </v-template>
+      </ListView>
+    </Page>
+  `,
+
   data: {
     items: [
       {

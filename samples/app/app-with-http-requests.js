@@ -1,13 +1,14 @@
 const Vue = require('./nativescript-vue')
-Vue.config.debug = true
 const http = require('http')
+
+Vue.config.debug = true
 
 new Vue({
   template: `
     <Page>
       <ScrollView>
         <StackLayout>
-          <Button text="make request" @tap="makeRequest"/>
+          <Button text="make request" @tap="makeRequest" />
         </StackLayout>
       </ScrollView>    
     </Page>    

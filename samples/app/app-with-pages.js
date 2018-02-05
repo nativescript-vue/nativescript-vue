@@ -2,10 +2,10 @@ const Vue = require('./nativescript-vue')
 
 const App = {
   template: `
-        <stack-layout>
-            <button text="Open page" @tap="openPage"></button>
-        </stack-layout>
-    `,
+    <StackLayout>
+      <Button text="Open page" @tap="openPage" />
+    </StackLayout>
+  `,
 
   methods: {
     openPage() {
@@ -16,12 +16,12 @@ const App = {
 
 const DetailsPage = {
   template: `
-        <stack-layout>
-            <label :text="'Details ' + Math.random()"></label>
-            <button text="another" @tap="openDetails"></button>
-            <button text="back" @tap="goBack"></button>
-        </stack-layout>
-    `,
+    <StackLayout>
+      <Label :text="'Details ' + Math.random()" />
+      <Button text="another" @tap="openDetails" />
+      <Button text="back" @tap="goBack" />
+    </StackLayout>
+  `,
 
   methods: {
     openDetails() {

@@ -19,10 +19,10 @@ new Vue({
   store,
   template: `
     <Page>
-        <Stack-Layout>
-            <Label :text="count + ' taps left'" style="text-align: center; font-size: 30; padding: 20 0;"/>
-            <Button text="Tap" @tap="decrement"/>
-        </Stack-Layout>
+      <StackLayout>
+        <Label :text="count + ' taps left'" style="text-align: center; font-size: 30; padding: 20 0;" />
+        <Button text="Tap" @tap="decrement" />
+      </StackLayout>
     </Page> 
   `,
 
