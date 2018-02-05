@@ -55,8 +55,38 @@ Next, open up a new terminal window and run `npm run samples`. This will bring u
 
 # Troubleshooting
 
-#### 1. Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
-If you see an eror like this:
+#### 1. Husky 'binding.open' error
+
+There is [currently] a bug in devDependencies husky 0.15 beta that aborts `npm install` if `.git/hooks` is missing.
+
+https://github.com/typicode/husky/issues/195 
+
+```
+> husky@0.15.0-rc.3 postinstall /.../nativescript-vue/node_modules/husky
+> node lib/installer/bin install
+husky > setting up git hooks
+fs.js:663
+  return binding.open(pathModule.toNamespacedPath(path),
+                 ^
+Error: ENOENT: no such file or directory, open '/.../nativescript-vue/.git/hooks/applypatch-msg'
+```
+
+Mac:
+```
+nativescript-vue$ mkdir -p .git/hooks/
+```
+
+#### 2. Make sure JAVA_HOME is set to your JAVA 8 JDK!
+
+If JAVA_HOME isn't set correctly, then `npm run samples` will exit back to the command prompt after prompting for a sample and platform.
+
+Mac:
+```
+export JAVA_HOME=`/usr/libexec/java_home -v1.8`
+```
+
+#### 3. Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
+If you see an error like this:
 ```
 Transferring project files...
 Multiple errors were thrown:
@@ -71,7 +101,7 @@ sudo sysctl -w kern.maxfilesperproc=65536
 ulimit -n 65536 65536
 ```
 
-#### 2. Using XCode 8
+#### 4. Using XCode 8
 Check if xcodeproj is installed
 - `sudo gem install xcodeproj -v 1.4.1`
 You may need to enable system ruby (macos)
