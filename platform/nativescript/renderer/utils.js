@@ -1,6 +1,6 @@
-import { View } from 'ui/core/view'
-import { ContentView } from 'ui/content-view'
 import { LayoutBase } from 'ui/layouts/layout-base'
+import { ContentView } from 'ui/content-view'
+import { View } from 'ui/core/view'
 
 export function isView(view) {
   return view instanceof View

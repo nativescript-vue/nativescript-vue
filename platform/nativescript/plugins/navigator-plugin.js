@@ -1,9 +1,9 @@
-import { isPage } from '../util/index'
-import { Page } from 'ui/page'
-import { topmost } from 'ui/frame'
-import { start } from 'application'
 import { VUE_VM_REF } from '../runtime/index'
+import { isPage } from '../util/index'
+import { start } from 'application'
+import { topmost } from 'ui/frame'
 import { after } from '../util'
+import { Page } from 'ui/page'
 
 export default {
   install(Vue) {

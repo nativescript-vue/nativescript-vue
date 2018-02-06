@@ -1,5 +1,5 @@
-import { makeMap, once } from 'shared/util'
 import { isKnownView, getViewMeta } from '../element-registry'
+import { makeMap, once } from 'shared/util'
 
 export const isReservedTag = makeMap('template', true)
 

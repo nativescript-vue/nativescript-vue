@@ -1,5 +1,5 @@
-import ViewNode from './ViewNode'
 import { getViewClass } from '../element-registry'
+import ViewNode from './ViewNode'
 
 export const VUE_ELEMENT_REF = '__vue_element_ref__'
 

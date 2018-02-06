@@ -1,5 +1,5 @@
-import { genStaticKeys } from 'shared/util'
 import { createCompiler } from 'compiler/index'
+import { genStaticKeys } from 'shared/util'
 
 import modules from './modules/index'
 import directives from './directives/index'

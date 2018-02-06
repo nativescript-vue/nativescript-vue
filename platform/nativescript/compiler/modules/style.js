@@ -1,6 +1,6 @@
-import { cached, camelize } from 'shared/util'
-import { parseText } from 'compiler/parser/text-parser'
 import { getAndRemoveAttr, getBindingAttr, baseWarn } from 'compiler/helpers'
+import { parseText } from 'compiler/parser/text-parser'
+import { cached, camelize } from 'shared/util'
 
 const normalize = cached(camelize)
 

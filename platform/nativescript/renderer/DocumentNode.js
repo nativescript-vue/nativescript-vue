@@ -1,6 +1,6 @@
-import ViewNode from './ViewNode'
 import CommentNode from './CommentNode'
 import ElementNode from './ElementNode'
+import ViewNode from './ViewNode'
 import TextNode from './TextNode'
 
 export default class DocumentNode extends ViewNode {

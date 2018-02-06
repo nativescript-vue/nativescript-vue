@@ -1,6 +1,6 @@
+import { getAndRemoveAttr, addRawAttr } from 'compiler/helpers'
 import { normalizeElementName } from '../../element-registry'
 import { parseFor } from 'compiler/parser/index'
-import { getAndRemoveAttr, addRawAttr } from 'compiler/helpers'
 import { warn } from 'core/util/debug'
 
 function preTransformNode(el) {

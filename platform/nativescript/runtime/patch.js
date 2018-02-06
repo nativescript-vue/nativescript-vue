@@ -1,7 +1,8 @@
-import * as nodeOps from './node-ops'
 import { createPatchFunction } from 'core/vdom/patch'
-import platformModules from './modules/index'
 import baseModules from 'core/vdom/modules/index'
+
+import platformModules from './modules/index'
+import * as nodeOps from './node-ops'
 
 const modules = platformModules.concat(baseModules)
 
