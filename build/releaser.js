@@ -5,18 +5,27 @@ const semver = require('semver')
 inquirer
   .prompt([
     {
-      name: 'type',
+      name: 'bump',
       type: 'list',
       message: 'Choose a version to release',
-      choices: ['major', 'minor', 'patch'],
+      choices: ['patch', 'minor', 'major', 'prerelease', 'custom'],
       default: 'patch'
+    },
+    {
+      name: 'customVersion',
+      type: 'input',
+      message: 'Input version',
+      choices: ['alpha', 'beta', 'patch', 'pre-release'],
+      when: ({bump}) => bump === 'custom'
     }
   ])
   .then(res => {
     return new Promise((resolve, reject) => {
-      const v = semver.parse(require('../package.json').version)
-      v.inc(res.type)
+      const v = semver.parse(res.customVersion || require('../package.json').version)
 
+      if (!res.customVersion) {
+        v.inc(res.bump)
+      }
       inquirer.prompt([{
         name: 'confirmed',
         type: 'confirm',
@@ -48,6 +57,7 @@ inquirer
       git commit --no-verify -m "${buildMessage}"
       npm version ${version} --commit-hooks false -m "${releaseMessage}"
       npm run release:notes
+      npm run changelog
       echo "Pushing to git"
       git push origin refs/tags/v${version}
       git push origin master
@@ -80,7 +90,7 @@ function runCommand(command) {
   return new Promise((resolve, reject) => {
     console.log(blue(`> ${command}`))
     const split = command.split(' ')
-    const child = spawn(split[0], split.slice(1), { shell: true })
+    const child = spawn(split[0], split.slice(1), {shell: true})
 
     child.stdout.on('data', data => process.stdout.write(data));
     child.on('error', data => reject(`The command '${command}' has failed.`));
