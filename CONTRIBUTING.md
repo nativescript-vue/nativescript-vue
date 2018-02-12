@@ -6,18 +6,17 @@ If you feel like contributing to this project, that is awesome! This guide shoul
 
 - It's OK to submit PR against the `master` branch
 - It's OK to have multiple commits per PR (will be squashed during merge)
-- Please describe the changes in every PR, to make it easier to review. (No empty PR's please)
+- Please describe the changes in every PR, to make it easier to review. (No empty PR descriptions please)
 
 We will re-iterate these guidelines as the project matures.
 
 # Contributing to docs
 
-For the docs, we are using [docute.js](https://docute.js.org/#/home)
-
-docute is very simple, so skim through their documentation to get started with it.
+Refer to the [nativescript-vue/nativescript-vue.org repository](https://github.com/nativescript-vue/nativescript-vue.org)
 
 # Development setup
-You will need Node.js installed, as well as Nativescript
+
+You will need Node.js installed, as well as NativeScript.
 
 Please make sure you are using Nativescript 3.x
 
@@ -30,7 +29,7 @@ After cloning the repo, run:
 # Commonly used NPM scripts
 
 ```bash
-# watch and auto re-build samples/app/nativescript-vue.js
+$ # watch and auto re-build samples/app/nativescript-vue.js
 $ npm run dev
 ```
 
@@ -42,16 +41,15 @@ Next, open up a new terminal window and run `npm run samples`. This will bring u
 
 # Project Structure
 
+- `build`: Directory for the custom tooling for managing and building the project
 - `dist`: Directory for the bundled code
+- `packages`: Directory for tightly related packages
 - `platform/nativescript`: Contains `nativescript` specific platform code
   - `compiler`: This is where template compilation logic will go (vue template -> render function)
   - `renderer`: The renderer that handles rendering vdom into actual elements in {N}
   - `runtime`: {N} specific Vue backend
   - `util`: Utilities
-  - `element-registry.js`: Registry of supported elements
-  - `framework.js`: Entry file for the rollup build
 - `samples`: Sample {N} applications for testing
-- `rollup.config.js`: rollup config for the build
 
 # Troubleshooting
 
@@ -86,6 +84,7 @@ export JAVA_HOME=`/usr/libexec/java_home -v1.8`
 ```
 
 #### 3. Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
+
 If you see an error like this:
 ```
 Transferring project files...
@@ -102,8 +101,10 @@ ulimit -n 65536 65536
 ```
 
 #### 4. Using XCode 8
+
 Check if xcodeproj is installed
 - `sudo gem install xcodeproj -v 1.4.1`
+
 You may need to enable system ruby (macos)
 - `rvm use system` // now using system ruby
 - repeat `sudo gem install xcodeproj -v 1.4.1`
@@ -117,7 +118,8 @@ You will probably get an error:
 - include `PROVISIONING_PROFILE = testapp;`
 
 Change app.js to
-```
+
+```javascript
 const Vue = require('nativescript-vue');
 
 new Vue({
@@ -127,13 +129,11 @@ new Vue({
   },
 
   template: `
-    <page>
-      <stack-layout>
-        <label v-model="message"></label>
-      </stack-layout>
-    </page>
+    <Page>
+      <StackLayout>
+        <Label v-model="message" />
+      </StackLayout>
+    </Page>
   `,
-
 }).$start()
 ```
-
