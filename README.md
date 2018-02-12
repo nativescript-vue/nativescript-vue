@@ -34,6 +34,7 @@ these awesome backers:
 - Hajnalka Molnár Csikós
 - Jen Looper
 - Packy Tagliaferro
+- Alexander Vakrilov
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
