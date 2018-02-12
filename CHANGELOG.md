@@ -1,3 +1,13 @@
+<a name="1.0.0-alpha.1"></a>
+# [1.0.0-alpha.1](https://github.com/nativescript-vue/nativescript-vue/compare/v1.0.0-alpha.0...v1.0.0-alpha.1) (2018-02-12)
+
+
+
+<a name="1.0.0-alpha.0"></a>
+# [1.0.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v0.7.12...v1.0.0-alpha.0) (2018-02-12)
+
+
+
 <a name="0.7.12"></a>
 ## [0.7.12](https://github.com/nativescript-vue/nativescript-vue/compare/v0.7.11...v0.7.12) (2018-01-30)
 
