@@ -1,5 +1,0 @@
----
-title: AbsoluteLayout
----
-
-TODO
