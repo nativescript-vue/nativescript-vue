@@ -1,6 +1,6 @@
 
 /*!
- * NativeScript-Vue-Template-Compiler v0.7.12
+ * NativeScript-Vue-Template-Compiler v1.0.0-alpha.0
  * (Using Vue v2.5.13)
  * (c) 2017-2018 rigor789
  * Released under the MIT license.
@@ -4123,7 +4123,7 @@ var view = {
 
 var modules = [class_, style, vTemplate, listView, view]
 
-function model(el, dir, _warn) {
+function model(el, dir) {
   if (el.type === 1 && isKnownView(el.tag)) {
     genDefaultModel(el, dir.value, dir.modifiers);
   } else {
