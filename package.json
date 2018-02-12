@@ -16,7 +16,7 @@
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js",
     "release:notes": "node build/gen-release-notes.js",
-    "changelog": "conventional-changelog --infile CHANGELOG.md --same-file --preset angular",
+    "changelog": "conventional-changelog --release-count 0 --outfile CHANGELOG.md --preset angular",
     "commit": "git-cz"
   },
   "repository": {

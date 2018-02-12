@@ -57,12 +57,15 @@ inquirer
       git commit --no-verify -m "${buildMessage}"
       npm version ${version} --commit-hooks false -m "${releaseMessage}"
       npm run release:notes
-      npm run changelog
       echo "Pushing to git"
       git push origin refs/tags/v${version}
       git push origin master
       echo "Publishing to npm"
       npm publish
+      npm run changelog
+      git add CHANGELOG.md
+      git commit --no-verify -m "chore: update changelog"
+      git push origin master
       echo "Release successful."
       `)
   })
