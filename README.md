@@ -35,6 +35,7 @@ these awesome backers:
 - Jen Looper
 - Packy Tagliaferro
 - Alexander Vakrilov
+- Dave
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
