@@ -44,7 +44,7 @@ const Baz = {
 }
 
 const router = new VueRouter({
-  PageRouting: true,
+  pageRouting: true,
   routes: [
     { path: '/foo', component: Foo },
     { path: '/bar', component: Bar },
