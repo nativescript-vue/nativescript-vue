@@ -5,6 +5,13 @@ jest.mock('renderer/utils', () => ({
   insertChild: jest.fn(),
   removeChild: jest.fn()
 }))
+jest.mock('tns-core-modules/platform', () => {
+  return {
+    isAndroid() {
+    },
+    isIOS() {}
+  }
+}, {virtual: true})
 
 describe('ViewNode', () => {
   test('firstChild returns null initially', () => {

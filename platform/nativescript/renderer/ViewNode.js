@@ -2,7 +2,7 @@ import set from 'set-value'
 
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
-const { isAndroid, isIOS } = require('tns-core-modules/platform')
+import { isAndroid, isIOS } from 'tns-core-modules/platform'
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
