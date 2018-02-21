@@ -1,3 +1,24 @@
+<a name="1.1.3"></a>
+## [1.1.3](https://github.com/nativescript-vue/nativescript-vue/compare/v1.1.2...v1.1.3) (2018-02-21)
+
+
+
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/nativescript-vue/nativescript-vue/compare/v1.0.0...v1.1.2) (2018-02-21)
+
+
+### Bug Fixes
+
+* fix option name for pageRouting ([8a8446f](https://github.com/nativescript-vue/nativescript-vue/commit/8a8446f))
+
+
+### Features
+
+* add <android> and <ios> elements ([ed96746](https://github.com/nativescript-vue/nativescript-vue/commit/ed96746))
+* add platform-dependent property setting ([f981816](https://github.com/nativescript-vue/nativescript-vue/commit/f981816))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.0.0-alpha.1...v1.0.0) (2018-02-13)
 
