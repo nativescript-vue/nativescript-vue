@@ -2,6 +2,7 @@ import set from 'set-value'
 
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
+const { isAndroid, isIOS } = require('tns-core-modules/platform')
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
@@ -91,6 +92,10 @@ export default class ViewNode {
     try {
       if (XML_ATTRIBUTES.indexOf(key) !== -1) {
         this.nativeView._applyXmlAttribute(key, value)
+      } else if (isAndroid && key.startsWith('android:')) {
+        set(this.nativeView, key.replace('android:', ''), value)
+      } else if (isIOS && key.startsWith('ios:')) {
+        set(this.nativeView, key.replace('ios:', ''), value)
       } else {
         set(this.nativeView, key, value)
       }
