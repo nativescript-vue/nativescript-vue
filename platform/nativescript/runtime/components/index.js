@@ -5,6 +5,8 @@ import NavigationButton from './navigation-button'
 import TabView from './tab-view'
 import TabViewItem from './tab-view-item'
 import VTemplate from './v-template'
+import android from './android'
+import ios from './ios'
 
 export default {
   ActionBar,
@@ -13,5 +15,7 @@ export default {
   NavigationButton,
   TabView,
   TabViewItem,
-  VTemplate
+  VTemplate,
+  android,
+  ios
 }

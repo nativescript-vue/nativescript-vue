@@ -1,5 +1,5 @@
 import { before } from '../util/index'
-import { Page } from 'ui/page'
+import { Page } from 'tns-core-modules/ui/page'
 
 export function patchRouter(router, Vue) {
   if (router.__patched_for_page_routing__) {

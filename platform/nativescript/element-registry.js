@@ -64,66 +64,105 @@ export function isKnownView(elementName) {
 
 registerElement(
   'AbsoluteLayout',
-  () => require('ui/layouts/absolute-layout').AbsoluteLayout
+  () => require('tns-core-modules/ui/layouts/absolute-layout').AbsoluteLayout
 )
 registerElement(
   'ActivityIndicator',
-  () => require('ui/activity-indicator').ActivityIndicator
+  () => require('tns-core-modules/ui/activity-indicator').ActivityIndicator
 )
-registerElement('Border', () => require('ui/border').Border)
-registerElement('Button', () => require('ui/button').Button)
-registerElement('ContentView', () => require('ui/content-view').ContentView)
-registerElement('DatePicker', () => require('ui/date-picker').DatePicker, {
-  model: {
-    prop: 'date',
-    event: 'dateChange'
+registerElement('Border', () => require('tns-core-modules/ui/border').Border)
+registerElement('Button', () => require('tns-core-modules/ui/button').Button)
+registerElement(
+  'ContentView',
+  () => require('tns-core-modules/ui/content-view').ContentView
+)
+registerElement(
+  'DatePicker',
+  () => require('tns-core-modules/ui/date-picker').DatePicker,
+  {
+    model: {
+      prop: 'date',
+      event: 'dateChange'
+    }
   }
-})
+)
 registerElement(
   'DockLayout',
-  () => require('ui/layouts/dock-layout').DockLayout
+  () => require('tns-core-modules/ui/layouts/dock-layout').DockLayout
 )
 registerElement(
   'GridLayout',
-  () => require('ui/layouts/grid-layout').GridLayout
+  () => require('tns-core-modules/ui/layouts/grid-layout').GridLayout
 )
-registerElement('HtmlView', () => require('ui/html-view').HtmlView)
-registerElement('Image', () => require('ui/image').Image)
-registerElement('img', () => require('ui/image').Image)
-registerElement('Label', () => require('ui/label').Label)
-registerElement('ListPicker', () => require('ui/list-picker').ListPicker, {
-  model: {
-    prop: 'selectedIndex',
-    event: 'selectedIndexChange'
+registerElement(
+  'HtmlView',
+  () => require('tns-core-modules/ui/html-view').HtmlView
+)
+registerElement('Image', () => require('tns-core-modules/ui/image').Image)
+registerElement('img', () => require('tns-core-modules/ui/image').Image)
+registerElement('Label', () => require('tns-core-modules/ui/label').Label)
+registerElement(
+  'ListPicker',
+  () => require('tns-core-modules/ui/list-picker').ListPicker,
+  {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
+    }
   }
-})
-registerElement('NativeActionBar', () => require('ui/action-bar').ActionBar)
-registerElement('NativeActionItem', () => require('ui/action-bar').ActionItem)
-registerElement('NativeListView', () => require('ui/list-view').ListView)
+)
+registerElement(
+  'NativeActionBar',
+  () => require('tns-core-modules/ui/action-bar').ActionBar
+)
+registerElement(
+  'NativeActionItem',
+  () => require('tns-core-modules/ui/action-bar').ActionItem
+)
+registerElement(
+  'NativeListView',
+  () => require('tns-core-modules/ui/list-view').ListView
+)
 registerElement(
   'NativeNavigationButton',
-  () => require('ui/action-bar').NavigationButton
+  () => require('tns-core-modules/ui/action-bar').NavigationButton
 )
-registerElement('Page', () => require('ui/page').Page, {
+registerElement('Page', () => require('tns-core-modules/ui/page').Page, {
   skipAddToDom: true
 })
-registerElement('Placeholder', () => require('ui/placeholder').Placeholder)
-registerElement('Progress', () => require('ui/progress').Progress)
+registerElement(
+  'Placeholder',
+  () => require('tns-core-modules/ui/placeholder').Placeholder
+)
+registerElement(
+  'Progress',
+  () => require('tns-core-modules/ui/progress').Progress
+)
 registerElement(
   'ProxyViewContainer',
-  () => require('ui/proxy-view-container').ProxyViewContainer
+  () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer
 )
-registerElement('Repeater', () => require('ui/repeater').Repeater)
-registerElement('ScrollView', () => require('ui/scroll-view').ScrollView)
-registerElement('SearchBar', () => require('ui/search-bar').SearchBar, {
-  model: {
-    prop: 'text',
-    event: 'textChange'
+registerElement(
+  'Repeater',
+  () => require('tns-core-modules/ui/repeater').Repeater
+)
+registerElement(
+  'ScrollView',
+  () => require('tns-core-modules/ui/scroll-view').ScrollView
+)
+registerElement(
+  'SearchBar',
+  () => require('tns-core-modules/ui/search-bar').SearchBar,
+  {
+    model: {
+      prop: 'text',
+      event: 'textChange'
+    }
   }
-})
+)
 registerElement(
   'SegmentedBar',
-  () => require('ui/segmented-bar').SegmentedBar,
+  () => require('tns-core-modules/ui/segmented-bar').SegmentedBar,
   {
     model: {
       prop: 'selectedIndex',
@@ -133,9 +172,9 @@ registerElement(
 )
 registerElement(
   'SegmentedBarItem',
-  () => require('ui/segmented-bar').SegmentedBarItem
+  () => require('tns-core-modules/ui/segmented-bar').SegmentedBarItem
 )
-registerElement('Slider', () => require('ui/slider').Slider, {
+registerElement('Slider', () => require('tns-core-modules/ui/slider').Slider, {
   model: {
     prop: 'value',
     event: 'valueChange'
@@ -143,41 +182,62 @@ registerElement('Slider', () => require('ui/slider').Slider, {
 })
 registerElement(
   'StackLayout',
-  () => require('ui/layouts/stack-layout').StackLayout
+  () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout
 )
 registerElement(
   'FlexboxLayout',
-  () => require('ui/layouts/flexbox-layout').FlexboxLayout
+  () => require('tns-core-modules/ui/layouts/flexbox-layout').FlexboxLayout
 )
-registerElement('Switch', () => require('ui/switch').Switch, {
+registerElement('Switch', () => require('tns-core-modules/ui/switch').Switch, {
   model: {
     prop: 'checked',
     event: 'checkedChange'
   }
 })
 
-registerElement('NativeTabView', () => require('ui/tab-view').TabView, {
-  model: {
-    prop: 'selectedIndex',
-    event: 'selectedIndexChange'
+registerElement(
+  'NativeTabView',
+  () => require('tns-core-modules/ui/tab-view').TabView,
+  {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
+    }
   }
-})
-registerElement('NativeTabViewItem', () => require('ui/tab-view').TabViewItem, {
-  skipAddToDom: true
-})
+)
+registerElement(
+  'NativeTabViewItem',
+  () => require('tns-core-modules/ui/tab-view').TabViewItem,
+  {
+    skipAddToDom: true
+  }
+)
 
-registerElement('TextField', () => require('ui/text-field').TextField)
-registerElement('TextView', () => require('ui/text-view').TextView)
-registerElement('TimePicker', () => require('ui/time-picker').TimePicker, {
-  model: {
-    prop: 'time',
-    event: 'timeChange'
+registerElement(
+  'TextField',
+  () => require('tns-core-modules/ui/text-field').TextField
+)
+registerElement(
+  'TextView',
+  () => require('tns-core-modules/ui/text-view').TextView
+)
+registerElement(
+  'TimePicker',
+  () => require('tns-core-modules/ui/time-picker').TimePicker,
+  {
+    model: {
+      prop: 'time',
+      event: 'timeChange'
+    }
   }
-})
-registerElement('WebView', () => require('ui/web-view').WebView)
+)
+registerElement(
+  'WebView',
+  () => require('tns-core-modules/ui/web-view').WebView
+)
 registerElement(
   'WrapLayout',
-  () => require('ui/layouts/wrap-layout').WrapLayout
+  () => require('tns-core-modules/ui/layouts/wrap-layout').WrapLayout
 )
 registerElement(
   'FormattedString',
@@ -187,18 +247,25 @@ registerElement('Span', () => require('text/span').Span)
 
 registerElement(
   'DetachedContainer',
-  () => require('ui/proxy-view-container').ProxyViewContainer,
+  () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
   {
     skipAddToDom: true
   }
 )
-registerElement('DetachedText', () => require('ui/placeholder').Placeholder, {
-  skipAddToDom: true
-})
-registerElement('Comment', () => require('ui/placeholder').Placeholder)
+registerElement(
+  'DetachedText',
+  () => require('tns-core-modules/ui/placeholder').Placeholder,
+  {
+    skipAddToDom: true
+  }
+)
+registerElement(
+  'Comment',
+  () => require('tns-core-modules/ui/placeholder').Placeholder
+)
 registerElement(
   'Document',
-  () => require('ui/proxy-view-container').ProxyViewContainer,
+  () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
   {
     skipAddToDom: true
   }

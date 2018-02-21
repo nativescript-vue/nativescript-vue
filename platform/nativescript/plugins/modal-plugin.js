@@ -1,5 +1,5 @@
 import { isPage } from '../util/index'
-import { Page } from 'ui/page'
+import { Page } from 'tns-core-modules/ui/page'
 
 export default {
   install(Vue) {

@@ -1,6 +1,6 @@
-import { LayoutBase } from 'ui/layouts/layout-base'
-import { ContentView } from 'ui/content-view'
-import { View } from 'ui/core/view'
+import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base'
+import { ContentView } from 'tns-core-modules/ui/content-view'
+import { View } from 'tns-core-modules/ui/core/view'
 
 export function isView(view) {
   return view instanceof View

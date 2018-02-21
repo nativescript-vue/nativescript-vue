@@ -1,11 +1,11 @@
-import { start } from 'application'
+import { start } from 'tns-core-modules/application'
 import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
 import { registerElement } from '../element-registry'
 import { isPage } from '../util/index'
-import { Page } from 'ui/page'
+import { Page } from 'tns-core-modules/ui/page'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'

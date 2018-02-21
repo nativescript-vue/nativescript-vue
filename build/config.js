@@ -38,7 +38,7 @@ const builds = {
         moduleName: 'NativeScript-Vue',
         banner: banner('NativeScript-Vue'),
         external(id) {
-            return id.startsWith('ui/') || id.startsWith('application')
+            return id.startsWith('tns-core-modules') || id.startsWith('weex')
         }
     },
     'nativescript-vue-template-compiler': {

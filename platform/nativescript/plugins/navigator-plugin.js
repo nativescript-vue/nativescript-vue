@@ -1,9 +1,9 @@
 import { VUE_VM_REF } from '../runtime/index'
 import { isPage } from '../util/index'
-import { start } from 'application'
-import { topmost } from 'ui/frame'
+import { start } from 'tns-core-modules/application'
+import { topmost } from 'tns-core-modules/ui/frame'
 import { after } from '../util'
-import { Page } from 'ui/page'
+import { Page } from 'tns-core-modules/ui/page'
 
 export default {
   install(Vue) {
