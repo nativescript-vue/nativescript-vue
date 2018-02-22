@@ -14,6 +14,8 @@ import RouterPlugin from './plugins/router-plugin'
 
 import { setVue } from './util'
 
+Vue.config.silent = true
+
 setVue(Vue)
 
 Vue.use(ModalPlugin)
