@@ -82,7 +82,7 @@ export default {
           ? items.getItem(index)
           : items[index]
 
-      const name = args.object._itemTemplateSelector(context, index, items)
+      const name = args.object._itemTemplateSelector(currentItem, index, items)
       const context = this.getItemContext(currentItem, index)
       const oldVnode = args.view && args.view[VUE_VIEW]
 

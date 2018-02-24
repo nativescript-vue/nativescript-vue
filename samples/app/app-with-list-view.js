@@ -45,7 +45,7 @@ new Vue({
           
           <v-template if="item.type === 'page'">
             <WrapLayout orientation="horizontal" class="list-group-item active">
-              <Label :text="'>>>>>>>' + item.title" style="color: red;" />
+              <Label :text="item.title" style="color: red;" />
             </WrapLayout>
           </v-template>
           
