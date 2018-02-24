@@ -77,8 +77,12 @@ export function after(original, thisArg, wrap) {
 export function deepProxy(object, depth = 0) {
   return new Proxy(object, {
     get(target, key) {
-      if (key === 'toString') {
+      if (key === 'toString' || key === 'valueOf') {
         return () => ''
+      }
+
+      if (key === Symbol.toPrimitive) {
+        return hint => hint
       }
 
       if (depth > 10) {
