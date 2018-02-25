@@ -7,9 +7,6 @@ export default {
       type: Array,
       required: true
     },
-    separatorColor: {
-      type: String
-    },
     '+alias': {
       type: String,
       default: 'item'
@@ -19,20 +16,18 @@ export default {
     }
   },
 
-  render(h) {
-    return h(
-      'native-list-view',
-      {
-        ref: 'listView',
-        on: this._on,
-        domProps: {
-          items: this.items,
-          separatorColor: this.separatorColor
-        }
-      },
-      this.$slots.default
-    )
-  },
+  template: `
+  <native-list-view
+    ref="listView" 
+    :items="items"
+    v-bind="$attrs"
+    v-on="listeners" 
+    @itemTap="onItemTap"
+    @itemLoading="onItemLoading"
+  >
+    <slot />
+  </native-list-view>
+  `,
 
   watch: {
     items: {
@@ -45,17 +40,11 @@ export default {
   },
 
   created() {
-    this._on = {
-      itemLoading: this.onItemLoading,
-      itemTap: args =>
-        this.$emit(
-          'itemTap',
-          Object.assign({ item: this.items[args.index] }, args)
-        ),
-      loaded: args => this.$emit('loaded', args),
-      unloaded: args => this.$emit('unloaded', args),
-      loadMoreItems: args => this.$emit('loadMoreItems', args)
-    }
+    // we need to remove the itemTap handler from a clone of the $listeners
+    // object because we are emitting the event ourselves with added data.
+    const listeners = Object.assign({}, this.$listeners)
+    delete listeners.itemTap
+    this.listeners = listeners
   },
 
   mounted() {
@@ -73,6 +62,12 @@ export default {
   },
 
   methods: {
+    onItemTap(args) {
+      this.$emit(
+        'itemTap',
+        Object.assign({ item: this.items[args.index] }, args)
+      )
+    },
     onItemLoading(args) {
       const index = args.index
       const items = args.object.items
