@@ -1,6 +1,14 @@
 const Vue = require('./nativescript-vue')
 const VueRouter = require('vue-router')
 
+Vue.config.silent = false
+Vue.config.debug = true
+Vue.config.errorHandler = (e, vm, info) => {
+  console.log('+'.repeat(80))
+  console.log(e, vm, info)
+  console.dir(e)
+  console.log('+'.repeat(80))
+}
 Vue.use(VueRouter)
 
 const Foo = {
@@ -70,8 +78,9 @@ new Vue({
           <Button text="Foo" @tap="changeRoute('/foo')" class="m-10" />
           <Button text="Bar" @tap="changeRoute('/bar')" class="m-10" />
         </StackLayout>
-
-        <router-view />
+        <transition name="fade" :duration="1000" mode="out-in">
+          <router-view />
+        </transition>
       </StackLayout>
     </Page>
   `,

@@ -87,6 +87,10 @@ export default class ViewNode {
     return (this._ownerDocument = el)
   }
 
+  getAttribute(key) {
+    return this.nativeView[key]
+  }
+
   /* istanbul ignore next */
   setAttribute(key, value) {
     try {

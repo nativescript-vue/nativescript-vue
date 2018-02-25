@@ -53,7 +53,7 @@ function updateStyle(oldVnode, vnode) {
 
 function toObject(arr) {
   const res = {}
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (arr[i]) {
       extend(res, arr[i])
     }

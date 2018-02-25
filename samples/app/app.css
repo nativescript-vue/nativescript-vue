@@ -9,3 +9,21 @@
 .odd {
     color: blue;
 }
+
+
+.fade-enter-active {
+    animation-name: fade;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+.fade-leave-active {
+    animation-name: fade;
+    animation-duration: 3s;
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
