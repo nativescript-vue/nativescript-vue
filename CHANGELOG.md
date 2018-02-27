@@ -1,3 +1,19 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.2.0...v1.3.0) (2018-02-27)
+
+
+### Bug Fixes
+
+* allow deepProxy to be used in expressions ([d7646ee](https://github.com/nativescript-vue/nativescript-vue/commit/d7646ee))
+* fix list view template selector getting the wrong item ([d648a57](https://github.com/nativescript-vue/nativescript-vue/commit/d648a57))
+
+
+### Features
+
+* add transition component ([4951821](https://github.com/nativescript-vue/nativescript-vue/commit/4951821)), closes [#110](https://github.com/nativescript-vue/nativescript-vue/issues/110)
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.1.3...v1.2.0) (2018-02-22)
 
