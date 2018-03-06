@@ -24,8 +24,8 @@ Vue.$document = Vue.prototype.$document = new DocumentNode()
 
 Vue.registerElement = registerElement
 
-Vue.options.directives = platformDirectives
-Vue.options.components = platformComponents
+Object.assign(Vue.options.directives, platformDirectives)
+Object.assign(Vue.options.components, platformComponents)
 
 Vue.prototype.__patch__ = patch
 
