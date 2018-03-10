@@ -1,3 +1,14 @@
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.0...v1.3.1) (2018-03-10)
+
+
+### Bug Fixes
+
+* allow using for attribute in custom components ([3114cca](https://github.com/nativescript-vue/nativescript-vue/commit/3114cca))
+* assign to existing instead of replacing ([ce3e9ea](https://github.com/nativescript-vue/nativescript-vue/commit/ce3e9ea))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.2.0...v1.3.0) (2018-02-27)
 
