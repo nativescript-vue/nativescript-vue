@@ -1,21 +1,21 @@
-import { getAndRemoveAttr, addRawAttr } from 'compiler/helpers'
-import { normalizeElementName } from '../../element-registry'
-import { parseFor } from 'compiler/parser/index'
-import { warn } from 'core/util/debug'
+import {getAndRemoveAttr, addRawAttr} from 'compiler/helpers'
+import {normalizeElementName} from '../../element-registry'
+import {parseFor} from 'compiler/parser/index'
+import {warn} from 'core/util/debug'
 
 function preTransformNode(el) {
-  if (normalizeElementName(el.tag) !== 'listview') {
-    return
-  }
+  let vfor
 
-  const vfor = getAndRemoveAttr(el, 'v-for')
-  delete el.attrsMap['v-for']
-  if (process.env.NODE_ENV !== 'production' && vfor) {
-    warn(
-      `The v-for directive is not supported on a ${el.tag}, ` +
+  if (normalizeElementName(el.tag) === 'listview') {
+    vfor = getAndRemoveAttr(el, 'v-for')
+    delete el.attrsMap['v-for']
+    if (process.env.NODE_ENV !== 'production' && vfor) {
+      warn(
+        `The v-for directive is not supported on a ${el.tag}, ` +
         'Use the "for" attribute instead. For example, instead of ' +
         `<${el.tag} v-for="${vfor}"> use <${el.tag} for="${vfor}">.`
-    )
+      )
+    }
   }
 
   const exp = getAndRemoveAttr(el, 'for') || vfor
