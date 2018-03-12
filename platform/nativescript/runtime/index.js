@@ -59,7 +59,7 @@ const mount = function(el, hydrating) {
       }
     })
   } else {
-    mountComponent(this, el, hydrating)
+    return mountComponent(this, el, hydrating)
   }
 }
 
