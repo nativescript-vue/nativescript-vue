@@ -33,7 +33,7 @@ export default {
         this.$root.$el.nativeView.showModal(
           modalPage,
           null,
-          resolve,
+          vm.$modal.close,
           options.fullscreen
         )
       })
