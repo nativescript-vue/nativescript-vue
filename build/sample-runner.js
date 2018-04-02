@@ -24,18 +24,29 @@ inquirer
       type: 'list',
       message: 'Choose a platform to run on',
       name: 'platform',
-      choices: ['Android', 'iOS']
+      choices: ['Android', 'iOS', 'Both']
     }
   ])
   .then(res => {
     setMain(res.sample)
-    tns = spawn('tns', ['run', res.platform], {
-      cwd: path.resolve(__dirname, '../samples')
-    })
+    if(res.platform.toLowerCase() === 'both') {
+      runPlatform('ios')
+      runPlatform('android')
 
-    tns.on('error', err => console.log(err))
-    tns.stdout.on('data', data => process.stdout.write(data))
+      return;
+    }
+
+    runPlatform(res.platform)
   })
+
+function runPlatform(platform) {
+  tns = spawn('tns', ['run', platform], {
+    cwd: path.resolve(__dirname, '../samples')
+  })
+
+  tns.on('error', err => console.log(err))
+  tns.stdout.on('data', data => process.stdout.write(platform + ': ' +data))
+}
 
 function shutDown() {
   if (tns) {
