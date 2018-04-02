@@ -1,5 +1,4 @@
-import { isPage } from '../util/index'
-import { Page } from 'tns-core-modules/ui/page'
+import { ensurePage } from '../util'
 
 export default {
   install(Vue) {
@@ -8,26 +7,17 @@ export default {
       options = { context: null, fullscreen: false }
     ) {
       return new Promise(resolve => {
-        const placeholder = this.$document.createComment('placeholder')
-
         const contentComponent = Vue.extend(component)
         const vm = new contentComponent(options.context)
+
+        vm.$mount()
+        const modalPage = ensurePage(vm.$el, vm)
 
         contentComponent.prototype.$modal = {
           close(data) {
             resolve(data)
             modalPage.closeModal()
-            setTimeout(() => {
-              vm.$destroy()
-            })
           }
-        }
-
-        vm.$mount(placeholder)
-        const modalPage = isPage(vm.$el) ? vm.$el.nativeView : new Page()
-
-        if (!isPage(vm.$el)) {
-          modalPage.content = vm.$el.nativeView
         }
 
         this.$root.$el.nativeView.showModal(

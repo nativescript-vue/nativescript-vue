@@ -4,8 +4,6 @@ import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
 import { registerElement } from '../element-registry'
-import { isPage } from '../util/index'
-import { Page } from 'tns-core-modules/ui/page'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
@@ -13,6 +11,7 @@ import platformComponents from './components/index'
 import platformDirectives from './directives/index'
 
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
+import { ensurePage } from '../util'
 
 export const VUE_VM_REF = '__vue_vm_ref__'
 
@@ -22,46 +21,13 @@ Vue.config.isUnknownElement = isUnknownElement
 
 Vue.$document = Vue.prototype.$document = new DocumentNode()
 
+Vue.compile = compileToFunctions
 Vue.registerElement = registerElement
 
 Object.assign(Vue.options.directives, platformDirectives)
 Object.assign(Vue.options.components, platformComponents)
 
 Vue.prototype.__patch__ = patch
-
-Vue.prototype.$start = function() {
-  this.__is_root__ = true
-
-  const placeholder = this.$document.createComment('placeholder')
-
-  this.$mount(placeholder)
-}
-
-const mount = function(el, hydrating) {
-  if (this.__is_root__ && !this.__started__) {
-    const self = this
-    start({
-      create() {
-        // Call mountComponent in the create callback when the IOS app loop has started
-        // https://github.com/rigor789/nativescript-vue/issues/24
-        mountComponent(self, el, hydrating)
-        self.__started__ = true
-
-        const page = isPage(self.$el) ? self.$el.nativeView : new Page()
-
-        if (!isPage(self.$el)) {
-          page.content = self.$el.nativeView
-        }
-
-        page[VUE_VM_REF] = self
-
-        return page
-      }
-    })
-  } else {
-    return mountComponent(this, el, hydrating)
-  }
-}
 
 Vue.prototype.$mount = function(el, hydrating) {
   const options = this.$options
@@ -77,7 +43,8 @@ Vue.prototype.$mount = function(el, hydrating) {
       const { render, staticRenderFns } = compileToFunctions(
         template,
         {
-          delimiters: options.delimiters
+          delimiters: options.delimiters,
+          comments: options.comments
         },
         this
       )
@@ -85,22 +52,24 @@ Vue.prototype.$mount = function(el, hydrating) {
       options.staticRenderFns = staticRenderFns
     }
   }
-  return mount.call(this, el, hydrating)
+
+  return mountComponent(this, el, hydrating)
 }
 
-Vue.compile = compileToFunctions
-Vue.prototype.$renderTemplate = function(template, context, oldVnode) {
-  let slot = template
-  if (typeof template !== 'function') {
-    slot = this.$scopedSlots[template]
-      ? this.$scopedSlots[template]
-      : this.$scopedSlots.default
-  }
+Vue.prototype.$start = function() {
+  const self = this
 
-  let vnode = slot(context)[0]
-  this.__patch__(oldVnode, vnode)
+  start({
+    create() {
+      if (self.$el) {
+        self.$el.nativeView.parent = null
+        return self.$el.nativeView
+      }
 
-  return vnode
+      self.$mount()
+      return ensurePage(self.$el, self)
+    }
+  })
 }
 
 export default Vue

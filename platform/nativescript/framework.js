@@ -44,19 +44,20 @@ console.keys = function(object) {
 // this fixes the issue of resuming the application
 // however this might not be the desired functionality
 // Todo: figure out if there is a better way to fix application resume.
-application.on(application.exitEvent, () => {
-  const frame = topmost()
-  if (frame) {
-    frame.eachChildView(child => {
-      const vm = child[VUE_VM_REF]
-
-      if (vm) {
-        vm.$destroy()
-      }
-      frame._removeView(child)
-    })
-  }
-})
+// application.on(application.exitEvent, () => {
+//   const frame = topmost()
+//   if (frame) {
+//     frame.eachChildView(child => {
+//       const vm = child[VUE_VM_REF]
+//
+//       if (vm) {
+//         console.log('DESTROYING ON APPEXITEVENT...')
+//         vm.$destroy()
+//       }
+//       frame._removeView(child)
+//     })
+//   }
+// })
 
 global.__onLiveSyncCore = () => {
   const frame = topmost()
