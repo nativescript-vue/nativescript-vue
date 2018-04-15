@@ -1,3 +1,14 @@
+<a name="1.3.2-rc.0"></a>
+## [1.3.2-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.1...v1.3.2-rc.0) (2018-04-15)
+
+
+### Bug Fixes
+
+* destroy modal vm when modal is closed ([#131](https://github.com/nativescript-vue/nativescript-vue/issues/131)) ([1fd7c81](https://github.com/nativescript-vue/nativescript-vue/commit/1fd7c81))
+* return mounted component ([#132](https://github.com/nativescript-vue/nativescript-vue/issues/132)) ([a9187b7](https://github.com/nativescript-vue/nativescript-vue/commit/a9187b7))
+
+
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.0...v1.3.1) (2018-03-10)
 
