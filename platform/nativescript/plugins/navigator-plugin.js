@@ -15,7 +15,7 @@ export default {
       return new Promise(resolve => {
         const navigationEntry = {
           create() {
-            const vm = new (Vue.extend(component))(options)
+            const vm = new (Vue.extend(component))(options.context)
 
             vm.$mount()
             const pageInstance = ensurePage(vm.$el, vm)
