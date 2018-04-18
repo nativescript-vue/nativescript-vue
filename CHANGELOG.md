@@ -1,3 +1,13 @@
+<a name="1.3.2-rc.2"></a>
+## [1.3.2-rc.2](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.1...v1.3.2-rc.2) (2018-04-18)
+
+
+### Features
+
+* **bootstrap:** use the launch event instead of a navigation entry ([13192b0](https://github.com/nativescript-vue/nativescript-vue/commit/13192b0))
+
+
+
 <a name="1.3.2-rc.1"></a>
 ## [1.3.2-rc.1](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.0...v1.3.2-rc.1) (2018-04-18)
 
