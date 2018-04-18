@@ -57,13 +57,14 @@ Vue.prototype.$mount = function(el, hydrating) {
 }
 
 Vue.prototype.$start = function() {
-  const self = this
+  let self = this
+  const AppConstructor = Vue.extend(this.$options)
 
   start({
     create() {
       if (self.$el) {
-        self.$el.nativeView.parent = null
-        return self.$el.nativeView
+        self.$destroy()
+        self = new AppConstructor()
       }
 
       self.$mount()
