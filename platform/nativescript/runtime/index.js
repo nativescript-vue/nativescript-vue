@@ -1,4 +1,4 @@
-import { start } from 'tns-core-modules/application'
+import { start, on, launchEvent } from 'tns-core-modules/application'
 import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
@@ -60,17 +60,17 @@ Vue.prototype.$start = function() {
   let self = this
   const AppConstructor = Vue.extend(this.$options)
 
-  start({
-    create() {
-      if (self.$el) {
-        self.$destroy()
-        self = new AppConstructor()
-      }
-
-      self.$mount()
-      return ensurePage(self.$el, self)
+  on(launchEvent, args => {
+    if (self.$el) {
+      self.$destroy()
+      self = new AppConstructor()
     }
+
+    self.$mount()
+    args.root = ensurePage(self.$el, self)
   })
+
+  start()
 }
 
 export default Vue
