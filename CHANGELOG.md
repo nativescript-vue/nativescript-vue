@@ -1,3 +1,13 @@
+<a name="1.3.2-rc.1"></a>
+## [1.3.2-rc.1](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.0...v1.3.2-rc.1) (2018-04-18)
+
+
+### Bug Fixes
+
+* **bootstrap:** re-mount when activity is re-created ([850b12b](https://github.com/nativescript-vue/nativescript-vue/commit/850b12b))
+
+
+
 <a name="1.3.2-rc.0"></a>
 ## [1.3.2-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.1...v1.3.2-rc.0) (2018-04-15)
 
