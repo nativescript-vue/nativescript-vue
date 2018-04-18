@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue",
-  "version": "1.3.2-rc.0",
+  "version": "1.3.2-rc.1",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "files": [
