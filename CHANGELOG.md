@@ -1,3 +1,15 @@
+<a name="1.3.2-rc.4"></a>
+## [1.3.2-rc.4](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.3...v1.3.2-rc.4) (2018-04-22)
+
+
+### Bug Fixes
+
+* add missing setStyleScope method ([eb03732](https://github.com/nativescript-vue/nativescript-vue/commit/eb03732))
+* check for existence of meta before accessing it ([a67119e](https://github.com/nativescript-vue/nativescript-vue/commit/a67119e))
+* check for parentNode before calling .meta on it ([45cb46d](https://github.com/nativescript-vue/nativescript-vue/commit/45cb46d))
+
+
+
 <a name="1.3.2-rc.3"></a>
 ## [1.3.2-rc.3](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.2...v1.3.2-rc.3) (2018-04-22)
 
