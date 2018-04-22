@@ -69,3 +69,7 @@ export function setAttribute(node, key, val) {
 
   node.setAttribute(key, val)
 }
+
+export function setStyleScope(node, scopeId) {
+  node.setAttribute(scopeId, '')
+}
