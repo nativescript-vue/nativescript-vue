@@ -270,3 +270,11 @@ registerElement(
     skipAddToDom: true
   }
 )
+
+registerElement('Frame', () => require('tns-core-modules/ui/frame').Frame, {
+  insertChild(parentNode, childNode, atIndex) {
+    if (childNode.tagName === 'page') {
+      parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+    }
+  }
+})

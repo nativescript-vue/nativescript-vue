@@ -15,6 +15,10 @@ export function isContentView(view) {
 }
 
 export function insertChild(parentNode, childNode, atIndex = -1) {
+  if (typeof parentNode.meta.insertChild === 'function') {
+    return parentNode.meta.insertChild(parentNode, childNode, atIndex)
+  }
+
   if (!parentNode || childNode.meta.skipAddToDom) {
     return
   }
@@ -51,6 +55,10 @@ export function insertChild(parentNode, childNode, atIndex = -1) {
 }
 
 export function removeChild(parentNode, childNode) {
+  if (typeof parentNode.meta.removeChild === 'function') {
+    return parentNode.meta.removeChild(parentNode, childNode)
+  }
+
   if (!parentNode || childNode.meta.skipAddToDom) {
     return
   }

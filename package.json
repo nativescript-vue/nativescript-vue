@@ -76,7 +76,7 @@
     "set-value": "^2.0.0",
     "tns-core-modules": "^3.4.0",
     "util-inspect": "^0.1.8",
-    "vue": "^2.5.13"
+    "vue": "^2.5.16"
   },
   "jest": {
     "verbose": true,
