@@ -19,7 +19,7 @@ export function insertChild(parentNode, childNode, atIndex = -1) {
     return
   }
 
-  if (typeof parentNode.meta.insertChild === 'function') {
+  if (parentNode.meta && typeof parentNode.meta.insertChild === 'function') {
     return parentNode.meta.insertChild(parentNode, childNode, atIndex)
   }
 
@@ -63,7 +63,7 @@ export function removeChild(parentNode, childNode) {
     return
   }
 
-  if (typeof parentNode.meta.removeChild === 'function') {
+  if (parentNode.meta && typeof parentNode.meta.removeChild === 'function') {
     return parentNode.meta.removeChild(parentNode, childNode)
   }
 
