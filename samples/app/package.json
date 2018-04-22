@@ -1,5 +1,5 @@
 {
-  "main": "app-with-android-ios.js",
+  "main": "app-with-frames.js",
   "name": "nativescript-template-tutorial",
   "version": "1.0.1"
 }
