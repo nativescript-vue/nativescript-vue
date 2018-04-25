@@ -56,7 +56,7 @@ Vue.prototype.$mount = function(el, hydrating) {
   return mountComponent(this, el, hydrating)
 }
 
-Vue.prototype.$start = function() {
+Vue.prototype.$start = function({ getRootView }) {
   let self = this
   const AppConstructor = Vue.extend(this.$options)
 
@@ -67,7 +67,10 @@ Vue.prototype.$start = function() {
     }
 
     self.$mount()
-    args.root = ensurePage(self.$el, self)
+    args.root =
+      typeof getRootView === 'function'
+        ? getRootView(self)
+        : ensurePage(self.$el, self)
   })
 
   start()
