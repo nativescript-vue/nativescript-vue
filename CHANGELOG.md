@@ -1,3 +1,20 @@
+<a name="1.4.0-alpha.0"></a>
+# [1.4.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.4...v1.4.0-alpha.0) (2018-05-07)
+
+
+### Features
+
+* allow custom getRootView implementation ([4ec580c](https://github.com/nativescript-vue/nativescript-vue/commit/4ec580c))
+* use the new run method instead of the old start method ([d840d3c](https://github.com/nativescript-vue/nativescript-vue/commit/d840d3c))
+
+
+### BREAKING CHANGES
+
+* nativescript 3.x will no longer work with this change because application.run has
+been added in 4.0
+
+
+
 <a name="1.3.2-rc.4"></a>
 ## [1.3.2-rc.4](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.3...v1.3.2-rc.4) (2018-04-22)
 
