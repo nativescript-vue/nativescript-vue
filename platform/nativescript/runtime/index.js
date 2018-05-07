@@ -1,4 +1,4 @@
-import { start, on, launchEvent } from 'tns-core-modules/application'
+import { run, on, launchEvent } from 'tns-core-modules/application'
 import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
@@ -73,7 +73,7 @@ Vue.prototype.$start = function({ getRootView }) {
         : ensurePage(self.$el, self)
   })
 
-  start()
+  run()
 }
 
 export default Vue
