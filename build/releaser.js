@@ -15,7 +15,13 @@ inquirer
       name: 'customVersion',
       type: 'input',
       message: 'Input version',
-      choices: ['alpha', 'beta', 'patch', 'pre-release'],
+      // choices: ['alpha', 'beta', 'patch', 'pre-release'],
+      when: ({bump}) => bump === 'custom'
+    },
+    {
+      name: 'releaseTag',
+      type: 'input',
+      message: 'Input release tag',
       when: ({bump}) => bump === 'custom'
     }
   ])
@@ -29,17 +35,20 @@ inquirer
       inquirer.prompt([{
         name: 'confirmed',
         type: 'confirm',
-        message: 'Are you sure you want to release v' + v.version,
+        message: 'Are you sure you want to release v' + v.version + (res.releaseTag ? ' with tag: ' + res.releaseTag: ''),
         default: false
       }]).then((res) => {
         if (res.confirmed) {
-          return resolve(v.version)
+          return resolve({
+            version: v.version,
+            releaseTag: res.releaseTag
+          })
         }
         reject()
       }).catch(reject)
     })
   })
-  .then(version => {
+  .then(({version, releaseTag}) => {
     console.log(blue(`Releasing v${version}...`))
     console.log(blue('-'.repeat(80)))
 
@@ -61,7 +70,7 @@ inquirer
       git push origin refs/tags/v${version}
       git push origin master
       echo "Publishing to npm"
-      npm publish
+      npm publish${releaseTag ? ' --tag ' + releaseTag : ''}
       npm run changelog
       git add CHANGELOG.md
       git commit --no-verify -m "chore: update changelog"
@@ -83,7 +92,7 @@ inquirer
 function runCommands(commands) {
   return commands.split('\n')
     .map(c => c.trim())
-    .filter(c => c.length)
+    .filter(c => !!c.length)
     .reduce((promise, command) => {
       return promise.then(() => runCommand(command))
     }, Promise.resolve())
