@@ -241,9 +241,9 @@ registerElement(
 )
 registerElement(
   'FormattedString',
-  () => require('text/formatted-string').FormattedString
+  () => require('tns-core-modules/text/formatted-string').FormattedString
 )
-registerElement('Span', () => require('text/span').Span)
+registerElement('Span', () => require('tns-core-modules/text/span').Span)
 
 registerElement(
   'DetachedContainer',
