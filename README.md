@@ -24,7 +24,8 @@
 
 <h2 align="center">Supporting NativeScript-Vue</h2>
 
-<h3 align="center">Sponsors</h3>
+NativeScript-Vue is an MIT-licensed open source project made possible by our sponsors:
+
 <!--sponsors-->
 <table>
   <tbody>
@@ -44,8 +45,7 @@
 </table>
 <!--/sponsors-->
 
-NativeScript-Vue is an MIT-licensed open source project made possible by
-these awesome backers:
+and these awesome backers:
 
 - Tiago Alves
 - Kamen Bundev
