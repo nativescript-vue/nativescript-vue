@@ -23,6 +23,27 @@
 </p>
 
 <h2 align="center">Supporting NativeScript-Vue</h2>
+
+<h3 align="center">Sponsors</h3>
+<!--sponsors-->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.privateinternetaccess.com/" target="_blank">
+          <img width="300px" src="https://art.nativescript-vue.org/sponsors/pia.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://kiwiirc.com/" target="_blank">
+          <img height="90px" src="https://art.nativescript-vue.org/sponsors/kiwiirc.png">
+        </a>
+      </td>
+    </tr><tr></tr>
+  </tbody>
+</table>
+<!--/sponsors-->
+
 NativeScript-Vue is an MIT-licensed open source project made possible by
 these awesome backers:
 
