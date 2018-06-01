@@ -21,9 +21,9 @@ const Detail = {
     <Page>
         <GridLayout rows="*, *, *">
             <Label :text="'Detail for ' + $route.params.id" row="0"/>
-            <Button text="Tab 2" @tap="$router.replace($route.path + '/tab2')"/> 
+            <Button row="1" text="Tab 2" @tap="$router.replace($route.path + '/tab2')"/> 
             
-            <router-view row="1" />
+            <router-view row="2" />
         </GridLayout>
     </Page>
   `
