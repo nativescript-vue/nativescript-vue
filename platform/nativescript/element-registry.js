@@ -127,9 +127,11 @@ registerElement(
   'NativeNavigationButton',
   () => require('tns-core-modules/ui/action-bar').NavigationButton
 )
-registerElement('Page', () => require('tns-core-modules/ui/page').Page, {
+
+registerElement('NativePage', () => require('tns-core-modules/ui/page').Page, {
   skipAddToDom: true
 })
+
 registerElement(
   'Placeholder',
   () => require('tns-core-modules/ui/placeholder').Placeholder
@@ -271,10 +273,14 @@ registerElement(
   }
 )
 
-registerElement('Frame', () => require('tns-core-modules/ui/frame').Frame, {
-  insertChild(parentNode, childNode, atIndex) {
-    if (childNode.tagName === 'page') {
-      parentNode.nativeView.navigate({ create: () => childNode.nativeView })
-    }
+registerElement(
+  'NativeFrame',
+  () => require('tns-core-modules/ui/frame').Frame,
+  {
+    // insertChild(parentNode, childNode, atIndex) {
+    //   if (childNode.tagName === 'page' || childNode.tagName === 'nativepage') {
+    //     parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+    //   }
+    // }
   }
-})
+)

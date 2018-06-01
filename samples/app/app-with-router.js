@@ -91,4 +91,8 @@ new Vue({
       router.replace(to)
     }
   }
-}).$start()
+}).$start({
+  getRootView(vm) {
+    return vm.$el.nativeView
+  }
+})

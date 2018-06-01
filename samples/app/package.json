@@ -1,5 +1,5 @@
 {
-  "main": "app-with-frames.js",
+  "main": "app-with-router-v2.js",
   "name": "nativescript-template-tutorial",
   "version": "1.0.1"
 }
