@@ -10,7 +10,8 @@ const Home = {
   template: `
     <Page>
         <StackLayout>
-            <Button text="Go to details page..." @tap="$router.push('/detail/1')"/>
+            <Button text="Go to details page 1..." @tap="$router.push('/detail/1')"/>
+            <Button text="Go to details page 2..." @tap="$router.push('/detail/2')"/>
         </StackLayout>
     </Page>
   `
@@ -19,12 +20,12 @@ const Home = {
 const Detail = {
   template: `
     <Page>
-        <GridLayout rows="*, *, *">
-            <Label :text="'Detail for ' + $route.params.id" row="0"/>
-            <Button row="1" text="Tab 2" @tap="$router.replace($route.path + '/tab2')"/> 
+        <StackLayout>
+            <Label :text="'Detail page for ' + $route.params.id"/>
+            <Button text="go to Tab 2 of the current page" @tap="$router.push($route.path + '/tab2')"/> 
             
-            <router-view row="2" />
-        </GridLayout>
+            <router-view/>
+        </StackLayout>
     </Page>
   `
 }
@@ -58,19 +59,19 @@ const router = new VueRouter({
 
 router.push('/')
 
-application.android.on('activityBackPressed', args => {
-  if (router.history.stack.length > 1) {
-    router.back()
-    args.cancel = true
-  }
-})
+// application.android && application.android.on('activityBackPressed', args => {
+//   if (router.history.stack.length > 1) {
+//     router.back()
+//     args.cancel = true
+//   }
+// })
 
 new Vue({
   router,
   template: `
-    <GridLayout rows="*, 80">
+    <GridLayout rows="*, 40">
       <Frame row="0">
-        <router-view :key="$route.path" />
+        <router-view />
       </Frame>
       
       <Label :text="$route.path"

@@ -1,21 +1,24 @@
 export default {
-  template: `<NativePage :ref="reference" v-bind="$attrs" v-on="$listeners">
-        <slot></slot>
-    </NativePage>`,
-  data() {
-    return {
-      reference: Math.random()
-        .toString(36)
-        .substring(2, 15),
-      context: null
-    }
-  },
+  name: 'page',
+  template: `
+    <NativePage v-bind="$attrs" v-on="$listeners">
+      <slot />
+    </NativePage>
+  `,
   mounted() {
-    let THIS = this
-    this.context = this.$refs[this.reference]
+    this.$nextTick(() => this.navigateToPage())
+  },
+  methods: {
+    navigateToPage() {
+      console.log('navigateToPage')
+      // find the closest parent frame
+      let parentFrame = this.$parent
+      while (parentFrame.$options.name !== 'frame') {
+        parentFrame = parentFrame.$parent
+      }
 
-    this.$nextTick(function() {
-      THIS.$parent.$parent.$emit('page_has_been_loaded', this.context)
-    })
+      // navigate the found frame to the page
+      parentFrame.navigateToPage(this.$el.nativeView)
+    }
   }
 }

@@ -15,13 +15,13 @@ export default {
   ActionBar,
   ActionItem,
   android,
+  Frame,
   ios,
   ListView,
   NavigationButton,
+  Page,
   TabView,
   TabViewItem,
   transition,
-  VTemplate,
-  Frame,
-  Page
+  VTemplate
 }

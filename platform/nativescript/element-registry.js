@@ -277,10 +277,10 @@ registerElement(
   'NativeFrame',
   () => require('tns-core-modules/ui/frame').Frame,
   {
-    // insertChild(parentNode, childNode, atIndex) {
-    //   if (childNode.tagName === 'page' || childNode.tagName === 'nativepage') {
-    //     parentNode.nativeView.navigate({ create: () => childNode.nativeView })
-    //   }
-    // }
+    insertChild(parentNode, childNode, atIndex) {
+      //   if (childNode.tagName === 'page' || childNode.tagName === 'nativepage') {
+      //     parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+      //   }
+    }
   }
 )
