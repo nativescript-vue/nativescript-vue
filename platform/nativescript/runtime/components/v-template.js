@@ -101,9 +101,9 @@ export class VueKeyedTemplate /* implements KeyedTemplate */ {
   }
 
   createView() {
-    const vnode = this._scopedFn(deepProxy({}))
-    const nativeView = patch(null, vnode).nativeView
-    nativeView[VUE_VIEW] = vnode
-    return nativeView
+    // we are returning null because we don't have the data here
+    // the view will be created in the `patchTemplate` method above.
+    // see https://github.com/nativescript-vue/nativescript-vue/issues/229#issuecomment-390330474
+    return null
   }
 }
