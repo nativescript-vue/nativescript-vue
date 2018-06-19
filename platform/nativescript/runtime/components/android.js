@@ -5,7 +5,7 @@ export default {
   functional: true,
   render(h, { children }) {
     if (isAndroid) {
-      return children[0]
+      return children
     }
   }
 }
