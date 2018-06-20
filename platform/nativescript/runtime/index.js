@@ -11,7 +11,6 @@ import platformComponents from './components/index'
 import platformDirectives from './directives/index'
 
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
-import { ensurePage } from '../util'
 
 export const VUE_VM_REF = '__vue_vm_ref__'
 
@@ -56,7 +55,7 @@ Vue.prototype.$mount = function(el, hydrating) {
   return mountComponent(this, el, hydrating)
 }
 
-Vue.prototype.$start = function({ getRootView }) {
+Vue.prototype.$start = function() {
   let self = this
   const AppConstructor = Vue.extend(this.$options)
 
@@ -67,10 +66,7 @@ Vue.prototype.$start = function({ getRootView }) {
     }
 
     self.$mount()
-    args.root =
-      typeof getRootView === 'function'
-        ? getRootView(self)
-        : ensurePage(self.$el, self)
+    args.root = self.$el.nativeView
   })
 
   run()
