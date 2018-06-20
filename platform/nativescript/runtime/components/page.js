@@ -11,12 +11,25 @@ export default {
     )
   },
   mounted() {
-    this._findParentFrame().notifyPageMounted(this)
+    const frame = this._findParentFrame()
+    if (frame) {
+      frame.notifyPageMounted(this)
+    }
+
+    this.$nextTick(() => {
+      const handler = e => {
+        if (e.isBackNavigation) {
+          this.$el.nativeView.off('navigatedFrom', handler)
+          this.$destroy()
+        }
+      }
+      this.$el.nativeView.on('navigatedFrom', handler)
+    })
   },
   methods: {
     _findParentFrame() {
       let parentFrame = this.$parent
-      while (parentFrame.$options.name !== 'frame') {
+      while (parentFrame && parentFrame.$options.name !== 'frame') {
         parentFrame = parentFrame.$parent
       }
 

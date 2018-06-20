@@ -1,6 +1,3 @@
-import Vue from '../../framework'
-//const Frame = require('tns-core-modules/ui/frame').Frame
-
 export default {
   name: 'frame',
   created() {
@@ -18,27 +15,54 @@ export default {
   },
   methods: {
     _getFrame() {
-      return this.$el.nativeView // as Frame
+      return this.$el.nativeView
     },
 
     notifyPageMounted(pageVm) {
       this.$nextTick(() => {
-        console.log('notifyPageMounted')
         this.navigate({
           create: _ => pageVm.$el.nativeView
         })
       })
     },
 
-    goBack() {
-      this._getFrame()
-    },
-    navigate(entry) {
+    navigate(entry, back = false) {
       const frame = this._getFrame()
 
-      console.log(frame.backStack)
+      if (back) {
+        return frame.goBack(entry)
+      }
+
+      entry.clearHistory && this.$emit('beforeReplace', entry)
+      !entry.clearHistory && this.$emit('beforePush', entry)
+
+      // resolve the page from the entry and attach a navigatedTo listener
+      // to fire the frame events
+      const page = entry.create()
+      page.once('navigatedTo', () => {
+        entry.clearHistory && this.$emit('replace', entry)
+        !entry.clearHistory && this.$emit('push', entry)
+      })
+      page.on('navigatedFrom', ({ isBackNavigation }) => {
+        if (isBackNavigation) {
+          page.off('navigatedFrom')
+          this.$emit('back', entry)
+        }
+      })
+      entry.create = () => page
       frame.navigate(entry)
-      console.log(frame.backStack)
+    },
+
+    back(backstackEntry = null) {
+      this.navigate(backstackEntry, true)
+    },
+    push(entry) {
+      this.navigate(entry)
+    },
+    replace(entry) {
+      entry.clearHistory = true
+
+      this.navigate(entry)
     }
   }
 }
