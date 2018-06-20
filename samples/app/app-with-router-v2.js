@@ -1,6 +1,5 @@
 const Vue = require('./nativescript-vue')
 const VueRouter = require('vue-router')
-const application = require('tns-core-modules/application')
 
 Vue.config.silent = false
 Vue.config.debug = true
@@ -59,13 +58,6 @@ const router = new VueRouter({
 
 router.push('/')
 
-// application.android && application.android.on('activityBackPressed', args => {
-//   if (router.history.stack.length > 1) {
-//     router.back()
-//     args.cancel = true
-//   }
-// })
-
 new Vue({
   router,
   template: `
@@ -79,8 +71,4 @@ new Vue({
             row="1" />
     </GridLayout>  
   `
-}).$start({
-  getRootView(vm) {
-    return vm.$el.nativeView
-  }
-})
+}).$start()

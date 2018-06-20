@@ -1,24 +1,26 @@
 export default {
   name: 'page',
-  template: `
-    <NativePage v-bind="$attrs" v-on="$listeners">
-      <slot />
-    </NativePage>
-  `,
+  render(h) {
+    return h(
+      'NativePage',
+      {
+        attrs: this.$attrs,
+        on: this.$listeners
+      },
+      this.$slots.default
+    )
+  },
   mounted() {
-    this.$nextTick(() => this.navigateToPage())
+    this._findParentFrame().notifyPageMounted(this)
   },
   methods: {
-    navigateToPage() {
-      console.log('navigateToPage')
-      // find the closest parent frame
+    _findParentFrame() {
       let parentFrame = this.$parent
       while (parentFrame.$options.name !== 'frame') {
         parentFrame = parentFrame.$parent
       }
 
-      // navigate the found frame to the page
-      parentFrame.navigateToPage(this.$el.nativeView)
+      return parentFrame
     }
   }
 }
