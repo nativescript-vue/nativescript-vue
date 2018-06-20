@@ -1,13 +1,24 @@
+import { setFrame, deleteFrame } from '../../util/frame'
+
 export default {
   name: 'frame',
+  props: {
+    id: {
+      default: 'default'
+    }
+  },
   created() {
+    setFrame(this.$props.id, this)
     this.cache = {}
+  },
+  destroyed() {
+    deleteFrame(this.$props.id)
   },
   render(h) {
     return h(
       'NativeFrame',
       {
-        attrs: this.$attrs,
+        attrs: Object.assign({}, this.$attrs, this.$props),
         on: this.$listeners
       },
       this.$slots.default

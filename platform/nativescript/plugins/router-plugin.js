@@ -80,20 +80,22 @@ export function patchRouter(router, Vue) {
 
     const component = router.getMatchedComponents()[0]
 
-    Vue.navigateTo(component, {
-      context: { router },
-      transition: router.pageTransition
-      // Todo: add transitionAndroid and transitionIOS
-    }).then(page => {
-      router.pageStack.push(page)
-
-      page.on(Page.navigatedFromEvent, ({ isBackNavigation }) => {
-        if (isBackNavigation && !router.isBackNavigation) {
-          router._beginBackNavigation(false)
-          router.back()
-        }
+    router.app
+      .$navigateTo(component, {
+        context: { router },
+        transition: router.pageTransition
+        // Todo: add transitionAndroid and transitionIOS
       })
-    })
+      .then(page => {
+        router.pageStack.push(page)
+
+        page.on(Page.navigatedFromEvent, ({ isBackNavigation }) => {
+          if (isBackNavigation && !router.isBackNavigation) {
+            router._beginBackNavigation(false)
+            router.back()
+          }
+        })
+      })
   })
 }
 
