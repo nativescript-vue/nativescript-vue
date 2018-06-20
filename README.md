@@ -63,6 +63,7 @@ and these awesome backers:
 - Robert M. Svendsen
 - Andy Drexler
 - ChiwalahSoftware
+- Nayir Chami
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 

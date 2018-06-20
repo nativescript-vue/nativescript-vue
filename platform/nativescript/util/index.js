@@ -34,6 +34,7 @@ export function isPage(el) {
   return el && el.tagName === 'page'
 }
 
+/** @deprecated */
 export function ensurePage(el, vm) {
   if (!isPage(el)) {
     const page = new (getViewClass('page'))()

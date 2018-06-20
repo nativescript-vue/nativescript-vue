@@ -5,7 +5,7 @@ export default {
   functional: true,
   render(h, { children }) {
     if (isIOS) {
-      return children[0]
+      return children
     }
   }
 }

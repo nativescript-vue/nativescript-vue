@@ -82,6 +82,9 @@ export default {
       const oldVnode = args.view && args.view[VUE_VIEW]
 
       args.view = this.$templates.patchTemplate(name, context, oldVnode)
+    },
+    refresh() {
+      this.$refs.listView.nativeView.refresh()
     }
   }
 }
