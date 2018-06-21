@@ -1,5 +1,6 @@
 const Vue = require('./nativescript-vue')
 
+Vue.config.debug = true
 Vue.config.silent = false
 
 new Vue({
