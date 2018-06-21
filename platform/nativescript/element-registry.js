@@ -113,7 +113,17 @@ registerElement(
 )
 registerElement(
   'NativeActionBar',
-  () => require('tns-core-modules/ui/action-bar').ActionBar
+  () => require('tns-core-modules/ui/action-bar').ActionBar,
+  {
+    removeChild(parent, child) {
+      try {
+        parent.nativeView._removeView(child.nativeView)
+      } catch (e) {
+        // ignore exception - child is likely already removed/replaced
+        // fixes #76
+      }
+    }
+  }
 )
 registerElement(
   'NativeActionItem',
