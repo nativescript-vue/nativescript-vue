@@ -80,7 +80,8 @@ describe('ViewNode', () => {
     )
   })
 
-  test('insertBefore throws if childNode is already a child', () => {
+  // no longer correct see #127 #240
+  test.skip('insertBefore throws if childNode is already a child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = node
@@ -133,7 +134,8 @@ describe('ViewNode', () => {
     )
   })
 
-  test('appendChild throws if childNode is already a child', () => {
+  // no longer correct see #127 #240
+  test.skip('appendChild throws if childNode is already a child', () => {
     let node = new ViewNode()
     let childNode = new ViewNode()
     childNode.parentNode = node
