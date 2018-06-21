@@ -3,6 +3,7 @@ import set from 'set-value'
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
+import * as types from 'tns-core-modules/utils/types'
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
@@ -99,7 +100,7 @@ export default class ViewNode {
       } else {
         // detect expandable attrs for boolean values
         // See https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
-        if (typeof this.nativeView[key] === 'boolean' && value === '') {
+        if (types.isBoolean(this.nativeView[key]) && value === '') {
           value = true
         }
 
