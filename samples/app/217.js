@@ -4,14 +4,12 @@ Vue.config.debug = true
 Vue.config.silent = false
 
 const CustomComponent = {
-  template: `
-    <Button :text="text" @tap="$emit('tap')"/>
-  `,
-  name: 'CustomComponent',
-  props: ['text']
+  // defining props breaks this on iOS
+  // props: ['text'],
+  template: `<Button @tap="$emit('tap')"/>`
 }
 
-new Vue({
+const PageContent = {
   data() {
     return {
       normal: false,
@@ -19,17 +17,28 @@ new Vue({
     }
   },
   template: `
-    <Frame>
-      <Page>
-        <ActionBar title="Issue #217"/>
-        <StackLayout>
-          <Button :text="'Normal Button: ' + normal " @tap="normal = !normal"/>
-          <CustomComponent :text="'Custom Button: ' + custom" @tap="custom = !custom"/>
-        </StackLayout>
-      </Page>
-    </Frame>
+    <StackLayout>
+      <Label :text="normal" textWrap="true" />
+      <Label :text="custom" textWrap="true" />
+      <Button :text="'Normal Button: ' + normal " @tap="normal = !normal"/>
+      <CustomComponent :text="'Custom Button: ' + custom" @tap="custom = !custom"/>
+    </StackLayout>
   `,
   components: {
     CustomComponent
   }
+}
+
+new Vue({
+  data: {
+    content: PageContent
+  },
+  template: `
+    <Frame>
+      <Page>
+        <ActionBar title="Issue #217"/>
+        <component :is="content" />
+      </Page>
+    </Frame>
+  `
 }).$start()
