@@ -28,8 +28,8 @@ export function registerComponent(componentName, resolver, meta, component) {
     if (registeredElem) {
       const model = registeredElem.meta.model
       modelTpl = `
-        :${model.prop}="value"
-        @${model.event}="emitInput"
+        v-bind:${model.prop}="value"
+        v-on:${model.event}="emitInput"
       `
     }
 
