@@ -14,19 +14,41 @@ import VTemplate from './v-template'
 const componentMap = new Map()
 
 export function registerComponent(componentName, resolver, meta, component) {
+  let registeredElem = null
   if (resolver) {
-    registerElement(`Native${componentName}`, resolver, meta)
+    registeredElem = registerElement(`Native${componentName}`, resolver, meta)
   }
+
   if (!component) {
     // if no Vue component is passed, wrap the simpler vue component
     // which bind the events and attributes to the NS one
     const tagName = 'native-' + normalizeElementName(componentName)
+    let modelTpl = ''
+
+    if (registeredElem) {
+      const model = registeredElem.meta.model
+      modelTpl = `
+        :${model.prop}="value"
+        @${model.event}="emitInput"
+      `
+    }
+
     component = {
       template: `
-        <${tagName} ref="${componentName}" v-bind="$attrs" v-on="$listeners">
+        <${tagName}
+          ref="${componentName}"
+          ${modelTpl}
+          v-bind="$attrs"
+          v-on="$listeners">
           <slot></slot>
         </${tagName}>
-      `
+      `,
+      props: ['value'],
+      methods: {
+        emitInput(event) {
+          this.$emit('input', event.value)
+        }
+      }
     }
   }
   componentMap.set(componentName, component)
@@ -62,8 +84,6 @@ registerComponent(
 registerComponent('android', null, {}, android)
 
 registerComponent('ios', null, {}, ios)
-
-registerComponent('Label', () => require('tns-core-modules/ui/label').Label, {})
 
 registerComponent(
   'ListView',
@@ -103,3 +123,19 @@ registerComponent(
 registerComponent('transition', null, {}, transition)
 
 registerComponent('VTemplate', null, {}, VTemplate)
+
+// NS components which uses the automatic registerComponent Vue wrapper
+// as they do not need any special logic
+
+registerComponent('Label', () => require('tns-core-modules/ui/label').Label, {})
+
+registerComponent(
+  'DatePicker',
+  () => require('tns-core-modules/ui/date-picker').DatePicker,
+  {
+    model: {
+      prop: 'date',
+      event: 'dateChange'
+    }
+  }
+)

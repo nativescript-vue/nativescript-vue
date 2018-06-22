@@ -26,6 +26,8 @@ export function registerElement(elementName, resolver, meta) {
 
   const entry = { resolver: resolver, meta: meta }
   elementMap.set(elementName.toLowerCase(), entry)
+
+  return entry
 }
 
 export function getViewClass(elementName) {
@@ -75,16 +77,6 @@ registerElement('Button', () => require('tns-core-modules/ui/button').Button)
 registerElement(
   'ContentView',
   () => require('tns-core-modules/ui/content-view').ContentView
-)
-registerElement(
-  'DatePicker',
-  () => require('tns-core-modules/ui/date-picker').DatePicker,
-  {
-    model: {
-      prop: 'date',
-      event: 'dateChange'
-    }
-  }
 )
 registerElement(
   'DockLayout',
