@@ -45,7 +45,7 @@ export function registerElement(elementName, resolver, meta) {
   if (!meta.component) {
     // if no Vue component is passed, wrap the simpler vue component
     // which bind the events and attributes to the NS one
-    component = {
+    meta.component = {
       name: elementName,
       functional: true,
       render: (h, { props, slots, listeners }) => {
@@ -183,7 +183,7 @@ registerElement('VTemplate', null, {
 // NS components which uses the automatic registerElement Vue wrapper
 // as they do not need any special logic
 
-registerElementLegacy('Label', () => require('tns-core-modules/ui/label').Label)
+registerElement('Label', () => require('tns-core-modules/ui/label').Label)
 
 registerElementLegacy(
   'DatePicker',
