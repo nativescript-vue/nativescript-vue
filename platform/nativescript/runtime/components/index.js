@@ -27,10 +27,13 @@ export function registerComponent(componentName, resolver, meta, component) {
 
     if (registeredElem) {
       const model = registeredElem.meta.model
-      modelTpl = `
+
+      modelTpl = model.prop
+        ? `
         v-bind:${model.prop}="value"
         v-on:${model.event}="emitInput"
       `
+        : ''
     }
 
     component = {

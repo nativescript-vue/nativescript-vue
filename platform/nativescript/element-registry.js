@@ -6,8 +6,8 @@ const defaultViewMeta = {
   tagNamespace: '',
   canBeLeftOpen: false,
   model: {
-    prop: 'text',
-    event: 'textChange'
+    prop: '',
+    event: ''
   }
 }
 
