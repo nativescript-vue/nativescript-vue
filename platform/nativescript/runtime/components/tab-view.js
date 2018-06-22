@@ -15,7 +15,7 @@ export default {
 
   render(h) {
     return h(
-      'native-tab-view',
+      'NativeTabView',
       {
         ref: 'tabView',
         on: {

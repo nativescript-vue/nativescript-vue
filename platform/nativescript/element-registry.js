@@ -15,7 +15,10 @@ const defaultViewMeta = {
 }
 
 export function normalizeElementName(elementName) {
-  return elementName.replace(/-/g, '').toLowerCase()
+  return elementName
+    .replace('Native', '')
+    .replace(/-/g, '')
+    .toLowerCase()
 }
 
 export function registerElementLegacy(elementName, resolver, meta) {
@@ -44,7 +47,6 @@ export function registerElement(elementName, resolver, meta) {
     // if no Vue component is passed, wrap the simpler vue component
     // which bind the events and attributes to the NS one
     meta.component = {
-      name: elementName,
       functional: true,
       render: (h, { props, slots, listeners }) => {
         return h(
@@ -55,6 +57,7 @@ export function registerElement(elementName, resolver, meta) {
       }
     }
   }
+  meta.component.name = elementName
 
   const entry = {
     resolver: resolver,

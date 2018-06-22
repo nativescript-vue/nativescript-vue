@@ -59,8 +59,11 @@ Vue.prototype.$start = function() {
   const AppConstructor = Vue.extend(this.$options)
 
   // register NS components into Vue
-  getElements().forEach((entry, name, map) => {
-    Vue.component(name, entry.meta.component)
+  getElements().forEach((entry, key, map) => {
+    if (!entry.meta.component) {
+      return // TODO: Delete after wrapping all NS elements into Vue's ones
+    }
+    Vue.component(entry.meta.component.name, entry.meta.component)
   })
 
   on(launchEvent, args => {

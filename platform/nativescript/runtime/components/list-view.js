@@ -17,16 +17,16 @@ export default {
   },
 
   template: `
-    <native-list-view
-      ref="listView" 
+    <NativeListView
+      ref="listView"
       :items="items"
       v-bind="$attrs"
-      v-on="listeners" 
+      v-on="listeners"
       @itemTap="onItemTap"
       @itemLoading="onItemLoading"
     >
       <slot />
-    </native-list-view>
+    </NativeListView>
   `,
 
   watch: {
