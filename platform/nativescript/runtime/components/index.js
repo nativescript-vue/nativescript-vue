@@ -10,16 +10,24 @@ import TabViewItem from './tab-view-item'
 import transition from './transition'
 import VTemplate from './v-template'
 
-export default {
-  ActionBar,
-  ActionItem,
-  android,
-  ios,
-  Label,
-  ListView,
-  NavigationButton,
-  TabView,
-  TabViewItem,
-  transition,
-  VTemplate
+const componentMap = new Map()
+
+export function registerComponent(componentName, component) {
+  componentMap.set(componentName, component)
 }
+
+export function getComponents() {
+  return componentMap
+}
+
+registerComponent('ActionBar', ActionBar)
+registerComponent('ActionItem', ActionItem)
+registerComponent('android', android)
+registerComponent('ios', ios)
+registerComponent('Label', Label)
+registerComponent('ListView', ListView)
+registerComponent('NavigationButton', NavigationButton)
+registerComponent('TabView', TabView)
+registerComponent('TabViewItem', TabViewItem)
+registerComponent('transition', transition)
+registerComponent('VTemplate', VTemplate)
