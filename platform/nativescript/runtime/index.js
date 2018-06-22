@@ -7,7 +7,7 @@ import { registerElement } from '../element-registry'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
-import platformComponents from './components/index'
+import { getComponents } from './components/index'
 import platformDirectives from './directives/index'
 
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
@@ -24,7 +24,7 @@ Vue.compile = compileToFunctions
 Vue.registerElement = registerElement
 
 Object.assign(Vue.options.directives, platformDirectives)
-Object.assign(Vue.options.components, platformComponents)
+Object.assign(Vue.options.components, [])
 
 Vue.prototype.__patch__ = patch
 
@@ -58,6 +58,11 @@ Vue.prototype.$mount = function(el, hydrating) {
 Vue.prototype.$start = function() {
   let self = this
   const AppConstructor = Vue.extend(this.$options)
+
+  // register NS components into Vue
+  getComponents().forEach((comp, name, map) => {
+    Vue.component(name, comp)
+  })
 
   on(launchEvent, args => {
     if (self.$el) {
