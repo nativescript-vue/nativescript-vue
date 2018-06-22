@@ -3,11 +3,10 @@ import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
-import { registerElement } from '../element-registry'
+import { registerElement, getElements } from '../element-registry'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
-import { getComponents } from './components/index'
 import platformDirectives from './directives/index'
 
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
@@ -60,8 +59,8 @@ Vue.prototype.$start = function() {
   const AppConstructor = Vue.extend(this.$options)
 
   // register NS components into Vue
-  getComponents().forEach((comp, name, map) => {
-    Vue.component(name, comp)
+  getElements().forEach((entry, name, map) => {
+    Vue.component(entry.componentName, entry.component)
   })
 
   on(launchEvent, args => {
