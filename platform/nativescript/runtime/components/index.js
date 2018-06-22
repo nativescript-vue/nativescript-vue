@@ -142,3 +142,14 @@ registerComponent(
     }
   }
 )
+
+registerElement(
+  'TextField',
+  () => require('tns-core-modules/ui/text-field').TextField,
+  {
+    model: {
+      prop: 'text',
+      event: 'textChange'
+    }
+  }
+)

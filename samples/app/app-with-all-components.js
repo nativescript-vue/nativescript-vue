@@ -4,8 +4,9 @@ Vue.config.debug = true
 Vue.config.silent = false
 
 new Vue({
-  data() {
+  data () {
     return {
+      text: 'testing',
       labelCondition: false,
       selectedDate: new Date()
     }
@@ -31,16 +32,24 @@ new Vue({
           <DatePicker
             v-model="selectedDate"
             @dateChange="onDateChanged" />
+
+          <TextField
+            v-model="text"
+            @textChange="onTextChanged" />
+
         </StackLayout>
       </Page>
     </Frame>
   `,
-  created() {
+  created () {
     console.log(Vue.compile(this.$options.template).render.toString())
   },
   methods: {
-    onDateChanged() {
+    onDateChanged () {
       console.log(`Date changed to ${this.selectedDate}`)
+    },
+    onTextChanged () {
+      console.log(`Text changed to ${this.text}`)
     }
   }
 }).$start()

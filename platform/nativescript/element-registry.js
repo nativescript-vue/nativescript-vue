@@ -171,10 +171,6 @@ registerElement('Switch', () => require('tns-core-modules/ui/switch').Switch, {
 })
 
 registerElement(
-  'TextField',
-  () => require('tns-core-modules/ui/text-field').TextField
-)
-registerElement(
   'TextView',
   () => require('tns-core-modules/ui/text-view').TextView
 )
