@@ -100,7 +100,7 @@ registerElement(
 )
 registerElement('Image', () => require('tns-core-modules/ui/image').Image)
 registerElement('img', () => require('tns-core-modules/ui/image').Image)
-registerElement('Label', () => require('tns-core-modules/ui/label').Label)
+registerElement('NativeLabel', () => require('tns-core-modules/ui/label').Label)
 registerElement(
   'ListPicker',
   () => require('tns-core-modules/ui/list-picker').ListPicker,
