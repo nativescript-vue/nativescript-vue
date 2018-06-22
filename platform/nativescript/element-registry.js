@@ -29,8 +29,6 @@ export function registerElementLegacy(elementName, resolver, meta) {
 
   const entry = { resolver: resolver, meta: meta }
   elementMap.set(elementName.toLowerCase(), entry)
-
-  return entry
 }
 
 export function registerElement(elementName, resolver, meta) {
