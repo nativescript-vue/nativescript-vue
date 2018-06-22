@@ -23,7 +23,7 @@ new Vue({
             @tap="labelCondition = false"/>
 
           <Label
-            v-if="!labelCondition"
+            v-else
             text="Label with labelCondition disabled. Tap me to enable"
             @tap="labelCondition = true"
             textWrap />
