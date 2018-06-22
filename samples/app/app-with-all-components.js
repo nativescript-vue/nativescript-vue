@@ -19,6 +19,7 @@ new Vue({
           <Label
             ref="label"
             text="Some Text" />
+
           <Label
             v-if="labelCondition"
             text="Label with labelCondition enabled. Tap me to disable"
@@ -26,7 +27,7 @@ new Vue({
             @tap="labelCondition = false"/>
 
           <Label
-            v-if="!labelCondition"
+            v-else
             text="Label with labelCondition disabled. Tap me to enable"
             @tap="labelCondition = true"
             textWrap />
@@ -45,8 +46,5 @@ new Vue({
   },
   created() {
     console.log(Vue.compile(this.$options.template).render.toString())
-  },
-  mounted() {
-    console.dir(this.$refs.label)
   }
 }).$start()
