@@ -34,11 +34,11 @@ export function registerElementLegacy(elementName, resolver, meta) {
 }
 
 export function registerElement(elementName, resolver, meta) {
-  elementName = normalizeElementName(elementName)
+  const normalizedName = normalizeElementName(elementName)
 
   meta = Object.assign({}, defaultViewMeta, meta)
 
-  if (elementMap.has(elementName)) {
+  if (elementMap.has(normalizedName)) {
     throw new Error(`Element for ${elementName} already registered.`)
   }
 
@@ -62,7 +62,7 @@ export function registerElement(elementName, resolver, meta) {
     resolver: resolver,
     meta: meta
   }
-  elementMap.set(normalizeElementName(elementName), entry)
+  elementMap.set(normalizedName, entry)
 }
 
 export function getElements() {
@@ -176,7 +176,7 @@ registerElement('transition', null, {
   component: comps.transition
 })
 
-registerElement('VTemplate', null, {
+registerElementLegacy('VTemplate', null, {
   component: comps.VTemplate
 })
 
