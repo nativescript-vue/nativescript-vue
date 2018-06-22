@@ -1,10 +1,9 @@
-import { registerElement } from '../../element-registry'
+import { normalizeElementName, registerElement } from '../../element-registry'
 
 import ActionBar from './action-bar'
 import ActionItem from './action-item'
 import android from './android'
 import ios from './ios'
-import Label from './label'
 import ListView from './list-view'
 import NavigationButton from './navigation-button'
 import TabView from './tab-view'
@@ -17,6 +16,18 @@ const componentMap = new Map()
 export function registerComponent(componentName, resolver, meta, component) {
   if (resolver) {
     registerElement(`Native${componentName}`, resolver, meta)
+  }
+  if (!component) {
+    // if no Vue component is passed, wrap the simpler vue component
+    // which bind the events and attributes to the NS one
+    const tagName = 'native-' + normalizeElementName(componentName)
+    component = {
+      template: `
+        <${tagName} ref="${componentName}" v-bind="$attrs" v-on="$listeners">
+          <slot></slot>
+        </${tagName}>
+      `
+    }
   }
   componentMap.set(componentName, component)
 }
@@ -52,12 +63,7 @@ registerComponent('android', null, {}, android)
 
 registerComponent('ios', null, {}, ios)
 
-registerComponent(
-  'Label',
-  () => require('tns-core-modules/ui/label').Label,
-  {},
-  Label
-)
+registerComponent('Label', () => require('tns-core-modules/ui/label').Label, {})
 
 registerComponent(
   'ListView',
