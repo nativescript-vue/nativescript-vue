@@ -17,6 +17,9 @@ new Vue({
 
         <StackLayout class="m-t-20">
           <Label
+            ref="label"
+            text="Some Text" />
+          <Label
             v-if="labelCondition"
             text="Label with labelCondition enabled. Tap me to disable"
             textWrap
@@ -35,12 +38,15 @@ new Vue({
       </Page>
     </Frame>
   `,
-  created() {
-    console.log(Vue.compile(this.$options.template).render.toString())
-  },
   methods: {
     onDateChanged() {
       console.log(`Date changed to ${this.selectedDate}`)
     }
+  },
+  created() {
+    console.log(Vue.compile(this.$options.template).render.toString())
+  },
+  mounted() {
+    console.dir(this.$refs.label)
   }
 }).$start()
