@@ -1,3 +1,5 @@
+import { registerElement } from '../../element-registry'
+
 import ActionBar from './action-bar'
 import ActionItem from './action-item'
 import android from './android'
@@ -12,7 +14,10 @@ import VTemplate from './v-template'
 
 const componentMap = new Map()
 
-export function registerComponent(componentName, component) {
+export function registerComponent(componentName, resolver, meta, component) {
+  if (resolver) {
+    registerElement(`Native${componentName}`, resolver, meta)
+  }
   componentMap.set(componentName, component)
 }
 
@@ -20,14 +25,75 @@ export function getComponents() {
   return componentMap
 }
 
-registerComponent('ActionBar', ActionBar)
-registerComponent('ActionItem', ActionItem)
-registerComponent('android', android)
-registerComponent('ios', ios)
-registerComponent('Label', Label)
-registerComponent('ListView', ListView)
-registerComponent('NavigationButton', NavigationButton)
-registerComponent('TabView', TabView)
-registerComponent('TabViewItem', TabViewItem)
-registerComponent('transition', transition)
-registerComponent('VTemplate', VTemplate)
+registerComponent(
+  'ActionBar',
+  () => require('tns-core-modules/ui/action-bar').ActionBar,
+  {
+    removeChild(parent, child) {
+      try {
+        parent.nativeView._removeView(child.nativeView)
+      } catch (e) {
+        // ignore exception - child is likely already removed/replaced
+        // fixes #76
+      }
+    }
+  },
+  ActionBar
+)
+
+registerComponent(
+  'ActionItem',
+  () => require('tns-core-modules/ui/action-bar').ActionItem,
+  {},
+  ActionItem
+)
+
+registerComponent('android', null, {}, android)
+
+registerComponent('ios', null, {}, ios)
+
+registerComponent(
+  'Label',
+  () => require('tns-core-modules/ui/label').Label,
+  {},
+  Label
+)
+
+registerComponent(
+  'ListView',
+  () => require('tns-core-modules/ui/list-view').ListView,
+  {},
+  ListView
+)
+
+registerComponent(
+  'NavigationButton',
+  () => require('tns-core-modules/ui/action-bar').NavigationButton,
+  {},
+  NavigationButton
+)
+
+registerComponent(
+  'TabView',
+  () => require('tns-core-modules/ui/tab-view').TabView,
+  {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
+    }
+  },
+  TabView
+)
+
+registerComponent(
+  'TabViewItem',
+  () => require('tns-core-modules/ui/tab-view').TabViewItem,
+  {
+    skipAddToDom: true
+  },
+  TabViewItem
+)
+
+registerComponent('transition', null, {}, transition)
+
+registerComponent('VTemplate', null, {}, VTemplate)

@@ -100,7 +100,6 @@ registerElement(
 )
 registerElement('Image', () => require('tns-core-modules/ui/image').Image)
 registerElement('img', () => require('tns-core-modules/ui/image').Image)
-registerElement('NativeLabel', () => require('tns-core-modules/ui/label').Label)
 registerElement(
   'ListPicker',
   () => require('tns-core-modules/ui/list-picker').ListPicker,
@@ -110,32 +109,6 @@ registerElement(
       event: 'selectedIndexChange'
     }
   }
-)
-registerElement(
-  'NativeActionBar',
-  () => require('tns-core-modules/ui/action-bar').ActionBar,
-  {
-    removeChild(parent, child) {
-      try {
-        parent.nativeView._removeView(child.nativeView)
-      } catch (e) {
-        // ignore exception - child is likely already removed/replaced
-        // fixes #76
-      }
-    }
-  }
-)
-registerElement(
-  'NativeActionItem',
-  () => require('tns-core-modules/ui/action-bar').ActionItem
-)
-registerElement(
-  'NativeListView',
-  () => require('tns-core-modules/ui/list-view').ListView
-)
-registerElement(
-  'NativeNavigationButton',
-  () => require('tns-core-modules/ui/action-bar').NavigationButton
 )
 registerElement('Page', () => require('tns-core-modules/ui/page').Page, {
   skipAddToDom: true
@@ -204,24 +177,6 @@ registerElement('Switch', () => require('tns-core-modules/ui/switch').Switch, {
     event: 'checkedChange'
   }
 })
-
-registerElement(
-  'NativeTabView',
-  () => require('tns-core-modules/ui/tab-view').TabView,
-  {
-    model: {
-      prop: 'selectedIndex',
-      event: 'selectedIndexChange'
-    }
-  }
-)
-registerElement(
-  'NativeTabViewItem',
-  () => require('tns-core-modules/ui/tab-view').TabViewItem,
-  {
-    skipAddToDom: true
-  }
-)
 
 registerElement(
   'TextField',
