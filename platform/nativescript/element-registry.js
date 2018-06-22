@@ -10,67 +10,59 @@ const defaultViewMeta = {
   model: {
     prop: 'text',
     event: 'textChange'
-  }
-}
-
-function getNSElementName(elementName) {
-  return `Native${elementName}`
+  },
+  component: null
 }
 
 export function normalizeElementName(elementName) {
   return elementName.replace(/-/g, '').toLowerCase()
 }
 
-export function registerElement(elementName, resolver, meta, component) {
-  const normalizedName = normalizeElementName(elementName)
-  const nsElementName = getNSElementName(elementName)
+export function registerElementLegacy(elementName, resolver, meta) {
+  elementName = normalizeElementName(elementName)
 
   meta = Object.assign({}, defaultViewMeta, meta)
 
-  if (elementMap.has(normalizedName)) {
+  if (elementMap.has(elementName)) {
     throw new Error(`Element for ${elementName} already registered.`)
   }
 
-  if (!component) {
+  const entry = { resolver: resolver, meta: meta }
+  elementMap.set(elementName.toLowerCase(), entry)
+
+  return entry
+}
+
+export function registerElement(elementName, resolver, meta) {
+  elementName = normalizeElementName(elementName)
+
+  meta = Object.assign({}, defaultViewMeta, meta)
+
+  if (elementMap.has(elementName)) {
+    throw new Error(`Element for ${elementName} already registered.`)
+  }
+
+  if (!meta.component) {
     // if no Vue component is passed, wrap the simpler vue component
     // which bind the events and attributes to the NS one
-    let modelTpl = ''
-    const tagName = 'native-' + elementName.toLowerCase()
-
-    if (meta.model) {
-      const model = meta.model
-      modelTpl = `
-        v-bind:${model.prop}="value"
-        v-on:${model.event}="emitInput"
-      `
-    }
-
     component = {
-      template: `
-        <${tagName}
-          ref="${elementName}"
-          ${modelTpl}
-          v-bind="$attrs"
-          v-on="$listeners">
-          <slot></slot>
-        </${tagName}>
-      `,
-      props: ['value'],
-      methods: {
-        emitInput(event) {
-          this.$emit('input', event.value)
-        }
+      name: elementName,
+      functional: true,
+      render: (h, { props, slots, listeners }) => {
+        return h(
+          `Native${elementName}`,
+          { on: listeners, props },
+          slots.default
+        )
       }
     }
   }
 
   const entry = {
     resolver: resolver,
-    meta: meta,
-    component: component,
-    componentName: elementName
+    meta: meta
   }
-  elementMap.set(normalizeElementName(nsElementName), entry)
+  elementMap.set(normalizeElementName(elementName), entry)
 }
 
 export function getElements() {
@@ -78,7 +70,7 @@ export function getElements() {
 }
 
 export function getViewClass(elementName) {
-  elementName = normalizeElementName(getNSElementName(elementName))
+  elementName = normalizeElementName(elementName)
   const entry = elementMap.get(elementName.toLowerCase())
 
   if (!entry) {
@@ -93,7 +85,7 @@ export function getViewClass(elementName) {
 }
 
 export function getViewMeta(nodeName) {
-  nodeName = normalizeElementName(getNSElementName(nodeName))
+  nodeName = normalizeElementName(nodeName)
 
   let meta = defaultViewMeta
   const entry = elementMap.get(nodeName)
@@ -107,9 +99,8 @@ export function getViewMeta(nodeName) {
 
 export function isKnownView(elementName) {
   elementName = normalizeElementName(elementName)
-  const nsElementName = normalizeElementName(getNSElementName(elementName))
 
-  return elementMap.has(elementName) || elementMap.has(nsElementName)
+  return elementMap.has(elementName)
 }
 
 registerElement(
@@ -123,34 +114,41 @@ registerElement(
         // ignore exception - child is likely already removed/replaced
         // fixes #76
       }
-    }
-  },
-  comps.ActionBar
+    },
+    component: comps.ActionBar
+  }
 )
 
 registerElement(
   'ActionItem',
   () => require('tns-core-modules/ui/action-bar').ActionItem,
-  {},
-  comps.ActionItem
+  {
+    component: comps.ActionItem
+  }
 )
 
-registerElement('android', null, {}, comps.android)
+registerElement('android', null, {
+  component: comps.android
+})
 
-registerElement('ios', null, {}, comps.ios)
+registerElement('ios', null, {
+  component: comps.ios
+})
 
 registerElement(
   'ListView',
   () => require('tns-core-modules/ui/list-view').ListView,
-  {},
-  comps.ListView
+  {
+    component: comps.ListView
+  }
 )
 
 registerElement(
   'NavigationButton',
   () => require('tns-core-modules/ui/action-bar').NavigationButton,
-  {},
-  comps.NavigationButton
+  {
+    component: comps.NavigationButton
+  }
 )
 
 registerElement(
@@ -160,30 +158,34 @@ registerElement(
     model: {
       prop: 'selectedIndex',
       event: 'selectedIndexChange'
-    }
-  },
-  comps.TabView
+    },
+    component: comps.TabView
+  }
 )
 
 registerElement(
   'TabViewItem',
   () => require('tns-core-modules/ui/tab-view').TabViewItem,
   {
-    skipAddToDom: true
-  },
-  comps.TabViewItem
+    skipAddToDom: true,
+    component: comps.TabViewItem
+  }
 )
 
-registerElement('transition', null, {}, comps.transition)
+registerElement('transition', null, {
+  component: comps.transition
+})
 
-registerElement('VTemplate', null, {}, comps.VTemplate)
+registerElement('VTemplate', null, {
+  component: comps.VTemplate
+})
 
 // NS components which uses the automatic registerElement Vue wrapper
 // as they do not need any special logic
 
-registerElement('Label', () => require('tns-core-modules/ui/label').Label)
+registerElementLegacy('Label', () => require('tns-core-modules/ui/label').Label)
 
-registerElement(
+registerElementLegacy(
   'DatePicker',
   () => require('tns-core-modules/ui/date-picker').DatePicker,
   {
@@ -194,35 +196,41 @@ registerElement(
   }
 )
 
-registerElement(
+registerElementLegacy(
   'AbsoluteLayout',
   () => require('tns-core-modules/ui/layouts/absolute-layout').AbsoluteLayout
 )
-registerElement(
+registerElementLegacy(
   'ActivityIndicator',
   () => require('tns-core-modules/ui/activity-indicator').ActivityIndicator
 )
-registerElement('Border', () => require('tns-core-modules/ui/border').Border)
-registerElement('Button', () => require('tns-core-modules/ui/button').Button)
-registerElement(
+registerElementLegacy(
+  'Border',
+  () => require('tns-core-modules/ui/border').Border
+)
+registerElementLegacy(
+  'Button',
+  () => require('tns-core-modules/ui/button').Button
+)
+registerElementLegacy(
   'ContentView',
   () => require('tns-core-modules/ui/content-view').ContentView
 )
-registerElement(
+registerElementLegacy(
   'DockLayout',
   () => require('tns-core-modules/ui/layouts/dock-layout').DockLayout
 )
-registerElement(
+registerElementLegacy(
   'GridLayout',
   () => require('tns-core-modules/ui/layouts/grid-layout').GridLayout
 )
-registerElement(
+registerElementLegacy(
   'HtmlView',
   () => require('tns-core-modules/ui/html-view').HtmlView
 )
-registerElement('Image', () => require('tns-core-modules/ui/image').Image)
-registerElement('img', () => require('tns-core-modules/ui/image').Image)
-registerElement(
+registerElementLegacy('Image', () => require('tns-core-modules/ui/image').Image)
+registerElementLegacy('img', () => require('tns-core-modules/ui/image').Image)
+registerElementLegacy(
   'ListPicker',
   () => require('tns-core-modules/ui/list-picker').ListPicker,
   {
@@ -232,30 +240,30 @@ registerElement(
     }
   }
 )
-registerElement('Page', () => require('tns-core-modules/ui/page').Page, {
+registerElementLegacy('Page', () => require('tns-core-modules/ui/page').Page, {
   skipAddToDom: true
 })
-registerElement(
+registerElementLegacy(
   'Placeholder',
   () => require('tns-core-modules/ui/placeholder').Placeholder
 )
-registerElement(
+registerElementLegacy(
   'Progress',
   () => require('tns-core-modules/ui/progress').Progress
 )
-registerElement(
+registerElementLegacy(
   'ProxyViewContainer',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer
 )
-registerElement(
+registerElementLegacy(
   'Repeater',
   () => require('tns-core-modules/ui/repeater').Repeater
 )
-registerElement(
+registerElementLegacy(
   'ScrollView',
   () => require('tns-core-modules/ui/scroll-view').ScrollView
 )
-registerElement(
+registerElementLegacy(
   'SearchBar',
   () => require('tns-core-modules/ui/search-bar').SearchBar,
   {
@@ -265,7 +273,7 @@ registerElement(
     }
   }
 )
-registerElement(
+registerElementLegacy(
   'SegmentedBar',
   () => require('tns-core-modules/ui/segmented-bar').SegmentedBar,
   {
@@ -275,40 +283,48 @@ registerElement(
     }
   }
 )
-registerElement(
+registerElementLegacy(
   'SegmentedBarItem',
   () => require('tns-core-modules/ui/segmented-bar').SegmentedBarItem
 )
-registerElement('Slider', () => require('tns-core-modules/ui/slider').Slider, {
-  model: {
-    prop: 'value',
-    event: 'valueChange'
+registerElementLegacy(
+  'Slider',
+  () => require('tns-core-modules/ui/slider').Slider,
+  {
+    model: {
+      prop: 'value',
+      event: 'valueChange'
+    }
   }
-})
-registerElement(
+)
+registerElementLegacy(
   'StackLayout',
   () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout
 )
-registerElement(
+registerElementLegacy(
   'FlexboxLayout',
   () => require('tns-core-modules/ui/layouts/flexbox-layout').FlexboxLayout
 )
-registerElement('Switch', () => require('tns-core-modules/ui/switch').Switch, {
-  model: {
-    prop: 'checked',
-    event: 'checkedChange'
+registerElementLegacy(
+  'Switch',
+  () => require('tns-core-modules/ui/switch').Switch,
+  {
+    model: {
+      prop: 'checked',
+      event: 'checkedChange'
+    }
   }
-})
+)
 
-registerElement(
+registerElementLegacy(
   'TextField',
   () => require('tns-core-modules/ui/text-field').TextField
 )
-registerElement(
+registerElementLegacy(
   'TextView',
   () => require('tns-core-modules/ui/text-view').TextView
 )
-registerElement(
+registerElementLegacy(
   'TimePicker',
   () => require('tns-core-modules/ui/time-picker').TimePicker,
   {
@@ -318,40 +334,40 @@ registerElement(
     }
   }
 )
-registerElement(
+registerElementLegacy(
   'WebView',
   () => require('tns-core-modules/ui/web-view').WebView
 )
-registerElement(
+registerElementLegacy(
   'WrapLayout',
   () => require('tns-core-modules/ui/layouts/wrap-layout').WrapLayout
 )
-registerElement(
+registerElementLegacy(
   'FormattedString',
   () => require('tns-core-modules/text/formatted-string').FormattedString
 )
-registerElement('Span', () => require('tns-core-modules/text/span').Span)
+registerElementLegacy('Span', () => require('tns-core-modules/text/span').Span)
 
-registerElement(
+registerElementLegacy(
   'DetachedContainer',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
   {
     skipAddToDom: true
   }
 )
-registerElement(
+registerElementLegacy(
   'DetachedText',
   () => require('tns-core-modules/ui/placeholder').Placeholder,
   {
     skipAddToDom: true
   }
 )
-registerElement(
+registerElementLegacy(
   'Comment',
   () => require('tns-core-modules/ui/placeholder').Placeholder
 )
 
-registerElement(
+registerElementLegacy(
   'Document',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
   {
@@ -359,10 +375,14 @@ registerElement(
   }
 )
 
-registerElement('Frame', () => require('tns-core-modules/ui/frame').Frame, {
-  insertChild(parentNode, childNode, atIndex) {
-    if (childNode.tagName === 'page') {
-      parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+registerElementLegacy(
+  'Frame',
+  () => require('tns-core-modules/ui/frame').Frame,
+  {
+    insertChild(parentNode, childNode, atIndex) {
+      if (childNode.tagName === 'page') {
+        parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+      }
     }
   }
-})
+)

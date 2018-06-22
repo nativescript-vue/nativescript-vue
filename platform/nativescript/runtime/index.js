@@ -60,7 +60,7 @@ Vue.prototype.$start = function() {
 
   // register NS components into Vue
   getElements().forEach((entry, name, map) => {
-    Vue.component(entry.componentName, entry.component)
+    Vue.component(name, entry.meta.component)
   })
 
   on(launchEvent, args => {
