@@ -49,15 +49,7 @@ export function registerElement(elementName, resolver, meta) {
     meta.component = {
       functional: true,
       render: (h, context) => {
-        return h(
-          `Native${elementName}`,
-          {
-            attrs: context.data.attrs,
-            on: context.data.on,
-            props: context.data.props
-          },
-          context.children
-        )
+        return h(`Native${elementName}`, context.data, context.slots.default)
       }
     }
   }
