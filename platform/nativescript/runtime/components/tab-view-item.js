@@ -3,7 +3,7 @@ import { warn } from 'core/util/debug'
 export default {
   name: 'tab-view-item',
 
-  template: `<native-tab-view-item ref="tabViewItem"><slot></slot></native-tab-view-item>`,
+  template: `<NativeTabViewItem ref="tabViewItem"><slot></slot></NativeTabViewItem>`,
 
   mounted() {
     if (this.$el.childNodes.length > 1) {

@@ -11,10 +11,10 @@ new Vue({
     <Frame>
       <Page>
         <ActionBar title="Issue #127" />
-        
+
         <StackLayout>
           <Label v-if="foo" text="Enable" @tap="foo = false"/>
-          <Label v-if="!foo" text="Disable" @tap="foo = true"/>
+          <Label v-else text="Disable" @tap="foo = true"/>
         </StackLayout>
       </Page>
     </Frame>

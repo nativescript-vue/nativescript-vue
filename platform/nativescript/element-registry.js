@@ -1,3 +1,5 @@
+import * as comps from './runtime/components'
+
 const elementMap = new Map()
 
 const defaultViewMeta = {
@@ -8,14 +10,18 @@ const defaultViewMeta = {
   model: {
     prop: 'text',
     event: 'textChange'
-  }
+  },
+  component: null
 }
 
 export function normalizeElementName(elementName) {
-  return elementName.replace(/-/g, '').toLowerCase()
+  return elementName
+    .replace('Native', '')
+    .replace(/-/g, '')
+    .toLowerCase()
 }
 
-export function registerElement(elementName, resolver, meta) {
+export function registerElementLegacy(elementName, resolver, meta) {
   elementName = normalizeElementName(elementName)
 
   meta = Object.assign({}, defaultViewMeta, meta)
@@ -26,6 +32,38 @@ export function registerElement(elementName, resolver, meta) {
 
   const entry = { resolver: resolver, meta: meta }
   elementMap.set(elementName.toLowerCase(), entry)
+}
+
+export function registerElement(elementName, resolver, meta) {
+  const normalizedName = normalizeElementName(elementName)
+
+  meta = Object.assign({}, defaultViewMeta, meta)
+
+  if (elementMap.has(normalizedName)) {
+    throw new Error(`Element for ${elementName} already registered.`)
+  }
+
+  if (!meta.component) {
+    // if no Vue component is passed, wrap the simpler vue component
+    // which bind the events and attributes to the NS one
+    meta.component = {
+      functional: true,
+      render: (h, { data, slots }) => {
+        return h(`Native${elementName}`, data, slots().default)
+      }
+    }
+  }
+  meta.component.name = elementName
+
+  const entry = {
+    resolver: resolver,
+    meta: meta
+  }
+  elementMap.set(normalizedName, entry)
+}
+
+export function getElements() {
+  return elementMap
 }
 
 export function getViewClass(elementName) {
@@ -47,7 +85,7 @@ export function getViewMeta(nodeName) {
   nodeName = normalizeElementName(nodeName)
 
   let meta = defaultViewMeta
-  const entry = elementMap.get(nodeName.toLowerCase())
+  const entry = elementMap.get(nodeName)
 
   if (entry && entry.meta) {
     meta = entry.meta
@@ -59,23 +97,91 @@ export function getViewMeta(nodeName) {
 export function isKnownView(elementName) {
   elementName = normalizeElementName(elementName)
 
-  return elementMap.has(elementName.toLowerCase())
+  return elementMap.has(elementName)
 }
 
 registerElement(
-  'AbsoluteLayout',
-  () => require('tns-core-modules/ui/layouts/absolute-layout').AbsoluteLayout
+  'ActionBar',
+  () => require('tns-core-modules/ui/action-bar').ActionBar,
+  {
+    removeChild(parent, child) {
+      try {
+        parent.nativeView._removeView(child.nativeView)
+      } catch (e) {
+        // ignore exception - child is likely already removed/replaced
+        // fixes #76
+      }
+    },
+    component: comps.ActionBar
+  }
 )
+
 registerElement(
-  'ActivityIndicator',
-  () => require('tns-core-modules/ui/activity-indicator').ActivityIndicator
+  'ActionItem',
+  () => require('tns-core-modules/ui/action-bar').ActionItem,
+  {
+    component: comps.ActionItem
+  }
 )
-registerElement('Border', () => require('tns-core-modules/ui/border').Border)
-registerElement('Button', () => require('tns-core-modules/ui/button').Button)
+
+registerElement('android', null, {
+  component: comps.android
+})
+
+registerElement('ios', null, {
+  component: comps.ios
+})
+
 registerElement(
-  'ContentView',
-  () => require('tns-core-modules/ui/content-view').ContentView
+  'ListView',
+  () => require('tns-core-modules/ui/list-view').ListView,
+  {
+    component: comps.ListView
+  }
 )
+
+registerElement(
+  'NavigationButton',
+  () => require('tns-core-modules/ui/action-bar').NavigationButton,
+  {
+    component: comps.NavigationButton
+  }
+)
+
+registerElement(
+  'TabView',
+  () => require('tns-core-modules/ui/tab-view').TabView,
+  {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
+    },
+    component: comps.TabView
+  }
+)
+
+registerElement(
+  'TabViewItem',
+  () => require('tns-core-modules/ui/tab-view').TabViewItem,
+  {
+    skipAddToDom: true,
+    component: comps.TabViewItem
+  }
+)
+
+registerElement('transition', null, {
+  component: comps.transition
+})
+
+registerElementLegacy('VTemplate', null, {
+  component: comps.VTemplate
+})
+
+// NS components which uses the automatic registerElement Vue wrapper
+// as they do not need any special logic
+
+registerElement('Label', () => require('tns-core-modules/ui/label').Label)
+
 registerElement(
   'DatePicker',
   () => require('tns-core-modules/ui/date-picker').DatePicker,
@@ -86,22 +192,42 @@ registerElement(
     }
   }
 )
+
+registerElementLegacy(
+  'AbsoluteLayout',
+  () => require('tns-core-modules/ui/layouts/absolute-layout').AbsoluteLayout
+)
+registerElementLegacy(
+  'ActivityIndicator',
+  () => require('tns-core-modules/ui/activity-indicator').ActivityIndicator
+)
+registerElementLegacy(
+  'Border',
+  () => require('tns-core-modules/ui/border').Border
+)
 registerElement(
+  'Button',
+  () => require('tns-core-modules/ui/button').Button,
+)
+registerElementLegacy(
+  'ContentView',
+  () => require('tns-core-modules/ui/content-view').ContentView
+)
+registerElementLegacy(
   'DockLayout',
   () => require('tns-core-modules/ui/layouts/dock-layout').DockLayout
 )
-registerElement(
+registerElementLegacy(
   'GridLayout',
   () => require('tns-core-modules/ui/layouts/grid-layout').GridLayout
 )
-registerElement(
+registerElementLegacy(
   'HtmlView',
   () => require('tns-core-modules/ui/html-view').HtmlView
 )
-registerElement('Image', () => require('tns-core-modules/ui/image').Image)
-registerElement('img', () => require('tns-core-modules/ui/image').Image)
-registerElement('Label', () => require('tns-core-modules/ui/label').Label)
-registerElement(
+registerElementLegacy('Image', () => require('tns-core-modules/ui/image').Image)
+registerElementLegacy('img', () => require('tns-core-modules/ui/image').Image)
+registerElementLegacy(
   'ListPicker',
   () => require('tns-core-modules/ui/list-picker').ListPicker,
   {
@@ -111,56 +237,30 @@ registerElement(
     }
   }
 )
-registerElement(
-  'NativeActionBar',
-  () => require('tns-core-modules/ui/action-bar').ActionBar,
-  {
-    removeChild(parent, child) {
-      try {
-        parent.nativeView._removeView(child.nativeView)
-      } catch (e) {
-        // ignore exception - child is likely already removed/replaced
-        // fixes #76
-      }
-    }
-  }
-)
-registerElement(
-  'NativeActionItem',
-  () => require('tns-core-modules/ui/action-bar').ActionItem
-)
-registerElement(
-  'NativeListView',
-  () => require('tns-core-modules/ui/list-view').ListView
-)
-registerElement(
-  'NativeNavigationButton',
-  () => require('tns-core-modules/ui/action-bar').NavigationButton
-)
-registerElement('Page', () => require('tns-core-modules/ui/page').Page, {
+registerElementLegacy('Page', () => require('tns-core-modules/ui/page').Page, {
   skipAddToDom: true
 })
-registerElement(
+registerElementLegacy(
   'Placeholder',
   () => require('tns-core-modules/ui/placeholder').Placeholder
 )
-registerElement(
+registerElementLegacy(
   'Progress',
   () => require('tns-core-modules/ui/progress').Progress
 )
-registerElement(
+registerElementLegacy(
   'ProxyViewContainer',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer
 )
-registerElement(
+registerElementLegacy(
   'Repeater',
   () => require('tns-core-modules/ui/repeater').Repeater
 )
-registerElement(
+registerElementLegacy(
   'ScrollView',
   () => require('tns-core-modules/ui/scroll-view').ScrollView
 )
-registerElement(
+registerElementLegacy(
   'SearchBar',
   () => require('tns-core-modules/ui/search-bar').SearchBar,
   {
@@ -170,7 +270,7 @@ registerElement(
     }
   }
 )
-registerElement(
+registerElementLegacy(
   'SegmentedBar',
   () => require('tns-core-modules/ui/segmented-bar').SegmentedBar,
   {
@@ -180,58 +280,48 @@ registerElement(
     }
   }
 )
-registerElement(
+registerElementLegacy(
   'SegmentedBarItem',
   () => require('tns-core-modules/ui/segmented-bar').SegmentedBarItem
 )
-registerElement('Slider', () => require('tns-core-modules/ui/slider').Slider, {
-  model: {
-    prop: 'value',
-    event: 'valueChange'
-  }
-})
-registerElement(
-  'StackLayout',
-  () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout
-)
-registerElement(
-  'FlexboxLayout',
-  () => require('tns-core-modules/ui/layouts/flexbox-layout').FlexboxLayout
-)
-registerElement('Switch', () => require('tns-core-modules/ui/switch').Switch, {
-  model: {
-    prop: 'checked',
-    event: 'checkedChange'
-  }
-})
-
-registerElement(
-  'NativeTabView',
-  () => require('tns-core-modules/ui/tab-view').TabView,
+registerElementLegacy(
+  'Slider',
+  () => require('tns-core-modules/ui/slider').Slider,
   {
     model: {
-      prop: 'selectedIndex',
-      event: 'selectedIndexChange'
+      prop: 'value',
+      event: 'valueChange'
     }
   }
 )
-registerElement(
-  'NativeTabViewItem',
-  () => require('tns-core-modules/ui/tab-view').TabViewItem,
+registerElementLegacy(
+  'StackLayout',
+  () => require('tns-core-modules/ui/layouts/stack-layout').StackLayout
+)
+registerElementLegacy(
+  'FlexboxLayout',
+  () => require('tns-core-modules/ui/layouts/flexbox-layout').FlexboxLayout
+)
+registerElementLegacy(
+  'Switch',
+  () => require('tns-core-modules/ui/switch').Switch,
   {
-    skipAddToDom: true
+    model: {
+      prop: 'checked',
+      event: 'checkedChange'
+    }
   }
 )
 
-registerElement(
+registerElementLegacy(
   'TextField',
   () => require('tns-core-modules/ui/text-field').TextField
 )
-registerElement(
+registerElementLegacy(
   'TextView',
   () => require('tns-core-modules/ui/text-view').TextView
 )
-registerElement(
+registerElementLegacy(
   'TimePicker',
   () => require('tns-core-modules/ui/time-picker').TimePicker,
   {
@@ -241,39 +331,40 @@ registerElement(
     }
   }
 )
-registerElement(
+registerElementLegacy(
   'WebView',
   () => require('tns-core-modules/ui/web-view').WebView
 )
-registerElement(
+registerElementLegacy(
   'WrapLayout',
   () => require('tns-core-modules/ui/layouts/wrap-layout').WrapLayout
 )
-registerElement(
+registerElementLegacy(
   'FormattedString',
   () => require('tns-core-modules/text/formatted-string').FormattedString
 )
-registerElement('Span', () => require('tns-core-modules/text/span').Span)
+registerElementLegacy('Span', () => require('tns-core-modules/text/span').Span)
 
-registerElement(
+registerElementLegacy(
   'DetachedContainer',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
   {
     skipAddToDom: true
   }
 )
-registerElement(
+registerElementLegacy(
   'DetachedText',
   () => require('tns-core-modules/ui/placeholder').Placeholder,
   {
     skipAddToDom: true
   }
 )
-registerElement(
+registerElementLegacy(
   'Comment',
   () => require('tns-core-modules/ui/placeholder').Placeholder
 )
-registerElement(
+
+registerElementLegacy(
   'Document',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
   {
@@ -281,10 +372,14 @@ registerElement(
   }
 )
 
-registerElement('Frame', () => require('tns-core-modules/ui/frame').Frame, {
-  insertChild(parentNode, childNode, atIndex) {
-    if (childNode.tagName === 'page') {
-      parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+registerElementLegacy(
+  'Frame',
+  () => require('tns-core-modules/ui/frame').Frame,
+  {
+    insertChild(parentNode, childNode, atIndex) {
+      if (childNode.tagName === 'page') {
+        parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+      }
     }
   }
-})
+)
