@@ -6,6 +6,7 @@ Vue.config.silent = false
 new Vue({
   data() {
     return {
+      timesPressed: 0,
       labelCondition: false,
       selectedDate: new Date()
     }
@@ -16,10 +17,6 @@ new Vue({
         <ActionBar title="App with all components" />
 
         <StackLayout class="m-t-20">
-          <Label
-            ref="label"
-            text="Some Text" />
-
           <Label
             v-if="labelCondition"
             text="Label with labelCondition enabled. Tap me to disable"
@@ -33,16 +30,30 @@ new Vue({
             textWrap />
 
           <DatePicker
+            ref="date"
             v-model="selectedDate"
             @dateChange="onDateChanged" />
+
+          <Button
+            :text="buttonText"
+            @tap="onButtonPress" />
         </StackLayout>
       </Page>
     </Frame>
   `,
-  methods: {
-    onDateChanged() {
-      console.log(`Date changed to ${this.selectedDate}`)
+  computed: {
+    buttonText () {
+      return (this.timesPressed > 0) ? `Pressed ${this.timesPressed} times` : 'Press me'
     }
+  },
+  methods: {
+    onDateChanged () {
+      console.log(`Date changed to ${this.selectedDate}`)
+    },
+    onButtonPress () {
+      console.log('Button pressed')
+      this.timesPressed++
+    },
   },
   created() {
     console.log(Vue.compile(this.$options.template).render.toString())

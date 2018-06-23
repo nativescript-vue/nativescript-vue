@@ -182,7 +182,7 @@ registerElementLegacy('VTemplate', null, {
 
 registerElement('Label', () => require('tns-core-modules/ui/label').Label)
 
-registerElementLegacy(
+registerElement(
   'DatePicker',
   () => require('tns-core-modules/ui/date-picker').DatePicker,
   {
@@ -205,9 +205,9 @@ registerElementLegacy(
   'Border',
   () => require('tns-core-modules/ui/border').Border
 )
-registerElementLegacy(
+registerElement(
   'Button',
-  () => require('tns-core-modules/ui/button').Button
+  () => require('tns-core-modules/ui/button').Button,
 )
 registerElementLegacy(
   'ContentView',
