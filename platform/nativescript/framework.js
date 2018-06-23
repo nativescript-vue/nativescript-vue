@@ -3,7 +3,6 @@
 global.process = global.process || {}
 global.process.env = global.process.env || {}
 
-import { VUE_VM_REF } from './runtime'
 import inspect from 'util-inspect'
 import { topmost } from 'tns-core-modules/ui/frame'
 import application from 'tns-core-modules/application'

@@ -1,7 +1,6 @@
 import { VUE_VIEW } from './v-template'
 
 export default {
-  name: 'list-view',
   props: {
     items: {
       type: Array,

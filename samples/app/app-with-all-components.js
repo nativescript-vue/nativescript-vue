@@ -7,7 +7,7 @@ new Vue({
   data() {
     return {
       timesPressed: 0,
-      labelCondition: false,
+      labelCondition: true,
       selectedDate: new Date()
     }
   },
@@ -42,18 +42,20 @@ new Vue({
     </Frame>
   `,
   computed: {
-    buttonText () {
-      return (this.timesPressed > 0) ? `Pressed ${this.timesPressed} times` : 'Press me'
+    buttonText() {
+      return this.timesPressed > 0
+        ? `Pressed ${this.timesPressed} times`
+        : 'Press me'
     }
   },
   methods: {
-    onDateChanged () {
+    onDateChanged() {
       console.log(`Date changed to ${this.selectedDate}`)
     },
-    onButtonPress () {
+    onButtonPress() {
       console.log('Button pressed')
       this.timesPressed++
-    },
+    }
   },
   created() {
     console.log(Vue.compile(this.$options.template).render.toString())

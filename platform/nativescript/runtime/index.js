@@ -3,7 +3,8 @@ import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
-import { registerElement, getElements } from '../element-registry'
+import { registerElement, getElementMap } from '../element-registry'
+import { makeMap } from 'shared/util'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
@@ -23,7 +24,6 @@ Vue.compile = compileToFunctions
 Vue.registerElement = registerElement
 
 Object.assign(Vue.options.directives, platformDirectives)
-Object.assign(Vue.options.components, [])
 
 Vue.prototype.__patch__ = patch
 
@@ -59,10 +59,7 @@ Vue.prototype.$start = function() {
   const AppConstructor = Vue.extend(this.$options)
 
   // register NS components into Vue
-  getElements().forEach((entry, key, map) => {
-    if (!entry.meta.component) {
-      return // TODO: Delete after wrapping all NS elements into Vue's ones
-    }
+  getElementMap().forEach(entry => {
     Vue.component(entry.meta.component.name, entry.meta.component)
   })
 
