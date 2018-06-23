@@ -48,8 +48,8 @@ export function registerElement(elementName, resolver, meta) {
     // which bind the events and attributes to the NS one
     meta.component = {
       functional: true,
-      render: (h, context) => {
-        return h(`Native${elementName}`, context.data, context.slots.default)
+      render: (h, { data, slots }) => {
+        return h(`Native${elementName}`, data, slots().default)
       }
     }
   }
