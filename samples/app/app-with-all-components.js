@@ -9,7 +9,7 @@ Vue.config.silent = false
 // for animated GIF search
 const url = 'https://api.giphy.com/v1/gifs/search'
 const key = 'ZboEpjHv00FzK6SI7l33H7wutWlMldQs'
-const filter = 'limit=25&offset=0&rating=G&lang=fr'
+const filter = 'limit=10&offset=0&rating=G&lang=en'
 
 new Vue({
   data() {
@@ -100,9 +100,18 @@ new Vue({
                 v-model="q"
                 hint="Search a GIF"
                 @submit="onSearchGif" />
-              <ListView for="img in listViewImgs" height="100%">
+              <ListView
+                for="img in listViewImgs"
+                height="100%"
                 <v-template>
-                  <Image :src="img.images.downsized.url" stretch="aspectFit" />
+                  <StackLayout>
+                    <Label
+                      :text="'Loading ' + $index + ' result...'" />
+                    <Image
+                      :src="getImgUrl(img)"
+                      stretch="none"
+                      @loaded="onImageLoaded" />
+                  </StackLayout>
                 </v-template>
               </ListView>
             </StackLayout>
@@ -197,16 +206,24 @@ new Vue({
       this.timesPressed++
     },
     onSearchGif() {
-      this.$refs.search.nativeView.dismissSoftInput()
+      this.dismissKeyboard()
       fetch(`${url}?api_key=${key}&q=${this.q}&${filter}`)
         .then(response => response.json())
-        .then(json => (this.listViewImgs = json.data))
+        .then(json => {
+          this.listViewImgs = json.data
+        })
+    },
+    onImageLoaded(event) {
+      console.log('Image loaded')
     },
     onSegmentedBarChanged(event) {
       console.log(`SegmentedBar index changed to ${event.value}`)
     },
     onSliderChanged() {
       console.log(`Slider value changed to ${this.progressValue}`)
+    },
+    getImgUrl(img) {
+      return `${img.images.fixed_height_still.url}?${Date.now()}`
     },
     dismissKeyboard() {
       if (platform.isAndroid) {
