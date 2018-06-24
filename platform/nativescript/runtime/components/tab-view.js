@@ -17,7 +17,7 @@ export default {
 
   methods: {
     registerTab(tabView) {
-      const items = this.$el.nativeView.items || []
+      const items = this.nativeView.items || []
 
       this.$el.setAttribute('items', items.concat([tabView]))
     }
