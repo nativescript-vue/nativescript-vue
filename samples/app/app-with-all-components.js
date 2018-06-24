@@ -33,7 +33,7 @@ new Vue({
       <ActionBar title="test">
       </ActionBar>
       <StackLayout>
-        <TabView v-model="activeTab">
+        <TabView ref="tabview" v-model="activeTab">
           <TabViewItem title="Form">
             <StackLayout>
               <Label
@@ -96,32 +96,36 @@ new Vue({
           <TabViewItem title="Other">
             <StackLayout>
               <SegmentedBar
+                ref="segmentedbar"
                 @selectedIndexChange="onSegmentedBarChanged">
                 <SegmentedBarItem title="First" />
                 <SegmentedBarItem title="Second" />
                 <SegmentedBarItem title="Third" />
               </SegmentedBar>
               <Progress
+                ref="progress"
                 v-model="progressValue"
                 minValue="0"
                 maxValue="100" />
               <Slider
+                ref="slider"
                 v-model="progressValue"
                 @valueChange="onSliderChanged" />
               <ActivityIndicator
+                ref="activityindicator"
                 :busy="progressValue !== 100"
                 height="50"
                 style="margin-top: 10" />
               <TextView editable="false">
-                <FormattedString>
-                  <Span text="This is a FormattedString. You can use text attributes such as " />
-                  <Span text="bold, " fontWeight="Bold" />
-                  <Span text="italic " fontStyle="Italic" />
-                  <Span text="and " />
-                  <Span text="underline." textDecoration="Underline" />
+                <FormattedString ref="formattedstring">
+                  <Span ref="span1" text="This is a FormattedString. You can use text attributes such as " />
+                  <Span ref="span2" text="bold, " fontWeight="Bold" />
+                  <Span ref="span3" text="italic " fontStyle="Italic" />
+                  <Span ref="span4" text="and " />
+                  <Span ref="span5" text="underline." textDecoration="Underline" />
                 </FormattedString>
               </TextView>
-              <ScrollView orientation="horizontal">
+              <ScrollView ref="scrollview" orientation="horizontal">
                 <StackLayout
                   orientation="horizontal"
                   style="font-size: 30; margin: 10">
@@ -133,8 +137,10 @@ new Vue({
                 </StackLayout>
               </ScrollView>
               <HtmlView
+                ref="htmlview"
                 html="<p><b>HtmlView</b> renders HTML</p>" />
               <WebView
+                ref="webview"
                 src="<p><b>WebView</b> with some static HTML</p>" />
             </StackLayout>
           </TabViewItem>
