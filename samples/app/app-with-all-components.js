@@ -3,53 +3,145 @@ const Vue = require('./nativescript-vue')
 Vue.config.debug = true
 Vue.config.silent = false
 
+// for animated GIF search
+const url = 'https://api.giphy.com/v1/gifs/search'
+const key = 'ZboEpjHv00FzK6SI7l33H7wutWlMldQs'
+const filter = 'limit=25&offset=0&rating=G&lang=fr'
+
 new Vue({
   data() {
     return {
       activeTab: 0,
-      tabs: [
-        { key: 'form', title: 'Form' },
-        { key: 'list', title: 'List' },
-        { key: 'other', title: 'Other' },
-      ],
+      switchValue: false,
+      textfieldValue: 'Some text',
+      textviewValue: 'TextView\nhas\nmultiple\nlines',
+      selectedItem: 'first',
+      listOfItems: ['first', 'second', 'third'],
+      selectedIndex: 0,
       timesPressed: 0,
       labelCondition: true,
       selectedDate: new Date(),
+      selectedTime: new Date(),
+      q: '',
+      listViewImgs: [],
+      progressValue: 50,
     }
   },
   template: `
-  <Page>
-    <ActionBar title="test">
-    </ActionBar>
-    <StackLayout>
-      <TabView v-model="activeTab">
-        <TabViewItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title">
-          <StackLayout v-show="isTabActive('form')" class="tab">
-            <Label
-              v-if="labelCondition"
-              ref="label1"
-              style="margin-top: 10"
-              text="Label with labelCondition enabled. Tap me to disable"
-              textWrap
-              @tap="labelCondition = false"/>
-            <Label
-              v-else
-              ref="label2"
-              text="Label with labelCondition disabled. Tap me to enable"
-              @tap="labelCondition = true"
-              textWrap />
-            <DatePicker
-              ref="date"
-              v-model="selectedDate"
-              @dateChange="onDateChanged" />
-            <Button
-              :text="buttonText"
-              @tap="onButtonPress" />
-          </StackLayout>
-        </TabViewItem>
-      </TabView>
-    </StackLayout>
-  </Page>
+  <Frame>
+    <Page>
+      <ActionBar title="test">
+      </ActionBar>
+      <StackLayout>
+        <TabView v-model="activeTab">
+          <TabViewItem title="Form">
+            <StackLayout>
+              <Label
+                v-if="labelCondition"
+                ref="label1"
+                text="Label with labelCondition enabled. Tap me to disable"
+                textWrap
+                style="margin-top: 10"
+                @tap="labelCondition = false"/>
+              <Label
+                v-else
+                ref="label2"
+                text="Label with labelCondition disabled. Tap me to enable"
+                @tap="labelCondition = true"
+                textWrap />
+              <Switch
+                v-model="switchValue"
+                @checkedChange="onSwitchChanged" />
+              <TextField
+                ref="textfield"
+                v-model="textfieldValue"
+                hint="Enter text..."
+                @textChange="onTextFiedChanged" />
+              <TextView
+                v-model="textviewValue"
+                @textChange="onTextViewChanged" />
+              <DatePicker
+                ref="date"
+                v-model="selectedDate"
+                @dateChange="onDateChanged" />
+              <TimePicker
+                ref="time"
+                v-model="selectedTime"
+                @timeChange="onTimeChanged" />
+              <ListPicker
+                ref="listpicker"
+                v-model="selectedIndex"
+                :items="listOfItems"
+                @selectedIndexChange="onListPickerChanged" />
+              <Button
+                ref="button"
+                :text="buttonText"
+                @tap="onButtonPress" />
+            </StackLayout>
+          </TabViewItem>
+          <TabViewItem title="List">
+            <StackLayout>
+              <SearchBar
+                ref="search"
+                v-model="q"
+                hint="Search a GIF"
+                @submit="onSearchGif" />
+              <ListView for="img in listViewImgs" height="100%">
+                <v-template>
+                  <Image :src="img.images.downsized.url" stretch="aspectFit" />
+                </v-template>
+              </ListView>
+            </StackLayout>
+          </TabViewItem>
+          <TabViewItem title="Other">
+            <StackLayout>
+              <SegmentedBar
+                @selectedIndexChange="onSegmentedBarChanged">
+                <SegmentedBarItem title="First" />
+                <SegmentedBarItem title="Second" />
+                <SegmentedBarItem title="Third" />
+              </SegmentedBar>
+              <Progress
+                v-model="progressValue"
+                minValue="0"
+                maxValue="100" />
+              <Slider
+                v-model="progressValue"
+                @valueChange="onSliderChanged" />
+              <ActivityIndicator
+                :busy="progressValue !== 100"
+                height="50"
+                style="margin-top: 10" />
+              <TextView editable="false">
+                <FormattedString>
+                  <Span text="This is a FormattedString. You can use text attributes such as " />
+                  <Span text="bold, " fontWeight="Bold" />
+                  <Span text="italic " fontStyle="Italic" />
+                  <Span text="and " />
+                  <Span text="underline." textDecoration="Underline" />
+                </FormattedString>
+              </TextView>
+              <ScrollView orientation="horizontal">
+                <StackLayout
+                  orientation="horizontal"
+                  style="font-size: 30; margin: 10">
+                  <Label style="margin-right: 10" text="This is" />
+                  <Label style="margin-right: 10" text="a text" />
+                  <Label style="margin-right: 10" text="which scrolls" />
+                  <Label style="margin-right: 10" text="horizontally" />
+                  <Label style="margin-right: 10" text="if necessary." />
+                </StackLayout>
+              </ScrollView>
+              <HtmlView
+                html="<p><b>HtmlView</b> renders HTML</p>" />
+              <WebView
+                src="<p><b>WebView</b> with some static HTML</p>" />
+            </StackLayout>
+          </TabViewItem>
+        </TabView>
+      </StackLayout>
+    </Page>
+  </Frame>
 `,
   computed: {
     buttonText() {
@@ -62,12 +154,39 @@ new Vue({
     isTabActive(key) {
       return this.tabs[this.activeTab].key === key
     },
+    onSwitchChanged() {
+      console.log(`Switch changed to ${this.switchValue}`)
+    },
+    onTextFiedChanged() {
+      console.log(`TextField changed to "${this.textfieldValue}"`)
+    },
+    onTextViewChanged() {
+      console.log(`TextView changed to "${this.textviewValue}"`)
+    },
+    onListPickerChanged() {
+      console.log(`ListPicker selectedIndex changed to ${this.selectedIndex}`)
+    },
     onDateChanged() {
       console.log(`Date changed to ${this.selectedDate}`)
+    },
+    onTimeChanged() {
+      console.log(`Time changed to ${this.selectedTime.toTimeString()}`)
     },
     onButtonPress() {
       console.log('Button pressed')
       this.timesPressed++
+    },
+    onSearchGif() {
+      this.$refs.search.nativeView.dismissSoftInput()
+      fetch(`${url}?api_key=${key}&q=${this.q}&${filter}`)
+        .then(response => response.json())
+        .then(json => (this.listViewImgs = json.data))
+    },
+    onSegmentedBarChanged(event) {
+      console.log(`SegmentedBar index changed to ${event.value}`)
+    },
+    onSliderChanged() {
+      console.log(`Slider value changed to ${this.progressValue}`)
     },
   },
   created() {
@@ -75,8 +194,7 @@ new Vue({
   },
   mounted() {
     Object.keys(this.$refs).map((key) => {
-      console.dir(`this.$refs.${key} ->`)
-      console.dir(this.$refs[key])
+      console.log(`this.$refs.${key} -> ${this.$refs[key]}`)
     })
   },
 }).$start()
