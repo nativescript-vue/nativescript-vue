@@ -29,15 +29,15 @@ let app = new Vue({
         <Label :text="activeTab" />
         <Button text="Click me!" @tap="tabs.push({title: 'added', text: 'added tab'})" />
         <button text="Go to last!" @tap="activeTab = tabs.length - 1" />
-        
+
         <TabView v-model="activeTab">
           <TabViewItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title">
-            <Label text="tab.text" />
+            <Label :text="tab.text" />
           </TabViewItem>
         </TabView>
       </StackLayout>
     </Page>
-  `
+  `,
 })
 
 app.$start()
