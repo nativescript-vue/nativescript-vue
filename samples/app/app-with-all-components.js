@@ -102,7 +102,7 @@ new Vue({
                 @submit="onSearchGif" />
               <ListView
                 for="img in listViewImgs"
-                height="100%"
+                height="100%">
                 <v-template>
                   <StackLayout>
                     <Label
