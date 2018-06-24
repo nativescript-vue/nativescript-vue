@@ -1,4 +1,7 @@
 const Vue = require('./nativescript-vue')
+const frame = require('tns-core-modules/ui/frame')
+const platform = require('tns-core-modules/platform')
+const utils = require('tns-core-modules/utils/utils')
 
 Vue.config.debug = true
 Vue.config.silent = false
@@ -31,53 +34,64 @@ new Vue({
   <Frame>
     <Page>
       <ActionBar title="test">
+        <ActionItem
+          @tap="dismissKeyboard"
+          ios.position="right"
+          android.position="right"
+          text="Hide Keyboard" />
       </ActionBar>
       <StackLayout>
         <TabView ref="tabview" v-model="activeTab">
           <TabViewItem title="Form">
-            <StackLayout>
-              <Label
-                v-if="labelCondition"
-                ref="label1"
-                text="Label with labelCondition enabled. Tap me to disable"
-                textWrap
-                style="margin-top: 10"
-                @tap="labelCondition = false"/>
-              <Label
-                v-else
-                ref="label2"
-                text="Label with labelCondition disabled. Tap me to enable"
-                @tap="labelCondition = true"
-                textWrap />
-              <Switch
-                v-model="switchValue"
-                @checkedChange="onSwitchChanged" />
-              <TextField
-                ref="textfield"
-                v-model="textfieldValue"
-                hint="Enter text..."
-                @textChange="onTextFiedChanged" />
-              <TextView
-                v-model="textviewValue"
-                @textChange="onTextViewChanged" />
-              <DatePicker
-                ref="date"
-                v-model="selectedDate"
-                @dateChange="onDateChanged" />
-              <TimePicker
-                ref="time"
-                v-model="selectedTime"
-                @timeChange="onTimeChanged" />
-              <ListPicker
-                ref="listpicker"
-                v-model="selectedIndex"
-                :items="listOfItems"
-                @selectedIndexChange="onListPickerChanged" />
-              <Button
-                ref="button"
-                :text="buttonText"
-                @tap="onButtonPress" />
-            </StackLayout>
+            <ScrollView orientation="vertical">
+              <StackLayout>
+                <Label
+                  v-if="labelCondition"
+                  ref="label1"
+                  text="Label with labelCondition enabled. Tap me to disable"
+                  textWrap
+                  style="margin-top: 10"
+                  @tap="labelCondition = false"/>
+                <Label
+                  v-else
+                  ref="label2"
+                  text="Label with labelCondition disabled. Tap me to enable"
+                  @tap="labelCondition = true"
+                  textWrap />
+                <Switch
+                  ref="switch"
+                  v-model="switchValue"
+                  @checkedChange="onSwitchChanged" />
+                <TextField
+                  ref="textfield"
+                  v-model="textfieldValue"
+                  hint="Enter text..."
+                  @textChange="onTextFiedChanged" />
+                <TextView
+                  ref="textview"
+                  v-model="textviewValue"
+                  @textChange="onTextViewChanged"
+                  @blur="dismissKeyboard" />
+                <DatePicker
+                  ref="date"
+                  v-model="selectedDate"
+                  @dateChange="onDateChanged" />
+                <TimePicker
+                  ref="time"
+                  v-model="selectedTime"
+                  @timeChange="onTimeChanged" />
+                <ListPicker
+                  ref="listpicker"
+                  v-model="selectedIndex"
+                  :items="listOfItems"
+                  @selectedIndexChange="onListPickerChanged" />
+                <Button
+                  ref="button"
+                  :text="buttonText"
+                  style="margin-bottom: 10"
+                  @tap="onButtonPress" />
+              </StackLayout>
+            </ScrollView>
           </TabViewItem>
           <TabViewItem title="List">
             <StackLayout>
@@ -194,12 +208,19 @@ new Vue({
     onSliderChanged() {
       console.log(`Slider value changed to ${this.progressValue}`)
     },
+    dismissKeyboard() {
+      if (platform.isAndroid) {
+        utils.ad.dismissSoftInput()
+      } else {
+        frame.topmost().nativeView.endEditing(true)
+      }
+    },
   },
   created() {
     console.log(Vue.compile(this.$options.template).render.toString())
   },
   mounted() {
-    Object.keys(this.$refs).map((key) => {
+    Object.keys(this.$refs).map(key => {
       console.log(`this.$refs.${key} -> ${this.$refs[key]}`)
     })
   },

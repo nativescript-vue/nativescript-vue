@@ -37,7 +37,7 @@ let app = new Vue({
         </TabView>
       </StackLayout>
     </Page>
-  `,
+  `
 })
 
 app.$start()
