@@ -1,6 +1,9 @@
 import ViewNode from 'renderer/ViewNode'
 import * as elReg from 'element-registry'
 
+jest.mock('runtime/components', () => {
+  return {}
+})
 jest.mock('renderer/utils', () => ({
   insertChild: jest.fn(),
   removeChild: jest.fn()
@@ -9,7 +12,8 @@ jest.mock('tns-core-modules/platform', () => {
   return {
     isAndroid() {
     },
-    isIOS() {}
+    isIOS() {
+    }
   }
 }, {virtual: true})
 
@@ -266,7 +270,7 @@ describe('ViewNode', () => {
     let meta = node.meta
     let second_meta = node.meta
 
-    expect(elReg.getViewMeta).toHaveBeenCalledWith('testing')
+    expect(elReg.getViewMeta).toHaveBeenCalledWith('nativetesting')
     expect(elReg.getViewMeta.mock.calls.length).toBe(1)
     expect(meta).toEqual('meta')
     expect(second_meta).toEqual('meta')
@@ -276,12 +280,12 @@ describe('ViewNode', () => {
     let node = new ViewNode()
 
     node.tagName = 'Testing'
-    expect(node.tagName).toEqual('testing')
+    expect(node.tagName).toEqual('nativetesting')
 
     node.tagName = 'TestingTesting'
-    expect(node.tagName).toEqual('testingtesting')
+    expect(node.tagName).toEqual('nativetestingtesting')
 
     node.tagName = 'testing-testing'
-    expect(node.tagName).toEqual('testingtesting')
+    expect(node.tagName).toEqual('nativetestingtesting')
   })
 })
