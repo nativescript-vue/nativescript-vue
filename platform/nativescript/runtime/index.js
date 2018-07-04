@@ -76,4 +76,11 @@ Vue.prototype.$start = function() {
   run()
 }
 
+// Define a `nativeView` getter in every NS vue instance
+Object.defineProperty(Vue.prototype, 'nativeView', {
+  get() {
+    return this.$el.nativeView
+  }
+})
+
 export default Vue

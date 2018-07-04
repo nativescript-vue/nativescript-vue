@@ -76,9 +76,7 @@ export function enter(vnode, toggleDisplay) {
 
   const beforeEnterHook = isAppear ? beforeAppear || beforeEnter : beforeEnter
   const enterHook = isAppear
-    ? typeof appear === 'function'
-      ? appear
-      : enter
+    ? typeof appear === 'function' ? appear : enter
     : enter
   const afterEnterHook = isAppear ? afterAppear || afterEnter : afterEnter
   const enterCancelledHook = isAppear
