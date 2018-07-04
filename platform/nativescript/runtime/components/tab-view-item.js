@@ -8,7 +8,7 @@ export default {
       warn('TabViewItem should contain only 1 root element', this)
     }
 
-    let _nativeView = this.$el.nativeView
+    let _nativeView = this.nativeView
     _nativeView.view = this.$el.childNodes[0].nativeView
     this.$parent.registerTab(_nativeView)
   }
