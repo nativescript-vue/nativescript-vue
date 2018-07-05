@@ -39,18 +39,20 @@ const DetailPage = {
     }
   },
   template: `
-    <Page>
-      <ActionBar title="Detail Page">
-        <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" @tap="$router.back()" />
-      </ActionBar>
-      <StackLayout>
-        <Label v-if="current" :text="current.text" textWrap="true" />
-        
-        
-        <Label text="Related" />
-        <Label text="Second Item" @tap="$router.replace('/detail/2')" style="color: blue; text-decoration: underline;" />
-      </StackLayout>
-    </Page>
+    <Frame>
+      <Page>
+        <ActionBar title="Detail Page">
+          <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" @tap="$router.back()" />
+        </ActionBar>
+        <StackLayout>
+          <Label v-if="current" :text="current.text" textWrap="true" />
+
+
+          <Label text="Related" />
+          <Label text="Second Item" @tap="$router.replace('/detail/2')" style="color: blue; text-decoration: underline;" />
+        </StackLayout>
+      </Page>
+    </Frame>
   `
 }
 const MasterPage = {
@@ -68,7 +70,7 @@ const MasterPage = {
             <GridLayout style="border-bottom-width: 2; border-bottom-color: red;">
               <Label :text="item.title" style="padding: 20"/>
             </GridLayout>
-          </v-template>       
+          </v-template>
         </ListView>
       </GridLayout>
     </Page>
