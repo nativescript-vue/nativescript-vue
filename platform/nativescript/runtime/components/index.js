@@ -8,8 +8,8 @@ import TabView from './tab-view'
 import TabViewItem from './tab-view-item'
 import transition from './transition'
 import VTemplate from './v-template'
-import Frame from './Frame'
-import Page from './Page'
+import Frame from './frame'
+import Page from './page'
 
 export default {
   ActionBar,
