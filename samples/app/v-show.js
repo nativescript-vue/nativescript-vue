@@ -5,16 +5,17 @@ Vue.config.silent = false
 
 new Vue({
   data: {
-    foo: false
+    foo: true
   },
   template: `
     <Frame>
       <Page>
         <ActionBar title="Issue #127" />
-
+        
         <StackLayout>
-          <Label v-if="foo" text="Enable" @tap="foo = false"/>
-          <Label v-else text="Disable" @tap="foo = true"/>
+          <Button @tap="foo = !foo" :text="foo"/>
+          <Label v-show="foo" text="Enable" @tap="foo = false" style="padding: 50; background: red;"/>
+          <Label v-show="!foo" text="Disable" @tap="foo = true" style="padding: 50; background: blue;"/>
         </StackLayout>
       </Page>
     </Frame>

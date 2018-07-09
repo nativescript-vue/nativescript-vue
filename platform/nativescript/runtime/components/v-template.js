@@ -1,12 +1,9 @@
 import { patch } from '../patch'
-import { deepProxy } from '../../util'
 
 export const VUE_VIEW = '__vueVNodeRef__'
 
 let tid = 0
 export default {
-  name: 'v-template',
-
   props: {
     name: {
       type: String

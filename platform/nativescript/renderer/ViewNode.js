@@ -3,6 +3,7 @@ import set from 'set-value'
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
+import * as types from 'tns-core-modules/utils/types'
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
@@ -96,12 +97,20 @@ export default class ViewNode {
     try {
       if (XML_ATTRIBUTES.indexOf(key) !== -1) {
         this.nativeView._applyXmlAttribute(key, value)
-      } else if (isAndroid && key.startsWith('android:')) {
-        set(this.nativeView, key.replace('android:', ''), value)
-      } else if (isIOS && key.startsWith('ios:')) {
-        set(this.nativeView, key.replace('ios:', ''), value)
       } else {
-        set(this.nativeView, key, value)
+        // detect expandable attrs for boolean values
+        // See https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
+        if (types.isBoolean(this.nativeView[key]) && value === '') {
+          value = true
+        }
+
+        if (isAndroid && key.startsWith('android:')) {
+          set(this.nativeView, key.replace('android:', ''), value)
+        } else if (isIOS && key.startsWith('ios:')) {
+          set(this.nativeView, key.replace('ios:', ''), value)
+        } else {
+          set(this.nativeView, key, value)
+        }
       }
     } catch (e) {
       // ignore
@@ -145,7 +154,13 @@ export default class ViewNode {
       throw new Error(`Can't insert child.`)
     }
 
-    if (referenceNode && referenceNode.parentNode !== this) {
+    // in some rare cases insertBefore is called with a null referenceNode
+    // this makes sure that it get's appended as the last child
+    if (!referenceNode) {
+      return this.appendChild(childNode)
+    }
+
+    if (referenceNode.parentNode !== this) {
       throw new Error(
         `Can't insert child, because the reference node has a different parent.`
       )
@@ -158,7 +173,11 @@ export default class ViewNode {
     }
 
     if (childNode.parentNode === this) {
-      throw new Error(`Can't insert child, because it is already a child.`)
+      // we don't need to throw an error here, because it is a valid case
+      // for example when switching the order of elements in the tree
+      // fixes #127 - see for more details
+      // fixes #240
+      // throw new Error(`Can't insert child, because it is already a child.`)
     }
 
     let index = this.childNodes.indexOf(referenceNode)
@@ -185,7 +204,11 @@ export default class ViewNode {
     }
 
     if (childNode.parentNode === this) {
-      throw new Error(`Can't append child, because it is already a child.`)
+      // we don't need to throw an error here, because it is a valid case
+      // for example when switching the order of elements in the tree
+      // fixes #127 - see for more details
+      // fixes #240
+      // throw new Error(`Can't append child, because it is already a child.`)
     }
 
     childNode.parentNode = this
