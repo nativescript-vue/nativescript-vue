@@ -5,13 +5,16 @@ Vue.config.silent = false
 
 const App = {
   template: `
-    <Frame ref="frame">
-      <Page>
-        <StackLayout>
-          <Button text="Open page" @tap="openPage" />
-        </StackLayout>
-      </Page>
-    </Frame> 
+  <Frame>
+    <Page>
+      <ActionBar class="action-bar" title="Home Page">
+        <ActionItem text="Action"></ActionItem>
+      </ActionBar>
+      <StackLayout>
+        <Button text="Open page" @tap="openPage" />
+      </StackLayout>
+    </Page>
+  </Frame>
   `,
 
   methods: {
@@ -23,13 +26,16 @@ const App = {
 
 const DetailsPage = {
   template: `
-    <Page>
-      <StackLayout>
-        <Label :text="'Details ' + Math.random()" />
-        <Button text="another" @tap="openDetails" />
-        <Button text="back" @tap="goBack" />
-      </StackLayout>
-    </Page>
+  <Page>
+    <ActionBar class="action-bar" title="Details Page">
+      <ActionItem text="Action"></ActionItem>
+    </ActionBar>
+    <StackLayout>
+      <Label :text="'Details ' + Math.random()" />
+      <Button text="another" @tap="openDetails" />
+      <Button text="back" @tap="goBack" />
+    </StackLayout>
+  </Page>
   `,
 
   methods: {
