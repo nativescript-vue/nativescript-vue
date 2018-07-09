@@ -64,6 +64,7 @@ and these awesome backers:
 - Andy Drexler
 - ChiwalahSoftware
 - Nayir Chami
+- Teon Ooi
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
