@@ -11,7 +11,12 @@ declare module 'nativescript-vue' {
          * @param resolver  function to register the element
          * @param meta meta associated with the element
          */
-        static registerElement(elementName: string, resolver: Function, meta?: any);
+        static registerElement(elementName: string, resolver: Function, meta?: any): void;
+        
+        /**
+         * starts the nativescript application
+         */
+        $run(): void
     }
 
     export = NativeScriptVue;
