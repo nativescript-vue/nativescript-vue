@@ -1,6 +1,6 @@
 import ElementNode from './ElementNode'
 
-export default class TextNode extends ElementNode {
+export default class CommentNode extends ElementNode {
   constructor(text) {
     super('comment')
 

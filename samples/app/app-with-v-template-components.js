@@ -1,6 +1,11 @@
 const Vue = require('./nativescript-vue')
 
-Vue.component('comment', {
+Vue.config.silent = false
+Vue.config.debug = true
+
+// Comment is a built-in tag/component so we use CommentComp instead
+// the framework should warn about this in the future!
+Vue.component('CommentComp', {
   props: ['comment'],
   template: `<label :text="comment.content"/>`
 })

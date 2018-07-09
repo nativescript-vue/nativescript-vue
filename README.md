@@ -37,7 +37,7 @@ NativeScript-Vue is an MIT-licensed open source project made possible by our spo
       </td>
       <td align="center" valign="middle">
         <a href="https://kiwiirc.com/" target="_blank">
-          <img height="90px" src="https://art.nativescript-vue.org/sponsors/kiwiirc.png">
+          <img height="50px" src="https://art.nativescript-vue.org/sponsors/kiwiirc.png?v=1">
         </a>
       </td>
     </tr><tr></tr>

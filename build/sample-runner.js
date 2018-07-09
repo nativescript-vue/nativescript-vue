@@ -40,7 +40,7 @@ inquirer
   })
 
 function runPlatform(platform) {
-  tns = spawn('tns', ['run', platform], {
+  tns = spawn('tns', ['debug', platform], {
     cwd: path.resolve(__dirname, '../samples')
   })
 

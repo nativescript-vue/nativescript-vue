@@ -2,7 +2,7 @@ const Vue = require('./nativescript-vue')
 
 Vue.registerElement(
   'RadSideDrawer',
-  () => require('nativescript-pro-ui/sidedrawer').RadSideDrawer
+  () => require('nativescript-ui-sidedrawer').RadSideDrawer
 )
 
 new Vue({

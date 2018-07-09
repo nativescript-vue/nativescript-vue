@@ -1,3 +1,33 @@
+<a name="2.0.0-alpha.0"></a>
+# [2.0.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.4.0-alpha.0...v2.0.0-alpha.0) (2018-07-04)
+
+
+### Bug Fixes
+
+* Detect boolean attributes and expand them if value is empty ([#171](https://github.com/nativescript-vue/nativescript-vue/issues/171)) ([72f2102](https://github.com/nativescript-vue/nativescript-vue/commit/72f2102))
+* don't create view without data ([ba4e994](https://github.com/nativescript-vue/nativescript-vue/commit/ba4e994)), closes [#229](https://github.com/nativescript-vue/nativescript-vue/issues/229)
+* fix consecutive v-if's and v-for's ([821d726](https://github.com/nativescript-vue/nativescript-vue/commit/821d726)), closes [#127](https://github.com/nativescript-vue/nativescript-vue/issues/127) [#240](https://github.com/nativescript-vue/nativescript-vue/issues/240)
+* fix v-if in ActionBar ([95054ee](https://github.com/nativescript-vue/nativescript-vue/commit/95054ee)), closes [#76](https://github.com/nativescript-vue/nativescript-vue/issues/76)
+
+
+### Features
+
+* add refresh shortcut for ListView ([b809f0f](https://github.com/nativescript-vue/nativescript-vue/commit/b809f0f)), closes [#193](https://github.com/nativescript-vue/nativescript-vue/issues/193)
+* allow multiple nodes in <ios> and <android> tags ([7bf8b10](https://github.com/nativescript-vue/nativescript-vue/commit/7bf8b10))
+* improve v-show to support <transition> ([3e50a90](https://github.com/nativescript-vue/nativescript-vue/commit/3e50a90))
+* include typedefinitions in npm package ([7286e67](https://github.com/nativescript-vue/nativescript-vue/commit/7286e67)), closes [#262](https://github.com/nativescript-vue/nativescript-vue/issues/262) [#263](https://github.com/nativescript-vue/nativescript-vue/issues/263)
+* wrap all elements in functional Vue components ([#267](https://github.com/nativescript-vue/nativescript-vue/issues/267)) ([a4e2fa5](https://github.com/nativescript-vue/nativescript-vue/commit/a4e2fa5)), closes [#127](https://github.com/nativescript-vue/nativescript-vue/issues/127) [#266](https://github.com/nativescript-vue/nativescript-vue/issues/266) [#241](https://github.com/nativescript-vue/nativescript-vue/issues/241)
+
+
+### BREAKING CHANGES
+
+* All elements are now Vue components, in some cases where a ref is used to get the
+nativeView will have to be updated to use `this.$refs.element.$el.nativeView` instead of
+`this.$refs.element.nativeView`. There may be other breaking changes this introduces that are not
+known at this point.
+
+
+
 <a name="1.4.0-alpha.0"></a>
 # [1.4.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.3.2-rc.4...v1.4.0-alpha.0) (2018-05-07)
 
