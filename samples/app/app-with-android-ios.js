@@ -19,8 +19,4 @@ new Vue({
       </Page>
     </Frame>
   `
-}).$start({
-  getRootView(self) {
-    return self.$el.nativeView // frame
-  }
-})
+}).$start()
