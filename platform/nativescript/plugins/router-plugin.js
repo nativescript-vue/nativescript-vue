@@ -1,5 +1,113 @@
 import { before } from '../util/index'
 import { Page } from 'tns-core-modules/ui/page'
+import { android } from 'tns-core-modules/application'
+
+const NativeScriptHistory = (function() {
+  function NativeScriptHistory(router, history) {
+    this.router = router
+    this.history = history
+
+    android.on('activityBackPressed', function(args) {
+      args.cancel = true
+
+      router.back()
+    })
+    ;['stack', 'index', 'current'].forEach(name => {
+      Object.defineProperty(NativeScriptHistory.prototype, name, {
+        get: () => {
+          return this.history[name]
+        },
+        set: value => {
+          this.history[name] = value
+        }
+      })
+    })
+  }
+
+  NativeScriptHistory.prototype.push = function push(
+    location,
+    onComplete,
+    onAbort
+  ) {
+    this.history.push.call(
+      this.history,
+      location,
+      route => {
+        onComplete && onComplete(route)
+      },
+      onAbort
+    )
+  }
+
+  NativeScriptHistory.prototype.replace = function replace(
+    location,
+    onComplete,
+    onAbort
+  ) {
+    this.history.replace.call(
+      this.history,
+      location,
+      route => {
+        onComplete && onComplete(route)
+      },
+      onAbort
+    )
+  }
+
+  NativeScriptHistory.prototype.go = function go(n) {
+    this.history.go.call(this.history, n)
+  }
+
+  NativeScriptHistory.prototype.getCurrentLocation = function getCurrentLocation() {
+    return this.history.getCurrentLocation.call(this.history)
+  }
+
+  NativeScriptHistory.prototype.onReady = function onReady(...args) {
+    this.history.onReady.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.onError = function onError(...args) {
+    this.history.onError.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.listen = function listen(...args) {
+    this.history.listen.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.transitionTo = function transitionTo(...args) {
+    this.history.transitionTo.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.confirmTransition = function confirmTransition(
+    ...args
+  ) {
+    this.history.confirmTransition.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.updateRoute = function updateRoute(...args) {
+    this.history.updateRoute.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.updateRoute = function updateRoute(...args) {
+    this.history.updateRoute.call(this.history, ...args)
+  }
+
+  NativeScriptHistory.prototype.ensureURL = function ensureURL(...args) {
+    this.history.ensureURL.call(this.history, ...args)
+  }
+
+  return NativeScriptHistory
+})()
+
+export function patchDefaultRouter(router, Vue) {
+  if (router.__patched_for_routing__) {
+    return
+  }
+
+  router.__patched_for_routing__ = true
+
+  router.history = new NativeScriptHistory(router, router.history)
+}
 
 export function patchRouter(router, Vue) {
   if (router.__patched_for_page_routing__) {
@@ -112,12 +220,13 @@ export default {
         const isPageRouting = router.options.pageRouting
         const self = this
 
-        if (!isPageRouting) {
-          // if not in page mode, we don't care
+        if (isPageRouting) {
+          patchRouter(router, Vue)
+        } else {
+          patchDefaultRouter(router, Vue)
+
           return
         }
-
-        patchRouter(router, Vue)
 
         // Overwrite the default $start function
         this.$start = () => {
