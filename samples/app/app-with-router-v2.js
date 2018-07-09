@@ -21,8 +21,8 @@ const Detail = {
     <Page>
         <StackLayout>
             <Label :text="'Detail page for ' + $route.params.id"/>
-            <Button text="go to Tab 2 of the current page" @tap="$router.push($route.path + '/tab2')"/> 
-            
+            <Button text="go to Tab 2 of the current page" @tap="$router.push($route.path + '/tab2')"/>
+
             <router-view/>
         </StackLayout>
     </Page>
@@ -65,10 +65,10 @@ new Vue({
       <Frame row="0">
         <router-view />
       </Frame>
-      
+
       <Label :text="$route.path"
-            backgroundColor="#333" color="#eee" 
+            backgroundColor="#333" color="#eee"
             row="1" />
-    </GridLayout>  
+    </GridLayout>
   `
 }).$start()

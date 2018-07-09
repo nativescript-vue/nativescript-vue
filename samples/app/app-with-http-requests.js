@@ -5,13 +5,15 @@ Vue.config.debug = true
 
 new Vue({
   template: `
-    <Page>
-      <ScrollView>
-        <StackLayout>
-          <Button text="make request" @tap="makeRequest" />
-        </StackLayout>
-      </ScrollView>    
-    </Page>    
+    <Frame>
+      <Page>
+        <ScrollView>
+          <StackLayout>
+            <Button text="make request" @tap="makeRequest" />
+          </StackLayout>
+        </ScrollView>
+      </Page>
+    </Frame>
   `,
 
   methods: {

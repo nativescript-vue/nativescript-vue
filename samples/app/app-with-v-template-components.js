@@ -20,15 +20,17 @@ new Vue({
     ]
   },
   template: `
-    <Page class="page">
-      <ActionBar title="Home" class="action-bar" />
-        <StackLayout class="home-panel">
-          <ListView for="comment in comments">
-            <v-template>
-              <CommentComp :comment="comment" />
-            </v-template>
-          </ListView>
-        </StackLayout>
-    </Page>
+    <Frame>
+      <Page class="page">
+        <ActionBar title="Home" class="action-bar" />
+          <StackLayout class="home-panel">
+            <ListView for="comment in comments">
+              <v-template>
+                <Comment :comment="comment" />
+              </v-template>
+            </ListView>
+          </StackLayout>
+      </Page>
+    </Frame>
   `
 }).$start()
