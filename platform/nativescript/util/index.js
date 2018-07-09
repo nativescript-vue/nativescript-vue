@@ -31,7 +31,7 @@ export function isUnknownElement(el) {
 }
 
 export function isPage(el) {
-  return el && el.tagName === 'page'
+  return el && el.tagName === 'nativepage'
 }
 
 /** @deprecated */
