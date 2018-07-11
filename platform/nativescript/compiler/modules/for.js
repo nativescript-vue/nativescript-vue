@@ -6,7 +6,7 @@ import { warn } from 'core/util/debug'
 function preTransformNode(el) {
   let vfor
 
-  if (normalizeElementName(el.tag) === 'listview') {
+  if (normalizeElementName(el.tag) === 'nativelistview') {
     vfor = getAndRemoveAttr(el, 'v-for')
     delete el.attrsMap['v-for']
     if (process.env.NODE_ENV !== 'production' && vfor) {
