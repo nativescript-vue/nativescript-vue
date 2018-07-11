@@ -1,5 +1,6 @@
+export const PAGE_REF = '__vuePageRef__'
+
 export default {
-  name: 'page',
   render(h) {
     return h(
       'NativePage',
@@ -11,9 +12,12 @@ export default {
     )
   },
   mounted() {
+    this.$el.nativeView[PAGE_REF] = this
+
     const frame = this._findParentFrame()
     if (frame) {
       frame.notifyPageMounted(this)
+      frame.pageRoutes.push(this.$route.fullPath)
     }
 
     this.$nextTick(() => {
@@ -29,7 +33,7 @@ export default {
   methods: {
     _findParentFrame() {
       let parentFrame = this.$parent
-      while (parentFrame && parentFrame.$options.name !== 'frame') {
+      while (parentFrame && parentFrame.$options.name !== 'Frame') {
         parentFrame = parentFrame.$parent
       }
 

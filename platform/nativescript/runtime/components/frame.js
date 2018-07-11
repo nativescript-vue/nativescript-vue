@@ -1,27 +1,41 @@
 import { setFrame, deleteFrame } from '../../util/frame'
+import { PAGE_REF } from './page'
 
 export default {
-  name: 'frame',
   props: {
     id: {
       default: 'default'
+    },
+    // injected by the template compiler
+    hasRouterView: {
+      default: false
+    }
+  },
+  data() {
+    return {
+      pageRoutes: []
     }
   },
   created() {
     setFrame(this.$props.id, this)
-    this.cache = {}
   },
   destroyed() {
     deleteFrame(this.$props.id)
   },
   render(h) {
+    let vnode = this.$slots.default
+    if (this.hasRouterView && this.isBackNavigation) {
+      this.isBackNavigation = false
+      vnode = this.$el.nativeView.currentPage[PAGE_REF] || vnode
+    }
+
     return h(
       'NativeFrame',
       {
         attrs: Object.assign({}, this.$attrs, this.$props),
         on: this.$listeners
       },
-      this.$slots.default
+      vnode
     )
   },
   methods: {
@@ -38,6 +52,10 @@ export default {
     },
 
     navigate(entry, back = false) {
+      if (this.isBackNavigation) {
+        console.log('skipping navigate()')
+        return
+      }
       const frame = this._getFrame()
 
       if (back) {
@@ -58,6 +76,18 @@ export default {
         if (isBackNavigation) {
           page.off('navigatedFrom')
           this.$emit('back', entry)
+
+          if (!this.hasRouterView) return
+          this.isBackNavigation = true
+
+          // since this was a page navigation
+          // we need to find the previous page's path
+          // and navigate back to it
+          const lastPageRoute = this.pageRoutes.pop()
+          while (this.$router.currentRoute.fullPath !== lastPageRoute) {
+            this.$router.go(-1)
+          }
+          this.$router.go(-1)
         }
       })
       entry.create = () => page
