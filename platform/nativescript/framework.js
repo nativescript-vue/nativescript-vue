@@ -9,7 +9,7 @@ import application from 'tns-core-modules/application'
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
-import RouterPlugin from './plugins/router-plugin'
+// import RouterPlugin from './plugins/router-plugin'
 
 import { setVue } from './util'
 
@@ -19,7 +19,7 @@ setVue(Vue)
 
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
-Vue.use(RouterPlugin)
+// Vue.use(RouterPlugin)
 
 console.log = (function(log, inspect, Vue) {
   return function() {
