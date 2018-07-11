@@ -1,6 +1,8 @@
 import { setFrame, deleteFrame } from '../../util/frame'
 import { PAGE_REF } from './page'
 
+let idCounter = 1;
+
 export default {
   props: {
     id: {
@@ -13,14 +15,23 @@ export default {
   },
   data() {
     return {
+      properties: {},
       pageRoutes: []
     }
   },
   created() {
-    setFrame(this.$props.id, this)
+    let properties = {}
+
+    if (getFrame(this.$props.id)) {
+      properties.id = this.$props.id + idCounter++;
+    }
+
+    this.properties = Object.assign({}, this.$attrs, this.$props, properties);
+
+    setFrame(this.properties.id, this)
   },
   destroyed() {
-    deleteFrame(this.$props.id)
+    deleteFrame(this.properties.id)
   },
   render(h) {
     let vnode = this.$slots.default
@@ -32,7 +43,7 @@ export default {
     return h(
       'NativeFrame',
       {
-        attrs: Object.assign({}, this.$attrs, this.$props),
+        attrs: this.properties,
         on: this.$listeners
       },
       vnode

@@ -1,103 +1,237 @@
 import { before } from '../util/index'
 import { Page } from 'tns-core-modules/ui/page'
-import { android } from 'tns-core-modules/application'
+//import { android } from 'tns-core-modules/application'
 
-const NativeScriptHistory = (function() {
-  function NativeScriptHistory(router, history) {
-    this.router = router
-    this.history = history
+const properties = ['stack', 'index', 'current']
 
-    android.on('activityBackPressed', function(args) {
-      args.cancel = true
+var View = {
+  name: 'router-view',
+  functional: true,
+  props: {
+    name: {
+      type: String,
+      default: 'default'
+    }
+  },
+//  render: function render (_, ref) {
+//    const props = ref.props;
+//    const children = ref.children;
+//    const data = ref.data;
+//
+//    let parent = ref.parent;
+//
+//    debugger;
+//
+//    data.routerView = true;
+//
+//    // directly use parent context's createElement() function
+//    // so that components rendered by router-view can resolve named slots
+//    const h = parent.$createElement;
+//    const name = props.name;
+//    const route = parent.$route;
+//    const cache = parent._routerViewCache || (parent._routerViewCache = {});
+//
+//    // determine current view depth, also check to see if the tree
+//    // has been toggled inactive but kept-alive.
+//    let depth = 0;
+//    let inactive = false;
+//
+//    while (parent && parent._routerRoot !== parent) {
+//      if (parent.$vnode && parent.$vnode.data.routerView) {
+//        depth++;
+//      }
+//      if (parent._inactive) {
+//        inactive = true;
+//      }
+//      parent = parent.$parent;
+//    }
+//    data.routerViewDepth = depth;
+//
+//    // render previous view if the tree is inactive and kept-alive
+//    if (inactive) {
+//      return h(cache[name], data, children)
+//    }
+//
+//    const matched = route.matched[depth];
+//    // render empty node if no matched route
+//    if (!matched) {
+//      cache[name] = null;
+//      return h()
+//    }
+//
+//    const component = cache[name] = matched.components[name];
+//
+//    // attach instance registration hook
+//    // this will be called in the instance's injected lifecycle hooks
+//    data.registerRouteInstance = function (vm, val) {
+//      // val could be undefined for unregistration
+//      const current = matched.instances[name];
+//      if (
+//        (val && current !== vm) ||
+//        (!val && current === vm)
+//      ) {
+//        matched.instances[name] = val;
+//      }
+//    }
+//
+//    // also register instance in prepatch hook
+//    // in case the same component instance is reused across different routes
+//    ;(data.hook || (data.hook = {})).prepatch = function (_, vnode) {
+//      matched.instances[name] = vnode.componentInstance;
+//    };
+//
+//    // resolve props
+//    var propsToPass = data.props = resolveProps(route, matched.props && matched.props[name]);
+//    if (propsToPass) {
+//      // clone to prevent mutation
+//      propsToPass = data.props = extend({}, propsToPass);
+//      // pass non-declared props as attrs
+//      var attrs = data.attrs = data.attrs || {};
+//      for (var key in propsToPass) {
+//        if (!component.props || !(key in component.props)) {
+//          attrs[key] = propsToPass[key];
+//          delete propsToPass[key];
+//        }
+//      }
+//    }
+//
+//    const rendered = h(component, data, children);
+//
+//    //setTimeout(() => {
+//    //  debugger;
+//    //  if (rendered.context.$el) {
+//    //    parent.$navigateTo(component, { frame: rendered.context.$el._nativeView.id });
+//    //  }
+//    //});
+//    //
+//    return rendered;
+//  }
+};
+//
+//function resolveProps (route, config) {
+//  switch (typeof config) {
+//    case 'undefined':
+//      return
+//    case 'object':
+//      return config
+//    case 'function':
+//      return config(route)
+//    case 'boolean':
+//      return config ? route.params : undefined
+//    default:
+//      if (process.env.NODE_ENV !== 'production') {
+//        console.log(
+//          "props in \"" + (route.path) + "\" is a " + (typeof config) + ", " +
+//          "expecting an object, function or boolean."
+//        );
+//      }
+//  }
+//}
 
-      router.back()
-    })
-    ;['stack', 'index', 'current'].forEach(name => {
+const NativeScriptHistory = (function () {
+  let Vue;
+
+  function NativeScriptHistory (router, history, VueInstance) {
+    this.router = router;
+    this.history = history;
+    Vue = VueInstance;
+
+    const routerView = Vue.options.components["router-view"];
+
+    if (routerView && routerView.options.render) {
+      const originalRender = routerView.options.render;
+
+      View.render = function render (createElement, context) {
+        const result = originalRender.call(this, createElement, context)
+        const originalRegister = result.data.registerRouteInstance;
+
+        result.data.registerRouteInstance = function (vm, val) {
+          originalRegister.call(this, vm, val)
+
+          vm.$nextTick(() => {
+            vm.$parent.navigate({
+              create: () => vm.$el.nativeView
+            })
+          });
+        }
+
+        return result;
+      }
+    }
+
+    Vue.delete(Vue.options.components, "router-view");
+
+    Vue.component('router-view', View);
+
+    //android.on("activityBackPressed", function (args) {
+    //  args.cancel = true;
+    //
+    //  router.back();
+    //});
+
+    properties.forEach((name) => {
       Object.defineProperty(NativeScriptHistory.prototype, name, {
         get: () => {
           return this.history[name]
         },
-        set: value => {
+        set: (value) => {
           this.history[name] = value
         }
-      })
-    })
+      });
+    });
   }
 
-  NativeScriptHistory.prototype.push = function push(
-    location,
-    onComplete,
-    onAbort
-  ) {
-    this.history.push.call(
-      this.history,
-      location,
-      route => {
-        onComplete && onComplete(route)
-      },
-      onAbort
-    )
-  }
+  NativeScriptHistory.prototype.push = function push (location, onComplete, onAbort) {
+    this.history.push.call(this.history, location, (route) => {
+      onComplete && onComplete(route);
+    }, onAbort);
+  };
 
-  NativeScriptHistory.prototype.replace = function replace(
-    location,
-    onComplete,
-    onAbort
-  ) {
-    this.history.replace.call(
-      this.history,
-      location,
-      route => {
-        onComplete && onComplete(route)
-      },
-      onAbort
-    )
-  }
+  NativeScriptHistory.prototype.replace = function replace (location, onComplete, onAbort) {
+    this.history.replace.call(this.history, location, (route) => {
+      onComplete && onComplete(route);
+    }, onAbort);
+  };
 
-  NativeScriptHistory.prototype.go = function go(n) {
-    this.history.go.call(this.history, n)
-  }
+  NativeScriptHistory.prototype.go = function go (n) {
+    this.history.go.call(this.history, n);
+  };
 
-  NativeScriptHistory.prototype.getCurrentLocation = function getCurrentLocation() {
+  NativeScriptHistory.prototype.getCurrentLocation = function getCurrentLocation () {
     return this.history.getCurrentLocation.call(this.history)
-  }
+  };
 
-  NativeScriptHistory.prototype.onReady = function onReady(...args) {
+  NativeScriptHistory.prototype.onReady = function onReady (...args) {
     this.history.onReady.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.onError = function onError(...args) {
+  NativeScriptHistory.prototype.onError = function onError (...args) {
     this.history.onError.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.listen = function listen(...args) {
+  NativeScriptHistory.prototype.listen = function listen (...args) {
     this.history.listen.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.transitionTo = function transitionTo(...args) {
+  NativeScriptHistory.prototype.transitionTo = function transitionTo (...args) {
     this.history.transitionTo.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.confirmTransition = function confirmTransition(
-    ...args
-  ) {
+  NativeScriptHistory.prototype.confirmTransition = function confirmTransition (...args) {
     this.history.confirmTransition.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.updateRoute = function updateRoute(...args) {
+  NativeScriptHistory.prototype.updateRoute = function updateRoute (...args) {
     this.history.updateRoute.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.updateRoute = function updateRoute(...args) {
-    this.history.updateRoute.call(this.history, ...args)
+  NativeScriptHistory.prototype.setupListeners = function setupListeners (...args) {
+    this.history.setupListeners.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.ensureURL = function ensureURL(...args) {
-    this.history.ensureURL.call(this.history, ...args)
-  }
+  return NativeScriptHistory;
+}());
 
-  return NativeScriptHistory
-})()
 
 export function patchDefaultRouter(router, Vue) {
   if (router.__patched_for_routing__) {
@@ -106,7 +240,7 @@ export function patchDefaultRouter(router, Vue) {
 
   router.__patched_for_routing__ = true
 
-  router.history = new NativeScriptHistory(router, router.history)
+  router.history = new NativeScriptHistory(router, router.history, Vue);
 }
 
 export function patchRouter(router, Vue) {

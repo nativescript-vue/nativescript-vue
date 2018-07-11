@@ -65,6 +65,9 @@ const genConfig = (name) => {
         treeshake: {
             pureExternalModules: id => id.startsWith('weex')
         },
+        watch: {
+          chokidar: false
+        },
         plugins: [
             replace({
                 __WEEX__: false,
