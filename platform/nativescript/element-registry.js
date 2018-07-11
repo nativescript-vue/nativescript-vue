@@ -362,9 +362,9 @@ registerElement(
 
 registerElement('Frame', () => require('tns-core-modules/ui/frame').Frame, {
   insertChild(parentNode, childNode, atIndex) {
-    if (normalizeElementName(childNode.tagName) === 'nativepage') {
-      parentNode.nativeView.navigate({ create: () => childNode.nativeView })
-    }
+    // if (normalizeElementName(childNode.tagName) === 'nativepage') {
+    // parentNode.nativeView.navigate({ create: () => childNode.nativeView })
+    // }
   },
   component: builtInComponents.Frame
 })
