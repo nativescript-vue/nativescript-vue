@@ -1,4 +1,4 @@
-import { setFrame, deleteFrame } from '../../util/frame'
+import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { PAGE_REF } from './page'
 
 let idCounter = 1;
