@@ -1,5 +1,6 @@
 const Vue = require('./nativescript-vue')
 const VueRouter = require('vue-router')
+const application = require('tns-core-modules/application')
 
 Vue.config.silent = false
 Vue.config.debug = true
@@ -57,6 +58,15 @@ const router = new VueRouter({
 })
 
 router.push('/')
+
+application.android &&
+  application.android.on(
+    application.AndroidApplication.activityBackPressedEvent,
+    event => {
+      event.cancel = true
+      router.go(-1)
+    }
+  )
 
 new Vue({
   router,
