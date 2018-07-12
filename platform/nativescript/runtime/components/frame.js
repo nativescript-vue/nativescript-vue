@@ -9,6 +9,20 @@ const propMap = {
   'transition-android': 'transitionAndroid'
 }
 
+const flipper = {
+  slide: "slideRight",
+  slideLeft: "slideRight",
+  slideRight: "slideLeft",
+  flip: "flipLeft",
+  flipRight: "flipLeft",
+  flipLeft: "flipRight",
+  fade: "fade",
+  explode: "explode",
+  curl: "curlDown",
+  curlUp: "curlDown",
+  curlDown: "curlUp"
+}
+
 export default {
   props: {
     id: {
@@ -25,6 +39,10 @@ export default {
     'transition-android': {
       type: [String, Object],
       default: ''
+    },
+    "back-transition": {
+      type: String,
+      default: "flip"
     },
     // injected by the template compiler
     hasRouterView: {
@@ -53,6 +71,7 @@ export default {
   },
   render(h) {
     let vnode = this.$slots.default
+
     if (this.hasRouterView && this.isBackNavigation) {
       this.isBackNavigation = false
       vnode = this.$el.nativeView.currentPage[PAGE_REF] || vnode
@@ -99,15 +118,27 @@ export default {
       })
     },
 
-    navigate(entry, back = false) {
+    notifyPageLeaving(isGoingBack) {
+      this.isGoingBack = isGoingBack;
+    },
+
+    navigate(entry, back = this.isGoingBack) {
       if (this.isBackNavigation) {
         console.log('skipping navigate()')
         return
       }
+
       const frame = this._getFrame()
+      const transition = this._composeTransition()
+
+      Object.assign(entry, transition, entry)
 
       if (back) {
-        return frame.goBack(entry)
+        if (this.backTransition === "flip") {
+          entry.transition.name = flipper[entry.transition.name]
+        }
+
+        return frame.navigate(entry)
       }
 
       entry.clearHistory && this.$emit('beforeReplace', entry)
@@ -139,8 +170,6 @@ export default {
         }
       })
       entry.create = () => page
-
-      Object.assign(entry, this._composeTransition(), entry)
 
       frame.navigate(entry)
     },

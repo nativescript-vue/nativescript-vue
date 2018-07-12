@@ -15,6 +15,7 @@ export default {
     this.$el.nativeView[PAGE_REF] = this
 
     const frame = this._findParentFrame()
+
     if (frame) {
       frame.notifyPageMounted(this)
       frame.pageRoutes.push(this.$route.fullPath)
@@ -38,6 +39,14 @@ export default {
       }
 
       return parentFrame
+    }
+  },
+
+  beforeDestroy () {
+    const frame = this._findParentFrame()
+
+    if (frame && this.$router) {
+      frame.notifyPageLeaving(this.$router.history.isGoingBack)
     }
   }
 }
