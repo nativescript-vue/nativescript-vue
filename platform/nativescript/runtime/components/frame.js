@@ -3,10 +3,28 @@ import { PAGE_REF } from './page'
 
 let idCounter = 1;
 
+const propMap = {
+  'transition': 'transition',
+  'transition-ios': 'transitioniOS',
+  'transition-android': 'transitionAndroid'
+}
+
 export default {
   props: {
     id: {
       default: 'default'
+    },
+    transition: {
+      type: [String, Object],
+      default: 'slide'
+    },
+    'transition-ios': {
+      type: [String, Object],
+      default: ''
+    },
+    'transition-android': {
+      type: [String, Object],
+      default: ''
     },
     // injected by the template compiler
     hasRouterView: {
@@ -23,10 +41,10 @@ export default {
     let properties = {}
 
     if (getFrame(this.$props.id)) {
-      properties.id = this.$props.id + idCounter++;
+      properties.id = this.$props.id + idCounter++
     }
 
-    this.properties = Object.assign({}, this.$attrs, this.$props, properties);
+    this.properties = Object.assign({}, this.$attrs, this.$props, properties)
 
     setFrame(this.properties.id, this)
   },
@@ -52,6 +70,25 @@ export default {
   methods: {
     _getFrame() {
       return this.$el.nativeView
+    },
+
+    _composeTransition() {
+      const result = {}
+
+      for (const prop in propMap) {
+        if (this[prop]) {
+          const name = propMap[prop]
+          result[name] = {}
+
+          if (typeof this[prop] === 'string') {
+            result[name].name = this[prop]
+          } else {
+            Object.assign(result[name], this[prop])
+          }
+        }
+      }
+
+      return result
     },
 
     notifyPageMounted(pageVm) {
@@ -102,6 +139,9 @@ export default {
         }
       })
       entry.create = () => page
+
+      Object.assign(entry, this._composeTransition(), entry)
+
       frame.navigate(entry)
     },
 
