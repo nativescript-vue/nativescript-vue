@@ -1,11 +1,17 @@
 import { default as document } from '../renderer/DocumentNode'
 import { trace } from '../util'
+import * as profiler from 'tns-core-modules/profiling'
 
 export const namespaceMap = {}
 
 export function createElement(tagName, vnode) {
-  trace(`CreateElement(${tagName})`)
-  return document.createElement(tagName)
+  const start = profiler.time()
+
+  const element = document.createElement(tagName)
+
+  trace(`CreateElement(${tagName})`, profiler.time() - start)
+
+  return element
 }
 
 export function createElementNS(namespace, tagName) {
@@ -35,9 +41,13 @@ export function removeChild(node, child) {
 }
 
 export function appendChild(node, child) {
-  trace(`AppendChild(${node}, ${child})`)
+  const start = profiler.time()
 
-  node.appendChild(child)
+  const element = node.appendChild(child)
+
+  trace(`AppendChild(${node}, ${child})`, profiler.time() - start)
+
+  return element
 }
 
 export function parentNode(node) {

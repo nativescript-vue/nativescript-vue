@@ -69,13 +69,13 @@ const infoTrace = once(() => {
   )
 })
 
-export function trace(message) {
+export function trace(message, time) {
   if (_Vue && _Vue.config.silent) {
     return infoTrace()
   }
 
   console.log(
-    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
+    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}${ time ? ` - ran ${time}ms` : '' }`
   )
 }
 

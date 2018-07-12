@@ -21,15 +21,13 @@ export default {
       frame.pageRoutes.push(this.$route.fullPath)
     }
 
-    this.$nextTick(() => {
-      const handler = e => {
-        if (e.isBackNavigation) {
-          this.$el.nativeView.off('navigatedFrom', handler)
-          this.$destroy()
-        }
+    const handler = e => {
+      if (e.isBackNavigation) {
+        this.$el.nativeView.off('navigatedFrom', handler)
+        this.$destroy()
       }
-      this.$el.nativeView.on('navigatedFrom', handler)
-    })
+    }
+    this.$el.nativeView.on('navigatedFrom', handler)
   },
   methods: {
     _findParentFrame() {
@@ -42,7 +40,7 @@ export default {
     }
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     const frame = this._findParentFrame()
 
     if (frame && this.$router) {
