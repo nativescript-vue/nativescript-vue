@@ -1,17 +1,11 @@
 import { default as document } from '../renderer/DocumentNode'
 import { trace } from '../util'
-import * as profiler from 'tns-core-modules/profiling'
 
 export const namespaceMap = {}
 
 export function createElement(tagName, vnode) {
-  const start = profiler.time()
-
-  const element = document.createElement(tagName)
-
-  trace(`CreateElement(${tagName})`, profiler.time() - start)
-
-  return element
+  trace(`CreateElement(${tagName})`)
+  return document.createElement(tagName)
 }
 
 export function createElementNS(namespace, tagName) {
@@ -32,22 +26,18 @@ export function createComment(text) {
 
 export function insertBefore(parentNode, newNode, referenceNode) {
   trace(`InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`)
-  parentNode.insertBefore(newNode, referenceNode)
+  return parentNode.insertBefore(newNode, referenceNode)
 }
 
 export function removeChild(node, child) {
   trace(`RemoveChild(${node}, ${child})`)
-  node.removeChild(child)
+  return node.removeChild(child)
 }
 
 export function appendChild(node, child) {
-  const start = profiler.time()
+  trace(`AppendChild(${node}, ${child})`)
 
-  const element = node.appendChild(child)
-
-  trace(`AppendChild(${node}, ${child})`, profiler.time() - start)
-
-  return element
+  return node.appendChild(child)
 }
 
 export function parentNode(node) {

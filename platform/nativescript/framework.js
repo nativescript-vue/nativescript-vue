@@ -21,16 +21,18 @@ Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
 Vue.use(RouterPlugin)
 
+const newLineRegExp = /\\n/g
+
 console.log = (function(log, inspect, Vue) {
-  return function() {
-    return log.apply(
+  return function(...args) {
+    return log.call(
       this,
-      Array.prototype.map.call(arguments, function(arg) {
+      ...Array.prototype.map.call(args, function(arg) {
         return inspect(arg, {
           depth: 2,
           colors: Vue.config.debug,
           showHidden: true
-        }).replace(/\\n/g, '\n')
+        }).replace(newLineRegExp, '\n')
       })
     )
   }

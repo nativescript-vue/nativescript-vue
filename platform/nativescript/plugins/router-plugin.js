@@ -1,6 +1,7 @@
 //import { before } from '../util/index'
 //import { Page } from 'tns-core-modules/ui/page'
 import { android } from 'tns-core-modules/application'
+import { isObject } from 'shared/util'
 
 const properties = ['stack', 'index', 'current']
 
@@ -31,12 +32,21 @@ const NativeScriptHistory = (function () {
     })
   }
 
-  NativeScriptHistory.prototype.push = function push(location, onComplete, onAbort) {
+  NativeScriptHistory.prototype.push = function push(...args) {
     this.isGoingBack = false;
 
-    this.history.push.call(this.history, location, (route) => {
-      onComplete && onComplete(route)
-    }, onAbort)
+    let entry;
+
+    for (let i = 1; i++ < args.length;) {
+      if (isObject(args[i])) {
+        entry = args[i];
+        delete args[i];
+      }
+    }
+
+    this.currentEntry = entry
+
+    this.history.push.call(this.history, ...args)
   };
 
   NativeScriptHistory.prototype.replace = function replace(location, onComplete, onAbort) {
@@ -97,6 +107,27 @@ export function patchDefaultRouter(router, Vue) {
   router.__patched_for_routing__ = true
 
   router.history = new NativeScriptHistory(router, router.history, Vue)
+
+  router.push = function push (...args) {
+    this.history.push(...args);
+  };
+
+  router.replace = function push (...args) {
+    this.history.push(...args);
+  };
+
+  router.push = function go (...args) {
+    this.history.push(...args);
+  };
+
+  router.back = function back (...args) {
+    this.go(-1, ...args);
+  };
+
+  router.forward = function forward (...args) {
+    this.go(1, ...args);
+  };
+
 }
 
 //export function patchRouter(router, Vue) {
@@ -213,7 +244,7 @@ export default {
         //if (isPageRouting) {
         //  patchRouter(router, Vue)
         //} else {
-          patchDefaultRouter(router, Vue)
+        patchDefaultRouter(router, Vue)
 
         //  return
         //}

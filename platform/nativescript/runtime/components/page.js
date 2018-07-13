@@ -18,7 +18,6 @@ export default {
 
     if (frame) {
       frame.notifyPageMounted(this)
-      frame.pageRoutes.push(this.$route.fullPath)
     }
 
     const handler = e => {

@@ -1,5 +1,6 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { PAGE_REF } from './page'
+import { extend } from 'shared/util'
 
 let idCounter = 1;
 
@@ -102,7 +103,7 @@ export default {
           if (typeof this[prop] === 'string') {
             result[name].name = this[prop]
           } else {
-            Object.assign(result[name], this[prop])
+            extend(result[name], this[prop])
           }
         }
       }
@@ -111,9 +112,13 @@ export default {
     },
 
     notifyPageMounted(pageVm) {
-      this.navigate({
-        create: _ => pageVm.$el.nativeView
-      })
+      this.$nextTick(_ =>
+        this.navigate({
+          create: _ => pageVm.$el.nativeView
+        })
+      )
+
+      this.pageRoutes.push(pageVm.$route.fullPath)
     },
 
     notifyPageLeaving(isGoingBack) {

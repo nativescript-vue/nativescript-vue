@@ -69,31 +69,27 @@ const infoTrace = once(() => {
   )
 })
 
-export function trace(message, time) {
+export function trace(message) {
   if (_Vue && _Vue.config.silent) {
     return infoTrace()
   }
 
   console.log(
-    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}${ time ? ` - ran ${time}ms` : '' }`
+    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
   )
 }
 
 export function before(original, thisArg, wrap) {
-  const __slice = Array.prototype.slice
-  return function() {
-    const args = __slice.call(arguments)
-    wrap.apply(null, args)
-    original.apply(thisArg, args)
+  return function(...args) {
+    wrap.call(null, ...args)
+    original.call(thisArg, ...args)
   }
 }
 
 export function after(original, thisArg, wrap) {
-  const __slice = Array.prototype.slice
-  return function() {
-    const args = __slice.call(arguments)
-    wrap.apply(null, args)
-    original.apply(thisArg, args)
+  return function(...args) {
+    wrap.call(null, ...args)
+    original.call(thisArg, ...args)
   }
 }
 

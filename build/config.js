@@ -78,11 +78,6 @@ const genConfig = (name) => {
                 'process.env.NS_VUE_VERSION': `'${NSVueVersion}'`
             }),
             flow(),
-            buble({
-              transforms: {
-                dangerousForOf: true
-              }
-            }),
             alias(aliases),
             resolve(),
             commonjs(),
