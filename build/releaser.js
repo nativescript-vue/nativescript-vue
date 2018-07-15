@@ -22,6 +22,7 @@ inquirer
       name: 'releaseTag',
       type: 'input',
       message: 'Input release tag',
+      default: 'next',
       when: ({bump}) => bump === 'custom'
     }
   ])
@@ -37,8 +38,8 @@ inquirer
         type: 'confirm',
         message: 'Are you sure you want to release v' + v.version + (res.releaseTag ? ' with tag: ' + res.releaseTag: ''),
         default: false
-      }]).then((res) => {
-        if (res.confirmed) {
+      }]).then(({confirmed}) => {
+        if (confirmed) {
           return resolve({
             version: v.version,
             releaseTag: res.releaseTag
@@ -50,6 +51,7 @@ inquirer
   })
   .then(({version, releaseTag}) => {
     console.log(blue(`Releasing v${version}...`))
+    console.log(blue(`With tag: ${releaseTag}`))
     console.log(blue('-'.repeat(80)))
 
     const buildMessage = `build: ${version}`
@@ -60,7 +62,7 @@ inquirer
       echo "Starting build..."
       VERSION=${version} npm run build
       echo "Build Successful. Updating packages"
-      cd packages/nativescript-vue-template-compiler && npm version ${version} && npm publish
+      cd packages/nativescript-vue-template-compiler && npm version ${version} && npm publish${releaseTag ? ' --tag ' + releaseTag : ''}
       git add -A
       git add -f dist/index.js dist/index.js.map packages/nativescript-vue-template-compiler/index.js
       git commit --no-verify -m "${buildMessage}"
