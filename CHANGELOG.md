@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.1"></a>
+# [2.0.0-alpha.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.0...v2.0.0-alpha.1) (2018-07-15)
+
+
+### Bug Fixes
+
+* action bar rendering - issue [#276](https://github.com/nativescript-vue/nativescript-vue/issues/276) ([#278](https://github.com/nativescript-vue/nativescript-vue/issues/278)) ([db6df39](https://github.com/nativescript-vue/nativescript-vue/commit/db6df39))
+
+
+
 <a name="2.0.0-alpha.0"></a>
 # [2.0.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v1.4.0-alpha.0...v2.0.0-alpha.0) (2018-07-04)
 
