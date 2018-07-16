@@ -43,7 +43,7 @@ export default {
     const frame = this._findParentFrame()
 
     if (frame && this.$router) {
-      frame.notifyPageLeaving(this.$router.history.isGoingBack)
+      frame.notifyPageLeaving(this.$router.history)
     }
   }
 }

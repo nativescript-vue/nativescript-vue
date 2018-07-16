@@ -1,18 +1,16 @@
 //import { before } from '../util/index'
 //import { Page } from 'tns-core-modules/ui/page'
 import { android } from 'tns-core-modules/application'
-import { isObject } from 'shared/util'
+import { isPlainObject } from 'shared/util'
 
 const properties = ['stack', 'index', 'current']
 
-const NativeScriptHistory = (function () {
-  let Vue;
-
-  function NativeScriptHistory (router, history, VueInstance) {
+class NativeScriptHistory {
+  constructor(router, history, VueInstance) {
     this.router = router
     this.history = history
     this.isGoingBack = false
-    Vue = VueInstance
+    this._Vue = VueInstance
 
     android.on("activityBackPressed", function (args) {
      args.cancel = true
@@ -32,72 +30,75 @@ const NativeScriptHistory = (function () {
     })
   }
 
-  NativeScriptHistory.prototype.push = function push(...args) {
-    this.isGoingBack = false;
-
+  static _buildEntry(args) {
     let entry;
 
-    for (let i = 1; i++ < args.length;) {
-      if (isObject(args[i])) {
+    for (let i = 1; i < args.length; i++) {
+      if (isPlainObject(args[i])) {
         entry = args[i];
         delete args[i];
       }
     }
 
-    this.currentEntry = entry
+    return { args, entry };
+  }
 
-    this.history.push.call(this.history, ...args)
-  };
-
-  NativeScriptHistory.prototype.replace = function replace(location, onComplete, onAbort) {
+  push(...args) {
     this.isGoingBack = false;
 
-    this.history.replace.call(this.history, location, (route) => {
-      onComplete && onComplete(route)
-    }, onAbort)
-  };
+    ({ args, entry: this.currentEntry } = NativeScriptHistory._buildEntry(args))
 
-  NativeScriptHistory.prototype.go = function go(n) {
+    this.history.push.call(this.history, ...args)
+  }
+
+  replace(...args) {
+    this.isGoingBack = false;
+
+    ({ args, entry: this.currentEntry } = NativeScriptHistory._buildEntry(args))
+
+    this.history.replace.call(this.history, ...args)
+  }
+
+  go(n, entry) {
     this.isGoingBack = n < 0
 
+    this.currentEntry = entry
+
     this.history.go.call(this.history, n)
-  };
+  }
 
-  NativeScriptHistory.prototype.getCurrentLocation = function getCurrentLocation() {
+  getCurrentLocation() {
     return this.history.getCurrentLocation.call(this.history)
-  };
+  }
 
-  NativeScriptHistory.prototype.onReady = function onReady(...args) {
+  onReady(...args) {
     this.history.onReady.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.onError = function onError(...args) {
+  onError(...args) {
     this.history.onError.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.listen = function listen(...args) {
+  listen(...args) {
     this.history.listen.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.transitionTo = function transitionTo(...args) {
+  transitionTo(...args) {
     this.history.transitionTo.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.confirmTransition = function confirmTransition(...args) {
+  confirmTransition(...args) {
     this.history.confirmTransition.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.updateRoute = function updateRoute(...args) {
+  updateRoute(...args) {
     this.history.updateRoute.call(this.history, ...args)
   }
 
-  NativeScriptHistory.prototype.setupListeners = function setupListeners(...args) {
+  setupListeners(...args) {
     this.history.setupListeners.call(this.history, ...args)
   }
-
-  return NativeScriptHistory
-}());
-
+}
 
 export function patchDefaultRouter(router, Vue) {
   if (router.__patched_for_routing__) {
@@ -116,16 +117,16 @@ export function patchDefaultRouter(router, Vue) {
     this.history.push(...args);
   };
 
-  router.push = function go (...args) {
-    this.history.push(...args);
+  router.go = function go (n, entry) {
+    this.history.go(n, entry);
   };
 
-  router.back = function back (...args) {
-    this.go(-1, ...args);
+  router.back = function back (entry) {
+    this.go(-1, entry);
   };
 
-  router.forward = function forward (...args) {
-    this.go(1, ...args);
+  router.forward = function forward (entry) {
+    this.go(1, entry);
   };
 
 }

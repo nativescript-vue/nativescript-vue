@@ -14,6 +14,8 @@ const flipper = {
   slide: "slideRight",
   slideLeft: "slideRight",
   slideRight: "slideLeft",
+  slideTop: "slideBottom",
+  slideBottom: "slideTop",
   flip: "flipLeft",
   flipRight: "flipLeft",
   flipLeft: "flipRight",
@@ -53,7 +55,8 @@ export default {
   data() {
     return {
       properties: {},
-      pageRoutes: []
+      pageRoutes: [],
+      lastTransition: undefined
     }
   },
   created() {
@@ -94,16 +97,17 @@ export default {
 
     _composeTransition() {
       const result = {}
+      const root = this.currentEntry || this
 
       for (const prop in propMap) {
-        if (this[prop]) {
+        if (root[prop]) {
           const name = propMap[prop]
           result[name] = {}
 
-          if (typeof this[prop] === 'string') {
-            result[name].name = this[prop]
+          if (typeof root[prop] === 'string') {
+            result[name].name = root[prop]
           } else {
-            extend(result[name], this[prop])
+            extend(result[name], root[prop])
           }
         }
       }
@@ -121,8 +125,9 @@ export default {
       this.pageRoutes.push(pageVm.$route.fullPath)
     },
 
-    notifyPageLeaving(isGoingBack) {
-      this.isGoingBack = isGoingBack;
+    notifyPageLeaving(history) {
+      this.isGoingBack = history.isGoingBack;
+      this.currentEntry = history.currentEntry;
     },
 
     navigate(entry, back = this.isGoingBack) {
@@ -132,7 +137,9 @@ export default {
       }
 
       const frame = this._getFrame()
-      const transition = this._composeTransition()
+      const transition = back && this.lastTransition
+                              ? this.lastTransition
+                              : this._composeTransition()
 
       Object.assign(entry, transition, entry)
 
@@ -140,6 +147,8 @@ export default {
         if (this.backTransition === "flip") {
           entry.transition.name = flipper[entry.transition.name]
         }
+
+        this.lastTransition = undefined
 
         return frame.navigate(entry)
       }
@@ -173,6 +182,8 @@ export default {
         }
       })
       entry.create = () => page
+
+      this.lastTransition = transition;
 
       frame.navigate(entry)
     },
