@@ -11,6 +11,9 @@ export default {
       this.$slots.default
     )
   },
+  created() {
+    this.$vnode.parent.data.keepAlive = true
+  },
   mounted() {
     this.$el.nativeView[PAGE_REF] = this
 
@@ -38,12 +41,11 @@ export default {
       return parentFrame
     }
   },
-
-  beforeDestroy() {
+  deactivated() {
     const frame = this._findParentFrame()
 
     if (frame && this.$router) {
-      frame.notifyPageLeaving(this.$router.history)
+      return frame.notifyPageLeaving(this.$router.history)
     }
   }
 }

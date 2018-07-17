@@ -34,8 +34,7 @@ export default {
   },
   data() {
     return {
-      properties: {},
-      pageRoutes: []
+      properties: {}
     }
   },
   created() {
@@ -100,8 +99,6 @@ export default {
           create: _ => pageVm.$el.nativeView
         })
       )
-
-      this.pageRoutes.push(pageVm.$route.fullPath)
     },
 
     notifyPageLeaving(history) {
@@ -135,18 +132,6 @@ export default {
         if (isBackNavigation) {
           page.off('navigatedFrom')
           this.$emit('back', entry)
-
-          if (!this.hasRouterView) return
-          this.isBackNavigation = true
-
-          // since this was a page navigation
-          // we need to find the previous page's path
-          // and navigate back to it
-          const lastPageRoute = this.pageRoutes.pop()
-          while (this.$router.currentRoute.fullPath !== lastPageRoute) {
-            this.$router.go(-1)
-          }
-          this.$router.go(-1)
         }
       })
       entry.create = () => page
