@@ -4,6 +4,7 @@ import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
 import * as types from 'tns-core-modules/utils/types'
+import { XmlParser } from 'tns-core-modules/xml'
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
@@ -108,6 +109,12 @@ export default class ViewNode {
           set(this.nativeView, key.substr(8), value)
         } else if (isIOS && key.startsWith('ios:')) {
           set(this.nativeView, key.substr(4), value)
+        } else if (key.endsWith('.decode')) {
+          set(
+            this.nativeView,
+            key.slice(0, -7),
+            XmlParser._dereferenceEntities(value)
+          )
         } else {
           set(this.nativeView, key, value)
         }

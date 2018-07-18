@@ -2,10 +2,10 @@ import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { PAGE_REF } from './page'
 import { extend } from 'shared/util'
 
-let idCounter = 1;
+let idCounter = 1
 
 const propMap = {
-  'transition': 'transition',
+  transition: 'transition',
   'transition-ios': 'transitioniOS',
   'transition-android': 'transitionAndroid'
 }
@@ -17,7 +17,7 @@ export default {
     },
     transition: {
       type: [String, Object],
-      default: 'slide'
+      default: _ => ({ name: 'slide', duration: 200 })
     },
     'transition-ios': {
       type: [String, Object],
@@ -102,8 +102,8 @@ export default {
     },
 
     notifyPageLeaving(history) {
-      this.isGoingBack = history.isGoingBack;
-      this.currentEntry = history.currentEntry;
+      this.isGoingBack = history.isGoingBack
+      this.currentEntry = history.currentEntry
     },
 
     navigate(entry, back = this.isGoingBack) {
