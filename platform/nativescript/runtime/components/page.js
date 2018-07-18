@@ -45,7 +45,9 @@ export default {
     const frame = this._findParentFrame()
 
     if (frame && this.$router) {
-      return frame.notifyPageLeaving(this.$router.history)
+      frame.notifyPageLeaving(this.$router.history)
+
+      this._watcher.teardown();
     }
   }
 }
