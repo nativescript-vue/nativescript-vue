@@ -26,7 +26,9 @@ export default {
     const handler = e => {
       if (e.isBackNavigation) {
         this.$el.nativeView.off('navigatedFrom', handler)
-        this.$destroy()
+
+        this.$vnode.parent.data.keepAlive = false
+        this.$parent.$destroy()
       }
     }
     this.$el.nativeView.on('navigatedFrom', handler)
@@ -47,7 +49,15 @@ export default {
     if (frame && this.$router) {
       frame.notifyPageLeaving(this.$router.history)
 
-      this._watcher.teardown();
+      if (this._watcher) {
+        this._watcher.teardown();
+      }
+
+      let i = this._watchers.length;
+
+      while (i--) {
+        this._watchers[i].teardown();
+      }
     }
   }
 }
