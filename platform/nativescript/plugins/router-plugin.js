@@ -12,11 +12,15 @@ class NativeScriptHistory {
     this.isGoingBack = false
     this._Vue = VueInstance
 
-    android.on("activityBackPressed", function (args) {
-     args.cancel = true
+    if (android) {
+      android.on("activityBackPressed", function(args) {
+        if (history.index > 0) {
+          args.cancel = true
 
-     router.back()
-    });
+          router.back()
+        }
+      });
+    }
 
     properties.forEach((name) => {
       Object.defineProperty(NativeScriptHistory.prototype, name, {
