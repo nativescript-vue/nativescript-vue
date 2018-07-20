@@ -1,12 +1,11 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
-import { PAGE_REF } from './page'
 import { extend } from 'shared/util'
 import { ios } from 'tns-core-modules/application'
 
 let idCounter = 1
 
 const propMap = {
-  'transition': 'transition',
+  transition: 'transition',
   'ios:transition': 'transitioniOS',
   'android:transition': 'transitionAndroid'
 }
@@ -54,20 +53,13 @@ export default {
     deleteFrame(this.properties.id)
   },
   render(h) {
-    let vnode = this.$slots.default
-
-    if (this.hasRouterView && this.isBackNavigation) {
-      this.isBackNavigation = false
-      vnode = this.$el.nativeView.currentPage[PAGE_REF] || vnode
-    }
-
     return h(
       'NativeFrame',
       {
         attrs: this.properties,
         on: this.$listeners
       },
-      vnode
+      this.$slots.default
     )
   },
   methods: {
@@ -98,7 +90,7 @@ export default {
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
         this.navigate({
-          create: _ => pageVm.$el.nativeView
+          create: () => pageVm.$el.nativeView
         })
       )
     },
@@ -109,11 +101,6 @@ export default {
     },
 
     navigate(entry, back = this.isGoingBack) {
-      if (this.isBackNavigation) {
-        console.log('skipping navigate()')
-        return
-      }
-
       const frame = this._getFrame()
 
       if (back || (ios && this.isGoingBack === undefined)) {

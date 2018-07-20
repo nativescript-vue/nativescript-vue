@@ -13,7 +13,9 @@ export default {
     )
   },
   created() {
-    this.$vnode.parent.data.keepAlive = true
+    if (this.$router) {
+      this.$vnode.parent.data.keepAlive = true
+    }
   },
   mounted() {
     this.$el.nativeView[PAGE_REF] = this
@@ -27,6 +29,10 @@ export default {
     const handler = e => {
       if (e.isBackNavigation) {
         this.$el.nativeView.off('navigatedFrom', handler)
+
+        if (!this.$router) {
+          return this.$parent.$destroy()
+        }
 
         if (ios) {
           this._findParentFrame().isGoingBack = undefined
