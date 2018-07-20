@@ -62,10 +62,7 @@ export default {
 
   methods: {
     onItemTap(args) {
-      this.$emit(
-        'itemTap',
-        extend({ item: this.items[args.index] }, args)
-      )
+      this.$emit('itemTap', extend({ item: this.items[args.index] }, args))
     },
     onItemLoading(args) {
       const index = args.index

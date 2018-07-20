@@ -1,6 +1,7 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { PAGE_REF } from './page'
 import { extend } from 'shared/util'
+import { ios } from 'tns-core-modules/application'
 
 let idCounter = 1
 
@@ -34,7 +35,8 @@ export default {
   },
   data() {
     return {
-      properties: {}
+      properties: {},
+      isGoingBack: false
     }
   },
   created() {
@@ -114,8 +116,11 @@ export default {
 
       const frame = this._getFrame()
 
-      if (back) {
-        return frame.goBack(this.isGoingBack ? undefined : entry)
+      if (back || (ios && this.isGoingBack === undefined)) {
+        frame.goBack(this.isGoingBack ? undefined : entry)
+
+        this.$router.history.isGoingBack = undefined
+        return
       }
 
       entry.clearHistory && this.$emit('beforeReplace', entry)

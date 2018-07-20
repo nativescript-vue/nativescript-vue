@@ -1,4 +1,5 @@
 export const PAGE_REF = '__vuePageRef__'
+import { ios } from 'tns-core-modules/application'
 
 export default {
   render(h) {
@@ -27,6 +28,14 @@ export default {
       if (e.isBackNavigation) {
         this.$el.nativeView.off('navigatedFrom', handler)
 
+        if (ios) {
+          this._findParentFrame().isGoingBack = undefined
+          const history = this.$router.history.history
+
+          history.index -= 1
+          history.updateRoute(history.stack[history.index])
+        }
+
         this.$vnode.parent.data.keepAlive = false
         this.$parent.$destroy()
       }
@@ -50,13 +59,13 @@ export default {
       frame.notifyPageLeaving(this.$router.history)
 
       if (this._watcher) {
-        this._watcher.teardown();
+        this._watcher.teardown()
       }
 
-      let i = this._watchers.length;
+      let i = this._watchers.length
 
       while (i--) {
-        this._watchers[i].teardown();
+        this._watchers[i].teardown()
       }
     }
   }

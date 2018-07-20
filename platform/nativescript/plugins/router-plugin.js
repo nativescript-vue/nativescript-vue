@@ -13,53 +13,51 @@ class NativeScriptHistory {
     this._Vue = VueInstance
 
     if (android) {
-      android.on("activityBackPressed", function(args) {
+      android.on('activityBackPressed', function(args) {
         if (history.index > 0) {
           args.cancel = true
 
           router.back()
         }
-      });
+      })
     }
 
-    properties.forEach((name) => {
+    properties.forEach(name => {
       Object.defineProperty(NativeScriptHistory.prototype, name, {
         get: () => {
           return this.history[name]
         },
-        set: (value) => {
+        set: value => {
           this.history[name] = value
         }
       })
     })
   }
 
-  static _buildEntry(args) {
-    let entry;
+  _buildEntry(args) {
+    let entry
 
     for (let i = 1; i < args.length; i++) {
       if (isPlainObject(args[i])) {
-        entry = args[i];
-        delete args[i];
+        entry = args[i]
+        delete args[i]
       }
     }
 
-    return { args, entry };
+    return { args, entry }
   }
 
   push(...args) {
-    this.isGoingBack = false;
+    ({ args, entry: this.currentEntry } = this._buildEntry(args))
 
-    ({ args, entry: this.currentEntry } = NativeScriptHistory._buildEntry(args))
-
+    this.isGoingBack = false
     this.history.push.call(this.history, ...args)
   }
 
   replace(...args) {
-    this.isGoingBack = false;
+    ({ args, entry: this.currentEntry } = this._buildEntry(args))
 
-    ({ args, entry: this.currentEntry } = NativeScriptHistory._buildEntry(args))
-
+    this.isGoingBack = false
     this.history.replace.call(this.history, ...args)
   }
 
@@ -113,26 +111,25 @@ export function patchDefaultRouter(router, Vue) {
 
   router.history = new NativeScriptHistory(router, router.history, Vue)
 
-  router.push = function push (...args) {
-    this.history.push(...args);
-  };
+  router.push = function push(...args) {
+    this.history.push(...args)
+  }
 
-  router.replace = function push (...args) {
-    this.history.push(...args);
-  };
+  router.replace = function push(...args) {
+    this.history.push(...args)
+  }
 
-  router.go = function go (n, entry) {
-    this.history.go(n, entry);
-  };
+  router.go = function go(n, entry) {
+    this.history.go(n, entry)
+  }
 
-  router.back = function back (entry) {
-    this.go(-1, entry);
-  };
+  router.back = function back(entry) {
+    this.go(-1, entry)
+  }
 
-  router.forward = function forward (entry) {
-    this.go(1, entry);
-  };
-
+  router.forward = function forward(entry) {
+    this.go(1, entry)
+  }
 }
 
 //export function patchRouter(router, Vue) {

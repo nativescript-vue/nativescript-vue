@@ -95,28 +95,26 @@ export default class ViewNode {
 
   /* istanbul ignore next */
   setAttribute(key, value) {
+    const nv = this.nativeView
+
     try {
       if (XML_ATTRIBUTES.indexOf(key) !== -1) {
-        this.nativeView[key] = value
+        nv[key] = value
       } else {
         // detect expandable attrs for boolean values
         // See https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
-        if (types.isBoolean(this.nativeView[key]) && value === '') {
+        if (types.isBoolean(nv[key]) && value === '') {
           value = true
         }
 
         if (isAndroid && key.startsWith('android:')) {
-          set(this.nativeView, key.substr(8), value)
+          set(nv, key.substr(8), value)
         } else if (isIOS && key.startsWith('ios:')) {
-          set(this.nativeView, key.substr(4), value)
+          set(nv, key.substr(4), value)
         } else if (key.endsWith('.decode')) {
-          set(
-            this.nativeView,
-            key.slice(0, -7),
-            XmlParser._dereferenceEntities(value)
-          )
+          set(nv, key.slice(0, -7), XmlParser._dereferenceEntities(value))
         } else {
-          set(this.nativeView, key, value)
+          set(nv, key, value)
         }
       }
     } catch (e) {
