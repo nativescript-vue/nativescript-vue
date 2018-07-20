@@ -106,7 +106,9 @@ export default {
       if (back || (ios && this.isGoingBack === undefined)) {
         frame.goBack(this.isGoingBack ? undefined : entry)
 
-        this.$router.history.isGoingBack = undefined
+        if (this.$router) {
+          this.$router.history.isGoingBack = undefined
+        }
         return
       }
 
@@ -117,6 +119,7 @@ export default {
       // to fire the frame events
       const page = entry.create()
       page.once('navigatedTo', () => {
+        this.$emit('navigated', entry)
         entry.clearHistory && this.$emit('replace', entry)
         !entry.clearHistory && this.$emit('push', entry)
       })
