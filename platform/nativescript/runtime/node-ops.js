@@ -26,18 +26,18 @@ export function createComment(text) {
 
 export function insertBefore(parentNode, newNode, referenceNode) {
   trace(`InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`)
-  parentNode.insertBefore(newNode, referenceNode)
+  return parentNode.insertBefore(newNode, referenceNode)
 }
 
 export function removeChild(node, child) {
   trace(`RemoveChild(${node}, ${child})`)
-  node.removeChild(child)
+  return node.removeChild(child)
 }
 
 export function appendChild(node, child) {
   trace(`AppendChild(${node}, ${child})`)
 
-  node.appendChild(child)
+  return node.appendChild(child)
 }
 
 export function parentNode(node) {

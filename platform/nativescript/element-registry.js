@@ -1,6 +1,8 @@
 import * as builtInComponents from './runtime/components'
 
 const elementMap = new Map()
+const nativeRegExp = /Native/gi
+const dashRegExp = /-/g
 
 const defaultViewMeta = {
   skipAddToDom: false,
@@ -13,8 +15,8 @@ const defaultViewMeta = {
 
 export function normalizeElementName(elementName) {
   return `native${elementName
-    .replace(/Native/gi, '')
-    .replace(/-/g, '')
+    .replace(nativeRegExp, '')
+    .replace(dashRegExp, '')
     .toLowerCase()}`
 }
 

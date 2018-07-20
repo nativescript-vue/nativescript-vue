@@ -1,10 +1,32 @@
-import { setFrame, deleteFrame } from '../../util/frame'
+import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { PAGE_REF } from './page'
+import { extend } from 'shared/util'
+import { ios } from 'tns-core-modules/application'
+
+let idCounter = 1
+
+const propMap = {
+  'transition': 'transition',
+  'ios:transition': 'transitioniOS',
+  'android:transition': 'transitionAndroid'
+}
 
 export default {
   props: {
     id: {
       default: 'default'
+    },
+    transition: {
+      type: [String, Object],
+      default: _ => ({ name: 'slide', duration: 200 })
+    },
+    'ios:transition': {
+      type: [String, Object],
+      default: ''
+    },
+    'android:transition': {
+      type: [String, Object],
+      default: ''
     },
     // injected by the template compiler
     hasRouterView: {
@@ -13,17 +35,27 @@ export default {
   },
   data() {
     return {
-      pageRoutes: []
+      properties: {},
+      isGoingBack: false
     }
   },
   created() {
-    setFrame(this.$props.id, this)
+    let properties = {}
+
+    if (getFrame(this.$props.id)) {
+      properties.id = this.$props.id + idCounter++
+    }
+
+    this.properties = Object.assign({}, this.$attrs, this.$props, properties)
+
+    setFrame(this.properties.id, this)
   },
   destroyed() {
-    deleteFrame(this.$props.id)
+    deleteFrame(this.properties.id)
   },
   render(h) {
     let vnode = this.$slots.default
+
     if (this.hasRouterView && this.isBackNavigation) {
       this.isBackNavigation = false
       vnode = this.$el.nativeView.currentPage[PAGE_REF] || vnode
@@ -32,7 +64,7 @@ export default {
     return h(
       'NativeFrame',
       {
-        attrs: Object.assign({}, this.$attrs, this.$props),
+        attrs: this.properties,
         on: this.$listeners
       },
       vnode
@@ -43,23 +75,52 @@ export default {
       return this.$el.nativeView
     },
 
+    _composeTransition() {
+      const result = {}
+      const root = this.currentEntry || this
+
+      for (const prop in propMap) {
+        if (root[prop]) {
+          const name = propMap[prop]
+          result[name] = {}
+
+          if (typeof root[prop] === 'string') {
+            result[name].name = root[prop]
+          } else {
+            extend(result[name], root[prop])
+          }
+        }
+      }
+
+      return result
+    },
+
     notifyPageMounted(pageVm) {
-      this.$nextTick(() => {
+      this.$nextTick(_ =>
         this.navigate({
           create: _ => pageVm.$el.nativeView
         })
-      })
+      )
     },
 
-    navigate(entry, back = false) {
+    notifyPageLeaving(history) {
+      this.isGoingBack = history.isGoingBack
+      this.currentEntry = history.currentEntry
+    },
+
+    navigate(entry, back = this.isGoingBack) {
       if (this.isBackNavigation) {
         console.log('skipping navigate()')
         return
       }
+
       const frame = this._getFrame()
 
-      if (back) {
-        return frame.goBack(entry)
+      if (back || (ios && this.isGoingBack === undefined)) {
+        frame.goBack(this.isGoingBack ? undefined : entry)
+
+        this.$router.history.isGoingBack = undefined
+        return
       }
 
       entry.clearHistory && this.$emit('beforeReplace', entry)
@@ -76,21 +137,14 @@ export default {
         if (isBackNavigation) {
           page.off('navigatedFrom')
           this.$emit('back', entry)
-
-          if (!this.hasRouterView) return
-          this.isBackNavigation = true
-
-          // since this was a page navigation
-          // we need to find the previous page's path
-          // and navigate back to it
-          const lastPageRoute = this.pageRoutes.pop()
-          while (this.$router.currentRoute.fullPath !== lastPageRoute) {
-            this.$router.go(-1)
-          }
-          this.$router.go(-1)
         }
       })
       entry.create = () => page
+
+      const transition = this._composeTransition()
+
+      Object.assign(entry, transition, entry)
+
       frame.navigate(entry)
     },
 
