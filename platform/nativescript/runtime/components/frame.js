@@ -6,9 +6,9 @@ import { ios } from 'tns-core-modules/application'
 let idCounter = 1
 
 const propMap = {
-  transition: 'transition',
-  'transition-ios': 'transitioniOS',
-  'transition-android': 'transitionAndroid'
+  'transition': 'transition',
+  'ios:transition': 'transitioniOS',
+  'android:transition': 'transitionAndroid'
 }
 
 export default {
@@ -20,11 +20,11 @@ export default {
       type: [String, Object],
       default: _ => ({ name: 'slide', duration: 200 })
     },
-    'transition-ios': {
+    'ios:transition': {
       type: [String, Object],
       default: ''
     },
-    'transition-android': {
+    'android:transition': {
       type: [String, Object],
       default: ''
     },
