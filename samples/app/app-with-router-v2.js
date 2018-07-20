@@ -1,6 +1,5 @@
 const Vue = require('./nativescript-vue')
 const VueRouter = require('vue-router')
-const application = require('tns-core-modules/application')
 
 Vue.config.silent = false
 Vue.config.debug = true
@@ -10,7 +9,9 @@ const Home = {
   template: `
     <Page>
         <StackLayout>
-            <Button text="Go to details page 1..." @tap="$router.push('/detail/1')"/>
+            <Button text="Go to details page 1..." @tap="$router.push('/detail/1', {
+                transition: 'slide'
+            })"/>
             <Button text="Go to details page 2..." @tap="$router.push('/detail/2')"/>
         </StackLayout>
     </Page>
@@ -59,20 +60,11 @@ const router = new VueRouter({
 
 router.push('/')
 
-application.android &&
-  application.android.on(
-    application.AndroidApplication.activityBackPressedEvent,
-    event => {
-      event.cancel = true
-      router.go(-1)
-    }
-  )
-
 new Vue({
   router,
   template: `
     <GridLayout rows="*, 40">
-      <Frame row="0">
+      <Frame row="0" transition="fade">
         <router-view />
       </Frame>
 
