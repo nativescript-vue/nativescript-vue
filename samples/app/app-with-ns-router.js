@@ -4,9 +4,9 @@ Vue.config.silent = false
 Vue.config.debug = true
 
 const FrameRouter = function install(Vue, options) {
-  const navigatorLog = (...args) => {
+  const navigatorLog = args => {
     if (options.debug) {
-      console.log(...args)
+      console.log(args)
     }
   }
 
@@ -62,7 +62,8 @@ const FrameRouter = function install(Vue, options) {
         this._setPending(path, false, data)
         const route = this._getMatched(path)
         this.$navigateTo(route.component, {
-          frame: '__navigator_frame__'
+          frame: '__navigator_frame__',
+          path
         })
       },
       replace(path, data) {
@@ -74,7 +75,8 @@ const FrameRouter = function install(Vue, options) {
         const route = this._getMatched(path)
         this.$navigateTo(route.component, {
           frame: '__navigator_frame__',
-          clearHistory: true
+          clearHistory: true,
+          path
         })
       },
       back(notify = false) {
@@ -105,10 +107,8 @@ const FrameRouter = function install(Vue, options) {
   })
 
   Vue.component('FrameRouter', {
-    data() {
-      return {
-        rendered: false
-      }
+    created() {
+      this.rendered = false
     },
     render(h) {
       if (!this.rendered) {
@@ -118,20 +118,24 @@ const FrameRouter = function install(Vue, options) {
       return h(
         'Frame',
         {
-          attrs: {
-            id: '__navigator_frame__',
-            ...this.$attrs,
-            ...this.$props
-          },
-          on: {
-            back() {
-              navigator.back(true)
+          attrs: Object.assign(
+            {
+              id: '__navigator_frame__'
             },
-            navigated() {
-              navigator._confirmPathChange()
+            this.$attrs,
+            this.$props
+          ),
+          on: Object.assign(
+            {
+              back() {
+                navigator.back(true)
+              },
+              navigated() {
+                navigator._confirmPathChange()
+              }
             },
-            ...this.$listeners
-          }
+            this.$listeners
+          )
         },
         [this.rendered]
       )
@@ -144,6 +148,7 @@ const HomePage = {
     <Page>
       <ActionBar title="Navigator Demo"/>
       <GridLayout>
+        <!--<Button @tap="$navigator.push('/details')" text="Go to details" />-->
         <ListView for="item in ['one', 'two', 'three']" @itemTap="$navigator.push('/details', { selected: $event.index })">
             <v-template>
                 <Label :text="item" padding="20"/>
@@ -157,6 +162,7 @@ const HomePage = {
 const DetailsPage = {
   template: `
     <Page>
+      <ActionBar title="Details Page"/>
       <StackLayout>
         <Label text="DetailsPage" />
         <Label :text="JSON.stringify($navigator.data, null, 2)" textWrap="true" />
@@ -179,8 +185,8 @@ Vue.use(FrameRouter, {
 
 new Vue({
   template: `
-    <GridLayout rows="*, auto, *">
-        <FrameRouter :transition="{ name: 'slide', duration: 1000 }" row="0"/>
+    <GridLayout rows="*, auto, auto">
+        <FrameRouter row="0"/>
         <label :text="$navigator.$data.path" row="1" />
         <label :text="JSON.stringify($navigator.$data.stack, null, 2)" textWrap="true" row="2" />
     </GridLayout>
