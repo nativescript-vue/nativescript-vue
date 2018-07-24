@@ -89,9 +89,14 @@ export default {
 
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
-        this.navigate({
-          create: () => pageVm.$el.nativeView
-        })
+        this.navigate(
+          Object.assign(
+            {
+              create: () => pageVm.$el.nativeView
+            },
+            this.nativeView.currentEntry ? {} : { path: '/' }
+          )
+        )
       )
     },
 

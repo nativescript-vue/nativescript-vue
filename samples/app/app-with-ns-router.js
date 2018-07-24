@@ -1,5 +1,7 @@
 const Vue = require('./nativescript-vue')
 
+const SCENARIO = 'login'
+
 Vue.config.silent = false
 Vue.config.debug = true
 
@@ -14,7 +16,7 @@ const FrameRouter = function install(Vue, options) {
     data: {
       routes: options.routes,
       path: '/', // current path
-      stack: [],
+      stack: ['/'],
       data: null,
 
       pending: false
@@ -31,10 +33,15 @@ const FrameRouter = function install(Vue, options) {
         this.data = this.pending.data
 
         this.pending = false
-      },
-      _setPending(path, clear = false, data) {
         navigatorLog(
-          ` *** NAVIGATOR::_setPending(path = ${path}, clear = ${clear}, data = ${data}) ***`
+          ` *** NAVIGATOR::_confirmPathChange::canGoBack = ${this.frameVM.nativeView.canGoBack()} ***`
+        )
+      },
+      _setPending(path, clear = false, data, replaceStack) {
+        navigatorLog(
+          ` *** NAVIGATOR::_setPending(path = ${path}, clear = ${clear}, data = ${data}, replaceStack = ${
+            replaceStack ? replaceStack.join() : undefined
+          }) ***`
         )
 
         let stack = this.stack.slice()
@@ -46,7 +53,7 @@ const FrameRouter = function install(Vue, options) {
 
         this.pending = {
           path,
-          stack,
+          stack: replaceStack ? replaceStack : stack,
           data
         }
       },
@@ -83,12 +90,62 @@ const FrameRouter = function install(Vue, options) {
         navigatorLog(` *** NAVIGATOR::back(notify = ${notify}) ***`)
 
         if (notify) {
-          this.stack.pop()
-          this.path = this.stack[this.stack.length - 1] || '/'
+          if (!this.pending) {
+            this.stack.pop()
+            this.path = this.stack[this.stack.length - 1]
+
+            if (!this.path) {
+              this.path = '/'
+              this.stack = ['/']
+            }
+          } else {
+            this._confirmPathChange()
+          }
         } else {
+          const replaceStack = this.stack.slice()
+          replaceStack.pop()
+
+          this._setPending(
+            this.stack[this.stack.length - 1] || '/',
+            false,
+            null,
+            replaceStack
+          )
           this.$navigateBack({
             frame: '__navigator_frame__'
           })
+        }
+      },
+      /**
+       * Tries to find the most recent entry matching the provided path in the backstack
+       * and navigates back to it, if the path is not found a navigation will occur with
+       * clearing the backStack
+       * @param path
+       */
+      backTo(path) {
+        navigatorLog(` *** NAVIGATOR::backTo(path = ${path}) ***`)
+
+        const entry = navigator.frameVM.nativeView.backStack.find(entry => {
+          return entry.entry.path === path
+        })
+        entry &&
+          navigatorLog(` *** NAVIGATOR::backTo::FOUND_BACKSTACK_ENTRY ***`)
+
+        if (entry) {
+          const index = this.stack
+            .slice()
+            .reverse()
+            .findIndex(p => p === path)
+          const actualIndex = this.stack.length - index
+          const replaceStack = this.stack.slice()
+          replaceStack.splice(actualIndex)
+          this._setPending(path, false, null, replaceStack)
+          this.$navigateBack({
+            frame: '__navigator_frame__',
+            entry: entry.entry
+          })
+        } else {
+          this.replace(path)
         }
       }
     }
@@ -109,6 +166,7 @@ const FrameRouter = function install(Vue, options) {
   Vue.component('FrameRouter', {
     created() {
       this.rendered = false
+      navigator.frameVM = this
     },
     render(h) {
       if (!this.rendered) {
@@ -170,25 +228,86 @@ const DetailsPage = {
         <Button @tap="$navigator.replace('/details')" text="Replace to details" />
 
         <Button @tap="$navigator.back()" text="Go back" />
+        <Button @tap="$navigator.backTo('/')" text="Go back to Home" />
       </StackLayout>
     </Page>
   `
 }
 
-Vue.use(FrameRouter, {
-  routes: [
-    { path: '/', component: HomePage },
-    { path: '/details', component: DetailsPage }
-  ],
-  debug: true
-})
+// LOGIN SCENARIO
 
-new Vue({
-  template: `
+if (SCENARIO === 'login') {
+  const applicationSettings = require('tns-core-modules/application-settings')
+  const LoginSCN__LoadingPage = {
+    data() {
+      return {
+        isLoggedIn: applicationSettings.getBoolean('isLoggedIn', false)
+      }
+    },
+    template: `
+    <Page @loaded="$navigator.replace(isLoggedIn ? '/home' : '/login')" actionBarHidden="true" />
+  `
+  }
+  const LoginSCN__HomePage = {
+    template: `
+    <Page>
+        <StackLayout>
+            <Button text="Do something (nav to home again...)" @tap="$navigator.push('/home')"/>
+            <Button text="Log out" @tap="logout"/>
+        </StackLayout>
+    </Page>
+  `,
+    methods: {
+      logout() {
+        applicationSettings.setBoolean('isLoggedIn', false)
+        this.$navigator.replace('/login')
+      }
+    }
+  }
+  const LoginSCN__LoginPage = {
+    template: `
+    <Page>
+        <StackLayout>
+            <Button text="Login" @tap="login"/>
+        </StackLayout>
+    </Page>
+  `,
+    methods: {
+      login() {
+        applicationSettings.setBoolean('isLoggedIn', true)
+        this.$navigator.replace('/home')
+      }
+    }
+  }
+
+  Vue.use(FrameRouter, {
+    routes: [
+      { path: '/', component: LoginSCN__LoadingPage },
+      { path: '/home', component: LoginSCN__HomePage },
+      { path: '/login', component: LoginSCN__LoginPage }
+    ],
+    debug: false
+  })
+
+  new Vue({
+    template: `<FrameRouter :transition="$navigator.path === '/' ? { name: 'fade', duration: 1 } : 'slide'"/>`
+  }).$start()
+} else {
+  Vue.use(FrameRouter, {
+    routes: [
+      { path: '/', component: HomePage },
+      { path: '/details', component: DetailsPage }
+    ],
+    debug: false
+  })
+
+  new Vue({
+    template: `
     <GridLayout rows="*, auto, auto">
         <FrameRouter row="0"/>
         <label :text="$navigator.$data.path" row="1" />
         <label :text="JSON.stringify($navigator.$data.stack, null, 2)" textWrap="true" row="2" />
     </GridLayout>
   `
-}).$start()
+  }).$start()
+}
