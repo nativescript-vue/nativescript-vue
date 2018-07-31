@@ -94,7 +94,8 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/samples"
     ],
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testURL": "http://localhost"
   },
   "prettier": {
     "semi": false,
