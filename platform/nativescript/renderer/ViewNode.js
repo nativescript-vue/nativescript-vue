@@ -246,6 +246,11 @@ export default class ViewNode {
       childNode.nextSibling.prevSibling = childNode.prevSibling
     }
 
+    // reset the nextSibling. If not, a keep-alived component will
+    // still have a filled nextSibling attribute so vue will not
+    // insert the node again to the parent. See #220
+    childNode.nextSibling = null
+
     this.childNodes = this.childNodes.filter(node => node !== childNode)
 
     viewUtil.removeChild(this, childNode)
