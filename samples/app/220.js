@@ -5,14 +5,12 @@ Vue.config.silent = false
 
 const CompButton = {
   template: `
-    <Button @tap="counter++">{{label}}: {{counter}}</Button>
+    <Button>{{label}}: {{counter}}</Button>
   `,
   name: 'CompButton',
-  props: ['label'],
-  data() {
-    return {
-      counter: 0
-    }
+  props: ['label', 'counter'],
+  destroyed() {
+    console.log('Component destroyed. This should not happen')
   }
 }
 
@@ -27,8 +25,8 @@ new Vue({
         <StackLayout>
           <Button @tap="counter++">{{counter}}</Button>
           <keep-alive>
-            <CompButton v-if="counter % 2" key="odd" label="Odd" />
-            <CompButton v-else key="even" label="Even" />
+            <CompButton v-if="counter % 2" key="odd" label="Odd" :counter="counter" />
+            <CompButton v-else key="even" label="Even" :counter="counter" />
           </keep-alive>
         </StackLayout>
       </Page>
