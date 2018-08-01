@@ -53,4 +53,12 @@ export default class History extends AbstractHistory {
 
     super.go(n)
   }
+
+  updateRoute(route) {
+    const prev = this.current
+    this.current = route
+    this.router.afterHooks.forEach(hook => {
+      hook && hook(route, prev)
+    })
+  }
 }

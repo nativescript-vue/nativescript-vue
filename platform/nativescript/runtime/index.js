@@ -59,7 +59,7 @@ Vue.prototype.$start = function() {
   const AppConstructor = Vue.extend(this.$options)
 
   // register NS components into Vue
-  getElementMap().forEach(entry => {
+  Object.values(getElementMap()).forEach(entry => {
     Vue.component(entry.meta.component.name, entry.meta.component)
   })
 

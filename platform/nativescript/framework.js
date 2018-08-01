@@ -72,6 +72,9 @@ global.__onLiveSyncCore = () => {
   }
 }
 
-export default Vue
+Object.assign(Vue, {
+  Vue,
+  History
+})
 
-export { Vue, History }
+export default Vue
