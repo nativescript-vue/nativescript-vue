@@ -241,6 +241,8 @@ describe('ViewNode', () => {
     expect(prevChildNode.nextSibling).toEqual(nextChildNode)
     expect(nextChildNode.prevSibling).toEqual(prevChildNode)
     expect(childNode.parentNode).toBeNull()
+    expect(childNode.prevSibling).toBeNull()
+    expect(childNode.nextSibling).toBeNull()
   })
 
   test('nativeView can be set once', () => {

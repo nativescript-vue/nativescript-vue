@@ -41,19 +41,19 @@ export function appendChild(node, child) {
 }
 
 export function parentNode(node) {
-  trace(`ParentNode(${node})`)
+  trace(`ParentNode(${node}) -> ${node.parentNode}`)
 
   return node.parentNode
 }
 
 export function nextSibling(node) {
-  trace(`NextSibling(${node})`)
+  trace(`NextSibling(${node}) -> ${node.nextSibling}`)
 
   return node.nextSibling
 }
 
 export function tagName(elementNode) {
-  trace(`TagName(${elementNode})`)
+  trace(`TagName(${elementNode}) -> ${elementNode.tagName}`)
 
   return elementNode.tagName
 }
