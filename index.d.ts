@@ -15,7 +15,7 @@ export interface ModalOptions {
     fullscreen?: boolean;
 }
 
-// creat a nativescript vue class that extends vue.js
+// create a nativescript vue class that extends vue.js
 export interface NativeScriptVue<V = View> extends Vue {
     nativeView: V
 
@@ -35,7 +35,6 @@ export interface NativeScriptVue<V = View> extends Vue {
     /**
      * starts the nativescript application
      */
-    $run(): void
     $start: () => void
 }
 
