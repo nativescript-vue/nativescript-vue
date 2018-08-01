@@ -65,7 +65,7 @@ const genConfig = (name) => {
             pureExternalModules: id => id.startsWith('weex')
         },
         watch: {
-          chokidar: false
+            chokidar: false
         },
         plugins: [
             replace({

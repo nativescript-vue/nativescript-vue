@@ -9,7 +9,7 @@ import application from 'tns-core-modules/application'
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
-import RouterPlugin from './plugins/router-plugin'
+import History from './plugins/router-plugin'
 
 import { setVue } from './util'
 
@@ -19,7 +19,6 @@ setVue(Vue)
 
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
-Vue.use(RouterPlugin)
 
 const newLineRegExp = /\\n/g
 
@@ -74,3 +73,5 @@ global.__onLiveSyncCore = () => {
 }
 
 export default Vue
+
+export { Vue, History }
