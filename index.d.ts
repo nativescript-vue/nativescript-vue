@@ -1,23 +1,58 @@
-// Typings for NativeScript-Vue
-declare module 'nativescript-vue' {
-    // import vue.js typings
-    import Vue from 'vue';
+// import vue.js typings
+// import Vue from 'vue';
+import { Vue, VueConstructor } from 'vue/types/vue'
+import { Page, NavigationEntry, Size } from 'tns-core-modules/ui/frame/frame'
+import { View } from 'tns-core-modules/ui/core/view'
 
-    // creat a nativescript vue class that extends vue.js
-    class NativeScriptVue extends Vue {
-        /**
-         * Registers NativeScript Plugin.
-         * @param elementName Name of the element to use in your template
-         * @param resolver  function to register the element
-         * @param meta meta associated with the element
-         */
-        static registerElement(elementName: string, resolver: Function, meta?: any): void;
-        
-        /**
-         * starts the nativescript application
-         */
-        $run(): void
-    }
+export type navigateTo = (
+    component: VueConstructor,
+    options?: NavigationEntry,
+    cb?: () => Page,
+) => Promise<Page>;
 
-    export = NativeScriptVue;
+export interface ModalOptions {
+    context?: any;
+    fullscreen?: boolean;
 }
+
+// create a nativescript vue class that extends vue.js
+export interface NativeScriptVue<V = View> extends Vue {
+    nativeView: V
+
+    $navigateTo: navigateTo
+    $navigateBack: () => void
+
+    $modal?: { close: (data?) => Promise<typeof data> };
+
+    /**
+     * Open a modal using a component
+     * @param {typeof Vue} component
+     * @param {ModalOptions} options
+     * @returns {any}
+     */
+    $showModal: (component: typeof Vue, options?: ModalOptions) => Promise<any>;
+
+    /**
+     * starts the nativescript application
+     */
+    $start: () => void
+}
+
+export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue> {
+    navigateTo: navigateTo
+    navigateBack: () => void
+}
+
+export const NativeScriptVue: NativeScriptVueConstructor
+
+export default NativeScriptVue;
+
+// export as namespace NativeScriptVue;
+
+/**
+ * Registers NativeScript Plugin.
+ * @param elementName Name of the element to use in your template
+ * @param resolver  function to register the element
+ * @param meta meta associated with the element
+ */
+export function registerElement(elementName: string, resolver: Function, meta?: any): void;
