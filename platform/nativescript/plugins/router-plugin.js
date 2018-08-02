@@ -2,15 +2,17 @@ import { android } from 'tns-core-modules/application'
 import { isPlainObject } from 'shared/util'
 import { AbstractHistory } from 'vue-router'
 
-export default class History extends AbstractHistory {
+export { default as Router } from 'vue-router'
+
+export class History extends AbstractHistory {
   constructor(router, base) {
     super(router, base)
     this.router = router
     this.isGoingBack = false
 
     if (android) {
-      android.on('activityBackPressed', function(args) {
-        if (history.index > 0) {
+      android.on('activityBackPressed', (args) => {
+        if (this.index > 0) {
           args.cancel = true
 
           router.back()
@@ -28,6 +30,8 @@ export default class History extends AbstractHistory {
         delete args[i]
       }
     }
+
+    args = args.filter(n => n)
 
     return { args, entry }
   }
@@ -57,6 +61,7 @@ export default class History extends AbstractHistory {
   updateRoute(route) {
     const prev = this.current
     this.current = route
+    this.cb && this.cb(route)
     this.router.afterHooks.forEach(hook => {
       hook && hook(route, prev)
     })

@@ -40,7 +40,7 @@ export default {
 
         if (ios) {
           this._findParentFrame().isGoingBack = undefined
-          const history = this.$router.history.history
+          const history = this.$router.history
 
           history.index -= 1
           history.updateRoute(history.stack[history.index])
