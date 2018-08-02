@@ -14,7 +14,11 @@ export default {
   },
   created() {
     if (this.$router) {
-      this.$vnode.parent.data.keepAlive = true
+      // Sometimes the parent is undefined
+      // See https://github.com/nativescript-vue/nativescript-vue/issues/292
+      if (this.$vnode.parent) {
+        this.$vnode.parent.data.keepAlive = true
+      }
     }
   },
   mounted() {
