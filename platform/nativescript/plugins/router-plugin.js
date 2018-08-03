@@ -26,7 +26,7 @@ export class History extends AbstractHistory {
     operations.forEach(name => {
       History.prototype[name] = (...args) => {
         if (args.length > 1) {
-          ;({ args, entry: this.currentEntry } = this._extractEntry(args))
+          ({ args, entry: this.currentEntry } = this._extractEntry(args))
         } else if (name === 'go') {
           this.isGoingBack = args[0] < 0
         }
