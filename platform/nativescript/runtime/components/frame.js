@@ -89,7 +89,7 @@ export default {
 
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
-        this.navigate({
+        this[this.$router.history.operation]({
           create: () => pageVm.$el.nativeView
         })
       )
@@ -116,6 +116,7 @@ export default {
       // resolve the page from the entry and attach a navigatedTo listener
       // to fire the frame events
       const page = entry.create()
+
       page.once('navigatedTo', () => {
         entry.clearHistory && this.$emit('replace', entry)
         !entry.clearHistory && this.$emit('push', entry)
@@ -138,12 +139,18 @@ export default {
     back(backstackEntry = null) {
       this.navigate(backstackEntry, true)
     },
+
     push(entry) {
       this.navigate(entry)
     },
+
     replace(entry) {
       entry.clearHistory = true
 
+      this.navigate(entry)
+    },
+
+    go(entry) {
       this.navigate(entry)
     }
   }

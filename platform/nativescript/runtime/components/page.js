@@ -54,12 +54,13 @@ export default {
   },
   methods: {
     _findParentFrame() {
-      let parentFrame = this.$parent
-      while (parentFrame && parentFrame.$options.name !== 'Frame') {
-        parentFrame = parentFrame.$parent
+      let frame = this.$parent
+
+      while (frame && frame.$options.name !== 'Frame') {
+        frame = frame.$parent
       }
 
-      return parentFrame
+      return frame
     }
   },
   deactivated() {
