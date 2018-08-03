@@ -1,4 +1,4 @@
-const Vue = require('./nativescript-vue');
+const Vue = require('./nativescript-vue')
 
 Vue.config.silent = false
 Vue.config.debug = true
