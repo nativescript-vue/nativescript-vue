@@ -9,7 +9,7 @@ import application from 'tns-core-modules/application'
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
-import { Router, History } from './plugins/router-plugin'
+import mode from './plugins/router-plugin'
 
 import { setVue } from './util'
 
@@ -74,8 +74,7 @@ global.__onLiveSyncCore = () => {
 
 Object.assign(Vue, {
   Vue,
-  Router,
-  History
+  mode
 })
 
 export default Vue

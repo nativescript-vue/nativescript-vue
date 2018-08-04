@@ -46,7 +46,7 @@ export default {
     delete listeners.itemTap
     this.listeners = listeners
 
-    this.getItemContext = getItemContext.bind(this);
+    this.getItemContext = getItemContext.bind(this)
   },
 
   mounted() {
@@ -84,7 +84,12 @@ export default {
   }
 }
 
-function getItemContext(item, index, alias = this.$props['+alias'], index_alias = this.$props['+index']) {
+function getItemContext(
+  item,
+  index,
+  alias = this.$props['+alias'],
+  index_alias = this.$props['+index']
+) {
   return {
     [alias]: item,
     [index_alias || '$index']: index,
