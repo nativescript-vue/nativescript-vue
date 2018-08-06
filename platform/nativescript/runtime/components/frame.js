@@ -89,7 +89,7 @@ export default {
 
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
-        this[this.$router.history.operation]({
+        this[(this.$router && this.$router.history.operation) || 'navigate']({
           create: () => pageVm.$el.nativeView
         })
       )
