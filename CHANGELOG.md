@@ -1,3 +1,16 @@
+<a name="2.0.0-alpha.2"></a>
+# [2.0.0-alpha.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2018-08-08)
+
+
+### Bug Fixes
+
+* **typings:** add proper typings ([#289](https://github.com/nativescript-vue/nativescript-vue/issues/289)) ([bb265bd](https://github.com/nativescript-vue/nativescript-vue/commit/bb265bd))
+* **typings:** declare explicitly the location of the TS typings ([259640e](https://github.com/nativescript-vue/nativescript-vue/commit/259640e))
+* ensre default is exported after bundling ([#301](https://github.com/nativescript-vue/nativescript-vue/issues/301)) ([7e39039](https://github.com/nativescript-vue/nativescript-vue/commit/7e39039))
+* re-adding <keep-alive> elements to view ([#291](https://github.com/nativescript-vue/nativescript-vue/issues/291)) ([a953db5](https://github.com/nativescript-vue/nativescript-vue/commit/a953db5)), closes [#220](https://github.com/nativescript-vue/nativescript-vue/issues/220) [#220](https://github.com/nativescript-vue/nativescript-vue/issues/220)
+
+
+
 <a name="2.0.0-alpha.1"></a>
 # [2.0.0-alpha.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.0...v2.0.0-alpha.1) (2018-07-15)
 
