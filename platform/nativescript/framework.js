@@ -71,4 +71,10 @@ global.__onLiveSyncCore = () => {
   }
 }
 
+// Fix a rollup problem which does not define
+// module.export.default = Vue
+// so a `import Vue from 'nativescript-vue'` will
+// fail from a Typescript file
+Vue.default = Vue
+
 export default Vue
