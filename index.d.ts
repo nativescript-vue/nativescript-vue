@@ -22,7 +22,7 @@ export interface NativeScriptVue<V = View> extends Vue {
     $navigateTo: navigateTo
     $navigateBack: () => void
 
-    $modal?: { close: (data?) => Promise<typeof data> };
+    $modal?: { close: (data?: any) => Promise<typeof data> };
 
     /**
      * Open a modal using a component
