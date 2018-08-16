@@ -151,6 +151,10 @@ export default {
     },
 
     go(entry) {
+      if (this.$router) {
+        this.isGoingBack = this.$router.history.isGoingBack
+      }
+
       this.navigate(entry)
     }
   }
