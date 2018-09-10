@@ -96,7 +96,6 @@ export default {
     },
 
     notifyPageLeaving(history) {
-      this.isGoingBack = history.isGoingBack
       this.currentEntry = history.currentEntry
     },
 
@@ -105,8 +104,6 @@ export default {
 
       if (back || (ios && this.isGoingBack === undefined)) {
         frame.goBack(this.isGoingBack ? undefined : entry)
-
-        this.$router.history.isGoingBack = undefined
         return
       }
 
@@ -118,15 +115,39 @@ export default {
       const page = entry.create()
 
       page.once('navigatedTo', () => {
+        this.$emit('navigated', entry)
         entry.clearHistory && this.$emit('replace', entry)
         !entry.clearHistory && this.$emit('push', entry)
       })
-      page.on('navigatedFrom', ({ isBackNavigation }) => {
-        if (isBackNavigation) {
+
+      page.on('navigatedFrom', args => {
+        if (args.isBackNavigation) {
           page.off('navigatedFrom')
+
+          if (args.cancel) {
+            return
+          }
+
+          const router = this.$router
+          const history = router.history
+
+          if (router && history.index > 0) {
+            args.cancel = true
+
+            this.isGoingBack = ios ? undefined : true
+
+            if (ios) {
+              history.index -= 1
+              history.updateRoute(history.stack[history.index])
+            } else {
+              router.back()
+            }
+          }
+
           this.$emit('back', entry)
         }
       })
+
       entry.create = () => page
 
       const transition = this._composeTransition()
@@ -151,10 +172,6 @@ export default {
     },
 
     go(entry) {
-      if (this.$router) {
-        this.isGoingBack = this.$router.history.isGoingBack
-      }
-
       this.navigate(entry)
     }
   }

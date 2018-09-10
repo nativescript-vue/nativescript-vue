@@ -1,4 +1,3 @@
-import { android } from 'tns-core-modules/application'
 import { isPlainObject } from 'shared/util'
 
 const operations = ['push', 'replace', 'go']
@@ -14,28 +13,11 @@ export default (mode = {
         super(router, base)
         this.router = router
         this.operation = 'push'
-        this.isGoingBack = false
-
-        if (android) {
-          android.on('activityBackPressed', args => {
-            if (args.cancel) {
-              return
-            }
-
-            if (this.index > 0) {
-              args.cancel = true
-
-              router.back()
-            }
-          })
-        }
 
         operations.forEach(name => {
           this[name] = (...args) => {
             if (args.length > 1) {
               ;({ args, entry: this.currentEntry } = this._extractEntry(args))
-            } else if (name === 'go') {
-              this.isGoingBack = args[0] < 0
             }
 
             this.operation = name
