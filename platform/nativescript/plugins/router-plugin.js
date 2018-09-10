@@ -18,6 +18,10 @@ export default (mode = {
 
         if (android) {
           android.on('activityBackPressed', args => {
+            if (args.cancel) {
+              return
+            }
+
             if (this.index > 0) {
               args.cancel = true
 
