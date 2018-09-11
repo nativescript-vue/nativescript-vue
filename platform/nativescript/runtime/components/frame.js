@@ -34,8 +34,7 @@ export default {
   },
   data() {
     return {
-      properties: {},
-      isGoingBack: false
+      properties: {}
     }
   },
   created() {
@@ -62,6 +61,19 @@ export default {
       this.$slots.default
     )
   },
+  computed: {
+    store() {
+      return this.$router && this.$router.history.store || {}
+    },
+
+    operation() {
+      return this.store.operation || 'navigate'
+    },
+
+    isGoingBack() {
+      return this.store && this.store.isGoingBack ? ios ? undefined : true : false
+    }
+  },
   methods: {
     _getFrame() {
       return this.$el.nativeView
@@ -69,7 +81,7 @@ export default {
 
     _composeTransition() {
       const result = {}
-      const root = this.currentEntry || this
+      const root = this.store.entry || this
 
       for (const prop in propMap) {
         if (root[prop]) {
@@ -89,14 +101,10 @@ export default {
 
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
-        this[(this.$router && this.$router.history.operation) || 'navigate']({
+        this[this.operation]({
           create: () => pageVm.$el.nativeView
         })
       )
-    },
-
-    notifyPageLeaving(history) {
-      this.currentEntry = history.currentEntry
     },
 
     navigate(entry, back = this.isGoingBack) {
@@ -124,24 +132,12 @@ export default {
         if (args.isBackNavigation) {
           page.off('navigatedFrom')
 
-          if (args.cancel) {
-            return
-          }
-
           const router = this.$router
           const history = router.history
 
-          if (router && history.index > 0) {
-            args.cancel = true
-
-            this.isGoingBack = ios ? undefined : true
-
-            if (ios) {
-              history.index -= 1
-              history.updateRoute(history.stack[history.index])
-            } else {
-              router.back()
-            }
+          if (router && ios) {
+            history.index -= 1
+            history.updateRoute(history.stack[history.index])
           }
 
           this.$emit('back', entry)
