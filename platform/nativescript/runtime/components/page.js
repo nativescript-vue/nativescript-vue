@@ -55,11 +55,7 @@ export default {
     }
   },
   deactivated() {
-    const frame = this._findParentFrame()
-
-    if (frame && this.$router) {
-      frame.notifyPageLeaving(this.$router.history)
-
+    if (this.$router) {
       if (this._watcher) {
         this._watcher.teardown()
       }

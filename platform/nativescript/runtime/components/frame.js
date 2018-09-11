@@ -62,12 +62,16 @@ export default {
     )
   },
   computed: {
-    store() {
-      return this.$router && this.$router.history.store || {}
+    history() {
+      return this.$router && this.$router.history || {}
     },
 
-    operation() {
-      return this.store.operation || 'navigate'
+    store() {
+      return this.history.store || {}
+    },
+
+    replacing() {
+      return this.store.operation === 'replace'
     },
 
     isGoingBack() {
@@ -101,7 +105,7 @@ export default {
 
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
-        this[this.operation]({
+        this[this.store.operation]({
           create: () => pageVm.$el.nativeView
         })
       )
@@ -112,11 +116,12 @@ export default {
 
       if (back || (ios && this.isGoingBack === undefined)) {
         frame.goBack(this.isGoingBack ? undefined : entry)
-        return
+
+        return this.store.isGoingBack = false
       }
 
-      entry.clearHistory && this.$emit('beforeReplace', entry)
-      !entry.clearHistory && this.$emit('beforePush', entry)
+      this.replacing && this.$emit('beforeReplace', entry)
+      !this.replacing && this.$emit('beforePush', entry)
 
       // resolve the page from the entry and attach a navigatedTo listener
       // to fire the frame events
@@ -124,25 +129,24 @@ export default {
 
       page.once('navigatedTo', () => {
         this.$emit('navigated', entry)
-        entry.clearHistory && this.$emit('replace', entry)
-        !entry.clearHistory && this.$emit('push', entry)
+        this.replacing && this.$emit('replace', entry)
+        !this.replacing && this.$emit('push', entry)
       })
 
-      page.on('navigatedFrom', args => {
+      const handler = args => {
         if (args.isBackNavigation) {
-          page.off('navigatedFrom')
+          page.off('navigatedFrom', handler)
 
-          const router = this.$router
-          const history = router.history
-
-          if (router && ios) {
-            history.index -= 1
-            history.updateRoute(history.stack[history.index])
+          if (this.$router && ios) {
+            this.history.index -= 1
+            this.history.updateRoute(this.history.stack[this.history.index])
           }
 
           this.$emit('back', entry)
         }
-      })
+      }
+
+      page.on('navigatedFrom', handler)
 
       entry.create = () => page
 
@@ -162,8 +166,6 @@ export default {
     },
 
     replace(entry) {
-      entry.clearHistory = true
-
       this.navigate(entry)
     },
 
