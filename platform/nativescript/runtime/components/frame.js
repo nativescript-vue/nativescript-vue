@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     history() {
-      return this.$router && this.$router.history || {}
+      return (this.$router && this.$router.history) || {}
     },
 
     store() {
@@ -75,7 +75,11 @@ export default {
     },
 
     isGoingBack() {
-      return this.store && this.store.isGoingBack ? ios ? undefined : true : false
+      return this.store && this.store.isGoingBack
+        ? ios
+          ? undefined
+          : true
+        : false
     }
   },
   methods: {
@@ -117,7 +121,7 @@ export default {
       if (back || (ios && this.isGoingBack === undefined)) {
         frame.goBack(this.isGoingBack ? undefined : entry)
 
-        return this.store.isGoingBack = false
+        return (this.store.isGoingBack = false)
       }
 
       this.replacing && this.$emit('beforeReplace', entry)
