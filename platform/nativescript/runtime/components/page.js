@@ -24,7 +24,6 @@ export default {
     this.$el.nativeView[PAGE_REF] = this
 
     const frame = this._findParentFrame()
-    const parent = this.$parent
 
     if (frame) {
       frame.notifyPageMounted(this)
@@ -35,12 +34,13 @@ export default {
         this.$el.nativeView.off('navigatedFrom', handler)
 
         if (this.$router) {
-          parent.$vnode.data.keepAlive = false
+          this.$parent.$vnode.data.keepAlive = false
         }
 
-        parent.$destroy()
+        this.$parent.$destroy()
       }
     }
+
     this.$el.nativeView.on('navigatedFrom', handler)
   },
   methods: {
