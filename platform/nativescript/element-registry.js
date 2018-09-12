@@ -6,7 +6,7 @@ const defaultViewMeta = {
   skipAddToDom: false,
   isUnaryTag: false,
   tagNamespace: '',
-  canBeLeftOpen: false,
+  canBeLeftOpenTag: false,
   model: null,
   component: null
 }
