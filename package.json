@@ -38,8 +38,8 @@
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "nativescript": {
     "platforms": {
-      "android": "3.4.0",
-      "ios": "3.4.0"
+      "android": "4.2.0",
+      "ios": "4.2.0"
     },
     "plugin": {
       "vue": "true",
@@ -78,7 +78,7 @@
     "set-value": "^2.0.0",
     "tns-core-modules": "4.0.0",
     "util-inspect": "^0.1.8",
-    "vue": "^2.5.16"
+    "vue": "^2.5.17"
   },
   "jest": {
     "verbose": true,
