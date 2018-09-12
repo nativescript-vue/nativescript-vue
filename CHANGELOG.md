@@ -1,3 +1,14 @@
+<a name="2.0.0-alpha.3"></a>
+# [2.0.0-alpha.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2018-09-12)
+
+
+### Bug Fixes
+
+* canBeLeftOpenTag in defaultViewMeta instead of canBeLeftOpen ([#308](https://github.com/nativescript-vue/nativescript-vue/issues/308)) ([1b63f5b](https://github.com/nativescript-vue/nativescript-vue/commit/1b63f5b))
+* provide explicit type to data ([#305](https://github.com/nativescript-vue/nativescript-vue/issues/305)) ([4389228](https://github.com/nativescript-vue/nativescript-vue/commit/4389228))
+
+
+
 <a name="2.0.0-alpha.2"></a>
 # [2.0.0-alpha.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2018-08-08)
 
