@@ -1,6 +1,6 @@
 import * as builtInComponents from './runtime/components'
 
-const elementMap = new Map()
+const elementMap = {}
 const nativeRegExp = /Native/gi
 const dashRegExp = /-/g
 
@@ -25,7 +25,7 @@ export function registerElement(elementName, resolver, meta) {
 
   meta = Object.assign({}, defaultViewMeta, meta)
 
-  if (elementMap.has(normalizedName)) {
+  if (elementMap[normalizedName]) {
     throw new Error(`Element for ${elementName} already registered.`)
   }
 
@@ -46,7 +46,7 @@ export function registerElement(elementName, resolver, meta) {
     resolver: resolver,
     meta: meta
   }
-  elementMap.set(normalizedName, entry)
+  elementMap[normalizedName] = entry
 }
 
 export function getElementMap() {
@@ -55,7 +55,7 @@ export function getElementMap() {
 
 export function getViewClass(elementName) {
   const normalizedName = normalizeElementName(elementName)
-  const entry = elementMap.get(normalizedName)
+  const entry = elementMap[normalizedName]
 
   if (!entry) {
     throw new TypeError(`No known component for element ${elementName}.`)
@@ -72,7 +72,7 @@ export function getViewMeta(elementName) {
   const normalizedName = normalizeElementName(elementName)
 
   let meta = defaultViewMeta
-  const entry = elementMap.get(normalizedName)
+  const entry = elementMap[normalizedName]
 
   if (entry && entry.meta) {
     meta = entry.meta
@@ -82,7 +82,7 @@ export function getViewMeta(elementName) {
 }
 
 export function isKnownView(elementName) {
-  return elementMap.has(normalizeElementName(elementName))
+  return elementMap[normalizeElementName(elementName)]
 }
 
 registerElement(

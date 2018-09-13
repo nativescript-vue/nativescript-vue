@@ -45,12 +45,11 @@ export default {
     const listeners = extend({}, this.$listeners)
     delete listeners.itemTap
     this.listeners = listeners
+
+    this.getItemContext = getItemContext.bind(this)
   },
 
   mounted() {
-    this.getItemContext = (item, index) =>
-      getItemContext(item, index, this.$props['+alias'], this.$props['+index'])
-
     this.$refs.listView.setAttribute(
       '_itemTemplatesInternal',
       this.$templates.getKeyedTemplates()
@@ -85,7 +84,12 @@ export default {
   }
 }
 
-function getItemContext(item, index, alias, index_alias) {
+function getItemContext(
+  item,
+  index,
+  alias = this.$props['+alias'],
+  index_alias = this.$props['+index']
+) {
   return {
     [alias]: item,
     [index_alias || '$index']: index,

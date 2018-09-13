@@ -34,8 +34,7 @@ export default {
   },
   data() {
     return {
-      properties: {},
-      isGoingBack: false
+      properties: {}
     }
   },
   created() {
@@ -62,6 +61,27 @@ export default {
       this.$slots.default
     )
   },
+  computed: {
+    history() {
+      return (this.$router && this.$router.history) || {}
+    },
+
+    store() {
+      return this.history.store || {}
+    },
+
+    replacing() {
+      return this.store.operation === 'replace'
+    },
+
+    isGoingBack() {
+      return this.store && this.store.isGoingBack
+        ? ios
+          ? undefined
+          : true
+        : false
+    }
+  },
   methods: {
     _getFrame() {
       return this.$el.nativeView
@@ -69,7 +89,7 @@ export default {
 
     _composeTransition() {
       const result = {}
-      const root = this.currentEntry || this
+      const root = this.store.entry || this
 
       for (const prop in propMap) {
         if (root[prop]) {
@@ -89,15 +109,10 @@ export default {
 
     notifyPageMounted(pageVm) {
       this.$nextTick(_ =>
-        this.navigate({
+        this[this.store.operation]({
           create: () => pageVm.$el.nativeView
         })
       )
-    },
-
-    notifyPageLeaving(history) {
-      this.isGoingBack = history.isGoingBack
-      this.currentEntry = history.currentEntry
     },
 
     navigate(entry, back = this.isGoingBack) {
@@ -106,26 +121,37 @@ export default {
       if (back || (ios && this.isGoingBack === undefined)) {
         frame.goBack(this.isGoingBack ? undefined : entry)
 
-        this.$router.history.isGoingBack = undefined
-        return
+        return (this.store.isGoingBack = false)
       }
 
-      entry.clearHistory && this.$emit('beforeReplace', entry)
-      !entry.clearHistory && this.$emit('beforePush', entry)
+      this.replacing && this.$emit('beforeReplace', entry)
+      !this.replacing && this.$emit('beforePush', entry)
 
       // resolve the page from the entry and attach a navigatedTo listener
       // to fire the frame events
       const page = entry.create()
+
       page.once('navigatedTo', () => {
-        entry.clearHistory && this.$emit('replace', entry)
-        !entry.clearHistory && this.$emit('push', entry)
+        this.$emit('navigated', entry)
+        this.replacing && this.$emit('replace', entry)
+        !this.replacing && this.$emit('push', entry)
       })
-      page.on('navigatedFrom', ({ isBackNavigation }) => {
-        if (isBackNavigation) {
-          page.off('navigatedFrom')
+
+      const handler = args => {
+        if (args.isBackNavigation) {
+          page.off('navigatedFrom', handler)
+
+          if (this.$router && ios) {
+            this.history.index -= 1
+            this.history.updateRoute(this.history.stack[this.history.index])
+          }
+
           this.$emit('back', entry)
         }
-      })
+      }
+
+      page.on('navigatedFrom', handler)
+
       entry.create = () => page
 
       const transition = this._composeTransition()
@@ -138,12 +164,16 @@ export default {
     back(backstackEntry = null) {
       this.navigate(backstackEntry, true)
     },
+
     push(entry) {
       this.navigate(entry)
     },
-    replace(entry) {
-      entry.clearHistory = true
 
+    replace(entry) {
+      this.navigate(entry)
+    },
+
+    go(entry) {
       this.navigate(entry)
     }
   }

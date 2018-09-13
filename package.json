@@ -12,6 +12,7 @@
     "tdd": "jest --watch",
     "samples": "node build/sample-runner.js",
     "dev": "rollup -c build/config.js -w --o samples/app/nativescript-vue.js --environment TARGET:nativescript-vue",
+    "dev:dist": "rollup -c build/config.js -w --o dist/index.js --environment TARGET:nativescript-vue",
     "build": "node build/build.js",
     "build:docs": "cd docs && npm run build",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
@@ -76,7 +77,8 @@
     "set-value": "^2.0.0",
     "tns-core-modules": "4.1.0",
     "util-inspect": "^0.1.8",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-router": "file:../vue-router/"
   },
   "jest": {
     "verbose": true,
