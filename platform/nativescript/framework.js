@@ -9,7 +9,6 @@ import application from 'tns-core-modules/application'
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
-import mode from './plugins/router-plugin'
 
 import { setVue } from './util'
 
@@ -72,9 +71,10 @@ global.__onLiveSyncCore = () => {
   }
 }
 
-Object.assign(Vue, {
-  Vue,
-  mode
-})
+// Fix a rollup problem which does not define
+// module.export.default = Vue
+// so a `import Vue from 'nativescript-vue'` will
+// fail from a Typescript file
+Vue.default = Vue
 
 export default Vue

@@ -31,13 +31,18 @@ NativeScript-Vue is an MIT-licensed open source project made possible by our spo
   <tbody>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://www.privateinternetaccess.com/" target="_blank">
+        <a href="https://www.privateinternetaccess.com/?source=nativescript-vue-github" target="_blank">
           <img width="300px" src="https://art.nativescript-vue.org/sponsors/pia.png">
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://kiwiirc.com/" target="_blank">
+        <a href="https://kiwiirc.com/?source=nativescript-vue-github" target="_blank">
           <img height="50px" src="https://art.nativescript-vue.org/sponsors/kiwiirc.png?v=1">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.progress.com/?source=nativescript-vue-github" target="_blank">
+          <img height="50px" src="https://art.nativescript-vue.org/sponsors/progress.png">
         </a>
       </td>
     </tr><tr></tr>

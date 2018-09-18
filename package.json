@@ -1,12 +1,13 @@
 {
   "name": "nativescript-vue",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.3",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "files": [
     "dist/index.js",
     "index.d.ts"
   ],
+  "typings": "index.d.ts",
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
@@ -38,8 +39,8 @@
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "nativescript": {
     "platforms": {
-      "android": "4.1.2",
-      "ios": "4.1.0"
+      "android": "4.2.0",
+      "ios": "4.2.0"
     },
     "plugin": {
       "vue": "true",
@@ -77,8 +78,7 @@
     "set-value": "^2.0.0",
     "tns-core-modules": "4.1.0",
     "util-inspect": "^0.1.8",
-    "vue": "^2.5.16",
-    "vue-router": "file:../vue-router/"
+    "vue": "^2.5.17"
   },
   "jest": {
     "verbose": true,
@@ -95,7 +95,8 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/samples"
     ],
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testURL": "http://localhost"
   },
   "prettier": {
     "semi": false,

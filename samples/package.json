@@ -17,7 +17,8 @@
     "nativescript-pager": "^8.0.2",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-ui-sidedrawer": "^4.2.1",
-    "tns-core-modules": "^4.2.0-rc-2018-08-03-01",
+    "tns-core-modules": "^4.2.0",
+    "nativescript-ui-gauge": "^3.6.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
