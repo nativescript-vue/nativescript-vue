@@ -25,20 +25,16 @@ const createPage = title =>
 new Vue({
   template: `
     <Frame ref="frame" 
-        @beforePush="log('beforePush')"
-        @beforeReplace="log('beforeReplace')"
-        @beforeBack="log('beforeBack')"
-        @push="log('push')"
-        @replace="log('replace')"
-        @back="log('back')"
+        @navigated="log('navigated')"
+        @navigatedBack="log('navigatedBack')"
     >
-      <Page><Button text="Page" @tap="replace" /></Page>
+      <Page><Button text="Page" @tap="navigate" /></Page>
     </Frame>
   `,
 
   methods: {
-    replace() {
-      this.$refs.frame.push({
+    navigate() {
+      this.$refs.frame.navigate({
         create() {
           return createPage('test')
         }

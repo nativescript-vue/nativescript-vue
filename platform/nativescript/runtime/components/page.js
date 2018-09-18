@@ -11,15 +11,15 @@ export default {
       this.$slots.default
     )
   },
-  created() {
-    if (this.$router) {
-      // Sometimes the parent is undefined
-      // See https://github.com/nativescript-vue/nativescript-vue/issues/292
-      if (this.$vnode.parent) {
-        this.$vnode.parent.data.keepAlive = true
-      }
-    }
-  },
+  // created() {
+  //   if (this.$router) {
+  //     // Sometimes the parent is undefined
+  //     // See https://github.com/nativescript-vue/nativescript-vue/issues/292
+  //     if (this.$vnode.parent) {
+  //       this.$vnode.parent.data.keepAlive = true
+  //     }
+  //   }
+  // },
   mounted() {
     this.$el.nativeView[PAGE_REF] = this
 
@@ -33,9 +33,9 @@ export default {
       if (e.isBackNavigation) {
         this.$el.nativeView.off('navigatedFrom', handler)
 
-        if (this.$router) {
-          this.$parent.$vnode.data.keepAlive = false
-        }
+        // if (this.$router) {
+        //   this.$parent.$vnode.data.keepAlive = false
+        // }
 
         this.$parent.$destroy()
       }
@@ -53,18 +53,18 @@ export default {
 
       return frame
     }
-  },
-  deactivated() {
-    if (this.$router) {
-      if (this._watcher) {
-        this._watcher.teardown()
-      }
-
-      let i = this._watchers.length
-
-      while (i--) {
-        this._watchers[i].teardown()
-      }
-    }
   }
+  // deactivated() {
+  //   if (this.$router) {
+  //     if (this._watcher) {
+  //       this._watcher.teardown()
+  //     }
+  //
+  //     let i = this._watchers.length
+  //
+  //     while (i--) {
+  //       this._watchers[i].teardown()
+  //     }
+  //   }
+  // }
 }

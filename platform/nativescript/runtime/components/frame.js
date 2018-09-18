@@ -1,6 +1,5 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { extend } from 'shared/util'
-import { ios } from 'tns-core-modules/application'
 
 let idCounter = 1
 
@@ -61,27 +60,27 @@ export default {
       this.$slots.default
     )
   },
-  computed: {
-    history() {
-      return (this.$router && this.$router.history) || {}
-    },
-
-    store() {
-      return this.history.store || {}
-    },
-
-    replacing() {
-      return this.store.operation === 'replace'
-    },
-
-    isGoingBack() {
-      return this.store && this.store.isGoingBack
-        ? ios
-          ? undefined
-          : true
-        : false
-    }
-  },
+  // computed: {
+  //   history() {
+  //     return (this.$router && this.$router.history) || {}
+  //   },
+  //
+  //   store() {
+  //     return this.history.store || {}
+  //   },
+  //
+  //   replacing() {
+  //     return this.store.operation === 'replace'
+  //   },
+  //
+  //   isGoingBack() {
+  //     return this.store && this.store.isGoingBack
+  //       ? ios
+  //         ? undefined
+  //         : true
+  //       : false
+  //   }
+  // },
   methods: {
     _getFrame() {
       return this.$el.nativeView
@@ -89,17 +88,16 @@ export default {
 
     _composeTransition() {
       const result = {}
-      const root = this.store.entry || this
 
       for (const prop in propMap) {
-        if (root[prop]) {
+        if (this[prop]) {
           const name = propMap[prop]
           result[name] = {}
 
-          if (typeof root[prop] === 'string') {
-            result[name].name = root[prop]
+          if (typeof this[prop] === 'string') {
+            result[name].name = this[prop]
           } else {
-            extend(result[name], root[prop])
+            extend(result[name], this[prop])
           }
         }
       }
@@ -107,74 +105,46 @@ export default {
       return result
     },
 
-    notifyPageMounted(pageVm) {
-      this.$nextTick(_ =>
-        this[this.store.operation]({
-          create: () => pageVm.$el.nativeView
-        })
-      )
+    async notifyPageMounted(pageVm) {
+      await this.$nextTick()
+
+      this.navigate({
+        create: () => pageVm.$el.nativeView
+      })
     },
 
-    navigate(entry, back = this.isGoingBack) {
+    navigate(entry, back = false) {
       const frame = this._getFrame()
 
-      if (back || (ios && this.isGoingBack === undefined)) {
-        frame.goBack(this.isGoingBack ? undefined : entry)
-
-        return (this.store.isGoingBack = false)
+      if (back) {
+        return frame.goBack(entry)
       }
-
-      this.replacing && this.$emit('beforeReplace', entry)
-      !this.replacing && this.$emit('beforePush', entry)
 
       // resolve the page from the entry and attach a navigatedTo listener
       // to fire the frame events
       const page = entry.create()
-
       page.once('navigatedTo', () => {
         this.$emit('navigated', entry)
-        this.replacing && this.$emit('replace', entry)
-        !this.replacing && this.$emit('push', entry)
       })
 
       const handler = args => {
         if (args.isBackNavigation) {
           page.off('navigatedFrom', handler)
 
-          if (this.$router && ios) {
-            this.history.index -= 1
-            this.history.updateRoute(this.history.stack[this.history.index])
-          }
-
-          this.$emit('back', entry)
+          this.$emit('navigatedBack', entry)
         }
       }
-
       page.on('navigatedFrom', handler)
 
       entry.create = () => page
 
-      const transition = this._composeTransition()
-
-      Object.assign(entry, transition, entry)
+      Object.assign(entry, this._composeTransition())
 
       frame.navigate(entry)
     },
 
     back(backstackEntry = null) {
       this.navigate(backstackEntry, true)
-    },
-
-    push(entry) {
-      this.navigate(entry)
-    },
-
-    replace(entry) {
-      this.navigate(entry)
-    },
-
-    go(entry) {
-      this.navigate(entry)
     }
   }
 }

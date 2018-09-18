@@ -1,29 +1,23 @@
 {
-  "description": "NativeScript Application",
-  "license": "SEE LICENSE IN <your-license-filename>",
-  "readme": "NativeScript Application",
-  "repository": "<fill-your-repository-here>",
+  "description": "NativeScriptVue Samples Application",
+  "license": "MIT",
+  "readme": "NativeScriptVue Samples Application",
   "nativescript": {
-    "id": "org.nativescript.vuesample",
+    "id": "org.nativescript.vue.samples",
     "tns-ios": {
-      "version": "4.1.0"
+      "version": "4.2.0"
     },
     "tns-android": {
-      "version": "4.2.0-rc-2018-08-05-01"
+      "version": "4.3.0-2018-09-12-02"
     }
   },
   "dependencies": {
-    "nativescript-gradient": "^2.0.1",
     "nativescript-pager": "^8.0.2",
     "nativescript-theme-core": "^1.0.4",
-    "nativescript-ui-sidedrawer": "^4.2.1",
+    "nativescript-ui-sidedrawer": "^4.3.0",
     "tns-core-modules": "^4.2.0",
-    "nativescript-ui-gauge": "^3.6.0",
+    "nativescript-ui-gauge": "^3.7.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
-  },
-  "devDependencies": {
-    "lazy": "^1.0.11",
-    "nativescript-dev-android-snapshot": "^0.0.11"
   }
 }

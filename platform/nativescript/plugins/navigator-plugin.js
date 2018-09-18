@@ -19,11 +19,25 @@ function getFrameInstance(frame) {
   return getFrame(frame.id)
 }
 
+function _findParentNavigationEntry(vm) {
+  if (!vm) {
+    return false
+  }
+
+  let entry = vm.$parent
+  while (entry && entry.$options.name !== 'NavigationEntry') {
+    entry = entry.$parent
+  }
+
+  return entry
+}
+
 export default {
   install(Vue) {
     Vue.prototype.$navigateBack = function(options) {
+      const navEntry = _findParentNavigationEntry(this)
       const defaultOptions = {
-        frame: 'default'
+        frame: navEntry ? navEntry.$options.frame : 'default'
       }
       options = Object.assign({}, defaultOptions, options)
       const frame = getFrameInstance(options.frame)
@@ -40,10 +54,26 @@ export default {
 
       return new Promise(resolve => {
         const frame = getFrameInstance(options.frame)
-        const page = new Vue({
-          parent: this,
+        const navEntryInstance = new Vue({
+          name: 'NavigationEntry',
+          parent: this.$root,
+          frame,
+          props: {
+            frame: {
+              default: frame.id
+            }
+          },
           render: h => h(component, { props: options.props })
-        }).$mount().$el.nativeView
+        })
+        const page = navEntryInstance.$mount().$el.nativeView
+
+        const handler = args => {
+          if (args.isBackNavigation) {
+            page.off('navigatedFrom', handler)
+            navEntryInstance.$destroy()
+          }
+        }
+        page.on('navigatedFrom', handler)
 
         frame.navigate(Object.assign({}, options, { create: () => page }))
         resolve(page)
