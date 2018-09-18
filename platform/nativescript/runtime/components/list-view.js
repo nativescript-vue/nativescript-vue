@@ -1,4 +1,5 @@
 import { VUE_VIEW } from './v-template'
+import { extend } from 'shared/util'
 
 export default {
   props: {
@@ -32,7 +33,7 @@ export default {
     items: {
       handler(newVal) {
         this.$refs.listView.setAttribute('items', newVal)
-        this.$refs.listView.nativeView.refresh()
+        this.refresh()
       },
       deep: true
     }
@@ -41,16 +42,14 @@ export default {
   created() {
     // we need to remove the itemTap handler from a clone of the $listeners
     // object because we are emitting the event ourselves with added data.
-    const listeners = Object.assign({}, this.$listeners)
+    const listeners = extend({}, this.$listeners)
     delete listeners.itemTap
     this.listeners = listeners
+
+    this.getItemContext = getItemContext.bind(this)
   },
 
   mounted() {
-    this.getItemContext = (item, index) =>
-      getItemContext(item, index, this.$props['+alias'], this.$props['+index'])
-
-    this.$refs.listView.setAttribute('items', this.items)
     this.$refs.listView.setAttribute(
       '_itemTemplatesInternal',
       this.$templates.getKeyedTemplates()
@@ -62,10 +61,7 @@ export default {
 
   methods: {
     onItemTap(args) {
-      this.$emit(
-        'itemTap',
-        Object.assign({ item: this.items[args.index] }, args)
-      )
+      this.$emit('itemTap', extend({ item: this.items[args.index] }, args))
     },
     onItemLoading(args) {
       const index = args.index
@@ -88,7 +84,12 @@ export default {
   }
 }
 
-function getItemContext(item, index, alias, index_alias) {
+function getItemContext(
+  item,
+  index,
+  alias = this.$props['+alias'],
+  index_alias = this.$props['+index']
+) {
   return {
     [alias]: item,
     [index_alias || '$index']: index,

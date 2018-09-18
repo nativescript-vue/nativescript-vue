@@ -5,15 +5,17 @@ Vue.use(VueRouter)
 
 const Foo = {
   template: `
-    <Page>
-      <ActionBar :title="$route.path" />
-      <StackLayout>
-        <Label :text="$route.path" textWrap="true" />
-        <Label text="Hi I'm foo!" style="text-align: center; color: #41b883; font-size: 30" />
-        <Button text="Bar" @tap="$router.push('/bar')" />
-        <Button text="Baz" @tap="$router.push('/baz')"></Button>
-      </StackLayout>
-    </Page>
+    <Frame>
+      <Page>
+        <ActionBar :title="$route.path" />
+        <StackLayout>
+          <Label :text="$route.path" textWrap="true" />
+          <Label text="Hi I'm foo!" style="text-align: center; color: #41b883; font-size: 30" />
+          <Button text="Bar" @tap="$router.push('/bar')" />
+          <Button text="Baz" @tap="$router.push('/baz')"></Button>
+        </StackLayout>
+      </Page>
+    </Frame>
   `
 }
 const Bar = {
@@ -30,7 +32,7 @@ const Bar = {
   `
 }
 const Baz = {
-  template: `    
+  template: `
     <Page>
       <ActionBar :title="$route.path">
         <navigation-Button text="Back!" android.systemIcon="ic_menu_back" @tap="$router.back()" />

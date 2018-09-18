@@ -1,5 +1,8 @@
 const Vue = require('./nativescript-vue')
 
+Vue.config.debug = true
+Vue.config.silent = false
+
 const App = {
   template: `
   <Frame>

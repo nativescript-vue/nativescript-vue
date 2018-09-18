@@ -1,7 +1,6 @@
 const alias = require('rollup-plugin-alias')
 const commonjs = require('rollup-plugin-commonjs')
 const resolve = require('rollup-plugin-node-resolve')
-const buble = require('rollup-plugin-buble')
 const replace = require('rollup-plugin-replace')
 const flow = require('rollup-plugin-flow-no-whitespace')
 const path = require('path')
@@ -65,6 +64,9 @@ const genConfig = (name) => {
         treeshake: {
             pureExternalModules: id => id.startsWith('weex')
         },
+        watch: {
+            chokidar: false
+        },
         plugins: [
             replace({
                 __WEEX__: false,
@@ -75,7 +77,6 @@ const genConfig = (name) => {
                 'process.env.NS_VUE_VERSION': `'${NSVueVersion}'`
             }),
             flow(),
-            buble(),
             alias(aliases),
             resolve(),
             commonjs(),

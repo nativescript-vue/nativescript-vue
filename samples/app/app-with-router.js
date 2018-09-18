@@ -71,18 +71,20 @@ new Vue({
   },
 
   template: `
-    <Page ref="page">
-      <ActionBar :title="pageTitle" />
-      <StackLayout>
-        <StackLayout orientation="horizontal" horizontalAlignment="center" class="m-b-20">
-          <Button text="Foo" @tap="changeRoute('/foo')" class="m-10" />
-          <Button text="Bar" @tap="changeRoute('/bar')" class="m-10" />
+    <Frame>
+      <Page ref="page">
+        <ActionBar :title="pageTitle" />
+        <StackLayout>
+          <StackLayout orientation="horizontal" horizontalAlignment="center" class="m-b-20">
+            <Button text="Foo" @tap="changeRoute('/foo')" class="m-10" />
+            <Button text="Bar" @tap="changeRoute('/bar')" class="m-10" />
+          </StackLayout>
+          <transition name="fade" :duration="1000" mode="out-in">
+            <router-view />
+          </transition>
         </StackLayout>
-        <transition name="fade" :duration="1000" mode="out-in">
-          <router-view />
-        </transition>
-      </StackLayout>
-    </Page>
+      </Page>
+    </Frame>
   `,
 
   methods: {
@@ -91,4 +93,8 @@ new Vue({
       router.replace(to)
     }
   }
-}).$start()
+}).$start({
+  getRootView(vm) {
+    return vm.$el.nativeView
+  }
+})

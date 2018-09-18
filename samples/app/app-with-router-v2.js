@@ -1,6 +1,5 @@
 const Vue = require('./nativescript-vue')
 const VueRouter = require('vue-router')
-const application = require('tns-core-modules/application')
 
 Vue.config.silent = false
 Vue.config.debug = true
@@ -10,7 +9,10 @@ const Home = {
   template: `
     <Page>
         <StackLayout>
-            <Button text="Go to details page..." @tap="$router.push('/detail/1')"/>
+            <Button text="Go to details page 1..." @tap="$router.push('/detail/1', {
+                transition: 'slide'
+            })"/>
+            <Button text="Go to details page 2..." @tap="$router.push('/detail/2')"/>
         </StackLayout>
     </Page>
   `
@@ -19,12 +21,12 @@ const Home = {
 const Detail = {
   template: `
     <Page>
-        <GridLayout rows="*, *, *">
-            <Label :text="'Detail for ' + $route.params.id" row="0"/>
-            <Button text="Tab 2" @tap="$router.replace($route.path + '/tab2')"/> 
-            
-            <router-view row="1" />
-        </GridLayout>
+        <StackLayout>
+            <Label :text="'Detail page for ' + $route.params.id"/>
+            <Button text="go to Tab 2 of the current page" @tap="$router.push($route.path + '/tab2')"/>
+
+            <router-view/>
+        </StackLayout>
     </Page>
   `
 }
@@ -58,28 +60,17 @@ const router = new VueRouter({
 
 router.push('/')
 
-application.android.on('activityBackPressed', args => {
-  if (router.history.stack.length > 1) {
-    router.back()
-    args.cancel = true
-  }
-})
-
 new Vue({
   router,
   template: `
-    <GridLayout rows="*, 80">
-      <Frame row="0">
-        <router-view :key="$route.path" />
+    <GridLayout rows="*, 40">
+      <Frame row="0" transition="fade">
+        <router-view />
       </Frame>
-      
+
       <Label :text="$route.path"
-            backgroundColor="#333" color="#eee" 
+            backgroundColor="#333" color="#eee"
             row="1" />
-    </GridLayout>  
+    </GridLayout>
   `
-}).$start({
-  getRootView(vm) {
-    return vm.$el.nativeView
-  }
-})
+}).$start()

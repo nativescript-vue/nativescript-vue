@@ -18,12 +18,14 @@ const store = new Vuex.Store({
 new Vue({
   store,
   template: `
-    <Page>
-      <StackLayout>
-        <Label :text="count + ' taps left'" style="text-align: center; font-size: 30; padding: 20 0;" />
-        <Button text="Tap" @tap="decrement" />
-      </StackLayout>
-    </Page> 
+    <Frame>
+      <Page>
+        <StackLayout>
+          <Label :text="count + ' taps left'" style="text-align: center; font-size: 30; padding: 20 0;" />
+          <Button text="Tap" @tap="decrement" />
+        </StackLayout>
+      </Page>
+    </Frame>
   `,
 
   computed: {

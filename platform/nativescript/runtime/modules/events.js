@@ -9,22 +9,18 @@ function add(event, handler, once, capture) {
   }
   if (once) {
     const oldHandler = handler
-    const _target = target // save current target element in closure
-    handler = function(ev) {
-      const res =
-        arguments.length === 1
-          ? oldHandler(ev)
-          : oldHandler.apply(null, arguments)
+    handler = (...args) => {
+      const res = oldHandler.call(null, ...args)
       if (res !== null) {
-        remove(event, null, null, _target)
+        remove(event, null, null, target)
       }
     }
   }
   target.addEventListener(event, handler)
 }
 
-function remove(event, handler, capture, _target) {
-  ;(_target || target).removeEventListener(event)
+function remove(event, handler, capture, _target = target) {
+  _target.removeEventListener(event)
 }
 
 function updateDOMListeners(oldVnode, vnode) {
