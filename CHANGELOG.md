@@ -1,3 +1,21 @@
+<a name="2.0.0-beta.0"></a>
+# [2.0.0-beta.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.3...v2.0.0-beta.0) (2018-09-18)
+
+
+### Features
+
+* multiple frame navigation ([6c45812](https://github.com/nativescript-vue/nativescript-vue/commit/6c45812)), closes [#188](https://github.com/nativescript-vue/nativescript-vue/issues/188)
+* multiple frames ([#325](https://github.com/nativescript-vue/nativescript-vue/issues/325)) ([6d7b169](https://github.com/nativescript-vue/nativescript-vue/commit/6d7b169)), closes [#213](https://github.com/nativescript-vue/nativescript-vue/issues/213) [#286](https://github.com/nativescript-vue/nativescript-vue/issues/286) [#292](https://github.com/nativescript-vue/nativescript-vue/issues/292) [#292](https://github.com/nativescript-vue/nativescript-vue/issues/292) [#321](https://github.com/nativescript-vue/nativescript-vue/issues/321)
+
+
+### BREAKING CHANGES
+
+* $navigateTo: passing props should now be done using options.props instead of
+options.context.propsData
+* the options object of $navigateTo has been simplified
+
+
+
 <a name="2.0.0-alpha.3"></a>
 # [2.0.0-alpha.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2018-09-12)
 
