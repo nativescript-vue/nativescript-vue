@@ -1,3 +1,13 @@
+<a name="2.0.0-rc.0"></a>
+# [2.0.0-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-beta.1...v2.0.0-rc.0) (2018-09-19)
+
+
+### Features
+
+* updated $showModal ([b2be4bd](https://github.com/nativescript-vue/nativescript-vue/commit/b2be4bd))
+
+
+
 <a name="2.0.0-beta.1"></a>
 # [2.0.0-beta.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2018-09-19)
 
