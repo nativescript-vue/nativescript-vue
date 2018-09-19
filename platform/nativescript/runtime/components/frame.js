@@ -105,11 +105,11 @@ export default {
       return result
     },
 
-    async notifyPageMounted(pageVm) {
-      await this.$nextTick()
-
-      this.navigate({
-        create: () => pageVm.$el.nativeView
+    notifyPageMounted(pageVm) {
+      this.$nextTick(() => {
+        this.navigate({
+          create: () => pageVm.$el.nativeView
+        })
       })
     },
 
