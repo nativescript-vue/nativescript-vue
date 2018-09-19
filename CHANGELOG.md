@@ -1,3 +1,13 @@
+<a name="2.0.0-beta.1"></a>
+# [2.0.0-beta.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2018-09-19)
+
+
+### Bug Fixes
+
+* **build:** add buble as otherwise static bindings fail to generate ([f36d462](https://github.com/nativescript-vue/nativescript-vue/commit/f36d462))
+
+
+
 <a name="2.0.0-beta.0"></a>
 # [2.0.0-beta.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-alpha.3...v2.0.0-beta.0) (2018-09-18)
 
