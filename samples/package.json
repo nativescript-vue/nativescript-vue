@@ -3,20 +3,24 @@
   "license": "MIT",
   "readme": "NativeScriptVue Samples Application",
   "nativescript": {
-    "id": "org.nativescript.vue.samples",
+    "id": "org.nativescript.application",
     "tns-ios": {
       "version": "4.2.0"
     },
     "tns-android": {
-      "version": "4.3.0-2018-09-12-02"
+      "version": "4.2.0"
     }
   },
   "dependencies": {
+    "@vue/devtools": "^5.0.0-beta.3",
     "nativescript-pager": "^8.0.2",
+    "nativescript-socket.io": "^0.9.0",
     "nativescript-theme-core": "^1.0.4",
-    "nativescript-ui-sidedrawer": "^4.3.0",
-    "tns-core-modules": "^4.2.0",
+    "nativescript-toast": "^1.4.6",
     "nativescript-ui-gauge": "^3.7.1",
+    "nativescript-ui-sidedrawer": "^4.3.0",
+    "nativescript-vue-devtools": "^1.1.0",
+    "tns-core-modules": "^4.2.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   }

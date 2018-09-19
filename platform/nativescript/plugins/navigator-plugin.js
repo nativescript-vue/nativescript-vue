@@ -34,7 +34,7 @@ function _findParentNavigationEntry(vm) {
 
 export default {
   install(Vue) {
-    Vue.prototype.$navigateBack = function(options) {
+    Vue.prototype.$navigateBack = function(options, backstackEntry = null) {
       const navEntry = _findParentNavigationEntry(this)
       const defaultOptions = {
         frame: navEntry ? navEntry.$options.frame : 'default'
@@ -42,7 +42,7 @@ export default {
       options = Object.assign({}, defaultOptions, options)
       const frame = getFrameInstance(options.frame)
 
-      frame.back()
+      frame.back(backstackEntry)
     }
 
     Vue.prototype.$navigateTo = function(component, options) {
