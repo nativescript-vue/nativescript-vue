@@ -1,3 +1,8 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-rc.0...v2.0.0) (2018-09-22)
+
+
+
 <a name="2.0.0-rc.0"></a>
 # [2.0.0-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-beta.1...v2.0.0-rc.0) (2018-09-19)
 
