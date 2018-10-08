@@ -11,15 +11,6 @@ export default {
       this.$slots.default
     )
   },
-  // created() {
-  //   if (this.$router) {
-  //     // Sometimes the parent is undefined
-  //     // See https://github.com/nativescript-vue/nativescript-vue/issues/292
-  //     if (this.$vnode.parent) {
-  //       this.$vnode.parent.data.keepAlive = true
-  //     }
-  //   }
-  // },
   mounted() {
     this.$el.nativeView[PAGE_REF] = this
 
@@ -32,16 +23,19 @@ export default {
     const handler = e => {
       if (e.isBackNavigation) {
         this.$el.nativeView.off('navigatedFrom', handler)
-
-        // if (this.$router) {
-        //   this.$parent.$vnode.data.keepAlive = false
-        // }
-
         this.$parent.$destroy()
       }
     }
 
     this.$el.nativeView.on('navigatedFrom', handler)
+
+    // ensure that the parent vue instance is destroyed when the
+    // page is disposed (clearHistory: true for example)
+    const dispose = this.$el.nativeView.disposeNativeView
+    this.$el.nativeView.disposeNativeView = (...args) => {
+      this.$parent.$destroy()
+      dispose.call(this.$el.nativeView, args)
+    }
   },
   methods: {
     _findParentFrame() {
@@ -54,17 +48,4 @@ export default {
       return frame
     }
   }
-  // deactivated() {
-  //   if (this.$router) {
-  //     if (this._watcher) {
-  //       this._watcher.teardown()
-  //     }
-  //
-  //     let i = this._watchers.length
-  //
-  //     while (i--) {
-  //       this._watchers[i].teardown()
-  //     }
-  //   }
-  // }
 }
