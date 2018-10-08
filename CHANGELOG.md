@@ -1,3 +1,13 @@
+<a name="2.0.2"></a>
+## [2.0.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.1...v2.0.2) (2018-10-08)
+
+
+### Bug Fixes
+
+* destroy the navigation entry instance when the page is disposed ([63f8f14](https://github.com/nativescript-vue/nativescript-vue/commit/63f8f14))
+
+
+
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0...v2.0.1) (2018-10-08)
 
