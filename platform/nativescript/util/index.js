@@ -88,8 +88,8 @@ export function before(original, thisArg, wrap) {
 
 export function after(original, thisArg, wrap) {
   return function(...args) {
-    wrap.call(null, ...args)
     original.call(thisArg, ...args)
+    wrap.call(null, ...args)
   }
 }
 
