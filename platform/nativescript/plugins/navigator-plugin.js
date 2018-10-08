@@ -75,6 +75,14 @@ export default {
         }
         page.on('navigatedFrom', handler)
 
+        // ensure that the navEntryInstance vue instance is destroyed when the
+        // page is disposed (clearHistory: true for example)
+        const dispose = page.disposeNativeView
+        page.disposeNativeView = (...args) => {
+          navEntryInstance.$destroy()
+          dispose.call(page, args)
+        }
+
         frame.navigate(Object.assign({}, options, { create: () => page }))
         resolve(page)
       })
