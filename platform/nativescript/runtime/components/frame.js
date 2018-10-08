@@ -1,13 +1,8 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { extend } from 'shared/util'
+import { isAndroid } from 'tns-core-modules/platform'
 
 let idCounter = 1
-
-const propMap = {
-  transition: 'transition',
-  'ios:transition': 'transitioniOS',
-  'android:transition': 'transitionAndroid'
-}
 
 export default {
   props: {
@@ -16,15 +11,18 @@ export default {
     },
     transition: {
       type: [String, Object],
-      default: _ => ({ name: 'slide', duration: 200 })
+      required: false,
+      default: null
     },
     'ios:transition': {
       type: [String, Object],
-      default: ''
+      required: false,
+      default: null
     },
     'android:transition': {
       type: [String, Object],
-      default: ''
+      required: false,
+      default: null
     },
     // injected by the template compiler
     hasRouterView: {
@@ -60,49 +58,33 @@ export default {
       this.$slots.default
     )
   },
-  // computed: {
-  //   history() {
-  //     return (this.$router && this.$router.history) || {}
-  //   },
-  //
-  //   store() {
-  //     return this.history.store || {}
-  //   },
-  //
-  //   replacing() {
-  //     return this.store.operation === 'replace'
-  //   },
-  //
-  //   isGoingBack() {
-  //     return this.store && this.store.isGoingBack
-  //       ? ios
-  //         ? undefined
-  //         : true
-  //       : false
-  //   }
-  // },
   methods: {
     _getFrame() {
       return this.$el.nativeView
     },
 
-    _composeTransition() {
-      const result = {}
+    _ensureTransitionObject(transition) {
+      if (typeof transition === 'string') {
+        return { name: transition }
+      }
+      return transition
+    },
 
-      for (const prop in propMap) {
-        if (this[prop]) {
-          const name = propMap[prop]
-          result[name] = {}
+    _composeTransition(entry) {
+      const platformEntryProp = `transition${isAndroid ? 'Android' : 'iOS'}`
+      const entryProp = entry[platformEntryProp]
+        ? platformEntryProp
+        : 'transition'
+      const platformProp = `${isAndroid ? 'android' : 'ios'}:transition`
+      const prop = this[platformProp] ? platformProp : 'transition'
 
-          if (typeof this[prop] === 'string') {
-            result[name].name = this[prop]
-          } else {
-            extend(result[name], this[prop])
-          }
-        }
+      if (entry[entryProp]) {
+        entry[entryProp] = this._ensureTransitionObject(entry[entryProp])
+      } else if (this[prop]) {
+        entry[entryProp] = this._ensureTransitionObject(this[prop])
       }
 
-      return result
+      return entry
     },
 
     notifyPageMounted(pageVm) {
@@ -138,8 +120,7 @@ export default {
 
       entry.create = () => page
 
-      Object.assign(entry, this._composeTransition())
-
+      this._composeTransition(entry)
       frame.navigate(entry)
     },
 
