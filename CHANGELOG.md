@@ -1,3 +1,15 @@
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0...v2.0.1) (2018-10-08)
+
+
+### Bug Fixes
+
+* destroy vue instance when page is disposed ([3df80ea](https://github.com/nativescript-vue/nativescript-vue/commit/3df80ea)), closes [#339](https://github.com/nativescript-vue/nativescript-vue/issues/339)
+* fix function call order in `after` util ([16ffa1c](https://github.com/nativescript-vue/nativescript-vue/commit/16ffa1c))
+* **transition:** use the correct transition when navigating ([799e42f](https://github.com/nativescript-vue/nativescript-vue/commit/799e42f)), closes [#342](https://github.com/nativescript-vue/nativescript-vue/issues/342)
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.0-rc.0...v2.0.0) (2018-09-22)
 
