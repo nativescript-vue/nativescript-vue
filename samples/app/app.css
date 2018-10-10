@@ -27,3 +27,20 @@
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+.tabbar {
+    width: 100%;
+    vertical-align: bottom;
+    background-color: #eaeaea;
+}
+
+.tabbar__item {
+    padding: 20 0;
+    width: 50%;
+    text-align: center;
+    vertical-align: center;
+}
+
+.tabbar__item--active {
+    color: #5577dd;
+}
