@@ -17,6 +17,7 @@ if (process.argv[2]) {
 }
 
 build(builds)
+copyHooks()
 
 function build(builds) {
   let built = 0
@@ -60,4 +61,27 @@ function write(dest, code) {
 }
 function logError(e) {
   console.log(e)
+}
+
+function copyHooks() {
+  const sourceHooksDir = path.join(process.cwd(), "platform", "nativescript", "hooks");
+  if (!fs.existsSync(sourceHooksDir)) {
+    return;
+  }
+
+  const targetHooksDir = path.join(process.cwd(), "dist", "hooks");
+  if (!fs.existsSync(targetHooksDir)) {
+    fs.mkdirSync(targetHooksDir)
+  }
+
+  const sourceFiles = fs.readdirSync(sourceHooksDir);
+  sourceFiles.forEach(file => {
+    const sourcePath = path.join(sourceHooksDir, file);
+    const targetPath = path.join(targetHooksDir, file);
+    if (fs.existsSync(targetPath)) {
+      fs.unlinkSync(targetPath);
+    }
+
+    fs.copyFileSync(sourcePath, targetPath);
+  });
 }
