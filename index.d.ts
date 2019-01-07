@@ -1,16 +1,12 @@
 // import vue.js typings
 // import Vue from 'vue';
 import { Vue, VueConstructor } from 'vue/types/vue'
-import { Page, NavigationEntry } from 'tns-core-modules/ui/frame/frame'
+import { Page, NavigationEntry, Size } from 'tns-core-modules/ui/frame/frame'
 import { View } from 'tns-core-modules/ui/core/view'
-
-export interface NavigationEntryVue extends NavigationEntry {
-    props?: Record<string, any>
-}
 
 export type navigateTo = (
     component: VueConstructor,
-    options?: NavigationEntryVue,
+    options?: NavigationEntry,
     cb?: () => Page,
 ) => Promise<Page>;
 
@@ -45,18 +41,16 @@ export interface NativeScriptVue<V = View> extends Vue {
 export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue> {
     navigateTo: navigateTo
     navigateBack: () => void
+    /**
+     * Registers NativeScript Plugin.
+     * @param elementName Name of the element to use in your template
+     * @param resolver  function to register the element
+     * @param meta meta associated with the element
+     */
+    registerElement: (elementName: string, resolver: Function, meta?: any) => void
 }
 
 export const NativeScriptVue: NativeScriptVueConstructor
 
-export default NativeScriptVue;
-
 // export as namespace NativeScriptVue;
-
-/**
- * Registers NativeScript Plugin.
- * @param elementName Name of the element to use in your template
- * @param resolver  function to register the element
- * @param meta meta associated with the element
- */
-export function registerElement(elementName: string, resolver: Function, meta?: any): void;
+export default NativeScriptVue;
