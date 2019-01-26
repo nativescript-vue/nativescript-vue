@@ -17,6 +17,7 @@ export type navigateTo = (
 export interface ModalOptions {
     context?: any;
     fullscreen?: boolean;
+    props?: Record<string, any>;
 }
 
 // create a nativescript vue class that extends vue.js
