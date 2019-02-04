@@ -45,6 +45,7 @@ export interface NativeScriptVue<V = View> extends Vue {
 export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue> {
     navigateTo: navigateTo
     navigateBack: () => void
+    registerElement: (elementName: string, resolver: Function, meta?: any) => void
 }
 
 export const NativeScriptVue: NativeScriptVueConstructor
