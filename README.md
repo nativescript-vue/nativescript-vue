@@ -70,6 +70,7 @@ and these awesome backers:
 - ChiwalahSoftware
 - Nayir Chami
 - Teon Ooi
+- Thomas Kuhlmann
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
