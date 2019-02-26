@@ -50,6 +50,10 @@ export default {
   },
 
   mounted() {
+    if (!this.$templates) {
+        return;
+    }
+
     this.$refs.listView.setAttribute(
       '_itemTemplatesInternal',
       this.$templates.getKeyedTemplates()
