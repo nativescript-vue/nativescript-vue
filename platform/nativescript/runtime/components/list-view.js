@@ -68,6 +68,10 @@ export default {
       this.$emit('itemTap', extend({ item: this.items[args.index] }, args))
     },
     onItemLoading(args) {
+      if (!this.$templates) {
+        return;
+      }
+ 
       const index = args.index
       const items = args.object.items
 
