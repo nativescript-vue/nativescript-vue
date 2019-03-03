@@ -1,5 +1,5 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
-import { isHMRChecking } from '../../util/hmr'
+import { isHMRChecking, resetHMRChecking } from '../../util/hmr'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
 import { ios as iosUtils } from 'tns-core-modules/utils/utils'
 
@@ -161,6 +161,7 @@ export default {
       } else {
         // TODO: Implement for Android
       }
+      resetHMRChecking()
     },
 
     navigate(entry, back = false) {
