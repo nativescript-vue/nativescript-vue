@@ -27,8 +27,8 @@ export default class ViewNode {
     this._meta = null
 
     /* istanbul ignore next
-         * make vue happy :)
-         */
+     * make vue happy :)
+     */
     this.hasAttribute = this.removeAttribute = () => false
   }
 

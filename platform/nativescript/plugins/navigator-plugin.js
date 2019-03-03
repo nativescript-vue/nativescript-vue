@@ -2,7 +2,7 @@ import { isObject, isDef, isPrimitive } from 'shared/util'
 import { getFrame } from '../util/frame'
 import { getFrameById } from 'tns-core-modules/ui/frame'
 
-function getFrameInstance(frame) {
+export function getFrameInstance(frame) {
   // get the frame that we need to navigate
   // this can be a frame id (String)
   // a Vue ref to a frame
@@ -19,7 +19,7 @@ function getFrameInstance(frame) {
   return getFrame(frame.id)
 }
 
-function _findParentNavigationEntry(vm) {
+export function findParentNavigationEntry(vm) {
   if (!vm) {
     return false
   }
@@ -35,7 +35,7 @@ function _findParentNavigationEntry(vm) {
 export default {
   install(Vue) {
     Vue.prototype.$navigateBack = function(options, backstackEntry = null) {
-      const navEntry = _findParentNavigationEntry(this)
+      const navEntry = findParentNavigationEntry(this)
       const defaultOptions = {
         frame: navEntry ? navEntry.$options.frame : 'default'
       }
