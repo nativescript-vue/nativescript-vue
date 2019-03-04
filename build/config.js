@@ -17,6 +17,12 @@ const banner = (name, version) => `
  * Released under the MIT license.
  */
 `
+const intro = `
+if (!this['process']) {
+  global.process = process = {env:{}}
+}
+`
+
 const resolveVue = p => {
     return path.resolve(process.cwd(), 'node_modules', 'vue/src/', p) + '/'
 }
@@ -36,6 +42,7 @@ const builds = {
         entry: './platform/nativescript/framework.js',
         dest: './dist/index.js',
         moduleName: 'NativeScript-Vue',
+        intro: intro,
         banner: banner('NativeScript-Vue'),
         external(id) {
             return id.startsWith('tns-core-modules') || id.startsWith('weex')
@@ -57,6 +64,8 @@ const genConfig = (name) => {
         input: opts.entry,
         external: opts.external,
         output: {
+            strict: false,
+            intro: opts.intro,
             file: opts.dest,
             format: opts.format || 'cjs',
             banner: opts.banner,
@@ -72,10 +81,9 @@ const genConfig = (name) => {
             replace({
                 __WEEX__: false,
                 __VERSION__: VueVersion,
-                'process.env.NODE_ENV': "'development'",
                 'let _isServer': 'let _isServer = false',
-                'process.env.VUE_VERSION': `'${VueVersion}'`,
-                'process.env.NS_VUE_VERSION': `'${NSVueVersion}'`
+                'process.env.VUE_VERSION': `process.env.VUE_VERSION || '${VueVersion}'`,
+                'process.env.NS_VUE_VERSION': `process.env.NS_VUE_VERSION || '${NSVueVersion}'`
             }),
             flow(),
             buble(),
