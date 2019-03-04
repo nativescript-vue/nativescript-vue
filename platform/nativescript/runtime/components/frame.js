@@ -125,7 +125,6 @@ export default {
         viewController['_transition'] = { name: 'non-animated' }
         viewController['_delegate'] = null
         frame._ios.controller.delegate = null
-        // backstackEntry[NAV_DEPTH] = navDepth;
         viewController['_entry'] = backstackEntry
 
         if (iosUtils.MajorVersion > 10) {
