@@ -114,8 +114,8 @@ export default {
         navDepth: undefined,
         fragmentTag: undefined
       }
+      // TODO: this should be in a specific NS Frame method
       if (isIOS) {
-        // TODO: this should be in a specific NS Frame method
         let viewController = backstackEntry.resolvedPage.ios
         if (!viewController) {
           throw new Error(
