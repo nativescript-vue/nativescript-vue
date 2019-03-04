@@ -1,4 +1,4 @@
-import { normalizeElementName } from '../../element-registry'
+import { normalizeElementName } from '../../element-register'
 import { addAttr } from 'compiler/helpers'
 
 function preTransformNode(el) {

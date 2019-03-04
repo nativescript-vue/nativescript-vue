@@ -1,98 +1,5 @@
-import * as builtInComponents from './runtime/components'
-import { registerElement } from './element-register'
+import { registerElement } from '../element-register'
 export { registerElement }
-
-registerElement(
-  'ActionBar',
-  () => require('tns-core-modules/ui/action-bar').ActionBar,
-  {
-    removeChild(parent, child) {
-      try {
-        parent.nativeView._removeView(child.nativeView)
-      } catch (e) {
-        // ignore exception - child is likely already removed/replaced
-        // fixes #76
-      }
-    },
-    component: builtInComponents.ActionBar
-  }
-)
-
-registerElement(
-  'ActionItem',
-  () => require('tns-core-modules/ui/action-bar').ActionItem
-)
-
-registerElement('android', null, {
-  component: builtInComponents.android
-})
-
-registerElement('ios', null, {
-  component: builtInComponents.ios
-})
-
-registerElement(
-  'ListView',
-  () => require('tns-core-modules/ui/list-view').ListView,
-  {
-    component: builtInComponents.ListView
-  }
-)
-
-registerElement(
-  'NavigationButton',
-  () => require('tns-core-modules/ui/action-bar').NavigationButton
-)
-
-registerElement(
-  'TabView',
-  () => require('tns-core-modules/ui/tab-view').TabView,
-  {
-    model: {
-      prop: 'selectedIndex',
-      event: 'selectedIndexChange'
-    },
-    component: builtInComponents.TabView
-  }
-)
-
-registerElement(
-  'TabViewItem',
-  () => require('tns-core-modules/ui/tab-view').TabViewItem,
-  {
-    skipAddToDom: true,
-    component: builtInComponents.TabViewItem
-  }
-)
-
-registerElement('transition', null, {
-  component: builtInComponents.transition
-})
-
-registerElement('v-template', null, {
-  component: builtInComponents.VTemplate
-})
-
-// NS components which uses the automatic registerElement Vue wrapper
-// as they do not need any special logic
-
-registerElement('Label', () => require('tns-core-modules/ui/label').Label, {
-  model: {
-    prop: 'text',
-    event: 'textChange'
-  }
-})
-
-registerElement(
-  'DatePicker',
-  () => require('tns-core-modules/ui/date-picker').DatePicker,
-  {
-    model: {
-      prop: 'date',
-      event: 'dateChange'
-    }
-  }
-)
 
 registerElement(
   'AbsoluteLayout',
@@ -109,6 +16,16 @@ registerElement(
   () => require('tns-core-modules/ui/content-view').ContentView
 )
 registerElement(
+  'DatePicker',
+  () => require('tns-core-modules/ui/date-picker').DatePicker,
+  {
+    model: {
+      prop: 'date',
+      event: 'dateChange'
+    }
+  }
+)
+registerElement(
   'DockLayout',
   () => require('tns-core-modules/ui/layouts/dock-layout').DockLayout
 )
@@ -122,6 +39,7 @@ registerElement(
 )
 registerElement('Image', () => require('tns-core-modules/ui/image').Image)
 registerElement('img', () => require('tns-core-modules/ui/image').Image)
+registerElement('Label', () => require('tns-core-modules/ui/label').Label)
 registerElement(
   'ListPicker',
   () => require('tns-core-modules/ui/list-picker').ListPicker,
@@ -132,33 +50,41 @@ registerElement(
     }
   }
 )
+registerElement(
+  'NativeActionBar',
+  () => require('tns-core-modules/ui/action-bar').ActionBar
+)
+registerElement(
+  'NativeActionItem',
+  () => require('tns-core-modules/ui/action-bar').ActionItem
+)
+registerElement(
+  'NativeListView',
+  () => require('tns-core-modules/ui/list-view').ListView
+)
+registerElement(
+  'NativeNavigationButton',
+  () => require('tns-core-modules/ui/action-bar').NavigationButton
+)
 registerElement('Page', () => require('tns-core-modules/ui/page').Page, {
-  skipAddToDom: true,
-  component: builtInComponents.Page
+  skipAddToDom: true
 })
-
 registerElement(
   'Placeholder',
   () => require('tns-core-modules/ui/placeholder').Placeholder
 )
 registerElement(
   'Progress',
-  () => require('tns-core-modules/ui/progress').Progress,
-  {
-    model: {
-      prop: 'value',
-      event: 'valueChange'
-    }
-  }
+  () => require('tns-core-modules/ui/progress').Progress
 )
 registerElement(
   'ProxyViewContainer',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer
 )
-// registerElement(
-//   'Repeater',
-//   () => require('tns-core-modules/ui/repeater').Repeater
-// )
+registerElement(
+  'Repeater',
+  () => require('tns-core-modules/ui/repeater').Repeater
+)
 registerElement(
   'ScrollView',
   () => require('tns-core-modules/ui/scroll-view').ScrollView
@@ -209,24 +135,30 @@ registerElement('Switch', () => require('tns-core-modules/ui/switch').Switch, {
 })
 
 registerElement(
-  'TextField',
-  () => require('tns-core-modules/ui/text-field').TextField,
+  'NativeTabView',
+  () => require('tns-core-modules/ui/tab-view').TabView,
   {
     model: {
-      prop: 'text',
-      event: 'textChange'
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
     }
   }
 )
 registerElement(
-  'TextView',
-  () => require('tns-core-modules/ui/text-view').TextView,
+  'NativeTabViewItem',
+  () => require('tns-core-modules/ui/tab-view').TabViewItem,
   {
-    model: {
-      prop: 'text',
-      event: 'textChange'
-    }
+    skipAddToDom: true
   }
+)
+
+registerElement(
+  'TextField',
+  () => require('tns-core-modules/ui/text-field').TextField
+)
+registerElement(
+  'TextView',
+  () => require('tns-core-modules/ui/text-view').TextView
 )
 registerElement(
   'TimePicker',
@@ -248,9 +180,9 @@ registerElement(
 )
 registerElement(
   'FormattedString',
-  () => require('tns-core-modules/text/formatted-string').FormattedString
+  () => require('text/formatted-string').FormattedString
 )
-registerElement('Span', () => require('tns-core-modules/text/span').Span)
+registerElement('Span', () => require('text/span').Span)
 
 registerElement(
   'DetachedContainer',
@@ -270,7 +202,6 @@ registerElement(
   'Comment',
   () => require('tns-core-modules/ui/placeholder').Placeholder
 )
-
 registerElement(
   'Document',
   () => require('tns-core-modules/ui/proxy-view-container').ProxyViewContainer,
@@ -278,12 +209,3 @@ registerElement(
     skipAddToDom: true
   }
 )
-
-registerElement('Frame', () => require('tns-core-modules/ui/frame').Frame, {
-  insertChild(parentNode, childNode, atIndex) {
-    // if (normalizeElementName(childNode.tagName) === 'nativepage') {
-    // parentNode.nativeView.navigate({ create: () => childNode.nativeView })
-    // }
-  },
-  component: builtInComponents.Frame
-})

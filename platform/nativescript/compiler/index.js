@@ -1,6 +1,6 @@
 import { createCompiler } from 'compiler/index'
 import { genStaticKeys } from 'shared/util'
-
+import { registerElement } from '../element-register'
 import modules from './modules/index'
 import directives from './directives/index'
 
@@ -25,4 +25,4 @@ export const baseOptions = {
 }
 
 const { compile, compileToFunctions } = createCompiler(baseOptions)
-export { compile, compileToFunctions }
+export { compile, compileToFunctions, registerElement }
