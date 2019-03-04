@@ -2,6 +2,7 @@ import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { isHMRChecking, resetHMRChecking } from '../../util/hmr'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
 import { ios as iosUtils } from 'tns-core-modules/utils/utils'
+import { _setAndroidFragmentTransitions } from 'tns-core-modules/ui/frame/fragment.transitions'
 
 let idCounter = 1
 
@@ -159,7 +160,30 @@ export default {
         // replace the controllers instead of pushing directly
         frame._ios.controller.setViewControllersAnimated(newControllers, false)
       } else {
-        // TODO: Implement for Android
+        const frameId = frame._android.frameId
+        frame._isBack = false
+        backstackEntry.frameId = frameId
+
+        const manager = frame._getFragmentManager()
+        const currentEntry = frame._currentEntry
+
+        const newFragmentTag = `fragment${frameId}[-1]`
+        const newFragment = frame.createFragment(backstackEntry, newFragmentTag)
+        const animated = false
+        const navigationTransition = null
+
+        const transaction = manager.beginTransaction()
+        _setAndroidFragmentTransitions(
+          animated,
+          navigationTransition,
+          currentEntry,
+          backstackEntry,
+          transaction,
+          frameId
+        )
+        transaction.remove(currentEntry.fragment)
+        transaction.replace(frame.containerViewId, newFragment, newFragmentTag)
+        transaction.commitAllowingStateLoss()
       }
       resetHMRChecking()
     },
