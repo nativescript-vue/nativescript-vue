@@ -74,6 +74,9 @@ export class TemplateBag {
     if (Array.isArray(vnode)) {
       vnode = vnode[0]
     }
+    if (Array.isArray(oldVnode)) { 
+      oldVnode = oldVnode[0];
+    }
     const nativeView = patch(oldVnode, vnode).nativeView
     nativeView[VUE_VIEW] = vnode
 
