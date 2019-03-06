@@ -69,7 +69,7 @@ export class TemplateBag {
   }
 
   patchTemplate(name, context, oldVnode) {
-    const vnode = this._templateMap.get(name).scopedFn(context)
+    let vnode = this._templateMap.get(name).scopedFn(context)
     // in 2.6 scopedFn returns an array!
     if (Array.isArray(vnode)) {
       vnode = vnode[0]
