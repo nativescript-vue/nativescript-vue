@@ -45,19 +45,16 @@ export interface NativeScriptVue<V = View> extends Vue {
 export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue> {
     navigateTo: navigateTo
     navigateBack: () => void
+    /**
+     * Registers NativeScript Plugin.
+     * @param elementName Name of the element to use in your template
+     * @param resolver  function to register the element
+     * @param meta meta associated with the element
+     */
     registerElement: (elementName: string, resolver: Function, meta?: any) => void
 }
 
 export const NativeScriptVue: NativeScriptVueConstructor
 
-export default NativeScriptVue;
-
 // export as namespace NativeScriptVue;
-
-/**
- * Registers NativeScript Plugin.
- * @param elementName Name of the element to use in your template
- * @param resolver  function to register the element
- * @param meta meta associated with the element
- */
-export function registerElement(elementName: string, resolver: Function, meta?: any): void;
+export default NativeScriptVue;
