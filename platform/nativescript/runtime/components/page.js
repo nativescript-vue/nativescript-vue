@@ -1,3 +1,9 @@
+import {
+  findParentNavigationEntry,
+  getFrameInstance
+} from '../../plugins/navigator-plugin'
+import { isHMRChecking } from '../../util/hmr'
+
 export const PAGE_REF = '__vuePageRef__'
 
 export default {
@@ -14,7 +20,17 @@ export default {
   mounted() {
     this.$el.nativeView[PAGE_REF] = this
 
-    const frame = this._findParentFrame()
+    let frame = null
+
+    if (isHMRChecking()) {
+      const navEntry = findParentNavigationEntry(this)
+      const options = {
+        frame: navEntry ? navEntry.$options.frame : 'default'
+      }
+      frame = getFrameInstance(options.frame)
+    } else {
+      frame = this._findParentFrame()
+    }
 
     if (frame) {
       frame.notifyPageMounted(this)
