@@ -64,7 +64,6 @@ const genConfig = (name) => {
         input: opts.entry,
         external: opts.external,
         output: {
-            strict: false,
             intro: opts.intro,
             file: opts.dest,
             format: opts.format || 'cjs',
