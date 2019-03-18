@@ -1,3 +1,21 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.2...v2.1.0) (2019-03-18)
+
+
+### Bug Fixes
+
+* add registerElement to NativeScriptVueConstructor ([#413](https://github.com/nativescript-vue/nativescript-vue/issues/413)) ([7adad31](https://github.com/nativescript-vue/nativescript-vue/commit/7adad31)), closes [#409](https://github.com/nativescript-vue/nativescript-vue/issues/409)
+* Extend ModalOptions type definitions ([#422](https://github.com/nativescript-vue/nativescript-vue/issues/422)) ([72e9097](https://github.com/nativescript-vue/nativescript-vue/commit/72e9097))
+* **v-model:** export registerElement in webpack. fix v-model issue [#371](https://github.com/nativescript-vue/nativescript-vue/issues/371) ([e1bc562](https://github.com/nativescript-vue/nativescript-vue/commit/e1bc562))
+
+
+### Features
+
+* show error when --bundle option is not provided ([#361](https://github.com/nativescript-vue/nativescript-vue/issues/361)) ([265f416](https://github.com/nativescript-vue/nativescript-vue/commit/265f416))
+* **list-view:** Add support for default ListView item template ([#438](https://github.com/nativescript-vue/nativescript-vue/issues/438)) ([748d39a](https://github.com/nativescript-vue/nativescript-vue/commit/748d39a))
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.0.1...v2.0.2) (2018-10-08)
 
@@ -14,9 +32,9 @@
 
 ### Bug Fixes
 
+* **transition:** use the correct transition when navigating ([799e42f](https://github.com/nativescript-vue/nativescript-vue/commit/799e42f)), closes [#342](https://github.com/nativescript-vue/nativescript-vue/issues/342)
 * destroy vue instance when page is disposed ([3df80ea](https://github.com/nativescript-vue/nativescript-vue/commit/3df80ea)), closes [#339](https://github.com/nativescript-vue/nativescript-vue/issues/339)
 * fix function call order in `after` util ([16ffa1c](https://github.com/nativescript-vue/nativescript-vue/commit/16ffa1c))
-* **transition:** use the correct transition when navigating ([799e42f](https://github.com/nativescript-vue/nativescript-vue/commit/799e42f)), closes [#342](https://github.com/nativescript-vue/nativescript-vue/issues/342)
 
 
 
@@ -80,9 +98,9 @@ options.context.propsData
 
 ### Bug Fixes
 
+* ensre default is exported after bundling ([#301](https://github.com/nativescript-vue/nativescript-vue/issues/301)) ([7e39039](https://github.com/nativescript-vue/nativescript-vue/commit/7e39039))
 * **typings:** add proper typings ([#289](https://github.com/nativescript-vue/nativescript-vue/issues/289)) ([bb265bd](https://github.com/nativescript-vue/nativescript-vue/commit/bb265bd))
 * **typings:** declare explicitly the location of the TS typings ([259640e](https://github.com/nativescript-vue/nativescript-vue/commit/259640e))
-* ensre default is exported after bundling ([#301](https://github.com/nativescript-vue/nativescript-vue/issues/301)) ([7e39039](https://github.com/nativescript-vue/nativescript-vue/commit/7e39039))
 * re-adding <keep-alive> elements to view ([#291](https://github.com/nativescript-vue/nativescript-vue/issues/291)) ([a953db5](https://github.com/nativescript-vue/nativescript-vue/commit/a953db5)), closes [#220](https://github.com/nativescript-vue/nativescript-vue/issues/220) [#220](https://github.com/nativescript-vue/nativescript-vue/issues/220)
 
 
