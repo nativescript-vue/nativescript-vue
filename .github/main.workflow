@@ -1,9 +1,9 @@
 workflow "Run issue bot" {
-  resolves = ["rigor789/nativescript-vue-issue-bot@actions"]
   on = "issues"
+  resolves = ["nativescript-vue/issue-bot-action"]
 }
 
-action "rigor789/nativescript-vue-issue-bot@actions" {
-  uses = "rigor789/nativescript-vue-issue-bot@actions"
-  secrets = ["BOT_TOKEN"]
+action "nativescript-vue/issue-bot-action" {
+  uses = "nativescript-vue/issue-bot-action@master"
+  secrets = ["BOT_TOKEN", "GH_TOKEN"]
 }
