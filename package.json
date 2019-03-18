@@ -5,7 +5,10 @@
   "main": "dist/index.js",
   "files": [
     "dist/index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "dist/hooks/**",
+    "postinstall.js",
+    "preuninstall.js"
   ],
   "typings": "index.d.ts",
   "scripts": {
@@ -20,7 +23,9 @@
     "release": "node build/releaser.js",
     "release:notes": "node build/gen-release-notes.js",
     "changelog": "conventional-changelog --release-count 0 --outfile CHANGELOG.md --preset angular",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "postinstall": "node postinstall.js",
+    "preuninstall": "node preuninstall.js"
   },
   "repository": {
     "type": "git",
@@ -47,9 +52,23 @@
       "pan": "false",
       "core3": "true",
       "category": "Developer"
-    }
+    },
+    "hooks": [
+      {
+        "type": "before-checkForChanges",
+        "script": "dist/hooks/before-checkForChanges.js",
+        "inject": true
+      },
+      {
+        "type": "before-watch",
+        "script": "dist/hooks/before-watch.js",
+        "inject": true
+      }
+    ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "nativescript-hook": "0.2.4"
+  },
   "devDependencies": {
     "@commitlint/cli": "^6.1.0",
     "@commitlint/config-conventional": "^6.1.0",

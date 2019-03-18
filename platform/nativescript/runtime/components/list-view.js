@@ -50,6 +50,10 @@ export default {
   },
 
   mounted() {
+    if (!this.$templates) {
+        return;
+    }
+
     this.$refs.listView.setAttribute(
       '_itemTemplatesInternal',
       this.$templates.getKeyedTemplates()
@@ -64,6 +68,10 @@ export default {
       this.$emit('itemTap', extend({ item: this.items[args.index] }, args))
     },
     onItemLoading(args) {
+      if (!this.$templates) {
+        return;
+      }
+ 
       const index = args.index
       const items = args.object.items
 
