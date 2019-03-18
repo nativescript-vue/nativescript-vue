@@ -5,4 +5,5 @@ workflow "Run issue bot" {
 
 action "rigor789/nativescript-vue-issue-bot@actions" {
   uses = "rigor789/nativescript-vue-issue-bot@actions"
+  secrets = ["BOT_TOKEN"]
 }
