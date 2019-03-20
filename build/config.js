@@ -18,7 +18,7 @@ const banner = (name, version) => `
  */
 `
 const intro = `
-if (!this['process']) {
+if (!global.process) {
   global.process = process = {env:{}}
 }
 `
