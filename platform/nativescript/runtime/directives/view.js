@@ -1,7 +1,7 @@
 export default {
   inserted(el, binding, vnode, oldNode) {
     const parent = el.parentNode.nativeView
-    const arg = binding.rawName.split(":")[1];
+    const arg = binding.arg;
     const modifiers = binding.modifiers;
     if (parent) {
       if (modifiers.array) {

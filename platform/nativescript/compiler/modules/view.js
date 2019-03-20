@@ -12,7 +12,7 @@ function transformNode(el) {
       return mods
     }, {})
     getAndRemoveAttr(el, attr, true)
-    addDirective(el, 'view', `v-view:${attrName}`, '', false, arg, modifiers)
+    addDirective(el, 'view', `v-view:${attrName}`, '', arg, false, modifiers)
   }
 }
 
