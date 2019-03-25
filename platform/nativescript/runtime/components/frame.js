@@ -158,32 +158,12 @@ export default {
 
         // replace the controllers instead of pushing directly
         frame._ios.controller.setViewControllersAnimated(newControllers, false)
-      } else {
-        const frameId = frame._android.frameId
-        frame._isBack = false
-        backstackEntry.frameId = frameId
-
-        const manager = frame._getFragmentManager()
-        const currentEntry = frame._currentEntry
-
-        const newFragmentTag = `fragment${frameId}[-1]`
-        const newFragment = frame.createFragment(backstackEntry, newFragmentTag)
-        const animated = false
-        const navigationTransition = null
-
-        const transaction = manager.beginTransaction()
-        _setAndroidFragmentTransitions(
-          animated,
-          navigationTransition,
-          currentEntry,
-          backstackEntry,
-          transaction,
-          frameId
-        )
-        transaction.remove(currentEntry.fragment)
-        transaction.replace(frame.containerViewId, newFragment, newFragmentTag)
-        transaction.commitAllowingStateLoss()
       }
+      // Note: in the Android platform there is nothing to do, as the
+      // page is able to change without the need of replacing the last
+      // navigation entry
+
+      // reset HMR checking flag
       resetHMRChecking()
     },
 
