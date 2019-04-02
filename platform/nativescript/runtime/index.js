@@ -12,6 +12,8 @@ import platformDirectives from './directives/index'
 
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
 
+import pageEventsMixin from './mixins/pageEventsMixin'
+
 export const VUE_VM_REF = '__vue_vm_ref__'
 
 Vue.config.mustUseProp = mustUseProp
@@ -62,6 +64,9 @@ Vue.prototype.$start = function() {
   Object.values(getElementMap()).forEach(entry => {
     Vue.component(entry.meta.component.name, entry.meta.component)
   })
+
+  // register page events
+  Vue.mixin(pageEventsMixin)
 
   on(launchEvent, args => {
     if (self.$el) {
