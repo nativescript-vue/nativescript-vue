@@ -46,15 +46,6 @@ NativeScript-Vue is an MIT-licensed open source project made possible by our spo
         </a>
       </td>
     </tr><tr></tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://yakaz.com/?source=nativescript-vue-github" target="_blank">
-          <img height="50px" src="https://art.nativescript-vue.org/sponsors/yakaz.png">
-        </a>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
   </tbody>
 </table>
 <!--/sponsors-->
