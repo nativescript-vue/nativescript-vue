@@ -1,5 +1,5 @@
 {
-  "main": "app-with-all-components.js",
+  "main": "app-with-shared-actionbar.js",
   "name": "nativescript-template-tutorial",
   "version": "1.0.1"
 }
