@@ -2,6 +2,7 @@ import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { isHMRChecking, resetHMRChecking } from '../../util/hmr'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
 import { ios as iosUtils } from 'tns-core-modules/utils/utils'
+import { _setAndroidFragmentTransitions } from 'tns-core-modules/ui/frame/fragment.transitions'
 
 let idCounter = 1
 

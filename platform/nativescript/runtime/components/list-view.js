@@ -51,7 +51,7 @@ export default {
 
   mounted() {
     if (!this.$templates) {
-        return;
+      return
     }
 
     this.$refs.listView.setAttribute(
@@ -69,9 +69,9 @@ export default {
     },
     onItemLoading(args) {
       if (!this.$templates) {
-        return;
+        return
       }
- 
+
       const index = args.index
       const items = args.object.items
 
