@@ -27,6 +27,7 @@ module.exports = env => {
 
     const platforms = ["ios", "android"];
     const projectRoot = __dirname;
+    const nsVueRoot = resolve(projectRoot, '../');
 
     // Default destination inside platforms/<platform>/...
     const dist = resolve(projectRoot, nsWebpack.getAppPath(platform, projectRoot));
@@ -92,7 +93,8 @@ module.exports = env => {
             alias: {
                 '~': appFullPath,
                 '@': appFullPath,
-                'vue': 'nativescript-vue'
+                'vue': 'nativescript-vue',
+                'nativescript-vue': resolve(nsVueRoot, 'dist/index.js'),
             },
             // resolve symlinks to symlinked modules
             symlinks: true,

@@ -22,8 +22,7 @@
     "nativescript-vue-devtools": "^1.1.0",
     "tns-core-modules": "^5.3.1",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "nativescript-vue": "file://.."
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "~7.1.0",
