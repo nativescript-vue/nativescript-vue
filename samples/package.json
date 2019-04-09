@@ -5,7 +5,7 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "5.3.0"
+      "version": "5.3.1"
     },
     "tns-ios": {
       "version": "5.3.0"
