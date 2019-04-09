@@ -1,4 +1,4 @@
-const Vue = require('./nativescript-vue')
+const Vue = require('nativescript-vue')
 const frame = require('tns-core-modules/ui/frame')
 const platform = require('tns-core-modules/platform')
 const utils = require('tns-core-modules/utils/utils')
