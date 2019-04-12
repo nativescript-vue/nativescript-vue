@@ -9,36 +9,15 @@
 </template>
 
 <script>
-const DetailsPage = {
-  template: `
-  <Page>
-    <ActionBar class="action-bar" title="Details Page">
-      <ActionItem text="Action"></ActionItem>
-    </ActionBar>
-    <StackLayout>
-      <Label :text="'Details ' + Math.random()" />
-      <Button text="another" @tap="openDetails" />
-      <Button text="back" @tap="goBack" />
-    </StackLayout>
-  </Page>
-  `,
-  methods: {
-    openDetails() {
-      this.$navigateTo(DetailsPage)
-    },
-    goBack() {
-      this.$navigateBack()
-    }
-  }
-}
+import Details from './Details'
 
 export default {
   components: [
-    DetailsPage,
+    Details,
   ],
   methods: {
     openPage() {
-      this.$navigateTo(DetailsPage)
+      this.$navigateTo(Details)
     }
   }
 }
