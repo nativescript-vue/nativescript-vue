@@ -102,7 +102,7 @@
     "util-inspect": "^0.1.8",
     "vue": "2.5.22",
     "vue-jest": "^3.0.4",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "2.5.22"
   },
   "jest": {
     "verbose": true,
