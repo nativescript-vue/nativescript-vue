@@ -72,9 +72,11 @@
   "devDependencies": {
     "@commitlint/cli": "^7.5.2",
     "@commitlint/config-conventional": "^7.5.0",
-    "babel-jest": "^22.1.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^21.2.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "chalk": "^2.3.0",
     "commitizen": "^2.10.1",
     "conventional-changelog-cli": "^1.3.14",
@@ -98,10 +100,17 @@
     "set-value": "^2.0.0",
     "tns-core-modules": "4.2.0",
     "util-inspect": "^0.1.8",
-    "vue": "2.5.22"
+    "vue": "2.5.22",
+    "vue-jest": "^3.0.4",
+    "vue-template-compiler": "^2.6.10"
   },
   "jest": {
     "verbose": true,
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
     "modulePaths": [
       "<rootDir>/platform/nativescript"
     ],
@@ -117,7 +126,13 @@
     ],
     "collectCoverage": true,
     "testURL": "http://localhost",
-    "testDirectoryName": "tests"
+    "testMatch": [
+      "**/tests/**/*.spec.(js|jsx|ts)"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    }
   },
   "prettier": {
     "semi": false,
