@@ -29,7 +29,6 @@ matrix:
       language: node_js
       node_js: "8"
       jdk: oraclejdk8
-      before_script: pod repo update
       script:
         - npm i && npm run prepare:test:app
         - cd samples && npm i && tns build ios --bundle --env.uglify --copy-to "./outputs/demo-ns-vue.app"
