@@ -75,6 +75,7 @@
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-core": "^6.26.3",
     "babel-jest": "^21.2.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.7.0",
     "chalk": "^2.3.0",
@@ -112,7 +113,9 @@
       "vue"
     ],
     "modulePaths": [
-      "<rootDir>/platform/nativescript"
+      "<rootDir>/platform/nativescript",
+      "<rootDir>/node_modules/vue/src",
+      "<rootDir>/node_modules/vue/src/platforms"
     ],
     "collectCoverageFrom": [
       "platform/**/*.js",
@@ -132,7 +135,13 @@
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-    }
+    },
+    "transformIgnorePatterns": [
+      "node_modules\/(?!vue)"
+    ],
+    "setupFiles": [
+      "<rootDir>/tests/jest-setup.js"
+    ]
   },
   "prettier": {
     "semi": false,

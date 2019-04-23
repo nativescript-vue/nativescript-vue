@@ -2,8 +2,8 @@
   "presets": ["env"],
   "env": {
     "test": {
-      "presets": ["env"],
-      "plugins": ["transform-flow-strip-types"]
+      "presets": [["babel-preset-env", { "targets": { "node": "current" } }]],
+      "plugins": ["transform-flow-strip-types", "transform-es2015-modules-commonjs"]
     }
   }
 }
