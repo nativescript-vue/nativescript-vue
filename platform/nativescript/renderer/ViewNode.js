@@ -1,6 +1,6 @@
 import set from 'set-value'
 
-import { getViewMeta, normalizeElementName } from '../element-registry'
+import { getViewMeta, normalizeElementName } from '../register'
 import * as viewUtil from './utils'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
 import * as types from 'tns-core-modules/utils/types'
