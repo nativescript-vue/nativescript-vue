@@ -4,8 +4,6 @@ global.process = global.process || {}
 global.process.env = global.process.env || {}
 
 import inspect from 'util-inspect'
-import { topmost } from 'tns-core-modules/ui/frame'
-import application from 'tns-core-modules/application'
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
@@ -59,6 +57,9 @@ console.keys = function(object) {
 // })
 
 global.__onLiveSyncCore = () => {
+  const topmost = require('tns-core-modules/ui/frame').topmost
+  const application = require('tns-core-modules/application')
+
   const frame = topmost()
   if (frame) {
     if (frame.currentPage && frame.currentPage.modal) {

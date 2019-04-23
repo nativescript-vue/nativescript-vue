@@ -1,8 +1,8 @@
 import { isObject, isDef, isPrimitive } from 'shared/util'
 import { getFrame } from '../util/frame'
-import { getFrameById } from 'tns-core-modules/ui/frame'
 
 export function getFrameInstance(frame) {
+  const getFrameById = require('tns-core-modules/ui/frame').getFrameById
   // get the frame that we need to navigate
   // this can be a frame id (String)
   // a Vue ref to a frame

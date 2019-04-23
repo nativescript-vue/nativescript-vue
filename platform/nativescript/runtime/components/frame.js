@@ -2,7 +2,6 @@ import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { isHMRChecking, resetHMRChecking } from '../../util/hmr'
 import { isAndroid, isIOS } from 'tns-core-modules/platform'
 import { ios as iosUtils } from 'tns-core-modules/utils/utils'
-import { _setAndroidFragmentTransitions } from 'tns-core-modules/ui/frame/fragment.transitions'
 
 let idCounter = 1
 
@@ -104,6 +103,9 @@ export default {
     },
 
     replace(entry) {
+      const _setAndroidFragmentTransitions = require('tns-core-modules/ui/frame/fragment.transitions')
+        ._setAndroidFragmentTransitions
+
       const frame = this._getFrame()
       const page = entry.create()
       entry.create = () => page

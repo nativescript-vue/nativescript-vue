@@ -1,4 +1,4 @@
-import { isKnownView, getViewMeta, getViewClass } from '../element-registry'
+import { isKnownView, getViewMeta, getViewClass } from '../register'
 import { makeMap, once } from 'shared/util'
 import { VUE_VM_REF } from '../runtime'
 
