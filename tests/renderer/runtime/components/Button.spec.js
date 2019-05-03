@@ -3,11 +3,13 @@ import { getComponentByName } from 'register'
 
 
 const Button = getComponentByName('Button')
+const Label = getComponentByName('Label')
 const StackLayout = getComponentByName('StackLayout')
 
 const ButtonTest = {
   components: {
     Button,
+    Label,
     StackLayout
   },
   template: `
@@ -29,11 +31,10 @@ const ButtonTest = {
 }
 
 describe('Button', () => {
-  const Button = getComponentByName('Button')
   const wrapper = mount(ButtonTest)
 
   it('renders the correct markup', () => {
-    expect(wrapper.html()).toContain('<nativestacklayout><label text="0"></label> <nativebutton>Increment</nativebutton></nativestacklayout>')
+    expect(wrapper.html()).toContain('<nativestacklayout><nativelabel text="0"></nativelabel> <nativebutton>Increment</nativebutton></nativestacklayout>')
   })
 
   it('has a button', () => {
@@ -45,6 +46,6 @@ describe('Button', () => {
     const button = wrapper.find('nativebutton')
     button.trigger('tap')
     expect(wrapper.vm.count).toBe(1)
-    expect(wrapper.html()).toContain('<nativestacklayout><label text="1"></label> <nativebutton>Increment</nativebutton></nativestacklayout>')
+    expect(wrapper.html()).toContain('<nativestacklayout><nativelabel text="1"></nativelabel> <nativebutton>Increment</nativebutton></nativestacklayout>')
   })
 })
