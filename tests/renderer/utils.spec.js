@@ -1,24 +1,5 @@
 import * as utils from 'renderer/utils'
 
-jest.mock('tns-core-modules/ui/core/view', () => {
-  return {
-    View() {
-    }
-  }
-}, {virtual: true})
-jest.mock('tns-core-modules/ui/content-view', () => {
-  return {
-    ContentView() {
-    }
-  }
-}, {virtual: true})
-jest.mock('tns-core-modules/ui/layouts/layout-base', () => {
-  return {
-    LayoutBase() {
-    }
-  }
-}, {virtual: true})
-
 const getParentAndChild = (parentType) => {
   return {
     parentNode: {
