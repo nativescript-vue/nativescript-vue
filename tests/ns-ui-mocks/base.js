@@ -1,4 +1,4 @@
-class BaseComponent {
+class NSComponent {
   constructor() {
     this._eventListener = []
   }
@@ -17,4 +17,4 @@ class BaseComponent {
   }
 }
 
-module.exports = BaseComponent
+module.exports = NSComponent

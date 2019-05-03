@@ -51,6 +51,12 @@ export function getElementMap() {
   return elementMap
 }
 
+export function getComponentByName(name) {
+  return Object.values(getElementMap()).find(entry => {
+    return entry.meta.component.name == name
+  }).meta.component
+}
+
 export function getViewClass(elementName) {
   const normalizedName = normalizeElementName(elementName)
   const entry = elementMap[normalizedName]
