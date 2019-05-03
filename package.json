@@ -124,6 +124,10 @@
     "moduleDirectories": [
       "node_modules"
     ],
+    "moduleNameMapper": {
+      "^compiler/(.*)": "<rootDir>/node_modules/vue/src/compiler/$1",
+      "^core/(.*)": "<rootDir>/node_modules/vue/src/core/$1"
+    },
     "modulePathIgnorePatterns": [
       "<rootDir>/samples"
     ],
