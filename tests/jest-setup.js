@@ -30,10 +30,10 @@ jest.mock('tns-core-modules/ui/layouts/layout-base', () => {
   }
 }, {virtual: true})
 
-
 import { registerElement } from 'register'
 
 registerElement('Button', () => require('ns-ui-mocks/button').Button)
 registerElement('Label', () => require('ns-ui-mocks/label').Label)
+registerElement('Frame', () => require('ns-ui-mocks/frame').Frame)
+registerElement('Page', () => require('ns-ui-mocks/page').Page)
 registerElement('StackLayout', () => require('ns-ui-mocks/stacklayout').StackLayout)
-
