@@ -41,8 +41,8 @@ function buildEntry(config) {
 
   return rollup.rollup(config)
     .then(bundle => bundle.generate(output))
-    .then(({ code }) => {
-      return write(file, code)
+    .then((res) => {
+      return write(file, res.output[0].code)
     })
 }
 
