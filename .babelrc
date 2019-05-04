@@ -1,8 +1,8 @@
 {
-  "presets": ["env"],
+  "presets": ["@babel/preset-env"],
   "env": {
     "test": {
-      "presets": ["env"],
+      "presets": ["@babel/preset-env"],
       "plugins": ["transform-flow-strip-types"]
     }
   }
