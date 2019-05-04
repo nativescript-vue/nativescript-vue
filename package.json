@@ -70,6 +70,7 @@
     "nativescript-hook": "0.2.5"
   },
   "devDependencies": {
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "@babel/preset-env": "7.4.4",
     "@commitlint/cli": "7.5.2",
     "@commitlint/config-conventional": "7.5.0",
