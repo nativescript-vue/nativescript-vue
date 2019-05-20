@@ -17,7 +17,7 @@
     "nativescript-socketio": "^3.2.1",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-toasty": "^1.3.0",
-    "nativescript-ui-gauge": "^3.7.1",
+    "nativescript-ui-gauge": "^3.8.0",
     "nativescript-ui-sidedrawer": "^4.3.0",
     "nativescript-vue-devtools": "^1.1.0",
     "tns-core-modules": "^5.3.1",

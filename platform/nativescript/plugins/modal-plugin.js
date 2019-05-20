@@ -30,7 +30,9 @@ export default {
 
     Vue.prototype.$showModal = function(component, options) {
       const defaultOptions = {
-        fullscreen: false
+        fullscreen: false,
+        animated: true,
+        stretched: false
       }
       // build options object with defaults
       options = Object.assign({}, defaultOptions, options)
@@ -63,12 +65,13 @@ export default {
         })
         const modalPage = navEntryInstance.$mount().$el.nativeView
 
-        this.$el.nativeView.showModal(
-          modalPage,
-          null,
-          closeCb,
-          options.fullscreen
-        )
+        this.$el.nativeView.showModal(modalPage, {
+          context: null,
+          closeCallback: closeCb,
+          fullscreen: options.fullscreen,
+          animated: options.animated,
+          stretched: options.stretched
+        })
       })
     }
   }

@@ -24,7 +24,7 @@ const ModalComponent = {
             <Label :text="foo"/>
             <FooComp></FooComp>
         </StackLayout>
-    </Page> 
+    </Page>
 </Frame>
   `,
   components: { FooComp }
@@ -33,7 +33,10 @@ const ModalComponent = {
 new Vue({
   data() {
     return {
-      modalResult: 'No result yet.'
+      modalResult: 'No result yet.',
+      animated: true,
+      fullscreen: true,
+      stretched: false
     }
   },
   template: `
@@ -42,8 +45,20 @@ new Vue({
         <ActionBar title="Modals" />
 
         <StackLayout>
-            <Label :text="modalResult" />
-            <Button text="Open Modal" @tap="openModal"/>
+          <FlexboxLayout justifyContent="center">
+            <Label text="Animated" />
+            <Switch v-model="animated" />
+          </FlexboxLayout>
+          <FlexboxLayout justifyContent="center">
+            <Label text="Stretched" />
+            <Switch v-model="stretched" />
+          </FlexboxLayout>
+          <FlexboxLayout justifyContent="center">
+            <Label text="Fullscreen" />
+            <Switch v-model="fullscreen" />
+          </FlexboxLayout>
+          <Button text="Open Modal" @tap="openModal"/>
+          <Label :text="modalResult" />
         </StackLayout>
       </Page>
     </Frame>
@@ -52,7 +67,9 @@ new Vue({
     openModal() {
       this.$showModal(ModalComponent, {
         props: { foo: 'bar' },
-        fullscreen: true
+        animated: this.animated,
+        fullscreen: this.fullscreen,
+        stretched: this.stretched
       }).then(res => {
         this.modalResult = res
       })
