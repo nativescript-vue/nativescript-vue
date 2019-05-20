@@ -1,4 +1,4 @@
-const Vue = require('./nativescript-vue')
+const Vue = require('nativescript-vue')
 const Vuex = require('vuex')
 
 Vue.use(Vuex)

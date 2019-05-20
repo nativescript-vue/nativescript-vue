@@ -1,4 +1,4 @@
-const Vue = require('./nativescript-vue')
+const Vue = require('nativescript-vue')
 
 Vue.config.debug = true
 Vue.config.silent = false
@@ -14,7 +14,7 @@ new Vue({
       template: `
         <StackLayout :color="counter < 5 ? 'red' : 'blue'">
             <slot :counter="counter"/>
-            
+
             <Button text="+1" @tap="counter++"/>
         </StackLayout>
       `
