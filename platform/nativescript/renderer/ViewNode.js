@@ -2,9 +2,6 @@ import set from 'set-value'
 
 import { getViewMeta, normalizeElementName } from '../element-registry'
 import * as viewUtil from './utils'
-import { isAndroid, isIOS } from 'tns-core-modules/platform'
-import * as types from 'tns-core-modules/utils/types'
-import { XmlParser } from 'tns-core-modules/xml'
 
 const XML_ATTRIBUTES = Object.freeze([
   'style',
@@ -95,6 +92,7 @@ export default class ViewNode {
 
   /* istanbul ignore next */
   setAttribute(key, value) {
+    const { isAndroid, isIOS } = require('tns-core-modules/platform')
     const nv = this.nativeView
 
     try {
@@ -103,7 +101,10 @@ export default class ViewNode {
       } else {
         // detect expandable attrs for boolean values
         // See https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
-        if (types.isBoolean(nv[key]) && value === '') {
+        if (
+          require('tns-core-modules/utils/types').isBoolean(nv[key]) &&
+          value === ''
+        ) {
           value = true
         }
 
@@ -112,7 +113,13 @@ export default class ViewNode {
         } else if (isIOS && key.startsWith('ios:')) {
           set(nv, key.substr(4), value)
         } else if (key.endsWith('.decode')) {
-          set(nv, key.slice(0, -7), XmlParser._dereferenceEntities(value))
+          set(
+            nv,
+            key.slice(0, -7),
+            require('tns-core-modules/xml').XmlParser._dereferenceEntities(
+              value
+            )
+          )
         } else {
           set(nv, key, value)
         }

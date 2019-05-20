@@ -1,8 +1,5 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { isHMRChecking, resetHMRChecking } from '../../util/hmr'
-import { isAndroid, isIOS } from 'tns-core-modules/platform'
-import { ios as iosUtils } from 'tns-core-modules/utils/utils'
-import { _setAndroidFragmentTransitions } from 'tns-core-modules/ui/frame/fragment.transitions'
 
 let idCounter = 1
 
@@ -73,6 +70,7 @@ export default {
     },
 
     _composeTransition(entry) {
+      const isAndroid = require('tns-core-modules/platform').isAndroid
       const platformEntryProp = `transition${isAndroid ? 'Android' : 'iOS'}`
       const entryProp = entry[platformEntryProp]
         ? platformEntryProp
@@ -115,7 +113,7 @@ export default {
         fragmentTag: undefined
       }
       // TODO: this should be in a specific NS Frame method
-      if (isIOS) {
+      if (require('tns-core-modules/platform').isIOS) {
         let viewController = backstackEntry.resolvedPage.ios
         if (!viewController) {
           throw new Error(
@@ -127,7 +125,7 @@ export default {
         frame._ios.controller.delegate = null
         viewController['_entry'] = backstackEntry
 
-        if (iosUtils.MajorVersion > 10) {
+        if (require('tns-core-modules/utils/utils').ios.MajorVersion > 10) {
           // Reset back button title before pushing view controller to prevent
           // displaying default 'back' title (when NavigationButton custom title is set).
           let barButtonItem = UIBarButtonItem.alloc().initWithTitleStyleTargetAction(
@@ -172,7 +170,7 @@ export default {
         const navigationTransition = null
 
         const transaction = manager.beginTransaction()
-        _setAndroidFragmentTransitions(
+        require('tns-core-modules/ui/frame/fragment.transitions')._setAndroidFragmentTransitions(
           animated,
           navigationTransition,
           currentEntry,
