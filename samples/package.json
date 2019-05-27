@@ -29,7 +29,7 @@
     "@babel/preset-env": "~7.1.0",
     "babel-loader": "^8.0.5",
     "nativescript-dev-webpack": "^0.21.0",
-    "nativescript-vue-template-compiler": "~2.2.0",
+    "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
     "vue-loader": "~15.4.0"
   }
 }
