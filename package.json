@@ -93,10 +93,9 @@
     "rollup-plugin-node-resolve": "4.2.3",
     "rollup-plugin-replace": "2.2.0",
     "rollup-plugin-resolve-aliases": "0.2.0",
-    "rollup-watch": "4.3.1",
     "semver": "6.0.0",
     "set-value": "3.0.0",
-    "tns-core-modules": "5.3.2",
+    "tns-core-modules": "5.4.1",
     "util-inspect": "0.1.8",
     "vue": "2.6.10"
   },
