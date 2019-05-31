@@ -1,7 +1,7 @@
 const Vue = require('nativescript-vue')
-const VueDevtools = require('nativescript-vue-devtools')
+// const VueDevtools = require('nativescript-vue-devtools')
 
-Vue.use(VueDevtools)
+// Vue.use(VueDevtools)
 
 Vue.config.debug = true
 Vue.config.silent = false
