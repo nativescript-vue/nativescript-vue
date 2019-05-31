@@ -1,3 +1,21 @@
+<a name="2.3.0-rc.0"></a>
+# [2.3.0-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.2.2...v2.3.0-rc.0) (2019-05-31)
+
+
+### Bug Fixes
+
+* **hooks:** make hooks compatible with CLI's 6.0.0 changes ([#500](https://github.com/nativescript-vue/nativescript-vue/issues/500)) ([6f8945e](https://github.com/nativescript-vue/nativescript-vue/commit/6f8945e))
+* **listview:** only require tns module at runtime ([4c00885](https://github.com/nativescript-vue/nativescript-vue/commit/4c00885))
+* **ListView:** allow ObservableArray items in ListView (Fixes [#464](https://github.com/nativescript-vue/nativescript-vue/issues/464)) ([#498](https://github.com/nativescript-vue/nativescript-vue/issues/498)) ([a904c7b](https://github.com/nativescript-vue/nativescript-vue/commit/a904c7b))
+* build and use local template compiler in samples ([0282eca](https://github.com/nativescript-vue/nativescript-vue/commit/0282eca))
+
+
+### Features
+
+* upgrade to vue 2.6 ([e983a90](https://github.com/nativescript-vue/nativescript-vue/commit/e983a90))
+
+
+
 <a name="2.2.2"></a>
 ## [2.2.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.2.1...v2.2.2) (2019-04-10)
 
