@@ -1,12 +1,14 @@
 import { VUE_VIEW } from './v-template'
 import { extend } from 'shared/util'
-import { ObservableArray } from 'tns-core-modules/data/observable-array'
 
 export default {
   props: {
     items: {
       type: Object,
-      validator: val => Array.isArray(val) || val instanceof ObservableArray,
+      validator: val => {
+        const ObservableArray = require('tns-core-modules/data/observable-array')
+        return Array.isArray(val) || val instanceof ObservableArray
+      },
       required: true
     },
     '+alias': {
