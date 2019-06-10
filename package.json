@@ -70,10 +70,15 @@
     "nativescript-hook": "0.2.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.5",
     "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "7.4.4",
+    "@babel/register": "^7.4.4",
     "@commitlint/cli": "7.5.2",
     "@commitlint/config-conventional": "7.5.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "babel-jest": "24.7.1",
     "chalk": "2.4.2",
     "commitizen": "3.1.1",
@@ -97,49 +102,9 @@
     "set-value": "3.0.0",
     "tns-core-modules": "5.4.1",
     "util-inspect": "0.1.8",
-    "vue": "2.6.10"
-  },
-  "jest": {
-    "verbose": true,
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "vue"
-    ],
-    "modulePaths": [
-      "<rootDir>/platform/nativescript",
-      "<rootDir>/node_modules/vue/src",
-      "<rootDir>/node_modules/vue/src/platforms"
-    ],
-    "collectCoverageFrom": [
-      "platform/**/*.js",
-      "!**/node_modules/**"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "moduleNameMapper": {
-      "^compiler/(.*)": "<rootDir>/node_modules/vue/src/compiler/$1",
-      "^core/(.*)": "<rootDir>/node_modules/vue/src/core/$1"
-    },
-    "modulePathIgnorePatterns": [
-      "<rootDir>/samples"
-    ],
-    "collectCoverage": true,
-    "testURL": "http://localhost",
-    "testMatch": [
-      "**/tests/**/*.spec.(js|jsx|ts)"
-    ],
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules\/(?!vue)"
-    ],
-    "setupFiles": [
-      "<rootDir>/tests/jest-setup.js"
-    ]
+    "vue": "2.6.10",
+    "vue-jest": "^3.0.4",
+    "vue-template-compiler": "2.6.10"
   },
   "prettier": {
     "semi": false,
