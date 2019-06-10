@@ -4,7 +4,11 @@ import { extend } from 'shared/util'
 export default {
   props: {
     items: {
-      type: Array,
+      type: Object,
+      validator: val => {
+        const ObservableArray = require('tns-core-modules/data/observable-array')
+        return Array.isArray(val) || val instanceof ObservableArray
+      },
       required: true
     },
     '+alias': {
@@ -65,7 +69,7 @@ export default {
 
   methods: {
     onItemTap(args) {
-      this.$emit('itemTap', extend({ item: this.items[args.index] }, args))
+      this.$emit('itemTap', extend({ item: this.getItem(args.index) }, args))
     },
     onItemLoading(args) {
       if (!this.$templates) {
@@ -75,10 +79,7 @@ export default {
       const index = args.index
       const items = args.object.items
 
-      const currentItem =
-        typeof items.getItem === 'function'
-          ? items.getItem(index)
-          : items[index]
+      const currentItem = this.getItem(index)
 
       const name = args.object._itemTemplateSelector(currentItem, index, items)
       const context = this.getItemContext(currentItem, index)
@@ -88,6 +89,11 @@ export default {
     },
     refresh() {
       this.$refs.listView.nativeView.refresh()
+    },
+    getItem(idx) {
+      return typeof this.items.getItem === 'function'
+        ? this.items.getItem(idx)
+        : this.items[idx]
     }
   }
 }

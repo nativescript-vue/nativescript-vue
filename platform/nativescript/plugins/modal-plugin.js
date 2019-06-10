@@ -29,14 +29,6 @@ export default {
     })
 
     Vue.prototype.$showModal = function(component, options) {
-      const defaultOptions = {
-        fullscreen: false,
-        animated: true,
-        stretched: false
-      }
-      // build options object with defaults
-      options = Object.assign({}, defaultOptions, options)
-
       return new Promise(resolve => {
         let resolved = false
         const closeCb = data => {
@@ -52,6 +44,12 @@ export default {
           navEntryInstance.$destroy()
         }
 
+        // build options object with defaults
+        options = Object.assign({}, options, {
+          context: null,
+          closeCallback: closeCb
+        })
+
         const navEntryInstance = new Vue({
           name: 'ModalEntry',
           parent: this.$root,
@@ -65,13 +63,7 @@ export default {
         })
         const modalPage = navEntryInstance.$mount().$el.nativeView
 
-        this.$el.nativeView.showModal(modalPage, {
-          context: null,
-          closeCallback: closeCb,
-          fullscreen: options.fullscreen,
-          animated: options.animated,
-          stretched: options.stretched
-        })
+        this.$el.nativeView.showModal(modalPage, options)
       })
     }
   }

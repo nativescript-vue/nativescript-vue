@@ -6,6 +6,7 @@ const samplePackage = require('../samples/app/package.json')
 const originalMain = samplePackage.main
 
 let tns
+let args = process.argv.slice(2)
 
 const files = fs
   .readdirSync(path.resolve(__dirname, '../samples/app'))
@@ -40,11 +41,11 @@ inquirer
   })
 
 function runPlatform(platform) {
-  tns = spawn('tns', ['debug', platform], {
+  tns = spawn('tns', ['debug', platform, '--syncAllFiles', '--bundle'].concat(args), {
     cwd: path.resolve(__dirname, '../samples')
   })
 
-  tns.on('error', err => console.log(err))
+  tns.on('error', err => console.error(err))
   tns.stdout.on('data', data => process.stdout.write(platform + ': ' +data))
 }
 

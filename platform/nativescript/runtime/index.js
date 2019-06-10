@@ -2,15 +2,12 @@ import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
-import { registerElement, getElementMap } from '../register'
+import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
+import { registerElement, getElementMap } from '../element-registry'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
 import platformDirectives from './directives/index'
-
-import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
-
-export const VUE_VM_REF = '__vue_vm_ref__'
 
 Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
@@ -54,7 +51,6 @@ Vue.prototype.$mount = function(el, hydrating) {
 
 Vue.prototype.$start = function() {
   const application = require('tns-core-modules/application')
-
   let self = this
   const AppConstructor = Vue.extend(this.$options)
 

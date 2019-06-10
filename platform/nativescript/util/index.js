@@ -1,6 +1,6 @@
 import { isKnownView, getViewMeta, getViewClass } from '../register'
 import { makeMap, once } from 'shared/util'
-import { VUE_VM_REF } from '../runtime'
+import { VUE_VM_REF } from '../constants'
 
 export const isReservedTag = makeMap('template', true)
 
