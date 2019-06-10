@@ -42,6 +42,7 @@ inquirer
 
 function runPlatform(platform) {
   tns = spawn('tns', ['debug', platform, '--syncAllFiles', '--bundle'].concat(args), {
+    shell: true,
     cwd: path.resolve(__dirname, '../samples')
   })
 
