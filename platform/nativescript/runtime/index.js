@@ -3,7 +3,7 @@ import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
-import { registerElement, getElementMap } from '../element-registry'
+import { registerElement, getElementMap } from '../register'
 
 import Vue from 'core/index'
 import DocumentNode from '../renderer/DocumentNode'
