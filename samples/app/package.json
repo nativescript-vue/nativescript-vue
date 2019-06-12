@@ -1,5 +1,5 @@
 {
-  "main": "app-with-radsidedrawer-tabs-and-router.js",
+  "main": "app-to-check-hmr.js",
   "name": "nativescript-template-tutorial",
   "version": "1.0.1"
 }
