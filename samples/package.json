@@ -5,15 +5,15 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "5.4.0"
+      "version": "next"
     },
     "tns-ios": {
-      "version": "5.4.0"
+      "version": "6.0.0-2019-06-10-154118-03"
     }
   },
   "scripts": {
     "e2e": "node ./node_modules/nativescript-dev-appium/check-dev-deps.js && mocha --opts ./e2e/config/mocha.opts"
-  }
+  },
   "dependencies": {
     "@vue/devtools": "5.1.0",
     "nativescript-pager": "9.5.4",
@@ -21,7 +21,7 @@
     "nativescript-ui-gauge": "4.0.0",
     "nativescript-ui-sidedrawer": "6.0.0",
     "nativescript-vue-devtools": "1.2.0",
-    "tns-core-modules": "5.4.1",
+    "tns-core-modules": "next",
     "vue-router": "3.0.6",
     "vuex": "3.1.1"
   },
@@ -36,7 +36,7 @@
     "@babel/core": "7.4.5",
     "@babel/preset-env": "7.4.5",
     "babel-loader": "8.0.6",
-    "nativescript-dev-webpack": "0.24.0",
+    "nativescript-dev-webpack": "webpack",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
     "vue-loader": "15.7.0"
   }
