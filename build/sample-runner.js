@@ -41,7 +41,7 @@ inquirer
   })
 
 function runPlatform(platform) {
-  tns = spawn('tns', ['debug', platform, '--syncAllFiles', '--bundle'].concat(args), {
+  tns = spawn('tns', ['debug', platform].concat(args), {
     cwd: path.resolve(__dirname, '../samples')
   })
 
