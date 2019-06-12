@@ -1,17 +1,16 @@
-import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base'
-import { ContentView } from 'tns-core-modules/ui/content-view'
-import { View } from 'tns-core-modules/ui/core/view'
-
 export function isView(view) {
-  return view instanceof View
+  return view instanceof require('tns-core-modules/ui/core/view').View
 }
 
 export function isLayout(view) {
-  return view instanceof LayoutBase
+  return (
+    view instanceof
+    require('tns-core-modules/ui/layouts/layout-base').LayoutBase
+  )
 }
 
 export function isContentView(view) {
-  return view instanceof ContentView
+  return view instanceof require('tns-core-modules/ui/content-view').ContentView
 }
 
 export function insertChild(parentNode, childNode, atIndex = -1) {

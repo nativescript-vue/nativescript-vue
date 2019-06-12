@@ -1,4 +1,4 @@
-const Vue = require('./nativescript-vue')
+const Vue = require('nativescript-vue')
 const VueRouter = require('vue-router')
 const application = require('tns-core-modules/application')
 

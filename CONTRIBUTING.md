@@ -29,7 +29,7 @@ After cloning the repo, run:
 # Commonly used NPM scripts
 
 ```bash
-$ # watch and auto re-build samples/app/nativescript-vue.js
+$ # watch and auto re-build dist/index.js
 $ npm run dev
 ```
 
@@ -38,6 +38,8 @@ $ npm run dev
 To test the sample applications provided in the repository, you need to `npm run dev` in the root directory. This will watch for changes, and rebuild nativescript-vue, which in dev mode will be generated into the samples/app directory (this has been done to reduce the required steps of linking local packages, which had many issues with the recent releases of npm).
 
 Next, open up a new terminal window and run `npm run samples`. This will bring up a list of all the available sample applications which you can choose from with your arrow keys. Pressing enter/return will select that sample, and prompt you to choose the platform you'd like to run the sample on. After selecting the platform the application should start on your emulator, and the output will be in your terminal.
+
+If you want to test the sample apps with HMR activated, please run `npm run samples -- --hmr` instead. Actually, we can pass any arguments to the `tns debug platform` command placing them after the `--` separator.
 
 # Project Structure
 
@@ -57,7 +59,7 @@ Next, open up a new terminal window and run `npm run samples`. This will bring u
 
 There is [currently] a bug in devDependencies husky 0.15 beta that aborts `npm install` if `.git/hooks` is missing.
 
-https://github.com/typicode/husky/issues/195 
+https://github.com/typicode/husky/issues/195
 
 ```
 > husky@0.15.0-rc.3 postinstall /.../nativescript-vue/node_modules/husky

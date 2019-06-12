@@ -1,4 +1,3 @@
-import { isAndroid } from 'tns-core-modules/platform'
 import {
   findParentNavigationEntry,
   getFrameInstance
@@ -23,7 +22,7 @@ export default {
 
     let frame = null
 
-    if (isHMRChecking() && !isAndroid) {
+    if (isHMRChecking() && !require('tns-core-modules/platform').isAndroid) {
       const navEntry = findParentNavigationEntry(this)
       const options = {
         frame: navEntry ? navEntry.$options.frame : 'default'

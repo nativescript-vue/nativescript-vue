@@ -1,9 +1,7 @@
-const { isAndroid } = require('tns-core-modules/platform')
-
 export default {
   functional: true,
   render(h, { children }) {
-    if (isAndroid) {
+    if (require('tns-core-modules/platform').isAndroid) {
       return children
     }
   }
