@@ -30,7 +30,7 @@ module.exports = env => {
     const projectRoot = __dirname;
     const nsVueRoot = resolve(projectRoot, '../');
 
-    // Default destination inside platforms/<platform>/...
+  // Default destination inside platforms/<platform>/...
     const dist = resolve(projectRoot, nsWebpack.getAppPath(platform, projectRoot));
     const appResourcesPlatformDir = platform === "android" ? "Android" : "iOS";
 
@@ -65,7 +65,8 @@ module.exports = env => {
     if (platform === "ios") {
         entries["tns_modules/tns-core-modules/inspector_modules"] = "inspector_modules.js";
     };
-    console.log(`Bundling application for entryPath ${entryPath}...`);
+
+  console.log(`Bundling application for entryPath ${entryPath}...`);
 
     let sourceMapFilename = nsWebpack.getSourceMapFilename(hiddenSourceMap, __dirname, dist);
 
@@ -81,7 +82,6 @@ module.exports = env => {
             ],
         },
         target: nativescriptTarget,
-        // target: nativeScriptVueTarget,
         entry: entries,
         output: {
             pathinfo: false,
@@ -277,7 +277,7 @@ module.exports = env => {
         );
     }
 
-    // Copy the native app resources to the out dir
+  // Copy the native app resources to the out dir
     // only if doing a full build (tns run/build) and not previewing (tns preview)
     if (!externals || externals.length === 0) {
         config.plugins.push(new CopyWebpackPlugin([
