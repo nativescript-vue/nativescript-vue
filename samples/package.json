@@ -5,7 +5,7 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "next"
+      "version": "6.0.0-2019-06-12-140945-01"
     },
     "tns-ios": {
       "version": "6.0.0-2019-06-10-154118-03"
