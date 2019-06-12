@@ -10,7 +10,7 @@ git:
   depth: 1
 
 branches:
-  only: 
+  only:
     - master
 
 matrix:
@@ -18,8 +18,8 @@ matrix:
     - stage: "Unit Tests"
       language: node_js
       os: linux
-      node_js: "8"
-      script: npm i && npm run test
+      node_js: "11"
+      script: npm ci && npm run test
     - stage: "Build app"
       os: osx
       env:
@@ -27,11 +27,11 @@ matrix:
         - Type="VueJS"
       osx_image: xcode10.0
       language: node_js
-      node_js: "8"
+      node_js: "11"
       jdk: oraclejdk8
       script:
-        - npm i && npm run prepare:test:app
-        - cd samples && npm i && tns build ios --bundle --env.uglify --copy-to "./outputs/demo-ns-vue.app"
+        - npm ci && npm run dev:core
+        - cd samples && npm i && tns build ios --copy-to "./outputs/nativescript-vue-tests.app"
         - cd $IOS_PACKAGE_FOLDER_VUE && zip -r $IOS_PACKAGE_VUE demo-ns-vue.app
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $SAUCE_STORAGE/$IOS_PACKAGE_VUE?overwrite=true --data-binary @$IOS_PACKAGE_FOLDER_VUE/$IOS_PACKAGE_VUE"
     - language: android
@@ -40,10 +40,10 @@ matrix:
         - WebpackAndroid="28"
         - Type="VueJS"
       jdk: oraclejdk8
-      before_install: nvm install 8
+      before_install: nvm install 11
       script:
-        - npm i && npm run prepare:test:app
-        - cd samples && npm i && tns build android --bundle --env.uglify --copy-to "./outputs/demo-ns-vue.apk"
+        - npm ci && npm run dev:core
+        - cd samples && npm i && tns build android --copy-to "./outputs/nativescript-vue-tests.apk"
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $SAUCE_STORAGE/$ANDROID_PACKAGE_VUE?overwrite=true --data-binary @$ANDROID_PACKAGE_FOLDER_VUE/$ANDROID_PACKAGE_VUE"
     - stage: "UI Tests"
       env:
@@ -51,7 +51,7 @@ matrix:
         - Type="VueJS"
       language: node_js
       os: linux
-      node_js: "8"
+      node_js: "11"
       script:
         - npm i -g appium
         - cd samples && npm i
@@ -61,8 +61,7 @@ matrix:
         - Android="24"
         - Type="VueJS"
       language: node_js
-      os: linux
-      node_js: "8"
+      node_js: "11"
       script:
         - npm i -g appium
         - cd samples && npm i
@@ -85,11 +84,11 @@ cache:
         - .nvm
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
-        
+
 before_install:
     - sudo pip install --upgrade pip
     - sudo pip install six
-        
+
 install:
     - echo no | npm install -g nativescript
     - tns usage-reporting disable

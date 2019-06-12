@@ -1,5 +1,5 @@
 {
-  "main": "app-with-radsidedrawer-tabs-and-router.js",
-  "name": "nativescript-template-tutorial",
+  "main": "app-to-check-v-slot.js",
+  "name": "nativescript-vue-tests",
   "version": "1.0.1"
 }
