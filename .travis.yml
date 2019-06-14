@@ -1,9 +1,9 @@
 env:
   global:
-    - ANDROID_PACKAGE_VUE='demo-ns-vue.apk'
+    - ANDROID_PACKAGE_VUE='nativescript-vue-tests.apk'
     - ANDROID_PACKAGE_FOLDER_VUE=$TRAVIS_BUILD_DIR/samples/outputs
     - SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER"
-    - IOS_PACKAGE_VUE='demo-ns-vue.zip'
+    - IOS_PACKAGE_VUE='nativescript-vue-tests.zip'
     - IOS_PACKAGE_FOLDER_VUE=$TRAVIS_BUILD_DIR/samples/outputs
 
 git:
@@ -32,7 +32,7 @@ matrix:
       script:
         - npm ci && npm run dev:core
         - cd samples && npm i && tns build ios --copy-to "./outputs/nativescript-vue-tests.app"
-        - cd $IOS_PACKAGE_FOLDER_VUE && zip -r $IOS_PACKAGE_VUE demo-ns-vue.app
+        - cd $IOS_PACKAGE_FOLDER_VUE && zip -r $IOS_PACKAGE_VUE nativescript-vue-tests.app
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $SAUCE_STORAGE/$IOS_PACKAGE_VUE?overwrite=true --data-binary @$IOS_PACKAGE_FOLDER_VUE/$IOS_PACKAGE_VUE"
     - language: android
       os: linux
