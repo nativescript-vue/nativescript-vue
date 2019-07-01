@@ -1,3 +1,13 @@
+<a name="2.3.0-rc.1"></a>
+# [2.3.0-rc.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.0...v2.3.0-rc.1) (2019-07-01)
+
+
+### Bug Fixes
+
+* import `application` module ([#512](https://github.com/nativescript-vue/nativescript-vue/issues/512)) ([3f03251](https://github.com/nativescript-vue/nativescript-vue/commit/3f03251))
+
+
+
 <a name="2.3.0-rc.0"></a>
 # [2.3.0-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.2.2...v2.3.0-rc.0) (2019-05-31)
 
