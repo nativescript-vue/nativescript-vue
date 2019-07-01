@@ -1,3 +1,6 @@
+// Ensure `application` module is loaded
+// before overriding `global.__onLiveSyncCore`
+import { run, on, launchEvent } from 'tns-core-modules/application'
 import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
@@ -50,7 +53,6 @@ Vue.prototype.$mount = function(el, hydrating) {
 }
 
 Vue.prototype.$start = function() {
-  const application = require('tns-core-modules/application')
   let self = this
   const AppConstructor = Vue.extend(this.$options)
 
@@ -59,7 +61,7 @@ Vue.prototype.$start = function() {
     Vue.component(entry.meta.component.name, entry.meta.component)
   })
 
-  application.on(application.launchEvent, args => {
+  on(launchEvent, args => {
     if (self.$el) {
       self.$destroy()
       self = new AppConstructor()
@@ -69,7 +71,7 @@ Vue.prototype.$start = function() {
     args.root = self.$el.nativeView
   })
 
-  application.run()
+  run()
 }
 
 // Define a `nativeView` getter in every NS vue instance
