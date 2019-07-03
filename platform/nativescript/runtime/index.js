@@ -1,6 +1,8 @@
-// Ensure `application` module is loaded
+// Ensure `application` and `frame` modules are loaded
 // before overriding `global.__onLiveSyncCore`
 import { run, on, launchEvent } from 'tns-core-modules/application'
+import 'tns-core-modules/ui/frame'
+
 import { warn } from 'core/util/index'
 import { patch } from './patch'
 import { mountComponent } from 'core/instance/lifecycle'
