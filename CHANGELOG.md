@@ -1,3 +1,13 @@
+<a name="2.3.0-rc.2"></a>
+# [2.3.0-rc.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.1...v2.3.0-rc.2) (2019-07-03)
+
+
+### Bug Fixes
+
+* import `frame` module before __onLiveSyncCore override  ([#517](https://github.com/nativescript-vue/nativescript-vue/issues/517)) ([cbee066](https://github.com/nativescript-vue/nativescript-vue/commit/cbee066)), closes [NativeScript/nativescript-dev-webpack#943](https://github.com/NativeScript/nativescript-dev-webpack/issues/943)
+
+
+
 <a name="2.3.0-rc.1"></a>
 # [2.3.0-rc.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.0...v2.3.0-rc.1) (2019-07-01)
 
