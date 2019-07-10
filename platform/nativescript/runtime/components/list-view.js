@@ -4,7 +4,7 @@ import { extend } from 'shared/util'
 export default {
   props: {
     items: {
-      type: Object,
+      type: [Array, Object],
       validator: val => {
         const ObservableArray = require('tns-core-modules/data/observable-array')
         return Array.isArray(val) || val instanceof ObservableArray
