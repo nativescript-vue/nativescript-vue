@@ -1,3 +1,14 @@
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.2...v2.3.0) (2019-07-10)
+
+
+### Bug Fixes
+
+* **listview:** correct items prop type check ([c770745](https://github.com/nativescript-vue/nativescript-vue/commit/c770745)), closes [#522](https://github.com/nativescript-vue/nativescript-vue/issues/522)
+* **listview:** fix prop type check ([5780bac](https://github.com/nativescript-vue/nativescript-vue/commit/5780bac)), closes [#522](https://github.com/nativescript-vue/nativescript-vue/issues/522)
+
+
+
 <a name="2.3.0-rc.2"></a>
 # [2.3.0-rc.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.1...v2.3.0-rc.2) (2019-07-03)
 
