@@ -22,6 +22,16 @@ export default {
       required: false,
       default: null
     },
+    clearHistory: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    backstackVisible: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
     // injected by the template compiler
     hasRouterView: {
       default: false
@@ -88,6 +98,8 @@ export default {
 
     notifyPageMounted(pageVm) {
       let options = {
+        backstackVisible: this.backstackVisible,
+        clearHistory: this.clearHistory,
         create: () => pageVm.$el.nativeView
       }
 
