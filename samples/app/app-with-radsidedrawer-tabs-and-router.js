@@ -1,6 +1,5 @@
 const Vue = require('nativescript-vue')
 const VueRouter = require('vue-router')
-const application = require('tns-core-modules/application')
 
 Vue.registerElement(
   'RadSideDrawer',
@@ -21,8 +20,8 @@ const Home = {
 
 const Tabs = {
   template: `
-    <TabView
-      androidTabsPosition="bottom"
+  <GridLayout>
+    <TabView androidTabsPosition="bottom"
       :selectedIndex="selectedTabIndex" >
       <TabViewItem title="Tab 1">
         <StackLayout>
@@ -34,7 +33,8 @@ const Tabs = {
           <Label text="You are on Tab 2" />
         </StackLayout>
       </TabViewItem>
-    </TabView>`,
+    </TabView>
+  </GridLayout>`,
   data() {
     return {
       selectedTabIndex: 0,
@@ -103,7 +103,7 @@ new Vue({
         </RadSideDrawer>
       </Page>
     </Frame>
-  `,
+`,
   data() {
     return {}
   },

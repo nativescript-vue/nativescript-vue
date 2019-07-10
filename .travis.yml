@@ -1,0 +1,95 @@
+env:
+  global:
+    - ANDROID_PACKAGE_VUE='nativescript-vue-tests.apk'
+    - ANDROID_PACKAGE_FOLDER_VUE=$TRAVIS_BUILD_DIR/samples/outputs
+    - SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER"
+    - IOS_PACKAGE_VUE='nativescript-vue-tests.zip'
+    - IOS_PACKAGE_FOLDER_VUE=$TRAVIS_BUILD_DIR/samples/outputs
+
+git:
+  depth: 1
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - stage: "Unit Tests"
+      language: node_js
+      os: linux
+      node_js: "11"
+      script: npm ci && npm run test
+    - stage: "Build app"
+      os: osx
+      env:
+        - WebpackiOS="12.0"
+        - Type="VueJS"
+      osx_image: xcode10.0
+      language: node_js
+      node_js: "11"
+      jdk: oraclejdk8
+      script:
+        - npm ci && npm run dev:core && npm run dev:compiler
+        - cd samples && npm i && tns build ios --copy-to "./outputs/nativescript-vue-tests.app"
+        - cd $IOS_PACKAGE_FOLDER_VUE && zip -r $IOS_PACKAGE_VUE nativescript-vue-tests.app
+        - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $SAUCE_STORAGE/$IOS_PACKAGE_VUE?overwrite=true --data-binary @$IOS_PACKAGE_FOLDER_VUE/$IOS_PACKAGE_VUE"
+    - language: android
+      os: linux
+      env:
+        - WebpackAndroid="28"
+        - Type="VueJS"
+      jdk: oraclejdk8
+      before_install: nvm install 11
+      script:
+        - npm ci && npm run dev:core && npm run dev:compiler
+        - cd samples && npm i && tns build android --copy-to "./outputs/nativescript-vue-tests.apk"
+        - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $SAUCE_STORAGE/$ANDROID_PACKAGE_VUE?overwrite=true --data-binary @$ANDROID_PACKAGE_FOLDER_VUE/$ANDROID_PACKAGE_VUE"
+    - stage: "UI Tests"
+      env:
+        - iOS="12.0"
+        - Type="VueJS"
+      language: node_js
+      os: linux
+      node_js: "11"
+      script:
+        - npm i -g appium
+        - cd samples && npm i
+        - travis_wait travis_retry npm run e2e -- --runType sim12iPhoneX --sauceLab --appPath $IOS_PACKAGE_VUE
+    - os: linux
+      env:
+        - Android="24"
+        - Type="VueJS"
+      language: node_js
+      node_js: "11"
+      script:
+        - npm i -g appium
+        - cd samples && npm i
+        - travis_wait travis_retry npm run e2e -- --runType android24.sauce --sauceLab --appPath $ANDROID_PACKAGE_VUE
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-28.0.3
+    - android-28
+    - android-23
+    - extra-android-m2repository
+
+before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+    directories:
+        - .nvm
+        - $HOME/.gradle/caches/
+        - $HOME/.gradle/wrapper/
+
+before_install:
+    - sudo pip install --upgrade pip
+    - sudo pip install six
+
+install:
+    - echo no | npm install -g nativescript
+    - tns usage-reporting disable
+    - tns error-reporting disable
