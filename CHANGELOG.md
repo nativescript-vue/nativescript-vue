@@ -1,3 +1,20 @@
+<a name="2.4.0-alpha.0"></a>
+# [2.4.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.2...v2.4.0-alpha.0) (2019-07-10)
+
+
+### Bug Fixes
+
+* livesync and HMR fixes for NativeScript 6.0  ([#508](https://github.com/nativescript-vue/nativescript-vue/issues/508)) ([be95893](https://github.com/nativescript-vue/nativescript-vue/commit/be95893)), closes [#481](https://github.com/nativescript-vue/nativescript-vue/issues/481)
+* **listview:** correct items prop type check ([c770745](https://github.com/nativescript-vue/nativescript-vue/commit/c770745)), closes [#522](https://github.com/nativescript-vue/nativescript-vue/issues/522)
+* **listview:** fix prop type check ([5780bac](https://github.com/nativescript-vue/nativescript-vue/commit/5780bac)), closes [#522](https://github.com/nativescript-vue/nativescript-vue/issues/522)
+
+
+### Features
+
+* **frame:** allow setting clearHistory and backstackVisible options for default pages. ([#514](https://github.com/nativescript-vue/nativescript-vue/issues/514)) ([d06a7bd](https://github.com/nativescript-vue/nativescript-vue/commit/d06a7bd))
+
+
+
 <a name="2.3.0-rc.2"></a>
 # [2.3.0-rc.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.1...v2.3.0-rc.2) (2019-07-03)
 
