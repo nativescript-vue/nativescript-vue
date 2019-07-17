@@ -31,15 +31,17 @@ let app = new Vue({
           <Button text="Click me!" @tap="tabs.push({title: 'added', text: 'added tab'})" />
           <button text="Go to last!" @tap="activeTab = tabs.length - 1" />
 
-          <Tabs v-model="activeTab">
-            <TabStrip>
-              <TabStripItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title"></TabStripItem>
-            </TabStrip>
+          <GridLayout>
+            <Tabs v-model="activeTab">
+              <TabStrip>
+                <TabStripItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title"></TabStripItem>
+              </TabStrip>
 
-            <TabContentItem v-for="(tab, i) in tabs" :key="i + tab.title">
-              <Label text="tab.text" />
-            </TabContentItem>
-          </Tabs>
+              <TabContentItem v-for="(tab, i) in tabs" :key="i + tab.title">
+                <Label text="tab.text" />
+              </TabContentItem>
+            </Tabs>
+          </GridLayout>
         </StackLayout>
       </Page>
     </Frame>
