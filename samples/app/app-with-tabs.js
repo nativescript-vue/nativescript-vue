@@ -20,8 +20,8 @@ let app = new Vue({
             <Image src="res://icon" style="width: 30; height: 30; vertical-align: center; margin-right: 10;" />
             <Label style="font-size: 20; vertical-align: center;">
               <FormattedString>
-                <Span text="Tab" fontWeight="Bold" />
-                <Span text="Views" />
+                <Span text="Tabs" fontWeight="Bold" />
+                <Span text="Navigation" />
               </FormattedString>
             </Label>
           </StackLayout>
@@ -32,11 +32,15 @@ let app = new Vue({
           <button text="Go to last!" @tap="activeTab = tabs.length - 1" />
 
           <GridLayout>
-            <TabView v-model="activeTab">
-              <TabViewItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title">
+            <Tabs v-model="activeTab">
+              <TabStrip>
+                <TabStripItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title"></TabStripItem>
+              </TabStrip>
+
+              <TabContentItem v-for="(tab, i) in tabs" :key="i + tab.title">
                 <Label text="tab.text" />
-              </TabViewItem>
-            </TabView>
+              </TabContentItem>
+            </Tabs>
           </GridLayout>
         </StackLayout>
       </Page>
