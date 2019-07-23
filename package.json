@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue",
-  "version": "2.3.0",
+  "version": "2.4.0-alpha.0",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "files": [
@@ -15,9 +15,9 @@
     "test": "jest",
     "tdd": "jest --watch",
     "samples": "node build/sample-runner.js",
-    "dev": "npm run dev:core & npm run dev:compiler",
-    "dev:core": "rollup -c build/config.js -w --o dist/index.js --environment TARGET:nativescript-vue",
-    "dev:compiler": "rollup -c build/config.js -w --environment TARGET:nativescript-vue-template-compiler",
+    "dev": "npm run dev:core -- -w & npm run dev:compiler -- -w",
+    "dev:core": "rollup -c build/config.js --o dist/index.js --environment TARGET:nativescript-vue",
+    "dev:compiler": "rollup -c build/config.js --environment TARGET:nativescript-vue-template-compiler",
     "build": "node build/build.js",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js",
@@ -44,8 +44,8 @@
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "nativescript": {
     "platforms": {
-      "android": "4.2.0",
-      "ios": "4.2.0"
+      "android": "6.0.0",
+      "ios": "6.0.1"
     },
     "plugin": {
       "vue": "true",
@@ -95,7 +95,7 @@
     "rollup-plugin-resolve-aliases": "0.2.0",
     "semver": "6.0.0",
     "set-value": "3.0.0",
-    "tns-core-modules": "5.4.1",
+    "tns-core-modules": "6.0.1",
     "util-inspect": "0.1.8",
     "vue": "2.6.10"
   },

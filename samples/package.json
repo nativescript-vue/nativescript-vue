@@ -5,28 +5,44 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "5.4.0"
+      "version": "6.0.0"
     },
     "tns-ios": {
-      "version": "5.4.0"
+      "version": "6.0.1"
     }
+  },
+  "scripts": {
+    "build:ios": "tns build ios --copy-to ./outputs/nativescript-vue-tests.app",
+    "build:android": "tns build android --copy-to ./outputs/nativescript-vue-tests.apk",
+    "e2e": "node ./node_modules/nativescript-dev-appium/check-dev-deps.js && mocha --opts ./e2e/config/mocha.opts",
+    "e2e:local:ios": "npm run e2e -- --runType ios.local --appPath ./outputs/nativescript-vue-tests.app",
+    "e2e:local:android": "npm run e2e -- --runType android28.local --appPath ./outputs/nativescript-vue-tests.apk"
   },
   "dependencies": {
     "@vue/devtools": "5.1.0",
     "nativescript-pager": "9.5.4",
     "nativescript-theme-core": "1.0.6",
-    "nativescript-ui-gauge": "4.0.0",
-    "nativescript-ui-sidedrawer": "6.0.0",
+    "nativescript-ui-gauge": "5.0.0-androidx",
+    "nativescript-ui-sidedrawer": "7.0.0-androidx-110619",
     "nativescript-vue-devtools": "1.2.0",
-    "tns-core-modules": "5.4.1",
+    "tns-core-modules": "6.0.1",
     "vue-router": "3.0.6",
     "vuex": "3.1.1"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
     "@babel/preset-env": "7.4.5",
+    "@types/chai": "4.1.7",
+    "@types/mocha": "5.2.7",
+    "@types/node": "11.10.0",
     "babel-loader": "8.0.6",
-    "nativescript-dev-webpack": "0.24.0",
+    "chai": "4.2.0",
+    "mocha": "6.1.4",
+    "mocha-junit-reporter": "1.23.0",
+    "mocha-multi": "1.1.0",
+    "mochawesome": "4.0.0",
+    "nativescript-dev-appium": "^5.3.0",
+    "nativescript-dev-webpack": "1.0.0-rc-2019-07-10-002255-01",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
     "vue-loader": "15.7.0"
   }

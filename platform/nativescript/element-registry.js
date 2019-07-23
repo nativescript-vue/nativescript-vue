@@ -148,6 +148,57 @@ registerElement(
   }
 )
 
+registerElement(
+  'BottomNavigation',
+  () => require('tns-core-modules/ui/bottom-navigation').BottomNavigation,
+  {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange'
+    },
+    component: builtInComponents.BottomNavigation
+  }
+)
+
+registerElement('Tabs', () => require('tns-core-modules/ui/tabs').Tabs, {
+  model: {
+    prop: 'selectedIndex',
+    event: 'selectedIndexChange'
+  },
+  component: builtInComponents.Tabs
+})
+
+registerElement(
+  'TabStrip',
+  () => require('tns-core-modules/ui/tab-navigation-base/tab-strip').TabStrip,
+  {
+    skipAddToDom: true,
+    component: builtInComponents.TabStrip
+  }
+)
+
+registerElement(
+  'TabStripItem',
+  () =>
+    require('tns-core-modules/ui/tab-navigation-base/tab-strip-item')
+      .TabStripItem,
+  {
+    skipAddToDom: true,
+    component: builtInComponents.TabStripItem
+  }
+)
+
+registerElement(
+  'TabContentItem',
+  () =>
+    require('tns-core-modules/ui/tab-navigation-base/tab-content-item')
+      .TabContentItem,
+  {
+    skipAddToDom: true,
+    component: builtInComponents.TabContentItem
+  }
+)
+
 registerElement('transition', null, {
   component: builtInComponents.transition
 })

@@ -16,6 +16,9 @@ const page = {
   methods: {
     openDetails() {
       this.$navigateTo(page)
+    },
+    goBack() {
+      this.$navigateBack()
     }
   }
 }
