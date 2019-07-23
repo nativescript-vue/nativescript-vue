@@ -1,5 +1,5 @@
 {
-  "main": "app-to-check-v-slot.js",
+  "main": "app-with-tabs.js",
   "name": "nativescript-vue-tests",
   "version": "1.0.1"
 }

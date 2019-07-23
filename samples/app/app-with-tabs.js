@@ -34,11 +34,14 @@ let app = new Vue({
           <GridLayout>
             <Tabs v-model="activeTab">
               <TabStrip>
-                <TabStripItem v-for="(tab, i) in tabs" :key="i + tab.title" :title="tab.title"></TabStripItem>
+                <TabStripItem v-for="(tab, i) in tabs" 
+                             :key="i + tab.title" 
+                             :title="tab.title" />
               </TabStrip>
 
-              <TabContentItem v-for="(tab, i) in tabs" :key="i + tab.title">
-                <Label text="tab.text" />
+              <TabContentItem v-for="(tab, i) in tabs"
+                             :key="i + tab.title">
+                <Label :text="tab.text" />
               </TabContentItem>
             </Tabs>
           </GridLayout>

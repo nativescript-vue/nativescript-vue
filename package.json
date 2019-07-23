@@ -44,8 +44,8 @@
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "nativescript": {
     "platforms": {
-      "android": "4.2.0",
-      "ios": "4.2.0"
+      "android": "6.0.0",
+      "ios": "6.0.1"
     },
     "plugin": {
       "vue": "true",
@@ -95,7 +95,7 @@
     "rollup-plugin-resolve-aliases": "0.2.0",
     "semver": "6.0.0",
     "set-value": "3.0.0",
-    "tns-core-modules": "5.4.1",
+    "tns-core-modules": "6.0.1",
     "util-inspect": "0.1.8",
     "vue": "2.6.10"
   },
