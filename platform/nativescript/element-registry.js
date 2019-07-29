@@ -25,9 +25,10 @@ export function registerElement(elementName, resolver, meta) {
 
   meta = Object.assign({}, defaultViewMeta, meta)
 
-  if (elementMap[normalizedName]) {
-    throw new Error(`Element for ${elementName} already registered.`)
-  }
+  // allow override of elements classes (N ones especially)
+  // if (elementMap[normalizedName]) {
+  //   throw new Error(`Element for ${elementName} already registered.`)
+  // }
 
   if (!meta.component) {
     // if no Vue component is passed, wrap the simpler vue component
