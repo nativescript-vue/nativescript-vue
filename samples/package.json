@@ -21,9 +21,11 @@
   "dependencies": {
     "@vue/devtools": "5.1.0",
     "nativescript-pager": "9.5.4",
+    "nativescript-socketio": "^3.3.1",
     "nativescript-theme-core": "1.0.6",
-    "nativescript-ui-gauge": "5.0.0-androidx",
-    "nativescript-ui-sidedrawer": "7.0.0-androidx-110619",
+    "nativescript-toasty": "^2.0.1",
+    "nativescript-ui-gauge": "5.0.0",
+    "nativescript-ui-sidedrawer": "7.0.0",
     "nativescript-vue-devtools": "1.2.0",
     "tns-core-modules": "6.0.1",
     "vue-router": "3.0.6",
@@ -42,7 +44,7 @@
     "mocha-multi": "1.1.0",
     "mochawesome": "4.0.0",
     "nativescript-dev-appium": "^5.3.0",
-    "nativescript-dev-webpack": "1.0.0-rc-2019-07-10-002255-01",
+    "nativescript-dev-webpack": "1.0.1",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
     "vue-loader": "15.7.0"
   }
