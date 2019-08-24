@@ -96,6 +96,13 @@ const genConfig = (name) => {
     plugins: [
       replace({
         delimiters: ['', ''],
+        // Patch devtools flush calls to use the global hook
+        // rather than the devtools variable
+        // which is undefined in most cases
+        // and non-reactive
+        'devtools && config.devtools': 'global.__VUE_DEVTOOLS_GLOBAL_HOOK__ && config.devtools',
+        'devtools.emit(\'flush\')': 'global.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit(\'flush\')',
+
         // Replace empty .vue file components default element to avoid crashes
         '_c("div")': '_c("NativeContentView")'
       }),
