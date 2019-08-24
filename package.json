@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue",
-  "version": "2.4.0",
+  "version": "2.5.0-alpha.0",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "files": [
