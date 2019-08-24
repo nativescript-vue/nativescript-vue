@@ -95,6 +95,11 @@ const genConfig = (name) => {
     },
     plugins: [
       replace({
+        delimiters: ['', ''],
+        // Replace empty .vue file components default element to avoid crashes
+        '_c("div")': '_c("NativeContentView")'
+      }),
+      replace({
         __WEEX__: false,
         __VERSION__: VueVersion,
         // 'process.env.NODE_ENV': "'development'",
