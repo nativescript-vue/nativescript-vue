@@ -1,3 +1,26 @@
+<a name="2.5.0-alpha.0"></a>
+# [2.5.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.4.0...v2.5.0-alpha.0) (2019-08-24)
+
+
+### Bug Fixes
+
+* **devtools:** refresh devtools when state changes ([4d28b34](https://github.com/nativescript-vue/nativescript-vue/commit/4d28b34))
+* crash on blank .vue template section ([0295650](https://github.com/nativescript-vue/nativescript-vue/commit/0295650))
+
+
+### Features
+
+* **devtools:** show navigation entries under Frame ([e82d067](https://github.com/nativescript-vue/nativescript-vue/commit/e82d067))
+
+
+### BREAKING CHANGES
+
+* **devtools:** A Frame now only accepts a single child element, that is the defaultPage for the Frame. If you have multiple pages nested under the Frame element, you will need to refactor to use `$navigateTo` instead. Additionally the default slot is only rendered once, meaning that it will not be reactive after the initial render. This is due to how the Frame element works, it renders the defaultPage, and then "navigates" to it, and it is no longer a direct child of the Frame and cannot be reactive. If this affects you, plese open an issue and describe your use case, so we can discuss possible solutions.
+
+For most users this will not requre any additional refactoring.
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.4.0-alpha.0...v2.4.0) (2019-07-23)
 
