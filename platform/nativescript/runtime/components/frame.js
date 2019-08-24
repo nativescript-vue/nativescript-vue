@@ -1,4 +1,5 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
+import { warn } from 'core/util/debug'
 
 let idCounter = 1
 
@@ -39,10 +40,12 @@ export default {
   },
   data() {
     return {
+      // isFirstRender: true,
       properties: {}
     }
   },
   created() {
+    this._isFirstRender = true
     let properties = {}
 
     if (getFrame(this.$props.id)) {
@@ -57,13 +60,30 @@ export default {
     deleteFrame(this.properties.id)
   },
   render(h) {
+    let vnode = null
+
+    // Render slot on first render to ensure default page is displayed
+    if (this.$slots.default && this._isFirstRender) {
+      if (
+        process.env.NODE_ENV !== 'production' &&
+        this.$slots.default.length > 1
+      ) {
+        warn(
+          `The <Frame> element can only have a single child element, that is the defaultPage.`
+        )
+      }
+      this._isFirstRender = false
+      vnode = this.$slots.default[0]
+      vnode.key = 'default'
+    }
+
     return h(
       'NativeFrame',
       {
         attrs: this.properties,
         on: this.$listeners
       },
-      this.$slots.default
+      [vnode]
     )
   },
   methods: {
@@ -97,6 +117,7 @@ export default {
     },
 
     notifyPageMounted(pageVm) {
+      console.log('Page Mounted.')
       let options = {
         backstackVisible: this.backstackVisible,
         clearHistory: this.clearHistory,
@@ -104,6 +125,11 @@ export default {
       }
 
       this.$nextTick(() => {
+        if (pageVm.$el.nativeView.__isNavigatedTo) {
+          // Ignore pages we've navigated to, since they are already on screen
+          return
+        }
+
         this.navigate(options)
       })
     },

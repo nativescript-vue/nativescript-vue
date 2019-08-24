@@ -1,3 +1,5 @@
+import { updateDevtools } from '../../util'
+
 export const PAGE_REF = '__vuePageRef__'
 
 export default {
@@ -35,6 +37,7 @@ export default {
     this.$el.nativeView.disposeNativeView = (...args) => {
       this.$parent.$destroy()
       dispose.call(this.$el.nativeView, args)
+      updateDevtools()
     }
   },
   methods: {
