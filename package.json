@@ -128,16 +128,14 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "{{platform,__test__}/**/*.js,samples/app/*.js}": [
-        "prettier --write",
-        "git add"
-      ],
-      "docs/src/**/*.js": [
-        "npm run build:docs",
-        "git add"
-      ]
-    }
+    "{{platform,__test__}/**/*.js,samples/app/*.js}": [
+      "prettier --write",
+      "git add"
+    ],
+    "docs/src/**/*.js": [
+      "npm run build:docs",
+      "git add"
+    ]
   },
   "config": {
     "commitizen": {
