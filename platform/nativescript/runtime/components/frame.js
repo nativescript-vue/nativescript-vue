@@ -1,8 +1,6 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
 import { warn } from 'core/util/debug'
 
-let idCounter = 1
-
 export default {
   props: {
     id: {
@@ -47,10 +45,6 @@ export default {
   created() {
     this._isFirstRender = true
     let properties = {}
-
-    if (getFrame(this.$props.id)) {
-      properties.id = this.$props.id + idCounter++
-    }
 
     this.properties = Object.assign({}, this.$attrs, this.$props, properties)
 
