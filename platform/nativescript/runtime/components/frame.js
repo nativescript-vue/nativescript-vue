@@ -44,9 +44,7 @@ export default {
   },
   created() {
     this._isFirstRender = true
-    let properties = {}
-
-    this.properties = Object.assign({}, this.$attrs, this.$props, properties)
+    this.properties = Object.assign({}, this.$attrs, this.$props)
 
     setFrame(this.properties.id, this)
   },
