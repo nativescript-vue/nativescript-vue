@@ -1,3 +1,23 @@
+import { updateDevtools } from '../util'
+
+let sequentialCounter = 0
+
+function serializeModalOptions(options) {
+  if (process.env.NODE_ENV === 'production') {
+    return null
+  }
+
+  const allowed = ['fullscreen']
+
+  return Object.keys(options)
+    .filter(key => allowed.includes(key))
+    .map(key => {
+      return `${key}: ${options[key]}`
+    })
+    .concat(`uid: ${++sequentialCounter}`)
+    .join(', ')
+}
+
 function _findParentModalEntry(vm) {
   if (!vm) {
     return false
@@ -58,10 +78,12 @@ export default {
           },
           render: h =>
             h(component, {
-              props: options.props
+              props: options.props,
+              key: serializeModalOptions(options)
             })
         })
         const modalPage = navEntryInstance.$mount().$el.nativeView
+        updateDevtools()
 
         this.$el.nativeView.showModal(modalPage, options)
       })
