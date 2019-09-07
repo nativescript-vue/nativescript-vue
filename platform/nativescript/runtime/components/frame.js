@@ -106,7 +106,6 @@ export default {
     },
 
     notifyPageMounted(pageVm) {
-      console.log('Page Mounted.')
       let options = {
         backstackVisible: this.backstackVisible,
         clearHistory: this.clearHistory,
