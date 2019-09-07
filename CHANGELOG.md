@@ -1,3 +1,20 @@
+<a name="2.5.0-alpha.1"></a>
+# [2.5.0-alpha.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.0...v2.5.0-alpha.1) (2019-09-07)
+
+
+### Bug Fixes
+
+* **frame:** $refs inside default page ([#544](https://github.com/nativescript-vue/nativescript-vue/issues/544)) ([4872304](https://github.com/nativescript-vue/nativescript-vue/commit/4872304)), closes [#543](https://github.com/nativescript-vue/nativescript-vue/issues/543)
+* honour the ID of the <Frame> components in the App ([#541](https://github.com/nativescript-vue/nativescript-vue/issues/541)) ([a2b0cd6](https://github.com/nativescript-vue/nativescript-vue/commit/a2b0cd6))
+* look for parent Frame instead of a NavigationEntry ([7147a9f](https://github.com/nativescript-vue/nativescript-vue/commit/7147a9f))
+
+
+### Features
+
+* improve modals in DevTools ([8677a52](https://github.com/nativescript-vue/nativescript-vue/commit/8677a52))
+
+
+
 <a name="2.5.0-alpha.0"></a>
 # [2.5.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.4.0...v2.5.0-alpha.0) (2019-08-24)
 
