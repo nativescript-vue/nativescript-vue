@@ -38,12 +38,10 @@ export default {
   },
   data() {
     return {
-      // isFirstRender: true,
       properties: {}
     }
   },
   created() {
-    this._isFirstRender = true
     this.properties = Object.assign({}, this.$attrs, this.$props)
 
     setFrame(this.properties.id, this)
@@ -54,8 +52,8 @@ export default {
   render(h) {
     let vnode = null
 
-    // Render slot on first render to ensure default page is displayed
-    if (this.$slots.default && this._isFirstRender) {
+    // Render slot to ensure default page is displayed
+    if (this.$slots.default) {
       if (
         process.env.NODE_ENV !== 'production' &&
         this.$slots.default.length > 1
@@ -64,7 +62,6 @@ export default {
           `The <Frame> element can only have a single child element, that is the defaultPage.`
         )
       }
-      this._isFirstRender = false
       vnode = this.$slots.default[0]
       vnode.key = 'default'
     }
@@ -109,7 +106,6 @@ export default {
     },
 
     notifyPageMounted(pageVm) {
-      console.log('Page Mounted.')
       let options = {
         backstackVisible: this.backstackVisible,
         clearHistory: this.clearHistory,
