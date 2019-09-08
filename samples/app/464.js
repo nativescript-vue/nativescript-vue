@@ -1,4 +1,4 @@
-const Vue = require('./nativescript-vue')
+const Vue = require('nativescript-vue')
 const {
   ObservableArray
 } = require('tns-core-modules/data/observable-array/observable-array')

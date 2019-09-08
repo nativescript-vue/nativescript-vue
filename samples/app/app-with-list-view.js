@@ -3,7 +3,6 @@ const http = require('http')
 
 Vue.config.debug = true
 Vue.prototype.$http = http
-Vue.registerElement('gradient', () => require('nativescript-gradient').Gradient)
 
 new Vue({
   data: {
@@ -14,19 +13,21 @@ new Vue({
   },
 
   template: `
+  <Frame>
     <Page ref="page">
       <ActionBar :title="subreddit">
         <ActionItem android.systemIcon="ic_menu_refresh" ios.systemIcon="13" @tap="refresh" />
         <ActionItem text="change" android.position="popup" ios.position="right" @tap="chooseSubreddit" />
       </ActionBar>
-            
+
       <StackLayout>
-        <Gradient direction="to right" colors="#FF0077, red, #FF00FF" class="p-15">
+        <StackLayout orientation="horizontal" class="p-15">
           <Label class="p-5 c-white" horizontalAlignment="center" text="You are browsing" textWrap="true" />
           <Label class="p-5 c-white" horizontalAlignment="center" :text="subreddit" textWrap="true" />
-        </Gradient>
+        </StackLayout>
 
-        <ListView for="item in items" 
+        <ListView
+            for="item in items"
             class="list-group"
             separatorColor="red"
             @itemTap="onItemTap"
@@ -42,16 +43,17 @@ new Vue({
               </StackLayout>
             </StackLayout>
           </v-template>
-          
+
           <v-template if="item.type === 'page'">
             <WrapLayout orientation="horizontal" class="list-group-item active">
               <Label :text="'<<< ' + item.title + ' >>>'" style="color: red;" />
             </WrapLayout>
           </v-template>
-          
+
         </ListView>
       </StackLayout>
     </Page>
+  </Frame>
   `,
 
   created() {
@@ -69,13 +71,11 @@ new Vue({
           template: `
             <Page style="background-color: rgba(0, 0, 0, .6);">
               <StackLayout>
-                <Label class="h2" textAlignment="center" textWrap="true" text="${
-                  item.title
-                }" style="color: #fff; margin-top: 20" />
+                <Label class="h2" textAlignment="center" textWrap="true" text="${item.title}" style="color: #fff; margin-top: 20" />
                 <GridLayout rows="*, 60">
                   <ActivityIndicator row="0" :busy="true" height="100" />
                   <Image row="0" src="${item.fullImage}" />
-                  <Button row="1" @tap="$modal.close" text="Close" />                    
+                  <Button row="1" @tap="$modal.close" text="Close" />
                 </GridLayout>
               </StackLayout>
             </Page>
@@ -122,20 +122,23 @@ new Vue({
     fetchItems() {
       this.$http
         .getJSON(
-          `https://www.reddit.com/${
-            this.subreddit
-          }.json?limit=10&count=10&after=${this.last_page}`
+          `https://www.reddit.com/${this.subreddit}.json?limit=10&count=10&after=${this.last_page}`
         )
         .then(res => {
           this.items.push({
             title: 'Page ' + this.page_num,
             type: 'page'
           })
+
           res.data.children.forEach(item => {
+            const fullImage = item.data.preview
+              ? item.data.preview.images[0].source.url
+              : null
+            const image = item.data.preview ? item.data.preview.thumbnail : null
             this.items.push({
               title: item.data.title,
-              image: item.data.thumbnail,
-              fullImage: item.data.preview.images[0].source.url,
+              image: image,
+              fullImage: fullImage,
               type: 'entry'
             })
           })

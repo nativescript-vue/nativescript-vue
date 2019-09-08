@@ -13,13 +13,13 @@ let step1_id = 0
 const Step1 = {
   template: `
     <Page class="page">
-      <ActionBar title="Home" class="action-bar" />
+      <ActionBar title="Step 1" class="action-bar" />
       <StackLayout>
         <StackLayout>
           <Label class="m-t-30" text="Welcome to step 1!" />
-  
+
           <CustomButton text="This button only works if you stay on this tab" @tap="next" />
-  
+
           <CustomButton text="This button always works" @tap.native="next" />
         </StackLayout>
       </StackLayout>
@@ -49,7 +49,7 @@ const Step1 = {
 const Step2 = {
   template: `
     <Page class="page">
-      <ActionBar title="Home" class="action-bar" />
+      <ActionBar title="Step 2" class="action-bar" />
       <StackLayout>
         <Label text="Welcome to step 2!" />
         <Button text="Great, time for step 3." @tap="next" />
@@ -75,7 +75,7 @@ const Step2 = {
 const Step3 = {
   template: `
     <Page class="page">
-      <ActionBar title="Home" class="action-bar" />
+      <ActionBar title="Step 3" class="action-bar" />
       <StackLayout>
         <Label text="You made it to the last step!" />
         <Button text="Cool, start over." @tap="reset" />
@@ -101,7 +101,7 @@ const Step3 = {
 const FirstTab = {
   template: `
     <Page class="page">
-      <ActionBar title="Home" class="action-bar" />
+      <ActionBar title="Issue #344" class="action-bar" />
       <StackLayout>
         <Label class="m-t-30" textWrap="true" text="Tap on the second tab, then tap on this tab, and tap back over to the second tab. The top button will no longer work on the second tab's page."
         />
@@ -121,7 +121,7 @@ const TabBar = {
           <Step1 />
         </Frame>
       <!--</keep-alive>-->
-  
+
       <StackLayout class="tabbar" orientation="horizontal" row="0">
         <Label class="tabbar__item" @tap="screen = 0" text="First" :class='{"tabbar__item--active": screen == 0}' />
         <Label class="tabbar__item" @tap="screen = 1" text="Second" :class='{"tabbar__item--active": screen == 1}' />

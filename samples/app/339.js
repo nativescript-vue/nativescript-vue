@@ -7,7 +7,7 @@ let step1_id = 0
 const Step1 = {
   template: `
     <Page class="page">
-      <ActionBar title="Home" class="action-bar" />
+      <ActionBar title="Issue #339" class="action-bar" />
       <StackLayout>
         <Label text="Welcome to step 1!" />
         <Button text="Thanks! Step 2 please." @tap="next" />

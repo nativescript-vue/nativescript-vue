@@ -7,7 +7,7 @@ Vue.config.debug = true
 // the framework should warn about this in the future!
 Vue.component('CommentComp', {
   props: ['comment'],
-  template: `<label :text="comment.content"/>`
+  template: `<Label :text="comment.content"/>`
 })
 
 new Vue({
