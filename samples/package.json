@@ -20,15 +20,10 @@
   },
   "dependencies": {
     "@vue/devtools": "5.1.0",
-    "nativescript-pager": "9.5.4",
     "nativescript-socketio": "^3.3.1",
     "nativescript-theme-core": "1.0.6",
-    "nativescript-toasty": "^2.0.1",
-    "nativescript-ui-gauge": "5.0.0",
-    "nativescript-ui-sidedrawer": "7.0.0",
     "nativescript-vue-devtools": "1.2.0",
     "tns-core-modules": "6.0.1",
-    "vue-router": "3.0.6",
     "vuex": "3.1.1"
   },
   "devDependencies": {
