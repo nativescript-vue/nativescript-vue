@@ -40,9 +40,12 @@ module.exports = {
     "**/tests/**/*.spec.(js|jsx|ts)"
   ],
   transform: {
-    "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+    "^.+\\.jsx?$": "<rootDir>/node_modules/babel-jest",
     ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
   },
+  transformIgnorePatterns: [
+    "/node_modules/(?!(vue)/)"
+  ],
   setupFiles: [
     join(TESTS, "jest-setup.js")
   ],

@@ -1,5 +1,5 @@
 {
-  "presets": ["@babel/preset-env"],
+  "presets": ["@babel/preset-env", "@babel/preset-flow"],
   "env": {
     "test": {
       "presets": ["@babel/preset-env"],
