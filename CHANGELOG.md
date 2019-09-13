@@ -1,3 +1,99 @@
+<a name="2.5.0-alpha.1"></a>
+# [2.5.0-alpha.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.0...v2.5.0-alpha.1) (2019-09-07)
+
+
+### Bug Fixes
+
+* **frame:** $refs inside default page ([#544](https://github.com/nativescript-vue/nativescript-vue/issues/544)) ([4872304](https://github.com/nativescript-vue/nativescript-vue/commit/4872304)), closes [#543](https://github.com/nativescript-vue/nativescript-vue/issues/543)
+* honour the ID of the <Frame> components in the App ([#541](https://github.com/nativescript-vue/nativescript-vue/issues/541)) ([a2b0cd6](https://github.com/nativescript-vue/nativescript-vue/commit/a2b0cd6))
+* look for parent Frame instead of a NavigationEntry ([7147a9f](https://github.com/nativescript-vue/nativescript-vue/commit/7147a9f))
+
+
+### Features
+
+* improve modals in DevTools ([8677a52](https://github.com/nativescript-vue/nativescript-vue/commit/8677a52))
+
+
+
+<a name="2.5.0-alpha.0"></a>
+# [2.5.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.4.0...v2.5.0-alpha.0) (2019-08-24)
+
+
+### Bug Fixes
+
+* **devtools:** refresh devtools when state changes ([4d28b34](https://github.com/nativescript-vue/nativescript-vue/commit/4d28b34))
+* crash on blank .vue template section ([0295650](https://github.com/nativescript-vue/nativescript-vue/commit/0295650))
+
+
+### Features
+
+* **devtools:** show navigation entries under Frame ([e82d067](https://github.com/nativescript-vue/nativescript-vue/commit/e82d067))
+
+
+### BREAKING CHANGES
+
+* **devtools:** A Frame now only accepts a single child element, that is the defaultPage for the Frame. If you have multiple pages nested under the Frame element, you will need to refactor to use `$navigateTo` instead. Additionally the default slot is only rendered once, meaning that it will not be reactive after the initial render. This is due to how the Frame element works, it renders the defaultPage, and then "navigates" to it, and it is no longer a direct child of the Frame and cannot be reactive. If this affects you, plese open an issue and describe your use case, so we can discuss possible solutions.
+
+For most users this will not requre any additional refactoring.
+
+
+
+<a name="2.4.0"></a>
+# [2.4.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.4.0-alpha.0...v2.4.0) (2019-07-23)
+
+
+### Features
+
+* add support for Tabs and BottomNavigation ([#524](https://github.com/nativescript-vue/nativescript-vue/issues/524)) ([806658b](https://github.com/nativescript-vue/nativescript-vue/commit/806658b))
+
+
+
+<a name="2.4.0-alpha.0"></a>
+# [2.4.0-alpha.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0...v2.4.0-alpha.0) (2019-07-10)
+
+
+### Bug Fixes
+
+* livesync and HMR fixes for NativeScript 6.0  ([#508](https://github.com/nativescript-vue/nativescript-vue/issues/508)) ([be95893](https://github.com/nativescript-vue/nativescript-vue/commit/be95893)), closes [#481](https://github.com/nativescript-vue/nativescript-vue/issues/481)
+
+
+### Features
+
+* **frame:** allow setting clearHistory and backstackVisible options for default pages. ([#514](https://github.com/nativescript-vue/nativescript-vue/issues/514)) ([d06a7bd](https://github.com/nativescript-vue/nativescript-vue/commit/d06a7bd))
+
+
+
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.2...v2.3.0) (2019-07-10)
+
+
+### Bug Fixes
+
+* **listview:** correct items prop type check ([c770745](https://github.com/nativescript-vue/nativescript-vue/commit/c770745)), closes [#522](https://github.com/nativescript-vue/nativescript-vue/issues/522)
+* **listview:** fix prop type check ([5780bac](https://github.com/nativescript-vue/nativescript-vue/commit/5780bac)), closes [#522](https://github.com/nativescript-vue/nativescript-vue/issues/522)
+
+
+
+<a name="2.3.0-rc.2"></a>
+# [2.3.0-rc.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.1...v2.3.0-rc.2) (2019-07-03)
+
+
+### Bug Fixes
+
+* import `frame` module before __onLiveSyncCore override  ([#517](https://github.com/nativescript-vue/nativescript-vue/issues/517)) ([cbee066](https://github.com/nativescript-vue/nativescript-vue/commit/cbee066)), closes [NativeScript/nativescript-dev-webpack#943](https://github.com/NativeScript/nativescript-dev-webpack/issues/943)
+
+
+
+<a name="2.3.0-rc.1"></a>
+# [2.3.0-rc.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.0...v2.3.0-rc.1) (2019-07-01)
+
+
+### Bug Fixes
+
+* import `application` module ([#512](https://github.com/nativescript-vue/nativescript-vue/issues/512)) ([3f03251](https://github.com/nativescript-vue/nativescript-vue/commit/3f03251))
+
+
+
 <a name="2.3.0-rc.0"></a>
 # [2.3.0-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.2.2...v2.3.0-rc.0) (2019-05-31)
 

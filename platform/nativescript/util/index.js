@@ -111,3 +111,13 @@ export function deepProxy(object, depth = 0) {
     }
   })
 }
+
+export function updateDevtools() {
+  if (global.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+    try {
+      global.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit('flush')
+    } catch (err) {
+      //
+    }
+  }
+}

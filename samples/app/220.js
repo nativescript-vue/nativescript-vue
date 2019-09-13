@@ -21,7 +21,7 @@ new Vue({
   template: `
     <Frame>
       <Page>
-        <ActionBar title="Issue #127" />
+        <ActionBar title="Issue #220" />
         <StackLayout>
           <Button @tap="counter++">{{counter}}</Button>
           <keep-alive>

@@ -1,21 +1,29 @@
 const Vue = require('nativescript-vue')
 
-Vue.config.debug = true
+const VueDevtools = require('nativescript-vue-devtools')
+Vue.use(VueDevtools)
+
+Vue.config.devtools = true
+Vue.config.debug = false //true
 Vue.config.silent = false
 
-const App = {
+const ToggledComp = {
+  template: `<Label text="im toggled" />`
+}
+
+const DefaultPage = {
+  name: 'DefaultPage',
+
+  components: { ToggledComp },
   template: `
-  <Frame>
-    <Page>
-      <ActionBar class="action-bar" title="Home Page">
-        <ActionItem text="Action"></ActionItem>
-      </ActionBar>
-      <StackLayout>
-        <Button text="Open page" @tap="openPage" />
-      </StackLayout>
-    </Page>
-  </Frame>
-  `,
+  <Page>
+    <ActionBar class="action-bar" title="Home Page">
+      <ActionItem text="Action"></ActionItem>
+    </ActionBar>
+    <StackLayout>
+      <Button text="Open page" @tap="openPage" />
+    </StackLayout>
+  </Page>`,
 
   methods: {
     openPage() {
@@ -25,6 +33,7 @@ const App = {
 }
 
 const DetailsPage = {
+  name: 'DetailsPage',
   template: `
   <Page>
     <ActionBar class="action-bar" title="Details Page">
@@ -32,20 +41,35 @@ const DetailsPage = {
     </ActionBar>
     <StackLayout>
       <Label :text="'Details ' + Math.random()" />
-      <Button text="another" @tap="openDetails" />
+      <Button text="another" @tap="openDetails({})" />
+      <Button text="another backstackVisible=false" @tap="openDetails({backstackVisible: false})" />
+      <Button text="another clearHistory=true" @tap="openDefault({clearHistory: true})" />
       <Button text="back" @tap="goBack" />
     </StackLayout>
   </Page>
   `,
 
   methods: {
-    openDetails() {
-      this.$navigateTo(DetailsPage)
+    openDetails(options = {}) {
+      this.$navigateTo(DetailsPage, options)
+    },
+    openDefault(options) {
+      this.$navigateTo(DefaultPage, options)
     },
     goBack() {
       this.$navigateBack()
     }
   }
+}
+
+const App = {
+  name: 'App',
+  components: { DefaultPage },
+  template: `
+  <Frame>
+    <DefaultPage/>
+  </Frame>
+  `
 }
 
 new Vue({

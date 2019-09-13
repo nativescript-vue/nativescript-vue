@@ -1,7 +1,5 @@
 import { setFrame, getFrame, deleteFrame } from '../../util/frame'
-import { isHMRChecking, resetHMRChecking } from '../../util/hmr'
-
-let idCounter = 1
+import { warn } from 'core/util/debug'
 
 export default {
   props: {
@@ -23,6 +21,16 @@ export default {
       required: false,
       default: null
     },
+    clearHistory: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    backstackVisible: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
     // injected by the template compiler
     hasRouterView: {
       default: false
@@ -34,13 +42,7 @@ export default {
     }
   },
   created() {
-    let properties = {}
-
-    if (getFrame(this.$props.id)) {
-      properties.id = this.$props.id + idCounter++
-    }
-
-    this.properties = Object.assign({}, this.$attrs, this.$props, properties)
+    this.properties = Object.assign({}, this.$attrs, this.$props)
 
     setFrame(this.properties.id, this)
   },
@@ -48,13 +50,29 @@ export default {
     deleteFrame(this.properties.id)
   },
   render(h) {
+    let vnode = null
+
+    // Render slot to ensure default page is displayed
+    if (this.$slots.default) {
+      if (
+        process.env.NODE_ENV !== 'production' &&
+        this.$slots.default.length > 1
+      ) {
+        warn(
+          `The <Frame> element can only have a single child element, that is the defaultPage.`
+        )
+      }
+      vnode = this.$slots.default[0]
+      vnode.key = 'default'
+    }
+
     return h(
       'NativeFrame',
       {
         attrs: this.properties,
         on: this.$listeners
       },
-      this.$slots.default
+      [vnode]
     )
   },
   methods: {
@@ -89,103 +107,19 @@ export default {
 
     notifyPageMounted(pageVm) {
       let options = {
+        backstackVisible: this.backstackVisible,
+        clearHistory: this.clearHistory,
         create: () => pageVm.$el.nativeView
       }
 
       this.$nextTick(() => {
-        if (isHMRChecking()) {
-          this.replace(options)
-        } else {
-          this.navigate(options)
+        if (pageVm.$el.nativeView.__isNavigatedTo) {
+          // Ignore pages we've navigated to, since they are already on screen
+          return
         }
+
+        this.navigate(options)
       })
-    },
-
-    replace(entry) {
-      const _setAndroidFragmentTransitions = require('tns-core-modules/ui/frame/fragment.transitions')
-        ._setAndroidFragmentTransitions
-
-      const frame = this._getFrame()
-      const page = entry.create()
-      entry.create = () => page
-
-      const backstackEntry = {
-        entry: entry,
-        resolvedPage: page,
-        navDepth: undefined,
-        fragmentTag: undefined
-      }
-      // TODO: this should be in a specific NS Frame method
-      if (require('tns-core-modules/platform').isIOS) {
-        let viewController = backstackEntry.resolvedPage.ios
-        if (!viewController) {
-          throw new Error(
-            'Required page does not have a viewController created.'
-          )
-        }
-        viewController['_transition'] = { name: 'non-animated' }
-        viewController['_delegate'] = null
-        frame._ios.controller.delegate = null
-        viewController['_entry'] = backstackEntry
-
-        if (require('tns-core-modules/utils/utils').ios.MajorVersion > 10) {
-          // Reset back button title before pushing view controller to prevent
-          // displaying default 'back' title (when NavigationButton custom title is set).
-          let barButtonItem = UIBarButtonItem.alloc().initWithTitleStyleTargetAction(
-            '',
-            UIBarButtonItemStyle.Plain,
-            null,
-            null
-          )
-          viewController.navigationItem.backBarButtonItem = barButtonItem
-        }
-
-        let newControllers = NSMutableArray.alloc().initWithArray(
-          frame._ios.controller.viewControllers
-        )
-        if (newControllers.count === 0) {
-          throw new Error('Wrong controllers count.')
-        }
-
-        // the code below fixes a phantom animation that appears on the Back button in this case
-        viewController.navigationItem.hidesBackButton =
-          frame.backStack.length === 0
-
-        // swap the top entry with the new one
-        const skippedNavController = newControllers.lastObject
-        skippedNavController.isBackstackSkipped = true
-        newControllers.removeLastObject()
-        newControllers.addObject(viewController)
-
-        // replace the controllers instead of pushing directly
-        frame._ios.controller.setViewControllersAnimated(newControllers, false)
-      } else {
-        const frameId = frame._android.frameId
-        frame._isBack = false
-        backstackEntry.frameId = frameId
-
-        const manager = frame._getFragmentManager()
-        const currentEntry = frame._currentEntry
-
-        const newFragmentTag = `fragment${frameId}[-1]`
-        const newFragment = frame.createFragment(backstackEntry, newFragmentTag)
-        const animated = false
-        const navigationTransition = null
-
-        const transaction = manager.beginTransaction()
-        require('tns-core-modules/ui/frame/fragment.transitions')._setAndroidFragmentTransitions(
-          animated,
-          navigationTransition,
-          currentEntry,
-          backstackEntry,
-          transaction,
-          frameId
-        )
-        transaction.remove(currentEntry.fragment)
-        transaction.replace(frame.containerViewId, newFragment, newFragmentTag)
-        transaction.commitAllowingStateLoss()
-      }
-      resetHMRChecking()
     },
 
     navigate(entry, back = false) {

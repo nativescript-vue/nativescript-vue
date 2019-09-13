@@ -1,5 +1,24 @@
 import { isObject, isDef, isPrimitive } from 'shared/util'
 import { getFrame } from '../util/frame'
+import { updateDevtools } from '../util'
+
+let sequentialCounter = 0
+
+function serializeNavigationOptions(options) {
+  if (process.env.NODE_ENV === 'production') {
+    return null
+  }
+
+  const allowed = ['backstackVisible', 'clearHistory']
+
+  return Object.keys(options)
+    .filter(key => allowed.includes(key))
+    .map(key => {
+      return `${key}: ${options[key]}`
+    })
+    .concat(`uid: ${++sequentialCounter}`)
+    .join(', ')
+}
 
 export function getFrameInstance(frame) {
   const getFrameById = require('tns-core-modules/ui/frame').getFrameById
@@ -19,13 +38,13 @@ export function getFrameInstance(frame) {
   return getFrame(frame.id)
 }
 
-export function findParentNavigationEntry(vm) {
+export function findParentFrame(vm) {
   if (!vm) {
     return false
   }
 
   let entry = vm.$parent
-  while (entry && entry.$options.name !== 'NavigationEntry') {
+  while (entry && entry.$options.name !== 'Frame') {
     entry = entry.$parent
   }
 
@@ -35,9 +54,9 @@ export function findParentNavigationEntry(vm) {
 export default {
   install(Vue) {
     Vue.prototype.$navigateBack = function(options, backstackEntry = null) {
-      const navEntry = findParentNavigationEntry(this)
+      const parentFrame = findParentFrame(this)
       const defaultOptions = {
-        frame: navEntry ? navEntry.$options.frame : 'default'
+        frame: parentFrame ? parentFrame : 'default'
       }
       options = Object.assign({}, defaultOptions, options)
       const frame = getFrameInstance(options.frame)
@@ -55,17 +74,21 @@ export default {
       return new Promise(resolve => {
         const frame = getFrameInstance(options.frame)
         const navEntryInstance = new Vue({
+          abstract: true,
+          functional: true,
           name: 'NavigationEntry',
-          parent: this.$root,
+          parent: frame,
           frame,
-          props: {
-            frame: {
-              default: frame.id
-            }
-          },
-          render: h => h(component, { props: options.props })
+          render: h =>
+            h(component, {
+              props: options.props,
+              key: serializeNavigationOptions(options)
+            })
         })
         const page = navEntryInstance.$mount().$el.nativeView
+        page.__isNavigatedTo = true
+
+        updateDevtools()
 
         const handler = args => {
           if (args.isBackNavigation) {

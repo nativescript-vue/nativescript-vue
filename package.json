@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue",
-  "version": "2.3.0-rc.0",
+  "version": "2.5.0-alpha.1",
   "description": "NativeScript and Vue integration",
   "main": "dist/index.js",
   "files": [
@@ -15,9 +15,9 @@
     "test": "jest",
     "tdd": "jest --watch",
     "samples": "node build/sample-runner.js",
-    "dev": "npm run dev:core & npm run dev:compiler",
-    "dev:core": "rollup -c build/config.js -w --o dist/index.js --environment TARGET:nativescript-vue",
-    "dev:compiler": "rollup -c build/config.js -w --environment TARGET:nativescript-vue-template-compiler",
+    "dev": "npm run dev:core -- -w & npm run dev:compiler -- -w",
+    "dev:core": "rollup -c build/config.js --o dist/index.js --environment TARGET:nativescript-vue",
+    "dev:compiler": "rollup -c build/config.js --environment TARGET:nativescript-vue-template-compiler",
     "build": "node build/build.js",
     "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js",
@@ -44,8 +44,8 @@
   "homepage": "https://github.com/rigor789/nativescript-vue#readme",
   "nativescript": {
     "platforms": {
-      "android": "4.2.0",
-      "ios": "4.2.0"
+      "android": "6.0.0",
+      "ios": "6.0.1"
     },
     "plugin": {
       "vue": "true",
@@ -71,36 +71,36 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "@babel/plugin-transform-flow-strip-types": "7.4.4",
     "@babel/plugin-transform-modules-commonjs": "^7.4.4",
     "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "7.4.4",
+    "@babel/preset-env": "7.5.5",
     "@babel/register": "^7.4.4",
-    "@commitlint/cli": "7.5.2",
-    "@commitlint/config-conventional": "7.5.0",
+    "@commitlint/cli": "8.1.0",
+    "@commitlint/config-conventional": "8.1.0",
     "@vue/test-utils": "^1.0.0-beta.29",
-    "babel-jest": "24.7.1",
+    "babel-jest": "24.9.0",
     "chalk": "2.4.2",
-    "commitizen": "3.1.1",
-    "conventional-changelog-cli": "2.0.17",
-    "cz-conventional-changelog": "2.1.0",
-    "husky": "2.2.0",
-    "inquirer": "6.3.1",
-    "jest": "24.7.1",
-    "jest-junit": "6.4.0",
-    "lint-staged": "8.1.6",
-    "prettier": "1.17.0",
-    "rollup": "1.11.2",
-    "rollup-plugin-alias": "1.5.1",
-    "rollup-plugin-buble": "0.19.6",
-    "rollup-plugin-commonjs": "9.3.4",
+    "commitizen": "4.0.3",
+    "conventional-changelog-cli": "2.0.23",
+    "cz-conventional-changelog": "3.0.2",
+    "husky": "3.0.4",
+    "inquirer": "7.0.0",
+    "jest": "24.9.0",
+    "jest-junit": "7.0.0",
+    "lint-staged": "9.2.4",
+    "prettier": "1.18.2",
+    "rollup": "1.20.2",
+    "rollup-plugin-alias": "1.5.2",
+    "rollup-plugin-buble": "0.19.8",
+    "rollup-plugin-commonjs": "10.0.2",
     "rollup-plugin-flow-no-whitespace": "1.0.0",
-    "rollup-plugin-node-resolve": "4.2.3",
+    "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
     "rollup-plugin-resolve-aliases": "0.2.0",
-    "semver": "6.0.0",
-    "set-value": "3.0.0",
-    "tns-core-modules": "5.4.1",
+    "semver": "6.3.0",
+    "set-value": "3.0.1",
+    "tns-core-modules": "6.0.7",
     "util-inspect": "0.1.8",
     "vue": "2.6.10",
     "vue-jest": "^3.0.4",
@@ -117,16 +117,14 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "{{platform,__test__}/**/*.js,samples/app/*.js}": [
-        "prettier --write",
-        "git add"
-      ],
-      "docs/src/**/*.js": [
-        "npm run build:docs",
-        "git add"
-      ]
-    }
+    "{{platform,__test__}/**/*.js,samples/app/*.js}": [
+      "prettier --write",
+      "git add"
+    ],
+    "docs/src/**/*.js": [
+      "npm run build:docs",
+      "git add"
+    ]
   },
   "config": {
     "commitizen": {
