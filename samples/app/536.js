@@ -85,13 +85,26 @@ new Vue({
 }).$start()
 
 // Working code. Please comment the previous Vue instance and
-// uncomment the next one in order to workaround the issue
-// The workaround is not using a new Vue component as the
-// Tab content, so the wizard is opened using the root component
+// uncomment the following commented code in order to workaround the issue
+// The workaround is opening the modal in the root component
 /*
+const TabContentWorking = {
+  template: `
+  <GridLayout rows="auto, auto">
+      <Label text="This is the home page." row="0" />
+      <Button text="Open Wizard" row="1" @tap="emitOpenEvent" />
+  </GridLayout>
+  `,
+  methods: {
+    emitOpenEvent() {
+      this.$emit('show')
+    }
+  }
+}
+
 new Vue({
   components: {
-    TabContent,
+    TabContentWorking
   },
   template: `
   <GridLayout rows="*">
@@ -99,11 +112,8 @@ new Vue({
       <TabViewItem title="Tab1" textTransform="capitalize">
         <Frame id="main-frame">
           <Page class="page">
-            <ActionBar title="#536 - workaround" />
-            <GridLayout rows="auto, auto">
-              <Label text="This is the home page." row="0" />
-              <Button text="Open Wizard" row="1" @tap="openWizard" />
-            </GridLayout>
+            <ActionBar title="#536" />
+            <TabContentWorking @show="openModal" />
           </Page>
         </Frame>
       </TabViewItem>
@@ -111,14 +121,14 @@ new Vue({
   </GridLayout>
   `,
   methods: {
-    openWizard() {
+    openModal () {
       // show the wizard in a modal, and make sure it is fullscreen.
       this.$showModal(WizardModal, {
         fullscreen: true
       }).then(res => {
-        console.log('wizard completed with res', res);
-      });
+        console.log('wizard completed with res', res)
+      })
     }
-  },
+  }
 }).$start()
 */
