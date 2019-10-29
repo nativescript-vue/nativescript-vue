@@ -93,25 +93,6 @@ export function after(original, thisArg, wrap) {
   }
 }
 
-export function deepProxy(object, depth = 0) {
-  return new Proxy(object, {
-    get(target, key) {
-      if (key === 'toString' || key === 'valueOf') {
-        return () => ''
-      }
-
-      if (key === Symbol.toPrimitive) {
-        return hint => hint
-      }
-
-      if (depth > 10) {
-        throw new Error('deepProxy over 10 deep.')
-      }
-      return deepProxy({}, depth + 1)
-    }
-  })
-}
-
 export function updateDevtools() {
   if (global.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
     try {
