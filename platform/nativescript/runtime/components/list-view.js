@@ -60,7 +60,7 @@ export default {
     }
 
     this.$refs.listView.setAttribute(
-      '_itemTemplatesInternal',
+      'itemTemplates',
       this.$templates.getKeyedTemplates()
     )
     this.$refs.listView.setAttribute('_itemTemplateSelector', (item, index) => {
