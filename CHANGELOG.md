@@ -1,3 +1,14 @@
+<a name="2.5.0-alpha.2"></a>
+# [2.5.0-alpha.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.1...v2.5.0-alpha.2) (2019-11-13)
+
+
+### Bug Fixes
+
+* listview view recycling ([#572](https://github.com/nativescript-vue/nativescript-vue/issues/572)) ([7a220c9](https://github.com/nativescript-vue/nativescript-vue/commit/7a220c9))
+* **router module:** safely check parent tagname. fixes [#542](https://github.com/nativescript-vue/nativescript-vue/issues/542) ([#550](https://github.com/nativescript-vue/nativescript-vue/issues/550)) ([1cc8142](https://github.com/nativescript-vue/nativescript-vue/commit/1cc8142))
+
+
+
 <a name="2.5.0-alpha.1"></a>
 # [2.5.0-alpha.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.0...v2.5.0-alpha.1) (2019-09-07)
 
