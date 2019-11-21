@@ -74,7 +74,7 @@ export function trace(message) {
     return infoTrace()
   }
 
-  if (!_Vue.config.supressRenderLogs) {
+  if (!_Vue.config.suppressRenderLogs) {
     console.log(
       `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
     )
