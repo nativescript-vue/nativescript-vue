@@ -6,6 +6,7 @@ import NavigatorPlugin from './plugins/navigator-plugin'
 import { setVue } from './util'
 
 Vue.config.silent = true
+Vue.config.suppressRenderLogs = false
 
 setVue(Vue)
 

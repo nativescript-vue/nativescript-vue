@@ -74,9 +74,11 @@ export function trace(message) {
     return infoTrace()
   }
 
-  console.log(
-    `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
-  )
+  if (!_Vue.config.suppressRenderLogs) {
+    console.log(
+      `{NSVue (Vue: ${VUE_VERSION} | NSVue: ${NS_VUE_VERSION})} -> ${message}`
+    )
+  }
 }
 
 export function before(original, thisArg, wrap) {
