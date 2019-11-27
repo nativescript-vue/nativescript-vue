@@ -5,10 +5,10 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "6.0.0"
+      "version": "6.2.0"
     },
     "tns-ios": {
-      "version": "6.0.1"
+      "version": "6.2.0"
     }
   },
   "scripts": {
@@ -23,7 +23,7 @@
     "nativescript-socketio": "^3.3.1",
     "nativescript-theme-core": "1.0.6",
     "nativescript-vue-devtools": "1.2.0",
-    "tns-core-modules": "6.0.1",
+    "tns-core-modules": "6.2.0",
     "vuex": "3.1.1"
   },
   "devDependencies": {
