@@ -390,9 +390,9 @@ registerElement(
 )
 registerElement(
   'FormattedString',
-  () => require('tns-core-modules/text/formatted-string').FormattedString
+  () => require('@nativescript/core/text/formatted-string').FormattedString
 )
-registerElement('Span', () => require('tns-core-modules/text/span').Span)
+registerElement('Span', () => require('@nativescript/core/text/span').Span)
 
 registerElement(
   'DetachedContainer',

@@ -6,7 +6,7 @@ export default {
     items: {
       type: [Array, Object],
       validator: val => {
-        const ObservableArray = require('tns-core-modules/data/observable-array')
+        const ObservableArray = require('@nativescript/core/data/observable-array')
           .ObservableArray
         return Array.isArray(val) || val instanceof ObservableArray
       },

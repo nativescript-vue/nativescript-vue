@@ -1,7 +1,7 @@
 // Ensure `application` and `frame` modules are loaded
 // before overriding `global.__onLiveSyncCore`
-import { run, on, launchEvent } from 'tns-core-modules/application'
-import 'tns-core-modules/ui/frame'
+import { run, on, launchEvent } from '@nativescript/core/application'
+import '@nativescript/core/ui/frame'
 
 import { warn } from 'core/util/index'
 import { patch } from './patch'
