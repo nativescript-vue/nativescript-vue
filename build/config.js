@@ -47,7 +47,7 @@ const builds = {
     banner: banner('NativeScript-Vue'),
     intro,
     external(id) {
-      return id.startsWith('tns-core-modules') || id.startsWith('weex')
+      return id.startsWith('@nativescript') || id.startsWith('tns-core-modules') || id.startsWith('weex')
     },
   },
   'nativescript-vue-template-compiler': {

@@ -92,7 +92,7 @@ export default class ViewNode {
 
   /* istanbul ignore next */
   setAttribute(key, value) {
-    const { isAndroid, isIOS } = require('tns-core-modules/platform')
+    const { isAndroid, isIOS } = require('@nativescript/core/platform')
     const nv = this.nativeView
 
     try {
