@@ -1,3 +1,20 @@
+<a name="2.5.0-alpha.3"></a>
+# [2.5.0-alpha.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.2...v2.5.0-alpha.3) (2019-11-29)
+
+
+### Bug Fixes
+
+* **ListView:** v-if usage crash inside RLV template ([#554](https://github.com/nativescript-vue/nativescript-vue/issues/554)) ([838d98a](https://github.com/nativescript-vue/nativescript-vue/commit/838d98a))
+* **modals:** no ActionBar when launched from a frame within a component ([#558](https://github.com/nativescript-vue/nativescript-vue/issues/558)) ([3225852](https://github.com/nativescript-vue/nativescript-vue/commit/3225852)), closes [#536](https://github.com/nativescript-vue/nativescript-vue/issues/536) [#536](https://github.com/nativescript-vue/nativescript-vue/issues/536)
+
+
+### Features
+
+* allow suppressing renderer logs ([#586](https://github.com/nativescript-vue/nativescript-vue/issues/586)) ([12e5154](https://github.com/nativescript-vue/nativescript-vue/commit/12e5154))
+* use scoped nativescript packages ([#589](https://github.com/nativescript-vue/nativescript-vue/issues/589)) ([121c11d](https://github.com/nativescript-vue/nativescript-vue/commit/121c11d))
+
+
+
 <a name="2.5.0-alpha.2"></a>
 # [2.5.0-alpha.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.1...v2.5.0-alpha.2) (2019-11-13)
 
