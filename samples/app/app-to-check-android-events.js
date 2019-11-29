@@ -1,6 +1,6 @@
 const Vue = require('nativescript-vue')
-const application = require('tns-core-modules/application')
-const platform = require('tns-core-modules/platform')
+const application = require('@nativescript/core/application')
+const platform = require('@nativescript/core/platform')
 
 Vue.config.silent = false
 Vue.config.debug = true

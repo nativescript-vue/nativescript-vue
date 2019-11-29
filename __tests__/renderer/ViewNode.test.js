@@ -8,7 +8,7 @@ jest.mock('renderer/utils', () => ({
   insertChild: jest.fn(),
   removeChild: jest.fn()
 }))
-jest.mock('tns-core-modules/platform', () => {
+jest.mock('@nativescript/core/platform', () => {
   return {
     isAndroid() {
     },

@@ -92,7 +92,7 @@ export default class ViewNode {
 
   /* istanbul ignore next */
   setAttribute(key, value) {
-    const { isAndroid, isIOS } = require('tns-core-modules/platform')
+    const { isAndroid, isIOS } = require('@nativescript/core/platform')
     const nv = this.nativeView
 
     try {
@@ -102,7 +102,7 @@ export default class ViewNode {
         // detect expandable attrs for boolean values
         // See https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
         if (
-          require('tns-core-modules/utils/types').isBoolean(nv[key]) &&
+          require('@nativescript/core/utils/types').isBoolean(nv[key]) &&
           value === ''
         ) {
           value = true
@@ -116,7 +116,7 @@ export default class ViewNode {
           set(
             nv,
             key.slice(0, -7),
-            require('tns-core-modules/xml').XmlParser._dereferenceEntities(
+            require('@nativescript/core/xml').XmlParser._dereferenceEntities(
               value
             )
           )

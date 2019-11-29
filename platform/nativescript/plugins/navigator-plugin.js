@@ -29,7 +29,7 @@ export function getFrameInstance(frame) {
   if (isObject(frame) && isDef(frame.$el)) {
     frame = frame.$el.nativeView
   } else if (isPrimitive(frame)) {
-    frame = require('tns-core-modules/ui/frame').getFrameById(frame)
+    frame = require('@nativescript/core/ui/frame').Frame.getFrameById(frame)
   } else if (isDef(frame.nativeView)) {
     frame = frame.nativeView
   }

@@ -1,7 +1,7 @@
 const Vue = require('nativescript-vue')
 const {
   ObservableArray
-} = require('tns-core-modules/data/observable-array/observable-array')
+} = require('@nativescript/core/data/observable-array/observable-array')
 
 Vue.config.debug = true
 Vue.config.silent = false
