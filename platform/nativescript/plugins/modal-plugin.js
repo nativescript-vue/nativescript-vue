@@ -85,7 +85,7 @@ export default {
         const modalPage = navEntryInstance.$mount().$el.nativeView
         updateDevtools()
 
-        this.$el.nativeView.showModal(modalPage, options)
+        this.$root.nativeView.showModal(modalPage, options)
       })
     }
   }
