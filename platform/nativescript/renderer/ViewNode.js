@@ -172,7 +172,7 @@ export default class ViewNode {
       return this.appendChild(childNode)
     }
 
-    if (referenceNode.parentNode !== this) {
+    if (referenceNode.parentNode && referenceNode.parentNode !== this) {
       throw new Error(
         `Can't insert child, because the reference node has a different parent.`
       )
