@@ -131,7 +131,7 @@ export default class ViewNode {
 
   /* istanbul ignore next */
   setStyle(property, value) {
-    if (!(value = value.trim()).length) {
+    if (!value || !(value = value.trim()).length) {
       return
     }
 
