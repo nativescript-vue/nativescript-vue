@@ -79,7 +79,7 @@ Vue.prototype.$start = function() {
 // Define a `nativeView` getter in every NS vue instance
 Object.defineProperty(Vue.prototype, 'nativeView', {
   get() {
-    return this.$el.nativeView
+    return this.$el ? this.$el.nativeView : undefined
   }
 })
 
