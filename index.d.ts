@@ -5,7 +5,8 @@ import { Page, NavigationEntry } from 'tns-core-modules/ui/frame/frame'
 import { View } from 'tns-core-modules/ui/core/view'
 
 export interface NavigationEntryVue extends NavigationEntry {
-    props?: Record<string, any>
+    props?: Record<string, any>,
+    frame?: any
 }
 
 export type navigateTo = (
