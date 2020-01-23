@@ -8,7 +8,8 @@ export type NativeScriptVueItemEventData<T> = ItemEventData & { item: T }
 
 export interface NavigationEntryVue extends NavigationEntry {
     props?: Record<string, any>,
-    frame?: any
+    frame?: any,
+  resolveOnNavigated?:boolean
 }
 
 export type navigateTo = (

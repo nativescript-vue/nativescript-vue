@@ -69,6 +69,7 @@ export default {
       }
       // build options object with defaults
       options = Object.assign({}, defaultOptions, options)
+      const resolveOnNavigated = options.resolveOnNavigated === true
 
       return new Promise(resolve => {
         const frame = getFrameInstance(options.frame)
@@ -90,6 +91,9 @@ export default {
         updateDevtools()
 
         const handler = args => {
+          if (resolveOnNavigated) {
+            resolve(page)
+          }
           if (args.isBackNavigation) {
             page.off('navigatedFrom', handler)
             navEntryInstance.$destroy()
@@ -106,7 +110,9 @@ export default {
         }
 
         frame.navigate(Object.assign({}, options, { create: () => page }))
-        resolve(page)
+        if (!resolveOnNavigated) {
+          resolve(page)
+        }
       })
     }
   }
