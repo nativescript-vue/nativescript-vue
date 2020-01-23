@@ -64,7 +64,9 @@ export function getViewClass(elementName) {
   try {
     return entry.resolver()
   } catch (e) {
-    throw new TypeError(`Could not load view for: ${elementName}. ${e}`)
+    throw new TypeError(
+      `Could not load view for: ${elementName}. ${e} ${e.stack}`
+    )
   }
 }
 
