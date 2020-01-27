@@ -15,7 +15,7 @@ const getParentAndChild = (parentType) => {
 
 describe('utils', () => {
   test('isView', () => {
-    const View = require('tns-core-modules/ui/core/view').View;
+    const View = require('@nativescript/core/ui/core/view').View;
 
     expect(utils.isView()).toEqual(false)
     expect(utils.isView('a')).toEqual(false)
@@ -24,7 +24,7 @@ describe('utils', () => {
   })
 
   test('isLayout', () => {
-    const LayoutBase = require('tns-core-modules/ui/layouts/layout-base').LayoutBase;
+    const LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase;
 
     expect(utils.isLayout()).toEqual(false)
     expect(utils.isLayout('a')).toEqual(false)
@@ -33,7 +33,7 @@ describe('utils', () => {
   })
 
   test('isContentView', () => {
-    const ContentView = require('tns-core-modules/ui/content-view').ContentView;
+    const ContentView = require('@nativescript/core/ui/content-view').ContentView;
 
     expect(utils.isContentView()).toEqual(false)
     expect(utils.isContentView('a')).toEqual(false)
@@ -54,7 +54,7 @@ describe('utils', () => {
 
 
   test('insertChild adds childNode to Layout parent', () => {
-    const LayoutBase = require('tns-core-modules/ui/layouts/layout-base').LayoutBase;
+    const LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase;
     const {parentNode, childNode} = getParentAndChild(LayoutBase);
     parentNode.nativeView.addChild = jest.fn();
     childNode.nativeView.parent = null;
@@ -65,7 +65,7 @@ describe('utils', () => {
 
 
   test('insertChild adds childNode at index to Layout parent', () => {
-    const LayoutBase = require('tns-core-modules/ui/layouts/layout-base').LayoutBase;
+    const LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase;
     const {parentNode, childNode} = getParentAndChild(LayoutBase);
     parentNode.nativeView.insertChild = jest.fn();
     childNode.nativeView.parent = null;
@@ -75,7 +75,7 @@ describe('utils', () => {
   })
 
   test('insertChild removes childNode if the parent is the same Layout parent', () => {
-    const LayoutBase = require('tns-core-modules/ui/layouts/layout-base').LayoutBase;
+    const LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase;
     const {parentNode, childNode} = getParentAndChild(LayoutBase);
     parentNode.nativeView.getChildIndex = jest.fn().mockReturnValueOnce(1).mockReturnValueOnce(-1);
     parentNode.nativeView.removeChild = jest.fn();
@@ -93,7 +93,7 @@ describe('utils', () => {
   })
 
   test('insertChild adds comment node to ContentView parent', () => {
-    const ContentView = require('tns-core-modules/ui/content-view').ContentView;
+    const ContentView = require('@nativescript/core/ui/content-view').ContentView;
     const {parentNode, childNode} = getParentAndChild(ContentView);
     childNode.nodeType = 8;
     parentNode.nativeView._addView = jest.fn();
@@ -103,7 +103,7 @@ describe('utils', () => {
   })
 
   test('insertChild sets content of ContentView parent', () => {
-    const ContentView = require('tns-core-modules/ui/content-view').ContentView;
+    const ContentView = require('@nativescript/core/ui/content-view').ContentView;
     const {parentNode, childNode} = getParentAndChild(ContentView);
 
     utils.insertChild(parentNode, childNode);

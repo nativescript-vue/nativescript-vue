@@ -1,0 +1,13 @@
+on: issues
+name: Run issue bot
+jobs:
+  build:
+    name: nativescript-vue/issue-bot-action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: nativescript-vue/issue-bot-action
+      uses: nativescript-vue/issue-bot-action@master
+      env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}

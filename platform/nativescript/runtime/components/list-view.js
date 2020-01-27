@@ -6,7 +6,7 @@ export default {
     items: {
       type: [Array, Object],
       validator: val => {
-        const ObservableArray = require('tns-core-modules/data/observable-array')
+        const ObservableArray = require('@nativescript/core/data/observable-array')
           .ObservableArray
         return Array.isArray(val) || val instanceof ObservableArray
       },
@@ -60,10 +60,10 @@ export default {
     }
 
     this.$refs.listView.setAttribute(
-      '_itemTemplatesInternal',
+      'itemTemplates',
       this.$templates.getKeyedTemplates()
     )
-    this.$refs.listView.setAttribute('_itemTemplateSelector', (item, index) => {
+    this.$refs.listView.setAttribute('itemTemplateSelector', (item, index) => {
       return this.$templates.selectorFn(this.getItemContext(item, index))
     })
   },

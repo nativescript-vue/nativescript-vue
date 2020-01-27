@@ -88,7 +88,7 @@ export default {
     },
 
     _composeTransition(entry) {
-      const isAndroid = require('tns-core-modules/platform').isAndroid
+      const isAndroid = require('@nativescript/core/platform').isAndroid
       const platformEntryProp = `transition${isAndroid ? 'Android' : 'iOS'}`
       const entryProp = entry[platformEntryProp]
         ? platformEntryProp

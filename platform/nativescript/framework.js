@@ -6,6 +6,7 @@ import NavigatorPlugin from './plugins/navigator-plugin'
 import { setVue } from './util'
 
 Vue.config.silent = true
+Vue.config.suppressRenderLogs = false
 
 setVue(Vue)
 
@@ -30,7 +31,7 @@ console.log = (function(log, inspect, Vue) {
 })(console.log, inspect, Vue)
 
 global.__onLiveSyncCore = () => {
-  const frame = require('tns-core-modules/ui/frame').topmost()
+  const frame = require('@nativescript/core/ui/frame').Frame.topmost()
   if (frame) {
     if (frame.currentPage && frame.currentPage.modal) {
       frame.currentPage.modal.closeModal()
@@ -38,7 +39,7 @@ global.__onLiveSyncCore = () => {
 
     if (frame.currentPage) {
       frame.currentPage.addCssFile(
-        require('tns-core-modules/application').getCssFileName()
+        require('@nativescript/core/application').getCssFileName()
       )
     }
   }

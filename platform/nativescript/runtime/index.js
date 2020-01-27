@@ -1,7 +1,7 @@
 // Ensure `application` and `frame` modules are loaded
 // before overriding `global.__onLiveSyncCore`
-import { run, on, launchEvent } from 'tns-core-modules/application'
-import 'tns-core-modules/ui/frame'
+import { run, on, launchEvent } from '@nativescript/core/application'
+import '@nativescript/core/ui/frame'
 
 import { warn } from 'core/util/index'
 import { patch } from './patch'
@@ -79,7 +79,7 @@ Vue.prototype.$start = function() {
 // Define a `nativeView` getter in every NS vue instance
 Object.defineProperty(Vue.prototype, 'nativeView', {
   get() {
-    return this.$el.nativeView
+    return this.$el ? this.$el.nativeView : undefined
   }
 })
 

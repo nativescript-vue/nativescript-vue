@@ -1,7 +1,7 @@
 const Vue = require('nativescript-vue')
-const frame = require('tns-core-modules/ui/frame')
-const platform = require('tns-core-modules/platform')
-const utils = require('tns-core-modules/utils/utils')
+const frame = require('@nativescript/core/ui/frame')
+const platform = require('@nativescript/core/platform')
+const utils = require('@nativescript/core/utils/utils')
 
 Vue.config.debug = true
 Vue.config.silent = false
