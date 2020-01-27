@@ -70,17 +70,16 @@
     "nativescript-hook": "0.2.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/plugin-transform-flow-strip-types": "7.4.4",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.8.3",
     "@babel/plugin-transform-modules-commonjs": "^7.4.4",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "7.5.5",
-    "@babel/preset-flow": "^7.0.0",
-    "@babel/register": "^7.4.4",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-flow": "^7.8.0",
+    "@babel/register": "^7.8.0",
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
-    "@vue/test-utils": "^1.0.0-beta.29",
-    "babel-jest": "24.9.0",
+    "@vue/test-utils": "^1.0.0-beta.31",
+    "babel-jest": "25.1.0",
     "chalk": "2.4.2",
     "commitizen": "4.0.3",
     "conventional-changelog-cli": "2.0.23",
@@ -104,7 +103,7 @@
     "tns-core-modules": "6.0.7",
     "util-inspect": "0.1.8",
     "vue": "2.6.10",
-    "vue-jest": "^3.0.4",
+    "vue-jest": "^3.0.5",
     "vue-template-compiler": "2.6.10"
   },
   "prettier": {
