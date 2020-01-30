@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import { getComponentByName } from 'register'
 
 const Button = getComponentByName('Button')
@@ -30,7 +30,9 @@ const ButtonTest = {
 }
 
 describe('Button', () => {
-  const wrapper = mount(ButtonTest)
+  const Vue = require('runtime').Vue
+  const localVue = createLocalVue(Vue)
+  const wrapper = mount(ButtonTest, { localVue })
 
   it('renders the correct markup', () => {
     expect(wrapper.html()).toContain('<nativestacklayout>\n  <nativelabel text="0"></nativelabel>\n  <nativebutton>Increment</nativebutton>\n</nativestacklayout>')

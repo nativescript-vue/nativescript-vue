@@ -1,8 +1,3 @@
-const { readFileSync } = require("fs")
-const babelConfig = JSON.parse(readFileSync("./.babelrc", "utf8"))
-
-require("@babel/register")(babelConfig)
-
 const { join } = require("path")
 const ROOT = process.cwd()
 const TESTS = join(ROOT, "tests")
@@ -17,7 +12,8 @@ module.exports = {
   modulePaths: [
     "<rootDir>/platform/nativescript",
     "<rootDir>/node_modules/vue/src",
-    "<rootDir>/node_modules/vue/src/platforms"
+    "<rootDir>/node_modules/vue/src/platforms",
+    "<rootDir>/tests"
   ],
   collectCoverageFrom: [
     "platform/**/*.js",

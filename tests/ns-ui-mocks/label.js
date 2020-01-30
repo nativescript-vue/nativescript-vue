@@ -1,4 +1,3 @@
-
 const NSComponent = require('./base')
 
 class Label extends NSComponent {

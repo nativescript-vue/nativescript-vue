@@ -29,6 +29,21 @@ jest.mock('@nativescript/core/ui/layouts/layout-base', () => {
     }
   }
 }, {virtual: true})
+jest.mock('@nativescript/core/application', () => {
+  return {
+    Application() {
+    }
+  }
+}, {virtual: true})
+jest.mock('@nativescript/core/ui/frame', () => {
+  const getComponentByName = require('register').getComponentByName
+  const Frame = getComponentByName('Frame')
+
+  return {
+    __esModule: true,
+    default: Frame,
+  }
+}, {virtual: true})
 
 import { registerElement } from 'register'
 import Vue from 'vue'
@@ -41,9 +56,9 @@ Vue.config.ignoredElements = [
   'nativepage',
   'nativestacklayout',
 ]
-
 registerElement('Button', () => require('ns-ui-mocks/button').Button)
 registerElement('Label', () => require('ns-ui-mocks/label').Label)
 registerElement('Frame', () => require('ns-ui-mocks/frame').Frame)
 registerElement('Page', () => require('ns-ui-mocks/page').Page)
 registerElement('StackLayout', () => require('ns-ui-mocks/stacklayout').StackLayout)
+registerElement('Document', () => require('ns-ui-mocks/proxyviewcontainer').ProxyViewContainer)
