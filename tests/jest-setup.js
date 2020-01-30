@@ -1,29 +1,29 @@
-jest.mock('tns-core-modules/platform', () => {
+jest.mock('@nativescript/core/platform', () => {
   return {
     isAndroid: true,
     isIOS: false,
   }
 }, {virtual: true})
 
-jest.mock('tns-core-modules/utils/utils', () => {
+jest.mock('@nativescript/core/utils/utils', () => {
   return {
     ios: {},
   }
 }, {virtual: true})
 
-jest.mock('tns-core-modules/ui/core/view', () => {
+jest.mock('@nativescript/core/ui/core/view', () => {
   return {
     View() {
     }
   }
 }, {virtual: true})
-jest.mock('tns-core-modules/ui/content-view', () => {
+jest.mock('@nativescript/core/ui/content-view', () => {
   return {
     ContentView() {
     }
   }
 }, {virtual: true})
-jest.mock('tns-core-modules/ui/layouts/layout-base', () => {
+jest.mock('@nativescript/core/ui/layouts/layout-base', () => {
   return {
     LayoutBase() {
     }

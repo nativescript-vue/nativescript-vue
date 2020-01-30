@@ -42,7 +42,7 @@ const PageTest = {
   }
 }
 
-jest.mock('tns-core-modules/ui/frame', () => {
+jest.mock('@nativescript/core/ui/frame', () => {
   const getComponentByName = require('register').getComponentByName
   const Frame = getComponentByName('Frame')
 
