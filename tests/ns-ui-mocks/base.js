@@ -7,7 +7,6 @@ class NSComponent {
   removeChild() {
   }
   _removeView() {
-
   }
   addEventListener(name, func, node) {
     this._eventListener[name] = func

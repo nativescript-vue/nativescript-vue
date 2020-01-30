@@ -31,6 +31,16 @@ jest.mock('@nativescript/core/ui/layouts/layout-base', () => {
 }, {virtual: true})
 
 import { registerElement } from 'register'
+import Vue from 'vue'
+
+// To avoid `Unknown custom element` warning from Vue
+Vue.config.ignoredElements = [
+  'nativebutton',
+  'nativeframe',
+  'nativelabel',
+  'nativepage',
+  'nativestacklayout',
+]
 
 registerElement('Button', () => require('ns-ui-mocks/button').Button)
 registerElement('Label', () => require('ns-ui-mocks/label').Label)
