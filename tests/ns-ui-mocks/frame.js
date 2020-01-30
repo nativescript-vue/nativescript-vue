@@ -1,4 +1,4 @@
-const NSComponent = require('./ns-ui-mocks/base')
+const NSComponent = require('./base')
 
 const topmostFrame = () => {
   this.navigatedTo = 'nowhere'

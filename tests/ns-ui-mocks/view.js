@@ -1,8 +1,8 @@
 const NSComponent = require('./base')
 
-class Page extends NSComponent {
+class View extends NSComponent {
 }
 
 module.exports = {
-  Page
+  View
 }

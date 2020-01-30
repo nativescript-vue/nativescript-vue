@@ -11,30 +11,31 @@ jest.mock('@nativescript/core/utils/utils', () => {
   }
 }, {virtual: true})
 
-jest.mock('@nativescript/core/ui/core/view', () => {
-  return {
-    View() {
-    }
-  }
-}, {virtual: true})
-jest.mock('@nativescript/core/ui/content-view', () => {
-  return {
-    ContentView() {
-    }
-  }
-}, {virtual: true})
-jest.mock('@nativescript/core/ui/layouts/layout-base', () => {
-  return {
-    LayoutBase() {
-    }
-  }
-}, {virtual: true})
+jest.mock(
+  '@nativescript/core/ui/core/view',
+  () => require('ns-ui-mocks/view'),
+  { virtual: true },
+)
+
+jest.mock(
+  '@nativescript/core/ui/content-view',
+  () => require('ns-ui-mocks/contentview'),
+  { virtual: true }
+)
+
+jest.mock(
+  '@nativescript/core/ui/layouts/layout-base',
+  () => require('ns-ui-mocks/layoutbase'),
+  { virtual: true }
+)
+
 jest.mock('@nativescript/core/application', () => {
   return {
     Application() {
     }
   }
 }, {virtual: true})
+
 jest.mock('@nativescript/core/ui/frame', () => {
   const getComponentByName = require('register').getComponentByName
   const Frame = getComponentByName('Frame')
