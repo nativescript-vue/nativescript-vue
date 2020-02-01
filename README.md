@@ -73,6 +73,7 @@ and these awesome backers:
 - Thomas Kuhlmann
 - Abdullah Al Mashmoum
 - Stian Årsnes
+- Robertino Vasilescu
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
