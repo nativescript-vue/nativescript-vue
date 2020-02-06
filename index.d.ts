@@ -18,7 +18,7 @@ export type navigateTo = (
     cb?: () => Page,
 ) => Promise<Page>;
 
-export interface ModalOptions extends ShowModalOptions {
+export interface ModalOptions extends Partial<ShowModalOptions> {
     props?: Record<string, any>;
 }
 
