@@ -85,7 +85,7 @@ jest.mock('@nativescript/core/ui/frame', () => {
 }, {virtual: true})
 
 import { registerElement } from 'register'
-import * as builtInComponents from 'runtime/components'
+import Frame from 'runtime/components/frame'
 import Vue from 'vue'
 
 // To avoid `Unknown custom element` warning from Vue
@@ -106,7 +106,7 @@ registerElement('Label', () => require('@nativescript/core/ui/label').Label, {
 })
 registerElement('Frame', () => require('@nativescript/core/ui/frame').Frame, {
   insertChild(parentNode, childNode, atIndex) {},
-  component: builtInComponents.Frame
+  component: Frame
 })
 registerElement('Page', () => require('@nativescript/core/ui/page').Page)
 registerElement('StackLayout', () => require('@nativescript/core/ui/stacklayout').StackLayout)
