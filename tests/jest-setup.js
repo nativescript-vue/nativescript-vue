@@ -3,13 +3,15 @@ jest.mock('@nativescript/core/platform', () => {
     isAndroid: true,
     isIOS: false,
   }
-}, {virtual: true})
+}, {virtual: true}
+)
 
 jest.mock('@nativescript/core/utils/utils', () => {
   return {
     ios: {},
   }
-}, {virtual: true})
+}, {virtual: true}
+)
 
 jest.mock(
   '@nativescript/core/ui/core/view',
@@ -29,17 +31,53 @@ jest.mock(
   { virtual: true }
 )
 
+jest.mock(
+  '@nativescript/core/ui/button',
+  () => require('ns-ui-mocks/button'),
+  { virtual: true }
+)
+
+jest.mock(
+  '@nativescript/core/ui/label',
+  () => require('ns-ui-mocks/label'),
+  { virtual: true }
+)
+
+jest.mock(
+  '@nativescript/core/ui/frame',
+  () => require('ns-ui-mocks/frame'),
+  { virtual: true }
+)
+
+jest.mock(
+  '@nativescript/core/ui/page',
+  () => require('ns-ui-mocks/page'),
+  { virtual: true }
+)
+
+jest.mock(
+  '@nativescript/core/ui/proxyviewcontainer',
+  () => require('ns-ui-mocks/proxyviewcontainer'),
+  { virtual: true }
+)
+
+jest.mock(
+  '@nativescript/core/ui/stacklayout',
+  () => require('ns-ui-mocks/stacklayout'),
+  { virtual: true }
+)
+
 jest.mock('@nativescript/core/application', () => {
   return {
     Application() {
     }
   }
-}, {virtual: true})
+}, {virtual: true}
+)
 
 jest.mock('@nativescript/core/ui/frame', () => {
   const getComponentByName = require('register').getComponentByName
   const Frame = getComponentByName('Frame')
-
   return {
     __esModule: true,
     default: Frame,
@@ -47,6 +85,7 @@ jest.mock('@nativescript/core/ui/frame', () => {
 }, {virtual: true})
 
 import { registerElement } from 'register'
+import * as builtInComponents from 'runtime/components'
 import Vue from 'vue'
 
 // To avoid `Unknown custom element` warning from Vue
@@ -57,9 +96,18 @@ Vue.config.ignoredElements = [
   'nativepage',
   'nativestacklayout',
 ]
-registerElement('Button', () => require('ns-ui-mocks/button').Button)
-registerElement('Label', () => require('ns-ui-mocks/label').Label)
-registerElement('Frame', () => require('ns-ui-mocks/frame').Frame)
-registerElement('Page', () => require('ns-ui-mocks/page').Page)
-registerElement('StackLayout', () => require('ns-ui-mocks/stacklayout').StackLayout)
-registerElement('Document', () => require('ns-ui-mocks/proxyviewcontainer').ProxyViewContainer)
+
+registerElement('Button', () => require('@nativescript/core/ui/button').Button)
+registerElement('Label', () => require('@nativescript/core/ui/label').Label, {
+  model: {
+    prop: 'text',
+    event: 'textChange'
+  }
+})
+registerElement('Frame', () => require('@nativescript/core/ui/frame').Frame, {
+  insertChild(parentNode, childNode, atIndex) {},
+  component: builtInComponents.Frame
+})
+registerElement('Page', () => require('@nativescript/core/ui/page').Page)
+registerElement('StackLayout', () => require('@nativescript/core/ui/stacklayout').StackLayout)
+registerElement('Document', () => require('@nativescript/core/ui/proxyviewcontainer').ProxyViewContainer)
