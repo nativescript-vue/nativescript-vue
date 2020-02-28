@@ -1,8 +1,10 @@
-// import vue.js typings
-// import Vue from 'vue';
-import { Vue, VueConstructor } from 'vue/types/vue'
 import { Page, NavigationEntry } from 'tns-core-modules/ui/frame/frame'
+import { ItemEventData } from 'tns-core-modules/ui/list-view'
 import { View } from 'tns-core-modules/ui/core/view'
+import { Vue, VueConstructor } from 'vue/types/vue'
+
+// ListView ItemEventData with the addition of the item property
+export type NativeScriptVueItemEventData<T> = ItemEventData & { item: T }
 
 export interface NavigationEntryVue extends NavigationEntry {
     props?: Record<string, any>,
