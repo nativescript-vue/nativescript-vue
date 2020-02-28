@@ -1,3 +1,19 @@
+<a name="2.5.0"></a>
+# [2.5.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.3...v2.5.0) (2020-02-28)
+
+
+### Bug Fixes
+
+* **TabStripItem:** bind attributes and listeners ([#601](https://github.com/nativescript-vue/nativescript-vue/issues/601)) ([aa42642](https://github.com/nativescript-vue/nativescript-vue/commit/aa42642))
+* nativeView accessor when $el is undefined. fixes [#595](https://github.com/nativescript-vue/nativescript-vue/issues/595) ([#602](https://github.com/nativescript-vue/nativescript-vue/issues/602)) ([6df1351](https://github.com/nativescript-vue/nativescript-vue/commit/6df1351))
+
+
+### Features
+
+* **types:** export ListView ItemEventData with `item` ([3ba4941](https://github.com/nativescript-vue/nativescript-vue/commit/3ba4941))
+
+
+
 <a name="2.5.0-alpha.3"></a>
 # [2.5.0-alpha.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.2...v2.5.0-alpha.3) (2019-11-29)
 
@@ -420,12 +436,7 @@ been added in 4.0
 
 
 <a name="1.1.3"></a>
-## [1.1.3](https://github.com/nativescript-vue/nativescript-vue/compare/v1.1.2...v1.1.3) (2018-02-21)
-
-
-
-<a name="1.1.2"></a>
-## [1.1.2](https://github.com/nativescript-vue/nativescript-vue/compare/v1.0.0...v1.1.2) (2018-02-21)
+## [1.1.3](https://github.com/nativescript-vue/nativescript-vue/compare/v1.0.0...v1.1.3) (2018-02-21)
 
 
 ### Bug Fixes
