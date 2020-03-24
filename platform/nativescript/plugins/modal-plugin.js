@@ -65,14 +65,20 @@ export default {
         }
 
         // build options object with defaults
-        options = Object.assign({}, options, {
-          context: null,
-          closeCallback: closeCb
-        })
+        options = Object.assign(
+          {
+            target: this.$root
+          },
+          options,
+          {
+            context: null,
+            closeCallback: closeCb
+          }
+        )
 
         const navEntryInstance = new Vue({
           name: 'ModalEntry',
-          parent: this.$root,
+          parent: options.target,
           methods: {
             closeCb
           },
@@ -85,7 +91,7 @@ export default {
         const modalPage = navEntryInstance.$mount().$el.nativeView
         updateDevtools()
 
-        this.$root.nativeView.showModal(modalPage, options)
+        options.target.nativeView.showModal(modalPage, options)
       })
     }
   }
