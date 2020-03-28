@@ -1,3 +1,13 @@
+<a name="2.5.1"></a>
+## [2.5.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0...v2.5.1) (2020-03-28)
+
+
+### Features
+
+* **modals:** allow passing in the target for opening the modal ([#614](https://github.com/nativescript-vue/nativescript-vue/issues/614)) ([31bc425](https://github.com/nativescript-vue/nativescript-vue/commit/31bc425)), closes [#612](https://github.com/nativescript-vue/nativescript-vue/issues/612)
+
+
+
 <a name="2.5.0"></a>
 # [2.5.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0-alpha.3...v2.5.0) (2020-02-28)
 
