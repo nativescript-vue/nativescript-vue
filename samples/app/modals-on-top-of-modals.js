@@ -30,6 +30,7 @@ const ModalComponent = {
         <ActionBar title="Modal ActionBar"/>
         <StackLayout>
             <Button text="Open another modal" @tap="openModal"/>
+            <Button text="Close this modal" @tap="$modal.close"/>
         </StackLayout>
     </Page>
 </Frame>

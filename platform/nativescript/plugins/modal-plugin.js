@@ -1,4 +1,6 @@
+import { isObject, isDef, isPrimitive } from 'shared/util'
 import { updateDevtools } from '../util'
+import { VUE_ELEMENT_REF } from '../renderer/ElementNode'
 
 let sequentialCounter = 0
 
@@ -16,6 +18,16 @@ function serializeModalOptions(options) {
     })
     .concat(`uid: ${++sequentialCounter}`)
     .join(', ')
+}
+
+function getTargetView(target) {
+  if (isObject(target) && isDef(target.$el)) {
+    return target.$el.nativeView
+  } else if (isDef(target.nativeView)) {
+    return target.nativeView
+  } else if (target[VUE_ELEMENT_REF]) {
+    return target
+  }
 }
 
 function _findParentModalEntry(vm) {
@@ -91,7 +103,7 @@ export default {
         const modalPage = navEntryInstance.$mount().$el.nativeView
         updateDevtools()
 
-        options.target.nativeView.showModal(modalPage, options)
+        getTargetView(options.target).showModal(modalPage, options)
       })
     }
   }
