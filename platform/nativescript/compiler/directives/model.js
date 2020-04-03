@@ -1,5 +1,5 @@
 import { genComponentModel, genAssignmentCode } from 'compiler/directives/model'
-import { isKnownView, getViewMeta } from '../../element-registry'
+import { isKnownView, getViewMeta } from '../../register'
 import { addHandler, addAttr } from 'compiler/helpers'
 
 export default function model(el, dir) {

@@ -1,5 +1,5 @@
 import { getAndRemoveAttr, addRawAttr } from 'compiler/helpers'
-import { normalizeElementName } from '../../element-registry'
+import { normalizeElementName } from '../../register'
 import { parseFor } from 'compiler/parser/index'
 import { warn } from 'core/util/debug'
 

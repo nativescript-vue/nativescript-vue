@@ -1,24 +1,5 @@
 import * as utils from 'renderer/utils'
 
-jest.mock('@nativescript/core/ui/core/view', () => {
-  return {
-    View() {
-    }
-  }
-}, {virtual: true})
-jest.mock('@nativescript/core/ui/content-view', () => {
-  return {
-    ContentView() {
-    }
-  }
-}, {virtual: true})
-jest.mock('@nativescript/core/ui/layouts/layout-base', () => {
-  return {
-    LayoutBase() {
-    }
-  }
-}, {virtual: true})
-
 const getParentAndChild = (parentType) => {
   return {
     parentNode: {

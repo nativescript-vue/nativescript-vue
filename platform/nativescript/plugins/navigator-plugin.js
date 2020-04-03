@@ -21,6 +21,7 @@ function serializeNavigationOptions(options) {
 }
 
 export function getFrameInstance(frame) {
+  const getFrameById = require('tns-core-modules/ui/frame').getFrameById
   // get the frame that we need to navigate
   // this can be a frame id (String)
   // a Vue ref to a frame

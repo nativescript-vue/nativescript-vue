@@ -1,5 +1,5 @@
 import ViewNode from 'renderer/ViewNode'
-import * as elReg from 'element-registry'
+import * as register from 'register'
 
 jest.mock('runtime/components', () => {
   return {}
@@ -263,8 +263,8 @@ describe('ViewNode', () => {
   })
 
   test('meta should be fetched only once upon get', () => {
-    elReg.getViewMeta = jest.fn()
-    elReg.getViewMeta.mockReturnValue('meta')
+    register.getViewMeta = jest.fn()
+    register.getViewMeta.mockReturnValue('meta')
 
     let node = new ViewNode()
     node.tagName = 'testing'
@@ -272,8 +272,8 @@ describe('ViewNode', () => {
     let meta = node.meta
     let second_meta = node.meta
 
-    expect(elReg.getViewMeta).toHaveBeenCalledWith('nativetesting')
-    expect(elReg.getViewMeta.mock.calls.length).toBe(1)
+    expect(register.getViewMeta).toHaveBeenCalledWith('nativetesting')
+    expect(register.getViewMeta.mock.calls.length).toBe(1)
     expect(meta).toEqual('meta')
     expect(second_meta).toEqual('meta')
   })

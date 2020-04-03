@@ -70,11 +70,18 @@
     "nativescript-hook": "0.2.5"
   },
   "devDependencies": {
-    "@babel/plugin-transform-flow-strip-types": "7.4.4",
-    "@babel/preset-env": "7.5.5",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.8.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-flow": "^7.8.0",
+    "@babel/register": "^7.8.0",
+    "@babel/runtime": "^7.8.3",
     "@commitlint/cli": "8.1.0",
     "@commitlint/config-conventional": "8.1.0",
-    "babel-jest": "24.9.0",
+    "@vue/test-utils": "^1.0.0-beta.31",
+    "babel-jest": "25.1.0",
     "chalk": "2.4.2",
     "commitizen": "4.0.3",
     "conventional-changelog-cli": "2.0.23",
@@ -95,27 +102,11 @@
     "rollup-plugin-resolve-aliases": "0.2.0",
     "semver": "6.3.0",
     "set-value": "3.0.1",
-    "tns-core-modules": "6.0.7",
+    "tns-core-modules": "6.3.0",
     "util-inspect": "0.1.8",
-    "vue": "2.6.10"
-  },
-  "jest": {
-    "verbose": true,
-    "modulePaths": [
-      "<rootDir>/platform/nativescript"
-    ],
-    "collectCoverageFrom": [
-      "platform/**/*.js",
-      "!**/node_modules/**"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/samples"
-    ],
-    "collectCoverage": true,
-    "testURL": "http://localhost"
+    "vue": "2.6.10",
+    "vue-jest": "^3.0.5",
+    "vue-template-compiler": "2.6.10"
   },
   "prettier": {
     "semi": false,
