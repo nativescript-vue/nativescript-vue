@@ -18,18 +18,34 @@ export default class DocumentNode extends ViewNode {
   }
 
   static createComment(text) {
-    return new CommentNode(text)
+    try {
+      return new CommentNode(text)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   static createElement(tagName) {
-    return new ElementNode(tagName)
+    try {
+      return new ElementNode(tagName)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   static createElementNS(namespace, tagName) {
-    return new ElementNode(namespace + ':' + tagName)
+    try {
+      return new ElementNode(namespace + ':' + tagName)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   static createTextNode(text) {
-    return new TextNode(text)
+    try {
+      return new TextNode(text)
+    } catch (err) {
+      console.log(err)
+    }
   }
 }

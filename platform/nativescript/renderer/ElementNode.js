@@ -11,6 +11,11 @@ export default class ElementNode extends ViewNode {
     this.tagName = tagName
 
     const viewClass = getViewClass(tagName)
+    if (!viewClass) {
+      throw new TypeError(
+        `No native component for element tag name ${tagName}.`
+      )
+    }
     this._nativeView = new viewClass()
     this._nativeView[VUE_ELEMENT_REF] = this
   }
