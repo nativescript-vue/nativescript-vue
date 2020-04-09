@@ -1,4 +1,5 @@
 import * as builtInComponents from './runtime/components'
+import { trace } from './util'
 
 const elementMap = {}
 const nativeRegExp = /Native/gi
@@ -25,8 +26,11 @@ export function registerElement(elementName, resolver, meta) {
 
   meta = Object.assign({}, defaultViewMeta, meta)
 
+  // allow override of elements classes (N ones especially)
+  // this is very practical in case you want to test new component
+  // or simply override the global Button for example
   if (elementMap[normalizedName]) {
-    throw new Error(`Element for ${elementName} already registered.`)
+    trace(`Element for ${elementName} already registered.`)
   }
 
   if (!meta.component) {
