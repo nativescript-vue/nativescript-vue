@@ -1,4 +1,3 @@
-import inspect from 'util-inspect'
 import Vue from './runtime/index'
 import ModalPlugin from './plugins/modal-plugin'
 import NavigatorPlugin from './plugins/navigator-plugin'
@@ -12,23 +11,6 @@ setVue(Vue)
 
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
-
-const newLineRegExp = /\\n/g
-
-console.log = (function(log, inspect, Vue) {
-  return function(...args) {
-    return log.call(
-      this,
-      ...Array.prototype.map.call(args, function(arg) {
-        return inspect(arg, {
-          depth: 2,
-          colors: Vue.config.debug,
-          showHidden: true
-        }).replace(newLineRegExp, '\n')
-      })
-    )
-  }
-})(console.log, inspect, Vue)
 
 global.__onLiveSyncCore = () => {
   const frame = require('@nativescript/core/ui/frame').Frame.topmost()
