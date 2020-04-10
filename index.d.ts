@@ -19,6 +19,7 @@ export type navigateTo = (
 ) => Promise<Page>;
 
 export interface ModalOptions extends Partial<ShowModalOptions> {
+    target?: any; // optional Vue target to open the modal from
     props?: Record<string, any>;
 }
 
