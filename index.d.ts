@@ -1,6 +1,7 @@
 import { Page, NavigationEntry } from 'tns-core-modules/ui/frame/frame'
 import { ItemEventData } from 'tns-core-modules/ui/list-view'
 import { View } from 'tns-core-modules/ui/core/view'
+import { ShowModalOptions } from 'tns-core-modules/ui/core/view-base'
 import { Vue, VueConstructor } from 'vue/types/vue'
 
 // ListView ItemEventData with the addition of the item property
@@ -17,9 +18,8 @@ export type navigateTo = (
     cb?: () => Page,
 ) => Promise<Page>;
 
-export interface ModalOptions {
-    context?: any;
-    fullscreen?: boolean;
+export interface ModalOptions extends Partial<ShowModalOptions> {
+    target?: any; // optional Vue target to open the modal from
     props?: Record<string, any>;
 }
 
