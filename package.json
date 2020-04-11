@@ -96,7 +96,6 @@
     "semver": "6.3.0",
     "set-value": "3.0.1",
     "tns-core-modules": "6.0.7",
-    "util-inspect": "0.1.8",
     "vue": "2.6.10"
   },
   "jest": {
