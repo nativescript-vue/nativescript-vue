@@ -89,6 +89,10 @@ export default {
 
         updateDevtools()
 
+        const resolveOnEvent = options.resolveOnEvent
+        // ensure we dont resolve twice event though this should never happen!
+        let resolved = false
+
         const handler = args => {
           if (args.isBackNavigation) {
             page.off('navigatedFrom', handler)
@@ -96,6 +100,17 @@ export default {
           }
         }
         page.on('navigatedFrom', handler)
+
+        if (resolveOnEvent) {
+          const resolveHandler = args => {
+            if (!resolved) {
+              resolved = true
+              resolve(page)
+            }
+            page.off(resolveOnEvent, resolveHandler)
+          }
+          page.on(resolveOnEvent, resolveHandler)
+        }
 
         // ensure that the navEntryInstance vue instance is destroyed when the
         // page is disposed (clearHistory: true for example)
@@ -106,7 +121,10 @@ export default {
         }
 
         frame.navigate(Object.assign({}, options, { create: () => page }))
-        resolve(page)
+        if (!resolveOnEvent) {
+          resolved = true
+          resolve(page)
+        }
       })
     }
   }
