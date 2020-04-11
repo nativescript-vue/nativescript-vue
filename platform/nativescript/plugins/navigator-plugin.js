@@ -69,7 +69,6 @@ export default {
       }
       // build options object with defaults
       options = Object.assign({}, defaultOptions, options)
-      const resolveOnNavigated = options.resolveOnNavigated === true
 
       return new Promise(resolve => {
         const frame = getFrameInstance(options.frame)
@@ -90,16 +89,28 @@ export default {
 
         updateDevtools()
 
+        const resolveOnEvent = options.resolveOnEvent === true
+        // ensure we dont resolve twice event though this should never happen!
+        let resolved = false
+
         const handler = args => {
-          if (resolveOnNavigated) {
-            resolve(page)
-          }
           if (args.isBackNavigation) {
             page.off('navigatedFrom', handler)
             navEntryInstance.$destroy()
           }
         }
         page.on('navigatedFrom', handler)
+
+        if (resolveOnEvent) {
+          const resolveHandler = args => {
+            if (!resolved) {
+              resolved = true
+              resolve(page)
+            }
+            page.off(resolveOnEvent, resolveHandler)
+          }
+          page.on(resolveOnEvent, resolveHandler)
+        }
 
         // ensure that the navEntryInstance vue instance is destroyed when the
         // page is disposed (clearHistory: true for example)
@@ -110,7 +121,8 @@ export default {
         }
 
         frame.navigate(Object.assign({}, options, { create: () => page }))
-        if (!resolveOnNavigated) {
+        if (!resolveOnEvent) {
+          resolved = true
           resolve(page)
         }
       })

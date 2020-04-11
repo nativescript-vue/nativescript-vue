@@ -9,7 +9,7 @@ export type NativeScriptVueItemEventData<T> = ItemEventData & { item: T }
 export interface NavigationEntryVue extends NavigationEntry {
     props?: Record<string, any>,
     frame?: any,
-  resolveOnNavigated?:boolean
+    resolveOnNavigated?: Page.navigatingToEvent | Page.navigatedToEvent
 }
 
 export type navigateTo = (
