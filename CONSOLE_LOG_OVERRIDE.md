@@ -12,6 +12,7 @@ $ npm install --save-dev util-inspect
 ```
 
 In your main app file:
+
 ```js
 import Vue from 'nativescript-vue'
 
@@ -19,20 +20,20 @@ if (TNS_ENV !== 'production') {
     const inspect = require('util-inspect');
     const newLineRegExp = /\\n/g
     console.log = (function(log, inspect, Vue) {
-    return function(...args) {
-        return log.call(
-        this,
-        ...Array.prototype.map.call(args, function(arg) {
-            return inspect(arg, {
-            depth: 2,
-            colors: Vue.config.debug,
-            showHidden: true
-            }).replace(newLineRegExp, '\n')
-        })
-        )
-    }
-    })(console.log, inspect, Vue)
+        return function(...args) {
+            return log.call(
+                this,
+                ...Array.prototype.map.call(args, function(arg) {
+                    return inspect(arg, {
+                    depth: 2,
+                    colors: Vue.config.debug,
+                    showHidden: true
+                    }).replace(newLineRegExp, '\n')
+                })
+            )
+        }
+    })(console.log, inspect, Vue);
 }
 ```
 
-With this change, everything should work the way it worked before we removed our override. 
+With this change, everything should work the way it worked before we removed our override.
