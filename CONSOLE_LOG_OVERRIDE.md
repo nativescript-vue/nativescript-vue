@@ -1,17 +1,22 @@
-In previous versions of `nativescript-vue` the `console.log` was overriden to bring colors to your console.
-It was remove to improve perfomances and reduce the size of the plugin.
-You can however bring it back at an application level.
-Keep in mind that this override should not be present in production. It could make your app slower.
-```
-npm install --save-dev util-inspect
+# Colorful `console.log` with `util-inspect`
+
+In previous versions of NativeScript-Vue `console.log` was overriden to bring better logging and colors to your console.
+It was [removed in this commit](https://github.com/nativescript-vue/nativescript-vue/commit/226e108b92273b7a2f3e133e71f9f4fe3f5935b0) to improve perfomance and reduce the size of our bundle.
+
+If you however need this in your app, you can bring it back at an application level.
+
+Keep in mind that this override should not be present in production.
+
+```bash
+$ npm install --save-dev util-inspect
 ```
 
-Then in your main app file
+In your main app file:
 ```js
 import Vue from 'nativescript-vue'
 
 if (TNS_ENV !== 'production') {
-    const inspect require('util-inspect');
+    const inspect = require('util-inspect');
     const newLineRegExp = /\\n/g
     console.log = (function(log, inspect, Vue) {
     return function(...args) {
@@ -29,3 +34,5 @@ if (TNS_ENV !== 'production') {
     })(console.log, inspect, Vue)
 }
 ```
+
+With this change, everything should work the way it worked before we removed our override. 
