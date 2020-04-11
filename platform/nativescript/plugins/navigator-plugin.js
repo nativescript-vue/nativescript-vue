@@ -89,7 +89,7 @@ export default {
 
         updateDevtools()
 
-        const resolveOnEvent = options.resolveOnEvent === true
+        const resolveOnEvent = options.resolveOnEvent
         // ensure we dont resolve twice event though this should never happen!
         let resolved = false
 
