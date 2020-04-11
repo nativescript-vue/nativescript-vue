@@ -85,38 +85,6 @@ A huge thank you for all of the backers / sponsors!
 
 This plugin integrates [Vue](https://vuejs.org/) and [NativeScript](https://www.nativescript.org/), allowing you to build cross-platform iOS and Android apps using Vue.
 
-
-# console.log
-
-In previous versions of `nativescript-vue` the `console.log` was overriden to bring colors to your console.
-It was remove to improve perfomances and reduce the size of the plugin.
-You can however bring it back at an application level.
-Keep in mind that this override should not be present in production. It could make your app slower.
-```
-npm install util-inspect
-```
-
-Then in your main app file
-```js
-import Vue from 'nativescript-vue'
-import inspect from 'util-inspect'
-const newLineRegExp = /\\n/g
-console.log = (function(log, inspect, Vue) {
-  return function(...args) {
-    return log.call(
-      this,
-      ...Array.prototype.map.call(args, function(arg) {
-        return inspect(arg, {
-          depth: 2,
-          colors: Vue.config.debug,
-          showHidden: true
-        }).replace(newLineRegExp, '\n')
-      })
-    )
-  }
-})(console.log, inspect, Vue)
-```
-
 ## Contributing
 
 If you feel like contributing to this project, that’s awesome! Start by reading [this repo’s `CONTRIBUTING.MD`](https://github.com/rigor789/nativescript-vue/blob/master/CONTRIBUTING.md) file for details on the required development setup, how to send pull requests, and how to run this repo’s sample app.
