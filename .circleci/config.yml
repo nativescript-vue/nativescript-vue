@@ -2,7 +2,7 @@ version: 2
 jobs:
    build:
      docker:
-       - image: node:10.1.0
+       - image: node:13
      steps:
        - checkout
 
