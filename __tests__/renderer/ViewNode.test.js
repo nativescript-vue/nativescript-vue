@@ -1,6 +1,12 @@
 import ViewNode from 'renderer/ViewNode'
 import * as elReg from 'element-registry'
 
+jest.mock('shared/util', () => {
+  return {
+    makeMap() {},
+    once() {}
+  }
+}, { virtual: true })
 jest.mock('runtime/components', () => {
   return {}
 })
