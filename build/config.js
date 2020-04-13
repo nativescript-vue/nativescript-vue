@@ -1,8 +1,8 @@
-const alias = require('rollup-plugin-alias')
-const commonjs = require('rollup-plugin-commonjs')
-const resolve = require('rollup-plugin-node-resolve')
-const buble = require('rollup-plugin-buble')
-const replace = require('rollup-plugin-replace')
+const alias = require('@rollup/plugin-alias')
+const commonjs = require('@rollup/plugin-commonjs')
+const resolve = require('@rollup/plugin-node-resolve')
+const buble = require('@rollup/plugin-buble')
+const replace = require('@rollup/plugin-replace')
 const flow = require('rollup-plugin-flow-no-whitespace')
 const path = require('path')
 
@@ -26,7 +26,7 @@ global.process.env = global.process.env || {}
 `
 
 const resolveVue = p => {
-  return path.resolve(process.cwd(), 'node_modules', 'vue/src/', p) + '/'
+  return path.resolve(process.cwd(), 'node_modules', 'vue/src/', p) //+ '/'
 }
 const aliases = {
   vue: resolveVue('core/index'),
@@ -55,7 +55,10 @@ const builds = {
     dest: './packages/nativescript-vue-template-compiler/index.js',
     moduleName: 'NativeScript-Vue-Template-Compiler',
     banner: banner('NativeScript-Vue-Template-Compiler'),
-    external: Object.keys(require('../packages/nativescript-vue-template-compiler/package.json').dependencies)
+    external(id) {
+      const deps = Object.keys(require('../packages/nativescript-vue-template-compiler/package.json').dependencies)
+      return deps.includes(id) || id.startsWith('@nativescript') || id.startsWith('tns-core-modules') || id.startsWith('weex')
+    }
   }
 }
 
@@ -91,7 +94,8 @@ const genConfig = (name) => {
       console.warn(warning.message)
     },
     treeshake: {
-      pureExternalModules: id => id.startsWith('weex')
+      // pureExternalModules: id => id.startsWith('weex')
+      moduleSideEffects: id => !id.startsWith('weex')
     },
     plugins: [
       replace({
@@ -114,16 +118,27 @@ const genConfig = (name) => {
         // Vue 2.6 new slot syntax must be enabled via env.
         'process.env.NEW_SLOT_SYNTAX': `true`,
         'process.env.VBIND_PROP_SHORTHAND': `false`,
-        'process.env.VUE_VERSION': `process.env.VUE_VERSION || '${VueVersion}'`,
-        'process.env.NS_VUE_VERSION': `process.env.NS_VUE_VERSION || '${NSVueVersion}'`
+        'process.env._VUE_VERSION': `process.env.VUE_VERSION || '${VueVersion}'`,
+        'process.env._NS_VUE_VERSION': `process.env.NS_VUE_VERSION || '${NSVueVersion}'`
       }),
       flow(),
       buble({
         transforms: { asyncAwait: false }
       }),
-      alias(aliases),
+      alias({
+        entries: Object.keys(aliases).map(key => {
+          return {
+            find: key,
+            replacement: aliases[key]
+          }
+        })
+      }),
       resolve(),
-      commonjs(),
+      commonjs({
+        include: [
+          'node_modules/**'
+        ]
+      }),
     ],
   }
 

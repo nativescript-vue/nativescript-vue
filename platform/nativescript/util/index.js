@@ -10,11 +10,11 @@ export function setVue(Vue) {
   _Vue = Vue
 }
 
-export const canBeLeftOpenTag = function(el) {
+export const canBeLeftOpenTag = function (el) {
   return getViewMeta(el).canBeLeftOpenTag
 }
 
-export const isUnaryTag = function(el) {
+export const isUnaryTag = function (el) {
   return getViewMeta(el).isUnaryTag
 }
 
@@ -60,8 +60,8 @@ export function query(el, renderer, document) {
   // Todo
 }
 
-export const VUE_VERSION = process.env.VUE_VERSION
-export const NS_VUE_VERSION = process.env.NS_VUE_VERSION
+export const VUE_VERSION = process.env._VUE_VERSION
+export const NS_VUE_VERSION = process.env._NS_VUE_VERSION
 
 const infoTrace = once(() => {
   console.log(
@@ -82,14 +82,14 @@ export function trace(message) {
 }
 
 export function before(original, thisArg, wrap) {
-  return function(...args) {
+  return function (...args) {
     wrap.call(null, ...args)
     original.call(thisArg, ...args)
   }
 }
 
 export function after(original, thisArg, wrap) {
-  return function(...args) {
+  return function (...args) {
     original.call(thisArg, ...args)
     wrap.call(null, ...args)
   }
