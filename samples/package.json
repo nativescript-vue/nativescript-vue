@@ -5,10 +5,10 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "6.2.0"
+      "version": "6.5.0"
     },
     "tns-ios": {
-      "version": "6.2.0"
+      "version": "6.5.0"
     }
   },
   "scripts": {
@@ -23,7 +23,7 @@
     "nativescript-socketio": "^3.3.1",
     "nativescript-theme-core": "1.0.6",
     "nativescript-vue-devtools": "1.2.0",
-    "tns-core-modules": "6.2.0",
+    "tns-core-modules": "6.5.1",
     "vuex": "3.1.1"
   },
   "devDependencies": {
@@ -41,6 +41,6 @@
     "nativescript-dev-appium": "^5.3.0",
     "nativescript-dev-webpack": "1.0.1",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
-    "vue-loader": "15.7.0"
+    "vue-loader": "15.9.1"
   }
 }

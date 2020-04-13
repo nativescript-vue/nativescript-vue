@@ -1,5 +1,8 @@
 {
   "main": "app-with-all-components.js",
   "name": "nativescript-vue-tests",
-  "version": "1.0.1"
+  "version": "1.0.1",
+  "android": {
+    "markingMode": "none"
+  }
 }

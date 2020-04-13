@@ -7,7 +7,7 @@ Vue.config.debug = true
 // the framework should warn about this in the future!
 Vue.component('CommentComp', {
   props: ['comment'],
-  template: `<Label :text="comment.content"/>`
+  template: `<Label :text="comment.content"/>`,
 })
 
 new Vue({
@@ -16,21 +16,21 @@ new Vue({
       { content: 'hello1' },
       { content: 'hello2' },
       { content: 'hello3' },
-      { content: 'hello4' }
-    ]
+      { content: 'hello4' },
+    ],
   },
   template: `
     <Frame>
       <Page class="page">
         <ActionBar title="Home" class="action-bar" />
-          <StackLayout class="home-panel">
+          <GridLayout class="home-panel">
             <ListView for="comment in comments">
               <v-template>
-                <Comment :comment="comment" />
+                <CommentComp :comment="comment" />
               </v-template>
             </ListView>
-          </StackLayout>
+          </GridLayout>
       </Page>
     </Frame>
-  `
+  `,
 }).$start()
