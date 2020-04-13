@@ -1,3 +1,26 @@
+<a name="2.6.0"></a>
+# [2.6.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.1...v2.6.0) (2020-04-13)
+
+
+### Bug Fixes
+
+* remove console.log override ([#627](https://github.com/nativescript-vue/nativescript-vue/issues/627)) ([226e108](https://github.com/nativescript-vue/nativescript-vue/commit/226e108))
+* **renderer:** check for undefined before trimming style ([#622](https://github.com/nativescript-vue/nativescript-vue/issues/622)) ([9ce38a0](https://github.com/nativescript-vue/nativescript-vue/commit/9ce38a0))
+
+
+### Features
+
+* resolve navigation page on navigation event ([#624](https://github.com/nativescript-vue/nativescript-vue/issues/624)) ([787d1a5](https://github.com/nativescript-vue/nativescript-vue/commit/787d1a5))
+* **logging:** log node creation errors ([#625](https://github.com/nativescript-vue/nativescript-vue/issues/625)) ([b502fc8](https://github.com/nativescript-vue/nativescript-vue/commit/b502fc8))
+* **registry:** allow overriding elements ([#626](https://github.com/nativescript-vue/nativescript-vue/issues/626)) ([e37788c](https://github.com/nativescript-vue/nativescript-vue/commit/e37788c))
+
+
+### BREAKING CHANGES
+
+* Our `console.log` override using `util-inspect` has been removed due to performance concerns. If you were using `Vue.config.debug = true` to get colorful console.logs, this will no longer work. We have documented how you may add this feature back to your app if you relied on this behavior. See [CONSOLE_LOG_OVERRIDE.md](https://github.com/nativescript-vue/nativescript-vue/blob/master/CONSOLE_LOG_OVERRIDE.md) for details. 
+
+
+
 <a name="2.5.1"></a>
 ## [2.5.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.0...v2.5.1) (2020-03-28)
 
@@ -99,6 +122,11 @@ For most users this will not requre any additional refactoring.
 ### Features
 
 * add support for Tabs and BottomNavigation ([#524](https://github.com/nativescript-vue/nativescript-vue/issues/524)) ([806658b](https://github.com/nativescript-vue/nativescript-vue/commit/806658b))
+
+
+
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.3.0-rc.2...v2.3.0) (2019-07-10)
 
 
 
