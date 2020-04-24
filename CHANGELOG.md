@@ -1,3 +1,13 @@
+<a name="2.6.1"></a>
+## [2.6.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.0...v2.6.1) (2020-04-24)
+
+
+### Bug Fixes
+
+* check _Vue before accessing ([#632](https://github.com/nativescript-vue/nativescript-vue/issues/632)) ([29e7f47](https://github.com/nativescript-vue/nativescript-vue/commit/29e7f47))
+
+
+
 <a name="2.6.0"></a>
 # [2.6.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.5.1...v2.6.0) (2020-04-13)
 
