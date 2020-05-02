@@ -74,6 +74,7 @@ and these awesome backers:
 - Abdullah Al Mashmoum
 - Stian Årsnes
 - Robertino Vasilescu
+- Marc Lewis
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
