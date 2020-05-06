@@ -8,7 +8,7 @@ Vue.config.debug = false //true
 Vue.config.silent = false
 
 const ToggledComp = {
-  template: `<Label text="im toggled" />`
+  template: `<Label text="im toggled" />`,
 }
 
 const DefaultPage = {
@@ -28,8 +28,16 @@ const DefaultPage = {
   methods: {
     openPage() {
       this.$navigateTo(DetailsPage)
-    }
-  }
+    },
+    openReceivePropsPage() {
+      this.$navigateTo(ReceivePropsPage, {
+        props: {
+          title: 'Receive props',
+          text: 'This text is passed from $navigateTo',
+        },
+      })
+    },
+  },
 }
 
 const DetailsPage = {
@@ -58,8 +66,8 @@ const DetailsPage = {
     },
     goBack() {
       this.$navigateBack()
-    }
-  }
+    },
+  },
 }
 
 const App = {
@@ -69,9 +77,9 @@ const App = {
   <Frame>
     <DefaultPage/>
   </Frame>
-  `
+  `,
 }
 
 new Vue({
-  render: h => h(App)
+  render: (h) => h(App),
 }).$start()
