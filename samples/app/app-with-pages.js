@@ -11,6 +11,41 @@ const ToggledComp = {
   template: `<Label text="im toggled" />`,
 }
 
+const ReceivePropsPage = {
+  name: 'ReceivePropsPage',
+
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    text: {
+      type: String,
+      default: ''
+    }
+  },
+
+  mounted() {
+    console.debug(this.$props)
+  },
+
+  template: `
+  <Page>
+    <ActionBar class="action-bar" :title="$props.title">
+    </ActionBar>
+    <StackLayout>
+      <Button text="Open page" @tap="openPage" />
+      <Button :text="$props.text" />
+    </StackLayout>
+  </Page>`,
+
+  methods: {
+    openPage() {
+      this.$navigateTo(DetailsPage)
+    }
+  }
+}
+
 const DefaultPage = {
   name: 'DefaultPage',
 
@@ -22,6 +57,7 @@ const DefaultPage = {
     </ActionBar>
     <StackLayout>
       <Button text="Open page" @tap="openPage" />
+      <Button text="Open page with props" @tap="openReceivePropsPage" />
     </StackLayout>
   </Page>`,
 
