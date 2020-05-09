@@ -46,6 +46,13 @@ NativeScript-Vue is an MIT-licensed open source project made possible by our spo
         </a>
       </td>
     </tr><tr></tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://nativescripting.com/?source=nativescript-vue-github" target="_blank">
+          <img height="50px" src="https://nativescripting.com/img/logo_full.svg">
+        </a>
+      </td>
+    </tr>
   </tbody>
 </table>
 <!--/sponsors-->
