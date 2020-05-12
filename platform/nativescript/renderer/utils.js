@@ -1,17 +1,29 @@
+let View;
 export function isView(view) {
-  return view instanceof require('@nativescript/core/ui/core/view').View
+  if (!View)  {
+    View = require('@nativescript/core/ui/core/view').View
+  }
+  return view instanceof View
 }
 
+
+let LayoutBase;
 export function isLayout(view) {
+  if (!LayoutBase)  {
+    LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase
+  }
   return (
-    view instanceof
-    require('@nativescript/core/ui/layouts/layout-base').LayoutBase
+    view instanceof LayoutBase
   )
 }
 
+let ContentView;
 export function isContentView(view) {
+  if (!ContentView)  {
+    ContentView = require('@nativescript/core/ui/content-view').ContentView
+  }
   return (
-    view instanceof require('@nativescript/core/ui/content-view').ContentView
+    view instanceof ContentView
   )
 }
 
