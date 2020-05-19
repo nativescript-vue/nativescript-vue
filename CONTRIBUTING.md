@@ -16,9 +16,9 @@ Refer to the [nativescript-vue/nativescript-vue.org repository](https://github.c
 
 # Development setup
 
-You will need Node.js installed, as well as NativeScript.
+You will need Node.js (>=10.18.1) installed, as well as NativeScript.
 
-Please make sure you are using Nativescript 4.x
+Please make sure you are using Nativescript 6.x
 
 After cloning the repo, run:
 
