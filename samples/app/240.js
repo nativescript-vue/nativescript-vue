@@ -10,7 +10,7 @@ new Vue({
         return this.fooList
       }
 
-      let foo = this.fooList.filter((item) => {
+      let foo = this.fooList.filter(item => {
         return (
           item.title
             .toLowerCase()
@@ -25,7 +25,7 @@ new Vue({
         return this.barList
       }
 
-      let bar = this.barList.filter((item) => {
+      let bar = this.barList.filter(item => {
         return (
           item.title
             .toLowerCase()
@@ -40,7 +40,7 @@ new Vue({
         return this.fooBarList
       }
 
-      let fooBar = this.fooBarList.filter((item) => {
+      let fooBar = this.fooBarList.filter(item => {
         return (
           item.title
             .toLowerCase()
@@ -49,7 +49,7 @@ new Vue({
       })
 
       return fooBar
-    },
+    }
   },
   methods: {
     onSearchSubmit(args) {
@@ -57,7 +57,7 @@ new Vue({
       console.log('You are searching for [' + searchBar.text + ']')
 
       this.submittedPhrase = searchBar.text
-    },
+    }
   },
   data() {
     return {
@@ -66,45 +66,45 @@ new Vue({
       fooList: [
         {
           id: 1,
-          title: 'Foo 1',
+          title: 'Foo 1'
         },
         {
           id: 2,
-          title: 'Foo 2',
+          title: 'Foo 2'
         },
         {
           id: 3,
-          title: 'Foo 3',
-        },
+          title: 'Foo 3'
+        }
       ],
       barList: [
         {
           id: 11,
-          title: 'Bar 1',
+          title: 'Bar 1'
         },
         {
           id: 12,
-          title: 'Bar 2',
+          title: 'Bar 2'
         },
         {
           id: 13,
-          title: 'Bar 3',
-        },
+          title: 'Bar 3'
+        }
       ],
       fooBarList: [
         {
           id: 21,
-          title: 'Foo Bar 1',
+          title: 'Foo Bar 1'
         },
         {
           id: 22,
-          title: 'Foo Bar 2',
+          title: 'Foo Bar 2'
         },
         {
           id: 23,
-          title: 'Foo Bar 3',
-        },
-      ],
+          title: 'Foo Bar 3'
+        }
+      ]
     }
   },
   template: `
@@ -159,5 +159,5 @@ new Vue({
         </ScrollView>
       </Page>
     </Frame>
-  `,
+  `
 }).$start()

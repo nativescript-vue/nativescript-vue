@@ -19,7 +19,7 @@
     "dev:core": "rollup -c build/config.js --o dist/index.js --environment TARGET:nativescript-vue",
     "dev:compiler": "rollup -c build/config.js --environment TARGET:nativescript-vue-template-compiler",
     "build": "node build/build.js",
-    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
+    "prettier": "prettier --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
     "release": "node build/releaser.js",
     "release:notes": "node build/gen-release-notes.js",
     "changelog": "conventional-changelog --release-count 0 --outfile CHANGELOG.md --preset angular",
@@ -119,7 +119,9 @@
   },
   "prettier": {
     "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "trailingComma": "none",
+    "arrowParens": "avoid"
   },
   "husky": {
     "hooks": {

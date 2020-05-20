@@ -8,7 +8,7 @@ Plugin = {
     Vue.prototype.$name = name
 
     Vue.mixin({
-      beforeCreate: function() {
+      beforeCreate: function () {
         setTimeout(() => {
           console.log('this.$options: ', this.$options)
         }, 5000)

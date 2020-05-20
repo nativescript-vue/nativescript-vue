@@ -27,7 +27,7 @@ Object.assign(Vue.options.directives, platformDirectives)
 
 Vue.prototype.__patch__ = patch
 
-Vue.prototype.$mount = function(el, hydrating) {
+Vue.prototype.$mount = function (el, hydrating) {
   const options = this.$options
   // resolve template/el and convert to render function
   if (!options.render) {
@@ -54,7 +54,7 @@ Vue.prototype.$mount = function(el, hydrating) {
   return mountComponent(this, el, hydrating)
 }
 
-Vue.prototype.$start = function() {
+Vue.prototype.$start = function () {
   let self = this
   const AppConstructor = Vue.extend(this.$options)
 
