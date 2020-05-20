@@ -185,6 +185,12 @@ export default class ViewNode {
     }
 
     if (childNode.parentNode === this) {
+      // in case the childNode is already a child node of this view
+      // we need to first remove it to clean up childNodes, parentNode, prev/next siblings
+      // we are adding back the child right after - this is often the case when the order
+      // of children has to change (including comment nodes created by vue)
+      // fixes #608
+      this.removeChild(childNode)
       // we don't need to throw an error here, because it is a valid case
       // for example when switching the order of elements in the tree
       // fixes #127 - see for more details
@@ -201,7 +207,7 @@ export default class ViewNode {
     referenceNode.prevSibling = childNode
     this.childNodes.splice(index, 0, childNode)
 
-    viewUtil.insertChild(this, childNode, index)
+    viewUtil.insertChild(this, childNode, index === 0 ? 0 : index - 1)
   }
 
   appendChild(childNode) {
