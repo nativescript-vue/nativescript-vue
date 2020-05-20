@@ -1,27 +1,35 @@
 import { genComponentModel, genAssignmentCode } from 'compiler/directives/model'
 import { isKnownView, getViewMeta } from '../../element-registry'
-import { addHandler, addAttr } from 'compiler/helpers'
 
 export default function model(el, dir) {
   if (el.type === 1 && isKnownView(el.tag)) {
-    genDefaultModel(el, dir.value, dir.modifiers)
+    genViewComponentModel(el, dir.value, dir.modifiers)
   } else {
     genComponentModel(el, dir.value, dir.modifiers)
   }
 }
 
-function genDefaultModel(el, value, modifiers) {
-  const { trim, number } = modifiers || {}
-  const { prop, event } = getViewMeta(el.tag).model
+function genViewComponentModel(el, value, modifiers) {
+  debugger
+  const { number, trim } = modifiers || {}
+  const { prop } = getViewMeta(el.tag).model
 
-  let valueExpression = `$event.value${trim ? '.trim()' : ''}`
-
+  const baseValueExpression = '$event'
+  let valueExpression = `${baseValueExpression}.object[${JSON.stringify(prop)}]`
+  if (trim) {
+    valueExpression =
+      `(typeof ${valueExpression} === 'string'` +
+      `? ${valueExpression}.trim()` +
+      `: ${valueExpression})`
+  }
   if (number) {
     valueExpression = `_n(${valueExpression})`
   }
+  const assignment = genAssignmentCode(value, valueExpression)
 
-  const code = genAssignmentCode(value, valueExpression)
-
-  addAttr(el, prop, `(${value})`)
-  addHandler(el, event, code, null, true)
+  el.model = {
+    value: `(${value})`,
+    expression: JSON.stringify(value),
+    callback: `function (${baseValueExpression}) {debugger;${assignment}}`
+  }
 }

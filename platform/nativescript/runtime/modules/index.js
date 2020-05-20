@@ -4,4 +4,4 @@ import events from './events'
 import style from './style'
 import transition from './transition'
 
-export default [attrs, class_, events, style, transition]
+export default [class_, events, attrs, style, transition]
