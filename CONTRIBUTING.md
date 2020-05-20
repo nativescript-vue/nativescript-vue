@@ -22,24 +22,25 @@ Please make sure you are using Nativescript 6.x
 
 After cloning the repo, run:
 
-`npm install`
+```bash
+$ cd nativescript-vue
+$ yarn
+```
 
-(inside the `nativescript-vue` folder)
-
-# Commonly used NPM scripts
+# Commonly used scripts
 
 ```bash
 $ # watch and auto re-build dist/index.js
-$ npm run dev
+$ yarn dev
 ```
 
 # Testing with the sample application(s)
 
-To test the sample applications provided in the repository, you need to `npm run dev` in the root directory. This will watch for changes, and rebuild nativescript-vue, which in dev mode will be generated into the samples/app directory (this has been done to reduce the required steps of linking local packages, which had many issues with the recent releases of npm).
+To test the sample applications provided in the repository, you need to `yarn dev` in the root directory. This will watch for changes, and rebuild nativescript-vue, which in dev mode will be generated into the samples/app directory (this has been done to reduce the required steps of linking local packages, which had many issues with the recent releases of npm).
 
-Next, open up a new terminal window and run `npm run samples`. This will bring up a list of all the available sample applications which you can choose from with your arrow keys. Pressing enter/return will select that sample, and prompt you to choose the platform you'd like to run the sample on. After selecting the platform the application should start on your emulator, and the output will be in your terminal.
+Next, open up a new terminal window and run `yarn samples`. This will bring up a list of all the available sample applications which you can choose from with your arrow keys. Pressing enter/return will select that sample, and prompt you to choose the platform you'd like to run the sample on. After selecting the platform the application should start on your emulator, and the output will be in your terminal.
 
-If you want to test the sample apps with HMR activated, please run `npm run samples -- --hmr` instead. Actually, we can pass any arguments to the `tns debug platform` command placing them after the `--` separator.
+If you want to test the sample apps with HMR activated, please run `yarn samples -- --hmr` instead. Actually, we can pass any arguments to the `tns debug platform` command placing them after the `--` separator.
 
 # Project Structure
 
@@ -55,43 +56,22 @@ If you want to test the sample apps with HMR activated, please run `npm run samp
 
 # Troubleshooting
 
-#### 1. Husky 'binding.open' error
+#### Make sure JAVA_HOME is set to your JAVA 8 JDK!
 
-There is [currently] a bug in devDependencies husky 0.15 beta that aborts `npm install` if `.git/hooks` is missing.
-
-https://github.com/typicode/husky/issues/195
-
-```
-> husky@0.15.0-rc.3 postinstall /.../nativescript-vue/node_modules/husky
-> node lib/installer/bin install
-husky > setting up git hooks
-fs.js:663
-  return binding.open(pathModule.toNamespacedPath(path),
-                 ^
-Error: ENOENT: no such file or directory, open '/.../nativescript-vue/.git/hooks/applypatch-msg'
-```
-
-Mac:
-```
-nativescript-vue$ mkdir -p .git/hooks/
-```
-
-#### 2. Make sure JAVA_HOME is set to your JAVA 8 JDK!
-
-If JAVA_HOME isn't set correctly, then `npm run samples` will exit back to the command prompt after prompting for a sample and platform.
+If JAVA_HOME isn't set correctly, then `yarn samples` will exit back to the command prompt after prompting for a sample and platform.
 
 Mac:
 ```
 export JAVA_HOME=`/usr/libexec/java_home -v1.8`
 ```
 
-#### 3. Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
+#### Deploying to Android on MacOS fails due to a `ENFILE: file table overflow ...` error.
 
 If you see an error like this:
 ```
 Transferring project files...
 Multiple errors were thrown:
-ENFILE: file table overflow, open '/Users/tiagoalves/Projects/ns-vue/(...)/file-name-resolver/package.json'
+ENFILE: file table overflow, open '/(...)/file-name-resolver/package.json'
 ```
 it means you have to increase the file limits (see: [http://stackoverflow.com/a/27982223](http://stackoverflow.com/a/27982223)). You can do that with:
 ```
@@ -102,40 +82,3 @@ sudo sysctl -w kern.maxfilesperproc=65536
 ulimit -n 65536 65536
 ```
 
-#### 4. Using XCode 8
-
-Check if xcodeproj is installed
-- `sudo gem install xcodeproj -v 1.4.1`
-
-You may need to enable system ruby (macos)
-- `rvm use system` // now using system ruby
-- repeat `sudo gem install xcodeproj -v 1.4.1`
-- tns run ios
-
-You will probably get an error:
-`No profiles for 'org.nativescript.MyApp' were found: Xcode couldn't find a provisioning profile matching 'org.nativescript.MyApp'`
-
-- Open the project
-- nav to app/iOS/build.xcconfig
-- include `PROVISIONING_PROFILE = testapp;`
-
-Change app.js to
-
-```javascript
-const Vue = require('nativescript-vue');
-
-new Vue({
-
-  data: {
-	message: "Hello Vue!"
-  },
-
-  template: `
-    <Page>
-      <StackLayout>
-        <Label v-model="message" />
-      </StackLayout>
-    </Page>
-  `,
-}).$start()
-```
