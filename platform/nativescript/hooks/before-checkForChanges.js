@@ -1,6 +1,6 @@
 const { isBundleCheckRequired } = require('./helpers')
 
-module.exports = function(hookArgs, $errors, $injector) {
+module.exports = function (hookArgs, $errors, $injector) {
   const shouldCheckBundleOption = isBundleCheckRequired($injector)
 
   if (shouldCheckBundleOption) {

@@ -60,7 +60,7 @@ export default {
       }
     })
 
-    Vue.prototype.$showModal = function(component, options) {
+    Vue.prototype.$showModal = function (component, options) {
       return new Promise(resolve => {
         let resolved = false
         const closeCb = data => {

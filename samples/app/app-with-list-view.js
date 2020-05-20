@@ -9,7 +9,7 @@ new Vue({
     subreddit: '/r/funny',
     page_num: 1,
     last_page: '',
-    items: [],
+    items: []
   },
 
   template: `
@@ -79,12 +79,12 @@ new Vue({
                 </GridLayout>
               </StackLayout>
             </Page>
-          `,
+          `
         },
         {
-          fullscreen: true,
+          fullscreen: true
         }
-      ).then((res) => {
+      ).then(res => {
         console.log('Modal closed')
         console.dir(res)
       })
@@ -110,8 +110,8 @@ new Vue({
         title: 'Change subreddit:',
         defaultText: this.subreddit,
         okButtonText: 'Ok',
-        cancelButtonText: 'Cancel',
-      }).then((r) => {
+        cancelButtonText: 'Cancel'
+      }).then(r => {
         if (r.result) {
           this.subreddit = r.text
           this.refresh()
@@ -124,13 +124,13 @@ new Vue({
         .getJSON(
           `https://www.reddit.com/${this.subreddit}.json?limit=10&count=10&after=${this.last_page}`
         )
-        .then((res) => {
+        .then(res => {
           this.items.push({
             title: 'Page ' + this.page_num,
-            type: 'page',
+            type: 'page'
           })
 
-          res.data.children.forEach((item) => {
+          res.data.children.forEach(item => {
             const fullImage = item.data.preview
               ? item.data.preview.images[0].source.url
               : null
@@ -139,7 +139,7 @@ new Vue({
               title: item.data.title,
               image: image,
               fullImage: fullImage,
-              type: 'entry',
+              type: 'entry'
             })
           })
           this.last_page = res.data.after
@@ -147,9 +147,9 @@ new Vue({
 
           console.log('Loaded more items')
         })
-        .catch((err) => {
+        .catch(err => {
           console.log('err..' + err)
         })
-    },
-  },
+    }
+  }
 }).$start()
