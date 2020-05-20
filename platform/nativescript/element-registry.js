@@ -396,7 +396,23 @@ registerElement(
 )
 registerElement(
   'FormattedString',
-  () => require('@nativescript/core/text/formatted-string').FormattedString
+  () => require('@nativescript/core/text/formatted-string').FormattedString,
+  {
+    insertChild(parentNode, childNode, atIndex) {
+      if (atIndex) {
+        parentNode.nativeView.spans.splice(atIndex, 0, childNode.nativeView)
+        return
+      }
+      parentNode.nativeView.spans.push(childNode.nativeView)
+    },
+    removeChild(parentNode, childNode) {
+      const index = parentNode.nativeView.spans.indexOf(childNode.nativeView)
+
+      if (index > -1) {
+        parentNode.nativeView.spans.splice(index, 1)
+      }
+    }
+  }
 )
 registerElement('Span', () => require('@nativescript/core/text/span').Span)
 

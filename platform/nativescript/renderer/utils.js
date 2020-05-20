@@ -1,30 +1,25 @@
-let View;
+let View
 export function isView(view) {
-  if (!View)  {
+  if (!View) {
     View = require('@nativescript/core/ui/core/view').View
   }
   return view instanceof View
 }
 
-
-let LayoutBase;
+let LayoutBase
 export function isLayout(view) {
-  if (!LayoutBase)  {
+  if (!LayoutBase) {
     LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase
   }
-  return (
-    view instanceof LayoutBase
-  )
+  return view instanceof LayoutBase
 }
 
-let ContentView;
+let ContentView
 export function isContentView(view) {
-  if (!ContentView)  {
+  if (!ContentView) {
     ContentView = require('@nativescript/core/ui/content-view').ContentView
   }
-  return (
-    view instanceof ContentView
-  )
+  return view instanceof ContentView
 }
 
 export function insertChild(parentNode, childNode, atIndex = -1) {
