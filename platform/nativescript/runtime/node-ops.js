@@ -4,7 +4,7 @@ import { trace } from '../util'
 export const namespaceMap = {}
 
 export function createElement(tagName, vnode) {
-  trace(`CreateElement(${tagName})`)
+  trace(`CreateElement(${tagName.replace(/^native/i, '')})`)
   return document.createElement(tagName)
 }
 
