@@ -1,3 +1,15 @@
+## [2.6.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.2...v2.6.3) (2020-05-23)
+
+
+### Bug Fixes
+
+* wrong child order ([929b11a](https://github.com/nativescript-vue/nativescript-vue/commit/929b11a2d9dfcd7439495bf4a47bfdddc5f74f7e))
+* **formatted-string:** wrong atIndex condition ([8939f7c](https://github.com/nativescript-vue/nativescript-vue/commit/8939f7c1a072809c6aa5d670357c4adfe37e4664))
+* **trace:** print actual nativeView's with their id ([b2adf9c](https://github.com/nativescript-vue/nativescript-vue/commit/b2adf9cb656487010faa6cfd87660e95741f57b1))
+* **trace:** print tagName without the native prefix ([3b22260](https://github.com/nativescript-vue/nativescript-vue/commit/3b2226094e42908fc74fd59b819d31c3e541fcc8))
+
+
+
 ## [2.6.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.1...v2.6.2) (2020-05-20)
 
 
