@@ -20,6 +20,10 @@ export default class ElementNode extends ViewNode {
     this._nativeView[VUE_ELEMENT_REF] = this
   }
 
+  toString() {
+    return this.nativeView.toString()
+  }
+
   appendChild(childNode) {
     super.appendChild(childNode)
 
