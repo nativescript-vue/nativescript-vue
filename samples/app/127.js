@@ -14,7 +14,7 @@ new Vue({
 
         <StackLayout>
           <Label v-if="foo" text="Enable" @tap="foo = false"/>
-          <Label v-else text="Disable" @tap="foo = true"/>
+          <Label v-if="!foo" text="Disable" @tap="foo = true"/>
         </StackLayout>
       </Page>
     </Frame>

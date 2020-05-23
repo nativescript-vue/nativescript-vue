@@ -5,7 +5,7 @@ Vue.config.silent = false
 
 const CompButton = {
   template: `
-    <Button>{{label}}: {{counter}}</Button>
+      <Button :text="\`\${label}: \${counter}\`" />
   `,
   name: 'CompButton',
   props: ['label', 'counter'],
@@ -19,21 +19,22 @@ new Vue({
     counter: 0
   },
   template: `
-    <Frame>
-      <Page>
-        <ActionBar title="Issue #220" />
-        <StackLayout>
-          <Button @tap="counter++">{{counter}}</Button>
+      <StackLayout>
+          <Button @tap="inc" :text="counter" />
           <keep-alive>
-            <CompButton v-if="counter % 2" key="odd" label="Odd" :counter="counter" />
-            <CompButton v-else key="even" label="Even" :counter="counter" />
+              <CompButton v-if="counter % 2 === 0" key="odd" label="Odd" :counter="counter"/>
+              <CompButton v-else key="even" label="Even" :counter="counter"/>
           </keep-alive>
-        </StackLayout>
-      </Page>
-    </Frame>
+      </StackLayout>
   `,
   created() {
     console.log(Vue.compile(this.$options.template).render.toString())
+  },
+  methods: {
+    inc() {
+      console.log('\n\n=========INC=========\n\n')
+      this.counter++
+    }
   },
   components: {
     CompButton
