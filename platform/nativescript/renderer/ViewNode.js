@@ -207,7 +207,7 @@ export default class ViewNode {
     referenceNode.prevSibling = childNode
     this.childNodes.splice(index, 0, childNode)
 
-    viewUtil.insertChild(this, childNode, index === 0 ? 0 : index - 1)
+    viewUtil.insertChild(this, childNode, index)
   }
 
   appendChild(childNode) {
@@ -238,7 +238,7 @@ export default class ViewNode {
 
     this.childNodes.push(childNode)
 
-    viewUtil.insertChild(this, childNode, this.childNodes.length - 1)
+    viewUtil.insertChild(this, childNode)
   }
 
   removeChild(childNode) {
