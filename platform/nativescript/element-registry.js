@@ -399,7 +399,7 @@ registerElement(
   () => require('@nativescript/core/text/formatted-string').FormattedString,
   {
     insertChild(parentNode, childNode, atIndex) {
-      if (atIndex) {
+      if (atIndex > -1) {
         parentNode.nativeView.spans.splice(atIndex, 0, childNode.nativeView)
         return
       }
