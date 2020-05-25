@@ -10,7 +10,6 @@ export default function model(el, dir) {
 }
 
 function genViewComponentModel(el, value, modifiers) {
-  debugger
   const { number, trim } = modifiers || {}
   const { prop } = getViewMeta(el.tag).model
 
@@ -30,6 +29,6 @@ function genViewComponentModel(el, value, modifiers) {
   el.model = {
     value: `(${value})`,
     expression: JSON.stringify(value),
-    callback: `function (${baseValueExpression}) {debugger;${assignment}}`
+    callback: `function (${baseValueExpression}) {${assignment}}`
   }
 }
