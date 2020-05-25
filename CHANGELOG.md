@@ -1,3 +1,12 @@
+## [2.6.4](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.3...v2.6.4) (2020-05-25)
+
+
+### Bug Fixes
+
+* remove debugger statements ([6d0f954](https://github.com/nativescript-vue/nativescript-vue/commit/6d0f9547cfacc64f54acc31ba42ac2399048ce0c))
+
+
+
 ## [2.6.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.2...v2.6.3) (2020-05-23)
 
 
