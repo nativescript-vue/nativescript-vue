@@ -2,7 +2,8 @@
   "name": "nativescript-vue",
   "version": "2.6.1",
   "description": "NativeScript and Vue integration",
-  "main": "dist/index.js",
+  "main": "dist/index",
+  "module": "dist/index.mjs",
   "files": [
     "dist/index.js",
     "index.d.ts",

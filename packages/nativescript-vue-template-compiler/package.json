@@ -2,7 +2,8 @@
   "name": "nativescript-vue-template-compiler",
   "version": "2.6.1",
   "description": "template compiler for nativescript-vue",
-  "main": "index.js",
+  "main": "index",
+  "module": "index.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rigor789/nativescript-vue.git"
