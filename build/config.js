@@ -96,7 +96,6 @@ const plugins = [
     __WEEX__: false,
     __VERSION__: VueVersion,
     // 'process.env.NODE_ENV': "'development'",
-    'let _isServer': 'let _isServer = false',
     // Vue 2.6 new slot syntax must be enabled via env.
     'process.env.NEW_SLOT_SYNTAX': `true`,
     'process.env.VBIND_PROP_SHORTHAND': `false`,
@@ -134,9 +133,12 @@ const genConfig = (name) => {
         name: opts.moduleName,
       },
       plugins: plugins.concat([
+        replace({
+          'let _isServer': 'let _isServer = false',
+        }),
         buble({
           transforms: { asyncAwait: false },
-        }),
+        })
       ]),
       // https://github.com/rollup/rollup/issues/2271#issuecomment-455129819
       onwarn(warning) {
@@ -171,7 +173,12 @@ const genConfig = (name) => {
         name: opts.moduleName,
         esModule: false,
       },
-      plugins: plugins,
+      plugins: plugins.concat([
+        replace({
+          'let _isServer': 'const _isServer = false;',
+          delimiters: ['', ';'],
+        }),
+      ]),
       // https://github.com/rollup/rollup/issues/2271#issuecomment-455129819
       onwarn(warning) {
         if (
