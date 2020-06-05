@@ -14,7 +14,7 @@ export type NativeScriptVueItemEventData<T> = ItemEventData & { item: T }
 export interface NavigationEntryVue extends NavigationEntry {
     props?: Record<string, any>,
     frame?: any,
-    resolveOnEvent?: Page.navigatingToEvent | Page.navigatedToEvent,
+    resolveOnEvent?: Page.navigatingToEvent | Page.navigatedToEvent
 }
 
 export type navigateTo = (
@@ -40,7 +40,7 @@ export interface NativeScriptVue<V = View> extends Vue {
     $navigateTo: navigateTo
     $navigateBack: navigateBack
 
-    $modal?: { close: (data?: any) => Promise<typeof data> }
+    $modal?: { close: (data?: any) => Promise<typeof data> };
 
     /**
      * Open a modal using a component
@@ -48,7 +48,7 @@ export interface NativeScriptVue<V = View> extends Vue {
      * @param {ModalOptions} options
      * @returns {any}
      */
-    $showModal: (component: typeof Vue, options?: ModalOptions) => Promise<any>
+    $showModal: (component: typeof Vue, options?: ModalOptions) => Promise<any>;
 
     /**
      * starts the nativescript application
