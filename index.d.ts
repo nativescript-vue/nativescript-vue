@@ -1,4 +1,8 @@
-import { Page, NavigationEntry } from 'tns-core-modules/ui/frame/frame'
+import {
+    Page,
+    NavigationEntry,
+    BackstackEntry,
+} from 'tns-core-modules/ui/frame/frame'
 import { ItemEventData } from 'tns-core-modules/ui/list-view'
 import { View } from 'tns-core-modules/ui/core/view'
 import { ShowModalOptions } from 'tns-core-modules/ui/core/view-base'
@@ -17,7 +21,12 @@ export type navigateTo = (
     component: VueConstructor,
     options?: NavigationEntryVue,
     cb?: () => Page,
-) => Promise<Page>;
+) => Promise<Page>
+
+export type navigateBack = (
+    options?: NavigationEntryVue,
+    backstackEntry?: BackstackEntry,
+) => void
 
 export interface ModalOptions extends Partial<ShowModalOptions> {
     target?: any; // optional Vue target to open the modal from
@@ -29,7 +38,7 @@ export interface NativeScriptVue<V = View> extends Vue {
     nativeView: V
 
     $navigateTo: navigateTo
-    $navigateBack: () => void
+    $navigateBack: navigateBack
 
     $modal?: { close: (data?: any) => Promise<typeof data> };
 
@@ -47,9 +56,10 @@ export interface NativeScriptVue<V = View> extends Vue {
     $start: () => void
 }
 
-export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue> {
+export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue>
+{
     navigateTo: navigateTo
-    navigateBack: () => void
+    navigateBack: navigateBack
     /**
      * Registers NativeScript Plugin.
      * @param elementName Name of the element to use in your template
