@@ -24,8 +24,8 @@ export type navigateTo = (
 ) => Promise<Page>
 
 export type navigateBack = (
-    backstackEntry: BackstackEntry,
     options?: NavigationEntryVue,
+    backstackEntry?: BackstackEntry,
 ) => void
 
 export interface ModalOptions extends Partial<ShowModalOptions> {
