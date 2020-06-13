@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@vue/devtools": "5.1.0",
+    "nativescript-collectionview": "2.0.26",
     "nativescript-socketio": "^3.3.1",
     "nativescript-theme-core": "1.0.6",
     "nativescript-toasty": "3.0.0-alpha.2",
