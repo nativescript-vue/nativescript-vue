@@ -18,8 +18,10 @@ export default {
 
     let frame = this._findParentFrame()
 
-    if (frame) {
-      frame.notifyPageMounted(this)
+    // we only need call this for the "defaultPage" of the frame
+    // which is equivalent to testing if any page is "current" in the frame
+    if (frame && (!frame.$el.nativeView.currentPage )) {
+      frame.notifyFirstPageMounted(this)
     }
 
     const handler = e => {

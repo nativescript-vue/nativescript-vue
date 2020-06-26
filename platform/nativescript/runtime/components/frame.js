@@ -105,21 +105,13 @@ export default {
       return entry
     },
 
-    notifyPageMounted(pageVm) {
+    notifyFirstPageMounted(pageVm) {
       let options = {
         backstackVisible: this.backstackVisible,
         clearHistory: this.clearHistory,
         create: () => pageVm.$el.nativeView
       }
-
-      this.$nextTick(() => {
-        if (pageVm.$el.nativeView.__isNavigatedTo) {
-          // Ignore pages we've navigated to, since they are already on screen
-          return
-        }
-
-        this.navigate(options)
-      })
+      this.navigate(options)
     },
 
     navigate(entry, back = false) {
