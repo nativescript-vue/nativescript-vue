@@ -11,9 +11,12 @@ import { Vue, VueConstructor } from 'vue/types/vue'
 // ListView ItemEventData with the addition of the item property
 export type NativeScriptVueItemEventData<T> = ItemEventData & { item: T }
 
+// TODO: define fully.
+type TargetFrame = any;
+
 export interface NavigationEntryVue extends NavigationEntry {
     props?: Record<string, any>,
-    frame?: any,
+    frame?: TargetFrame,
     resolveOnEvent?: Page.navigatingToEvent | Page.navigatedToEvent
 }
 
@@ -24,7 +27,9 @@ export type navigateTo = (
 ) => Promise<Page>
 
 export type navigateBack = (
-    options?: NavigationEntryVue,
+    options?: {
+        frame?: TargetFrame
+    },
     backstackEntry?: BackstackEntry,
 ) => void
 
