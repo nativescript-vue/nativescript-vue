@@ -44,7 +44,13 @@ export function registerElement(elementName, resolver, meta) {
       }
     }
   }
-  meta.component.name = elementName
+  Object.defineProperty(meta.component, 'name', {
+    value: elementName,
+    enumerable: true,
+    writable: true,
+    configurable: true
+  });
+  // meta.component.name = elementName
 
   const entry = {
     resolver: resolver,
