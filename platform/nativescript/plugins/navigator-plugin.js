@@ -52,7 +52,10 @@ export function findParentFrame(vm) {
 
 export default {
   install(Vue) {
-    Vue.navigateBack = Vue.prototype.$navigateBack = function (options, backstackEntry = null) {
+    Vue.navigateBack = Vue.prototype.$navigateBack = function (
+      options,
+      backstackEntry = null
+    ) {
       const parentFrame = findParentFrame(this)
       const defaultOptions = {
         frame: parentFrame ? parentFrame : 'default'
