@@ -2,10 +2,10 @@ import {
     Page,
     NavigationEntry,
     BackstackEntry,
-} from 'tns-core-modules/ui/frame/frame'
-import { ItemEventData } from 'tns-core-modules/ui/list-view'
-import { View } from 'tns-core-modules/ui/core/view'
-import { ShowModalOptions } from 'tns-core-modules/ui/core/view-base'
+} from '@nativescript/core'
+import { ItemEventData } from '@nativescript/core'
+import { View } from '@nativescript/core'
+import { ShowModalOptions } from '@nativescript/core'
 import { Vue, VueConstructor } from 'vue/types/vue'
 
 // ListView ItemEventData with the addition of the item property

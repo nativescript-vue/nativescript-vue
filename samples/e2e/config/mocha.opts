@@ -1,5 +1,0 @@
---timeout 200000
---recursive e2e
---reporter mocha-multi 
---reporter-options mochawesome=-,mocha-junit-reporter=test-results.xml
---exit

@@ -5,10 +5,10 @@
   "nativescript": {
     "id": "org.nativescript.application",
     "tns-android": {
-      "version": "6.5.0"
+      "version": "6.5.3"
     },
     "tns-ios": {
-      "version": "6.5.0"
+      "version": "6.5.2"
     }
   },
   "scripts": {
@@ -19,31 +19,31 @@
     "e2e:local:android": "npm run e2e -- --runType android28.local --appPath ./outputs/nativescript-vue-tests.apk"
   },
   "dependencies": {
-    "@vue/devtools": "5.1.0",
+    "@vue/devtools": "5.3.3",
     "lorem-ipsum": "^2.0.3",
-    "nativescript-collectionview": "2.0.26",
+    "nativescript-collectionview": "2.0.36",
     "nativescript-socketio": "^3.3.1",
     "nativescript-theme-core": "1.0.6",
     "nativescript-toasty": "3.0.0-alpha.2",
-    "nativescript-vue-devtools": "1.2.0",
-    "tns-core-modules": "6.5.1",
-    "vuex": "3.1.1"
+    "nativescript-vue-devtools": "1.4.0",
+    "@nativescript/core": "6.5.10",
+    "vuex": "3.5.1"
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
-    "@babel/preset-env": "7.4.5",
-    "@types/chai": "4.1.7",
-    "@types/mocha": "5.2.7",
-    "@types/node": "11.10.0",
-    "babel-loader": "8.0.6",
+    "@babel/core": "7.10.5",
+    "@babel/preset-env": "7.10.4",
+    "@types/chai": "4.2.11",
+    "@types/mocha": "8.0.0",
+    "@types/node": "14.0.23",
+    "babel-loader": "8.1.0",
     "chai": "4.2.0",
-    "mocha": "6.1.4",
-    "mocha-junit-reporter": "1.23.0",
-    "mocha-multi": "1.1.0",
-    "mochawesome": "4.0.0",
-    "nativescript-dev-appium": "^5.3.0",
-    "nativescript-dev-webpack": "1.0.1",
+    "mocha": "8.0.1",
+    "mocha-junit-reporter": "2.0.0",
+    "mocha-multi": "1.1.3",
+    "mochawesome": "6.1.1",
+    "nativescript-dev-appium": "^6.1.3",
+    "@nativescript/webpack": "2.0.0-alpha.3",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
-    "vue-loader": "15.9.1"
+    "vue-loader": "15.9.3"
   }
 }

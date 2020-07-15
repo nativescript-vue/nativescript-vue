@@ -6,11 +6,7 @@ npm-debug.log
 node_modules
 samples/package-lock.json
 samples/platforms
-samples/app/nativescript-vue.js
-samples/app/nativescript-vue.js.map
 samples/hooks/
-samples/mochawesome-report/
-samples/e2e/reports/
 test-results.xml
 dist/
 packages/nativescript-vue-template-compiler/index.js
