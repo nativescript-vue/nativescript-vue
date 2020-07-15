@@ -1,3 +1,19 @@
+# [2.7.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.4...v2.7.0) (2020-07-15)
+
+
+### Bug Fixes
+
+* **ios:** fix white screen on start ([#672](https://github.com/nativescript-vue/nativescript-vue/issues/672)) ([d2899a1](https://github.com/nativescript-vue/nativescript-vue/commit/d2899a17ecdb805c7cdc637ed211f06e8f8fa6b3))
+* **types:** fix TS2702 can't use static class members ([eada027](https://github.com/nativescript-vue/nativescript-vue/commit/eada027bb43870dc46cd7d189c7bf256d137c36f))
+* **types:** navigateBack options types ([#679](https://github.com/nativescript-vue/nativescript-vue/issues/679)) ([53695ed](https://github.com/nativescript-vue/nativescript-vue/commit/53695eda9498cd6f6daea50f8b554aa817090209))
+
+
+### Features
+
+* global navigation methods ([#675](https://github.com/nativescript-vue/nativescript-vue/issues/675)) ([#677](https://github.com/nativescript-vue/nativescript-vue/issues/677)) ([bf1c708](https://github.com/nativescript-vue/nativescript-vue/commit/bf1c7080969d6ad23ab6c968b1391395bb729e75))
+
+
+
 ## [2.6.4](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.3...v2.6.4) (2020-05-25)
 
 
