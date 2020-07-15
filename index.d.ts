@@ -17,7 +17,8 @@ type TargetFrame = any;
 export interface NavigationEntryVue extends NavigationEntry {
     props?: Record<string, any>,
     frame?: TargetFrame,
-    resolveOnEvent?: Page.navigatingToEvent | Page.navigatedToEvent
+    resolveOnEvent?: "navigatingTo" | "navigatedTo" | string
+    // Page.navigatingToEvent | Page.navigatedToEvent
 }
 
 export type navigateTo = (
