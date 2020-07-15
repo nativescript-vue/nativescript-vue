@@ -85,7 +85,6 @@ export default {
             })
         })
         const page = navEntryInstance.$mount().$el.nativeView
-        page.__isNavigatedTo = true
 
         updateDevtools()
 
