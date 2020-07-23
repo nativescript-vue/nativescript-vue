@@ -20,7 +20,8 @@ export default {
 
     // we only need call this for the "defaultPage" of the frame
     // which is equivalent to testing if any page is "current" in the frame
-    if (frame && !frame.$el.nativeView.currentPage) {
+    if (frame && !frame.firstPageMounted && !frame.$el.nativeView.currentPage) {
+      frame.firstPageMounted = true
       frame.notifyFirstPageMounted(this)
     }
 
