@@ -1,3 +1,12 @@
+## [2.7.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.0...v2.7.1) (2020-07-23)
+
+
+### Bug Fixes
+
+* double navigation is certain conditions ([6a710aa](https://github.com/nativescript-vue/nativescript-vue/commit/6a710aaa31eaa4d2c6d7e1b0ae41869c3908f25d))
+
+
+
 # [2.7.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.4...v2.7.0) (2020-07-15)
 
 
