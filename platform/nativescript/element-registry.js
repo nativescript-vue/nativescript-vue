@@ -46,11 +46,10 @@ export function registerElement(elementName, resolver, meta) {
   }
   meta.component.name = elementName
 
-  const entry = {
+  elementMap[normalizedName] = {
     resolver: resolver,
     meta: meta
   }
-  elementMap[normalizedName] = entry
 }
 
 export function getElementMap() {
@@ -91,26 +90,19 @@ export function isKnownView(elementName) {
   return elementMap[normalizeElementName(elementName)]
 }
 
-registerElement(
-  'ActionBar',
-  () => require('@nativescript/core/ui/action-bar').ActionBar,
-  {
-    removeChild(parent, child) {
-      try {
-        parent.nativeView._removeView(child.nativeView)
-      } catch (e) {
-        // ignore exception - child is likely already removed/replaced
-        // fixes #76
-      }
-    },
-    component: builtInComponents.ActionBar
-  }
-)
+registerElement('ActionBar', () => require('@nativescript/core').ActionBar, {
+  removeChild(parent, child) {
+    try {
+      parent.nativeView._removeView(child.nativeView)
+    } catch (e) {
+      // ignore exception - child is likely already removed/replaced
+      // fixes #76
+    }
+  },
+  component: builtInComponents.ActionBar
+})
 
-registerElement(
-  'ActionItem',
-  () => require('@nativescript/core/ui/action-bar').ActionItem
-)
+registerElement('ActionItem', () => require('@nativescript/core').ActionItem)
 
 registerElement('android', null, {
   component: builtInComponents.android
@@ -120,34 +112,26 @@ registerElement('ios', null, {
   component: builtInComponents.ios
 })
 
-registerElement(
-  'ListView',
-  () => require('@nativescript/core/ui/list-view').ListView,
-  {
-    component: builtInComponents.ListView
-  }
-)
+registerElement('ListView', () => require('@nativescript/core').ListView, {
+  component: builtInComponents.ListView
+})
 
 registerElement(
   'NavigationButton',
-  () => require('@nativescript/core/ui/action-bar').NavigationButton
+  () => require('@nativescript/core').NavigationButton
 )
 
-registerElement(
-  'TabView',
-  () => require('@nativescript/core/ui/tab-view').TabView,
-  {
-    model: {
-      prop: 'selectedIndex',
-      event: 'selectedIndexChange'
-    },
-    component: builtInComponents.TabView
-  }
-)
+registerElement('TabView', () => require('@nativescript/core').TabView, {
+  model: {
+    prop: 'selectedIndex',
+    event: 'selectedIndexChange'
+  },
+  component: builtInComponents.TabView
+})
 
 registerElement(
   'TabViewItem',
-  () => require('@nativescript/core/ui/tab-view').TabViewItem,
+  () => require('@nativescript/core').TabViewItem,
   {
     skipAddToDom: true,
     component: builtInComponents.TabViewItem
@@ -156,7 +140,7 @@ registerElement(
 
 registerElement(
   'BottomNavigation',
-  () => require('@nativescript/core/ui/bottom-navigation').BottomNavigation,
+  () => require('@nativescript/core').BottomNavigation,
   {
     model: {
       prop: 'selectedIndex',
@@ -166,7 +150,7 @@ registerElement(
   }
 )
 
-registerElement('Tabs', () => require('@nativescript/core/ui/tabs').Tabs, {
+registerElement('Tabs', () => require('@nativescript/core').Tabs, {
   model: {
     prop: 'selectedIndex',
     event: 'selectedIndexChange'
@@ -174,20 +158,14 @@ registerElement('Tabs', () => require('@nativescript/core/ui/tabs').Tabs, {
   component: builtInComponents.Tabs
 })
 
-registerElement(
-  'TabStrip',
-  () => require('@nativescript/core/ui/tab-navigation-base/tab-strip').TabStrip,
-  {
-    skipAddToDom: true,
-    component: builtInComponents.TabStrip
-  }
-)
+registerElement('TabStrip', () => require('@nativescript/core').TabStrip, {
+  skipAddToDom: true,
+  component: builtInComponents.TabStrip
+})
 
 registerElement(
   'TabStripItem',
-  () =>
-    require('@nativescript/core/ui/tab-navigation-base/tab-strip-item')
-      .TabStripItem,
+  () => require('@nativescript/core').TabStripItem,
   {
     skipAddToDom: true,
     component: builtInComponents.TabStripItem
@@ -196,9 +174,7 @@ registerElement(
 
 registerElement(
   'TabContentItem',
-  () =>
-    require('@nativescript/core/ui/tab-navigation-base/tab-content-item')
-      .TabContentItem,
+  () => require('@nativescript/core').TabContentItem,
   {
     skipAddToDom: true,
     component: builtInComponents.TabContentItem
@@ -216,106 +192,71 @@ registerElement('v-template', null, {
 // NS components which uses the automatic registerElement Vue wrapper
 // as they do not need any special logic
 
-registerElement('Label', () => require('@nativescript/core/ui/label').Label, {
+registerElement('Label', () => require('@nativescript/core').Label, {
   model: {
     prop: 'text',
     event: 'textChange'
   }
 })
 
-registerElement(
-  'DatePicker',
-  () => require('@nativescript/core/ui/date-picker').DatePicker,
-  {
-    model: {
-      prop: 'date',
-      event: 'dateChange'
-    }
+registerElement('DatePicker', () => require('@nativescript/core').DatePicker, {
+  model: {
+    prop: 'date',
+    event: 'dateChange'
   }
-)
+})
 
 registerElement(
   'AbsoluteLayout',
-  () => require('@nativescript/core/ui/layouts/absolute-layout').AbsoluteLayout
+  () => require('@nativescript/core').AbsoluteLayout
 )
 registerElement(
   'ActivityIndicator',
-  () => require('@nativescript/core/ui/activity-indicator').ActivityIndicator
+  () => require('@nativescript/core').ActivityIndicator
 )
-registerElement('Border', () => require('@nativescript/core/ui/border').Border)
-registerElement('Button', () => require('@nativescript/core/ui/button').Button)
-registerElement(
-  'ContentView',
-  () => require('@nativescript/core/ui/content-view').ContentView
-)
-registerElement(
-  'DockLayout',
-  () => require('@nativescript/core/ui/layouts/dock-layout').DockLayout
-)
-registerElement(
-  'GridLayout',
-  () => require('@nativescript/core/ui/layouts/grid-layout').GridLayout
-)
-registerElement(
-  'HtmlView',
-  () => require('@nativescript/core/ui/html-view').HtmlView
-)
-registerElement('Image', () => require('@nativescript/core/ui/image').Image)
-registerElement('img', () => require('@nativescript/core/ui/image').Image)
-registerElement(
-  'ListPicker',
-  () => require('@nativescript/core/ui/list-picker').ListPicker,
-  {
-    model: {
-      prop: 'selectedIndex',
-      event: 'selectedIndexChange'
-    }
+registerElement('Button', () => require('@nativescript/core').Button)
+registerElement('ContentView', () => require('@nativescript/core').ContentView)
+registerElement('DockLayout', () => require('@nativescript/core').DockLayout)
+registerElement('GridLayout', () => require('@nativescript/core').GridLayout)
+registerElement('HtmlView', () => require('@nativescript/core').HtmlView)
+registerElement('Image', () => require('@nativescript/core').Image)
+registerElement('img', () => require('@nativescript/core').Image)
+registerElement('ListPicker', () => require('@nativescript/core').ListPicker, {
+  model: {
+    prop: 'selectedIndex',
+    event: 'selectedIndexChange'
   }
-)
-registerElement('Page', () => require('@nativescript/core/ui/page').Page, {
+})
+registerElement('Page', () => require('@nativescript/core').Page, {
   skipAddToDom: true,
   component: builtInComponents.Page
 })
 
-registerElement(
-  'Placeholder',
-  () => require('@nativescript/core/ui/placeholder').Placeholder
-)
-registerElement(
-  'Progress',
-  () => require('@nativescript/core/ui/progress').Progress,
-  {
-    model: {
-      prop: 'value',
-      event: 'valueChange'
-    }
+registerElement('Placeholder', () => require('@nativescript/core').Placeholder)
+registerElement('Progress', () => require('@nativescript/core').Progress, {
+  model: {
+    prop: 'value',
+    event: 'valueChange'
   }
-)
+})
 registerElement(
   'ProxyViewContainer',
-  () => require('@nativescript/core/ui/proxy-view-container').ProxyViewContainer
+  () => require('@nativescript/core').ProxyViewContainer
 )
 // registerElement(
 //   'Repeater',
-//   () => require('@nativescript/core/ui/repeater').Repeater
+//   () => require('@nativescript/core').Repeater
 // )
-registerElement(
-  'ScrollView',
-  () => require('@nativescript/core/ui/scroll-view').ScrollView
-)
-registerElement(
-  'SearchBar',
-  () => require('@nativescript/core/ui/search-bar').SearchBar,
-  {
-    model: {
-      prop: 'text',
-      event: 'textChange'
-    }
+registerElement('ScrollView', () => require('@nativescript/core').ScrollView)
+registerElement('SearchBar', () => require('@nativescript/core').SearchBar, {
+  model: {
+    prop: 'text',
+    event: 'textChange'
   }
-)
+})
 registerElement(
   'SegmentedBar',
-  () => require('@nativescript/core/ui/segmented-bar').SegmentedBar,
+  () => require('@nativescript/core').SegmentedBar,
   {
     model: {
       prop: 'selectedIndex',
@@ -325,78 +266,49 @@ registerElement(
 )
 registerElement(
   'SegmentedBarItem',
-  () => require('@nativescript/core/ui/segmented-bar').SegmentedBarItem
+  () => require('@nativescript/core').SegmentedBarItem
 )
-registerElement(
-  'Slider',
-  () => require('@nativescript/core/ui/slider').Slider,
-  {
-    model: {
-      prop: 'value',
-      event: 'valueChange'
-    }
+registerElement('Slider', () => require('@nativescript/core').Slider, {
+  model: {
+    prop: 'value',
+    event: 'valueChange'
   }
-)
-registerElement(
-  'StackLayout',
-  () => require('@nativescript/core/ui/layouts/stack-layout').StackLayout
-)
+})
+registerElement('StackLayout', () => require('@nativescript/core').StackLayout)
 registerElement(
   'FlexboxLayout',
-  () => require('@nativescript/core/ui/layouts/flexbox-layout').FlexboxLayout
+  () => require('@nativescript/core').FlexboxLayout
 )
-registerElement(
-  'Switch',
-  () => require('@nativescript/core/ui/switch').Switch,
-  {
-    model: {
-      prop: 'checked',
-      event: 'checkedChange'
-    }
+registerElement('Switch', () => require('@nativescript/core').Switch, {
+  model: {
+    prop: 'checked',
+    event: 'checkedChange'
   }
-)
+})
 
-registerElement(
-  'TextField',
-  () => require('@nativescript/core/ui/text-field').TextField,
-  {
-    model: {
-      prop: 'text',
-      event: 'textChange'
-    }
+registerElement('TextField', () => require('@nativescript/core').TextField, {
+  model: {
+    prop: 'text',
+    event: 'textChange'
   }
-)
-registerElement(
-  'TextView',
-  () => require('@nativescript/core/ui/text-view').TextView,
-  {
-    model: {
-      prop: 'text',
-      event: 'textChange'
-    }
+})
+registerElement('TextView', () => require('@nativescript/core').TextView, {
+  model: {
+    prop: 'text',
+    event: 'textChange'
   }
-)
-registerElement(
-  'TimePicker',
-  () => require('@nativescript/core/ui/time-picker').TimePicker,
-  {
-    model: {
-      prop: 'time',
-      event: 'timeChange'
-    }
+})
+registerElement('TimePicker', () => require('@nativescript/core').TimePicker, {
+  model: {
+    prop: 'time',
+    event: 'timeChange'
   }
-)
-registerElement(
-  'WebView',
-  () => require('@nativescript/core/ui/web-view').WebView
-)
-registerElement(
-  'WrapLayout',
-  () => require('@nativescript/core/ui/layouts/wrap-layout').WrapLayout
-)
+})
+registerElement('WebView', () => require('@nativescript/core').WebView)
+registerElement('WrapLayout', () => require('@nativescript/core').WrapLayout)
 registerElement(
   'FormattedString',
-  () => require('@nativescript/core/text/formatted-string').FormattedString,
+  () => require('@nativescript/core').FormattedString,
   {
     insertChild(parentNode, childNode, atIndex) {
       if (atIndex > -1) {
@@ -414,38 +326,33 @@ registerElement(
     }
   }
 )
-registerElement('Span', () => require('@nativescript/core/text/span').Span)
+registerElement('Span', () => require('@nativescript/core').Span)
 
 registerElement(
   'DetachedContainer',
-  () =>
-    require('@nativescript/core/ui/proxy-view-container').ProxyViewContainer,
+  () => require('@nativescript/core').ProxyViewContainer,
   {
     skipAddToDom: true
   }
 )
 registerElement(
   'DetachedText',
-  () => require('@nativescript/core/ui/placeholder').Placeholder,
+  () => require('@nativescript/core').Placeholder,
   {
     skipAddToDom: true
   }
 )
-registerElement(
-  'Comment',
-  () => require('@nativescript/core/ui/placeholder').Placeholder
-)
+registerElement('Comment', () => require('@nativescript/core').Placeholder)
 
 registerElement(
   'Document',
-  () =>
-    require('@nativescript/core/ui/proxy-view-container').ProxyViewContainer,
+  () => require('@nativescript/core').ProxyViewContainer,
   {
     skipAddToDom: true
   }
 )
 
-registerElement('Frame', () => require('@nativescript/core/ui/frame').Frame, {
+registerElement('Frame', () => require('@nativescript/core').Frame, {
   insertChild(parentNode, childNode, atIndex) {
     // if (normalizeElementName(childNode.tagName) === 'nativepage') {
     // parentNode.nativeView.navigate({ create: () => childNode.nativeView })

@@ -47,7 +47,7 @@ const builds = {
     banner: banner('NativeScript-Vue'),
     intro,
     external(id) {
-      return id.startsWith('@nativescript') || id.startsWith('tns-core-modules') || id.startsWith('weex')
+      return id.startsWith('@nativescript') || id.startsWith('weex')
     },
   },
   'nativescript-vue-template-compiler': {
@@ -57,7 +57,7 @@ const builds = {
     banner: banner('NativeScript-Vue-Template-Compiler'),
     external(id) {
       const deps = Object.keys(require('../packages/nativescript-vue-template-compiler/package.json').dependencies)
-      return deps.includes(id) || id.startsWith('@nativescript') || id.startsWith('tns-core-modules') || id.startsWith('weex')
+      return deps.includes(id) || id.startsWith('@nativescript') || id.startsWith('weex')
     }
   }
 }

@@ -67,37 +67,37 @@
     ]
   },
   "dependencies": {
-    "nativescript-hook": "0.2.5"
+    "@nativescript/hook": "1.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
+    "@babel/core": "^7.11.4",
     "@babel/plugin-transform-flow-strip-types": "7.10.4",
-    "@babel/preset-env": "7.10.4",
-    "@commitlint/cli": "9.1.1",
-    "@commitlint/config-conventional": "9.1.1",
-    "@nativescript/core": "6.5.10",
+    "@babel/preset-env": "7.11.0",
+    "@commitlint/cli": "9.1.2",
+    "@commitlint/config-conventional": "9.1.2",
+    "@nativescript/core": "7.0.0-rc.54",
     "@rollup/plugin-alias": "3.1.1",
     "@rollup/plugin-buble": "0.21.3",
-    "@rollup/plugin-commonjs": "14.0.0",
-    "@rollup/plugin-node-resolve": "8.4.0",
+    "@rollup/plugin-commonjs": "15.0.0",
+    "@rollup/plugin-node-resolve": "9.0.0",
     "@rollup/plugin-replace": "2.3.3",
-    "babel-jest": "26.1.0",
+    "babel-jest": "26.3.0",
     "chalk": "4.1.0",
-    "commitizen": "4.1.2",
-    "conventional-changelog-cli": "2.0.34",
-    "cz-conventional-changelog": "3.2.0",
+    "commitizen": "4.2.1",
+    "conventional-changelog-cli": "2.1.0",
+    "cz-conventional-changelog": "3.3.0",
     "husky": "4.2.5",
-    "inquirer": "7.3.2",
-    "jest": "26.1.0",
-    "jest-junit": "11.0.1",
-    "lint-staged": "10.2.11",
-    "prettier": "2.0.5",
-    "rollup": "^2.10.5",
+    "inquirer": "7.3.3",
+    "jest": "26.4.2",
+    "jest-junit": "11.1.0",
+    "lint-staged": "10.2.13",
+    "prettier": "2.1.1",
+    "rollup": "^2.26.6",
     "rollup-plugin-flow-no-whitespace": "1.0.0",
     "rollup-plugin-resolve-aliases": "0.3.0",
     "semver": "7.3.2",
     "set-value": "3.0.2",
-    "vue": "2.6.11"
+    "vue": "2.6.12"
   },
   "jest": {
     "verbose": true,
@@ -126,17 +126,12 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -e $GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
     "{{platform,__test__}/**/*.js,samples/app/*.js}": [
-      "prettier --write",
-      "git add"
-    ],
-    "docs/src/**/*.js": [
-      "npm run build:docs",
-      "git add"
+      "prettier --write"
     ]
   },
   "config": {

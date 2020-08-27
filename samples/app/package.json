@@ -1,8 +1,0 @@
-{
-  "main": "entry.js",
-  "name": "nativescript-vue-tests",
-  "version": "1.0.1",
-  "android": {
-    "markingMode": "none"
-  }
-}

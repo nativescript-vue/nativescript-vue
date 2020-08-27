@@ -1,48 +1,31 @@
 {
+  "main": "entry.js",
+  "name": "nativescript-vue-tests",
+  "version": "1.0.1",
+  "private": true,
   "description": "NativeScriptVue Samples Application",
   "license": "MIT",
   "readme": "NativeScriptVue Samples Application",
-  "nativescript": {
-    "id": "org.nativescript.application",
-    "tns-android": {
-      "version": "6.5.3"
-    },
-    "tns-ios": {
-      "version": "6.5.2"
-    }
-  },
-  "scripts": {
-    "build:ios": "tns build ios --copy-to ./outputs/nativescript-vue-tests.app",
-    "build:android": "tns build android --copy-to ./outputs/nativescript-vue-tests.apk",
-    "e2e": "node ./node_modules/nativescript-dev-appium/check-dev-deps.js && mocha --opts ./e2e/config/mocha.opts",
-    "e2e:local:ios": "npm run e2e -- --runType ios.local --appPath ./outputs/nativescript-vue-tests.app",
-    "e2e:local:android": "npm run e2e -- --runType android28.local --appPath ./outputs/nativescript-vue-tests.apk"
-  },
   "dependencies": {
-    "@nativescript/core": "6.5.10",
+    "@nativescript-community/ui-collectionview": "^3.0.5",
+    "@nativescript/core": "7.0.0-rc.54",
     "@vue/devtools": "5.3.3",
     "lorem-ipsum": "^2.0.3",
-    "nativescript-collectionview": "2.0.36",
     "nativescript-socketio": "^3.3.1",
-    "nativescript-theme-core": "1.0.6",
     "nativescript-toasty": "3.0.0-alpha.2",
     "nativescript-vue-devtools": "1.4.0",
     "vuex": "3.5.1"
   },
   "devDependencies": {
-    "@babel/core": "7.10.5",
-    "@babel/preset-env": "7.10.4",
-    "@nativescript/webpack": "2.0.0-alpha.3",
-    "@types/chai": "4.2.11",
-    "@types/mocha": "8.0.0",
-    "@types/node": "14.0.23",
+    "@babel/core": "7.11.4",
+    "@babel/preset-env": "7.11.0",
+    "tns-android": "6.5.3",
+    "@nativescript/ios": "^7.0.0",
+    "@nativescript/webpack": "3.0.0-rc.0",
+    "@types/chai": "4.2.12",
+    "@types/mocha": "8.0.3",
+    "@types/node": "14.6.1",
     "babel-loader": "8.1.0",
-    "chai": "4.2.0",
-    "mocha": "8.0.1",
-    "mocha-junit-reporter": "2.0.0",
-    "mocha-multi": "1.1.3",
-    "mochawesome": "6.1.1",
-    "nativescript-dev-appium": "^6.1.3",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
     "vue-loader": "15.9.3"
   }

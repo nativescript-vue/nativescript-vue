@@ -1,2 +1,2 @@
-var hook = require("nativescript-hook")(__dirname);
+const hook = require("@nativescript/hook")(__dirname);
 hook.postinstall();
