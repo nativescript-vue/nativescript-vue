@@ -1,3 +1,12 @@
+# [2.8.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.1...v2.8.0) (2020-08-31)
+
+
+### Features
+
+* upgrade to NS7 ([261f701](https://github.com/nativescript-vue/nativescript-vue/commit/261f7015d606d7ca82a135d9b531baa47d9ec9fe))
+
+
+
 ## [2.7.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.0...v2.7.1) (2020-07-23)
 
 
