@@ -1,6 +1,6 @@
 <template>
     <Page>
-        <CollectionView for="item in listItems"
+        <ListView for="item in listItems"
                         separatorColor="transparent">
 
 
@@ -101,7 +101,7 @@
                     <Label text="Reached end." row="1"/>
                 </GridLayout>
             </v-template>
-        </CollectionView>
+        </ListView>
     </Page>
 </template>
 
