@@ -1,8 +1,8 @@
 const Vue = require('nativescript-vue')
 import ListViewTest from './components/ListViewTest'
-import CollectionView from 'nativescript-collectionview/vue'
+import VueDevtools from 'nativescript-vue-devtools'
 
-Vue.use(CollectionView)
+Vue.use(VueDevtools)
 
 Vue.config.debug = true
 Vue.config.silent = false
