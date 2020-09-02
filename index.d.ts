@@ -6,7 +6,7 @@ import {
 import { ItemEventData } from '@nativescript/core'
 import { View } from '@nativescript/core'
 import { ShowModalOptions } from '@nativescript/core'
-import { Vue, VueConstructor } from 'vue/types/vue'
+import { Vue, VueConstructor, VueConfiguration } from 'vue/types/vue'
 
 // ListView ItemEventData with the addition of the item property
 export type NativeScriptVueItemEventData<T> = ItemEventData & { item: T }
@@ -66,6 +66,7 @@ export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptV
 {
     navigateTo: navigateTo
     navigateBack: navigateBack
+                                              
     /**
      * Registers NativeScript Plugin.
      * @param elementName Name of the element to use in your template
@@ -73,6 +74,12 @@ export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptV
      * @param meta meta associated with the element
      */
     registerElement: (elementName: string, resolver: Function, meta?: any) => void
+                                              
+    config: NativeScriptVueConfiguration
+}
+
+interface NativeScriptVueConfiguration extends VueConfiguration {
+  suppressRenderLogs: boolean;
 }
 
 export const NativeScriptVue: NativeScriptVueConstructor
