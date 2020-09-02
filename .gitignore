@@ -4,6 +4,7 @@ coverage
 junit.xml
 npm-debug.log
 node_modules
+package-lock.json
 samples/package-lock.json
 samples/platforms
 samples/hooks/
