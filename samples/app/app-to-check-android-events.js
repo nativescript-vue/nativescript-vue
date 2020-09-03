@@ -1,6 +1,5 @@
 const Vue = require('nativescript-vue')
-const application = require('@nativescript/core/application')
-const platform = require('@nativescript/core/platform')
+const { Application } = require('@nativescript/core')
 
 Vue.config.silent = false
 Vue.config.debug = true
@@ -30,20 +29,20 @@ new Vue({
     switchValue: false
   },
   created() {
-    if (platform.isAndroid) {
+    if (global.isAndroid) {
       const eventTypes = [
-        application.AndroidApplication.activityCreatedEvent,
-        application.AndroidApplication.activityDestroyedEvent,
-        application.AndroidApplication.activityStartedEvent,
-        application.AndroidApplication.activityPausedEvent,
-        application.AndroidApplication.activityResumedEvent,
-        application.AndroidApplication.activityStoppedEvent,
-        application.AndroidApplication.saveActivityStateEvent,
-        application.AndroidApplication.activityResultEvent,
-        application.AndroidApplication.activityBackPressedEvent
+        Application.AndroidApplication.activityCreatedEvent,
+        Application.AndroidApplication.activityDestroyedEvent,
+        Application.AndroidApplication.activityStartedEvent,
+        Application.AndroidApplication.activityPausedEvent,
+        Application.AndroidApplication.activityResumedEvent,
+        Application.AndroidApplication.activityStoppedEvent,
+        Application.AndroidApplication.saveActivityStateEvent,
+        Application.AndroidApplication.activityResultEvent,
+        Application.AndroidApplication.activityBackPressedEvent
       ]
       for (let i = 0; i < eventTypes.length; i++) {
-        application.android.on(eventTypes[i], event => {
+        Application.android.on(eventTypes[i], event => {
           console.log(`Event: ${event.eventName}, Activity: ${event.activity}`)
           this.androidEvents.push(event)
         })

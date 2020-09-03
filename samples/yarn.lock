@@ -991,10 +991,10 @@
     global-agent "^2.0.2"
     global-tunnel-ng "^2.7.1"
 
-"@nativescript/core@7.0.0-rc.57":
-  version "7.0.0-rc.57"
-  resolved "https://registry.yarnpkg.com/@nativescript/core/-/core-7.0.0-rc.57.tgz#2e406188128f19b215e3cb40db217172dd308c5b"
-  integrity sha512-vVkfXhZ1sAx9ku2dn08u7SyJlVSDgfmb0c2dFy0QurNcAbTGeDNPmU8insjnsMS+ns0s3pSIMHtGpvXHMhBm2A==
+"@nativescript/core@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@nativescript/core/-/core-7.0.0.tgz#2ff7e60cd3fd587c5ae955308350cbb1cac21b06"
+  integrity sha512-/DXCesjCXiCKbPOAX7bVoAIkGwjhw92wtq6M7RUS3aJOAP51/Ttm+1A7KSXJx3fCRHMD00duI7n3po2/I3a3bw==
   dependencies:
     "@nativescript/hook" "~2.0.0"
     css-tree "^1.0.0-alpha.39"
@@ -1009,10 +1009,15 @@
     glob "^7.1.0"
     mkdirp "^1.0.4"
 
-"@nativescript/webpack@3.0.0-rc.2":
-  version "3.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@nativescript/webpack/-/webpack-3.0.0-rc.2.tgz#000529cab9f7cdac35e9719f38cbcc8c1c5a6a05"
-  integrity sha512-IUHAcywAoVEgdmGAGwIsvoomqCkIAcplM4boQYePezmtyhJgXaqmUEiyRDfcSPjEKF3tkk03kMrE/AUyc8xa+Q==
+"@nativescript/ios@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@nativescript/ios/-/ios-7.0.0.tgz#4a7f5fcef9550c651427e5b577625acf7191cda1"
+  integrity sha512-6Tv4WG7plnuzVhnJ16E9XJ5flJOzqb5Wmmgx6Tn1NMNXTNZuT6c7rfDBGDR/xexz0gZ8Sx3PULyeBdUCKa/LIg==
+
+"@nativescript/webpack@3.0.1-rc.0":
+  version "3.0.1-rc.0"
+  resolved "https://registry.yarnpkg.com/@nativescript/webpack/-/webpack-3.0.1-rc.0.tgz#6a42ff3fef8c5333c82bb84267bb041c4343e48f"
+  integrity sha512-Lcz7FydUeJI9D82COTOSAY/p+j3eOvO/EmK+3EGX8yLUh219shxJ7glHMWi83rpZ8vKV9FsSuYRcrb+KFC2nsg==
   dependencies:
     "@angular-devkit/core" "~10.0.0"
     "@nativescript/hook" "~2.0.0"
@@ -4367,7 +4372,7 @@ nativescript-vue-devtools@1.4.0:
   integrity sha512-qYp1dtkxZziiCsUTSf5OjJgSGorGKQIsj132bHqvQNST/gKvucB4BaUGiassBJ5yhgykk5USxSb3YjGRNAsw1A==
 
 "nativescript-vue-template-compiler@file:../packages/nativescript-vue-template-compiler":
-  version "2.7.1"
+  version "2.8.0"
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"

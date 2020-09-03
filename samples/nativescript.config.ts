@@ -2,6 +2,7 @@ import { NativeScriptConfig } from "@nativescript/core";
 
 export default {
 	id: 'org.nativescript.application',
+  appPath: 'app',
 	appResourcesPath: 'app_resources',
 	android: {
 		markingMode: 'none',

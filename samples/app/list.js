@@ -4,8 +4,8 @@ import VueDevtools from 'nativescript-vue-devtools'
 
 Vue.use(VueDevtools)
 
-Vue.config.debug = true
-Vue.config.silent = false
+// Vue.config.debug = true
+// Vue.config.silent = false
 
 new Vue({
   template: `

@@ -1,7 +1,5 @@
 const Vue = require('nativescript-vue')
-const frame = require('@nativescript/core/ui/frame')
-const platform = require('@nativescript/core/platform')
-const utils = require('@nativescript/core/utils/utils')
+const { Frame, Utils } = require('@nativescript/core')
 
 Vue.config.debug = true
 Vue.config.silent = false
@@ -226,10 +224,10 @@ new Vue({
       return `${img.images.fixed_height_still.url}?${Date.now()}`
     },
     dismissKeyboard() {
-      if (platform.isAndroid) {
-        utils.ad.dismissSoftInput()
+      if (global.isAndroid) {
+        Utils.android.dismissSoftInput()
       } else {
-        frame.topmost().nativeView.endEditing(true)
+        Frame.topmost().nativeView.endEditing(true)
       }
     }
   },

@@ -7,7 +7,7 @@
   "license": "MIT",
   "readme": "NativeScriptVue Samples Application",
   "dependencies": {
-    "@nativescript/core": "7.0.0-rc.57",
+    "@nativescript/core": "7.0.0",
     "@vue/devtools": "5.3.3",
     "lorem-ipsum": "^2.0.3",
     "nativescript-socketio": "^3.3.1",
@@ -18,7 +18,8 @@
   "devDependencies": {
     "@babel/core": "7.11.5",
     "@babel/preset-env": "7.11.5",
-    "@nativescript/webpack": "3.0.0-rc.2",
+    "@nativescript/ios": "7.0.0",
+    "@nativescript/webpack": "3.0.1-rc.0",
     "babel-loader": "8.1.0",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler",
     "vue-loader": "15.9.3"

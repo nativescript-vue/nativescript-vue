@@ -228,3 +228,9 @@
     }
   }
 </script>
+
+<style>
+    GridLayout {
+        background: #f9cd0b;
+    }
+</style>
