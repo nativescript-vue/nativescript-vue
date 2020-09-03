@@ -1,3 +1,17 @@
+## [2.8.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.0...v2.8.1) (2020-09-03)
+
+
+### Bug Fixes
+
+* use preferred imports for ns7 ([4c38dfa](https://github.com/nativescript-vue/nativescript-vue/commit/4c38dfa42491742262aecc81951d4b80ae8fd2db))
+
+
+### Features
+
+* upgrade to NS7 ([#709](https://github.com/nativescript-vue/nativescript-vue/issues/709)) ([6d1f02b](https://github.com/nativescript-vue/nativescript-vue/commit/6d1f02b7a37a89d015f7a059e93f3f3540ab627a))
+
+
+
 # [2.8.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.1...v2.8.0) (2020-08-31)
 
 
