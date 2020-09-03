@@ -59,17 +59,17 @@ Vue.prototype.$start = function () {
     Vue.component(entry.meta.component.name, entry.meta.component)
   })
 
-  on(launchEvent, args => {
-    if (self.$el) {
-      self.$destroy()
-      self = new AppConstructor()
+  Application.run({
+    create() {
+      if (self.$el) {
+        self.$destroy()
+        self = new AppConstructor()
+      }
+
+      self.$mount()
+      return self.$el.nativeView
     }
-
-    self.$mount()
-    args.root = self.$el.nativeView
   })
-
-  run()
 }
 
 // Define a `nativeView` getter in every NS vue instance
