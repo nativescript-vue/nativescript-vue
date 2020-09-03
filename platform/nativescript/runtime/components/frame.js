@@ -88,7 +88,7 @@ export default {
     },
 
     _composeTransition(entry) {
-      const isAndroid = require('@nativescript/core/platform').isAndroid
+      const isAndroid = global.isAndroid
       const platformEntryProp = `transition${isAndroid ? 'Android' : 'iOS'}`
       const entryProp = entry[platformEntryProp]
         ? platformEntryProp

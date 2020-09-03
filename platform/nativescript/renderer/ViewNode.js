@@ -92,7 +92,8 @@ export default class ViewNode {
 
   /* istanbul ignore next */
   setAttribute(key, value) {
-    const { isAndroid, isIOS } = require('@nativescript/core/platform')
+    const isAndroid = global.isAndroid
+    const isIOS = global.isIOS
     const nv = this.nativeView
 
     try {
@@ -102,7 +103,7 @@ export default class ViewNode {
         // detect expandable attrs for boolean values
         // See https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
         if (
-          require('@nativescript/core/utils/types').isBoolean(nv[key]) &&
+          require('@nativescript/core').Utils.isBoolean(nv[key]) &&
           value === ''
         ) {
           value = true
@@ -116,9 +117,7 @@ export default class ViewNode {
           set(
             nv,
             key.slice(0, -7),
-            require('@nativescript/core/xml').XmlParser._dereferenceEntities(
-              value
-            )
+            require('@nativescript/core').XmlParser._dereferenceEntities(value)
           )
         } else {
           set(nv, key, value)

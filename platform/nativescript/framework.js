@@ -13,7 +13,7 @@ Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
 
 global.__onLiveSyncCore = () => {
-  const frame = require('@nativescript/core/ui/frame').Frame.topmost()
+  const frame = require('@nativescript/core').Frame.topmost()
   if (frame) {
     if (frame.currentPage && frame.currentPage.modal) {
       frame.currentPage.modal.closeModal()
@@ -21,7 +21,7 @@ global.__onLiveSyncCore = () => {
 
     if (frame.currentPage) {
       frame.currentPage.addCssFile(
-        require('@nativescript/core/application').getCssFileName()
+        require('@nativescript/core').getCssFileName()
       )
     }
   }
@@ -31,6 +31,6 @@ global.__onLiveSyncCore = () => {
 // module.export.default = Vue
 // so a `import Vue from 'nativescript-vue'` will
 // fail from a Typescript file
-Vue.default = Vue
+// Vue.default = Vue
 
 export default Vue

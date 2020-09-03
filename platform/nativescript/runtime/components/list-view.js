@@ -6,8 +6,7 @@ export default {
     items: {
       type: [Array, Object],
       validator: val => {
-        const ObservableArray = require('@nativescript/core/data/observable-array')
-          .ObservableArray
+        const ObservableArray = require('@nativescript/core').ObservableArray
         return Array.isArray(val) || val instanceof ObservableArray
       },
       required: true

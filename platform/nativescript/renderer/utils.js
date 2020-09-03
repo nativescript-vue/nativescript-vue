@@ -1,7 +1,7 @@
 let View
 export function isView(view) {
   if (!View) {
-    View = require('@nativescript/core/ui/core/view').View
+    View = require('@nativescript/core').View
   }
   return view instanceof View
 }
@@ -9,7 +9,7 @@ export function isView(view) {
 let LayoutBase
 export function isLayout(view) {
   if (!LayoutBase) {
-    LayoutBase = require('@nativescript/core/ui/layouts/layout-base').LayoutBase
+    LayoutBase = require('@nativescript/core').LayoutBase
   }
   return view instanceof LayoutBase
 }
@@ -17,7 +17,7 @@ export function isLayout(view) {
 let ContentView
 export function isContentView(view) {
   if (!ContentView) {
-    ContentView = require('@nativescript/core/ui/content-view').ContentView
+    ContentView = require('@nativescript/core').ContentView
   }
   return view instanceof ContentView
 }
