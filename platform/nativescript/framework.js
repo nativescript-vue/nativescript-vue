@@ -21,7 +21,7 @@ global.__onLiveSyncCore = () => {
 
     if (frame.currentPage) {
       frame.currentPage.addCssFile(
-        require('@nativescript/core').getCssFileName()
+        require('@nativescript/core').Application.getCssFileName()
       )
     }
   }
