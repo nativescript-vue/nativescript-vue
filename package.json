@@ -49,22 +49,7 @@
       "pan": "false",
       "core3": "true",
       "category": "Developer"
-    },
-    "hooks": [
-      {
-        "type": "before-checkForChanges",
-        "script": "dist/hooks/before-checkForChanges.js",
-        "inject": true
-      },
-      {
-        "type": "before-watch",
-        "script": "dist/hooks/before-watch.js",
-        "inject": true
-      }
-    ]
-  },
-  "dependencies": {
-    "@nativescript/hook": "2.0.0"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.12.7",
