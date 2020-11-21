@@ -1,3 +1,13 @@
+## [2.8.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.1...v2.8.2) (2020-11-21)
+
+
+### Bug Fixes
+
+* once event modifier ([#752](https://github.com/nativescript-vue/nativescript-vue/issues/752)) ([2a1b06f](https://github.com/nativescript-vue/nativescript-vue/commit/2a1b06fc29f1289dae33170c5b706f94c96da328)), closes [#748](https://github.com/nativescript-vue/nativescript-vue/issues/748)
+* wrong import for getCssFileName ([#738](https://github.com/nativescript-vue/nativescript-vue/issues/738)) ([f1110f1](https://github.com/nativescript-vue/nativescript-vue/commit/f1110f14f3dca664c6789e4d2cbb61dbaba3ea5d))
+
+
+
 ## [2.8.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.0...v2.8.1) (2020-09-03)
 
 
