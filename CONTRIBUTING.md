@@ -38,9 +38,11 @@ $ yarn dev
 
 To test the sample applications provided in the repository, you need to `yarn dev` in the root directory. This will watch for changes, and rebuild nativescript-vue, which in dev mode will be generated into the samples/app directory (this has been done to reduce the required steps of linking local packages, which had many issues with the recent releases of npm).
 
-Next, open up a new terminal window and run `yarn samples`. This will bring up a list of all the available sample applications which you can choose from with your arrow keys. Pressing enter/return will select that sample, and prompt you to choose the platform you'd like to run the sample on. After selecting the platform the application should start on your emulator, and the output will be in your terminal.
+Next, open up a new terminal window and change directory to samples `cd samples`.
 
-If you want to test the sample apps with HMR activated, please run `yarn samples -- --hmr` instead. Actually, we can pass any arguments to the `tns debug platform` command placing them after the `--` separator.
+If you want to test the sample apps, please run `ns run <platform> --no-hmr` (disabling hmr isn't necessary, but preferred most of the time).
+
+To test a different/new sample edit `app/entry.js` and update the `require('./<sample>')` statement to require any of the samples in the app folder.
 
 # Project Structure
 
