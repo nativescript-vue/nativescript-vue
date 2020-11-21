@@ -2,9 +2,19 @@ import { updateListeners } from 'core/vdom/helpers/update-listeners'
 
 let target
 
+function createOnceHandler(event, handler, capture) {
+  const _target = target // save current target element in closure
+  return function onceHandler() {
+    const res = handler.apply(null, arguments)
+    if (res !== null) {
+      remove(event, onceHandler, capture, _target)
+    }
+  }
+}
+
 function add(event, handler, once, capture) {
   if (capture) {
-    console.log('bubble phase not supported')
+    console.log('NativeScript-Vue do not support event in bubble phase.')
     return
   }
   if (once) {
@@ -30,7 +40,7 @@ function updateDOMListeners(oldVnode, vnode) {
   const on = vnode.data.on || {}
   const oldOn = oldVnode.data.on || {}
   target = vnode.elm
-  updateListeners(on, oldOn, add, remove, vnode.context)
+  updateListeners(on, oldOn, add, remove, createOnceHandler, vnode.context)
   target = undefined
 }
 
