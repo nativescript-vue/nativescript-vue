@@ -964,6 +964,11 @@
     global-agent "^2.0.2"
     global-tunnel-ng "^2.7.1"
 
+"@nativescript/android@7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@nativescript/android/-/android-7.0.1.tgz#940bdb054c33730114960b774b5df69a79de2168"
+  integrity sha512-VsZCJ5zfZo0+/lFwKz+S7iFb7MA2jgACB7y8dNje3/cnZl+moKPNjFqitoEP0DY4gLz9LJNbFIIaUt84tMdUSQ==
+
 "@nativescript/core@7.0.13":
   version "7.0.13"
   resolved "https://registry.yarnpkg.com/@nativescript/core/-/core-7.0.13.tgz#77d209765c14c9337b28297c36b1586b21fc1002"
