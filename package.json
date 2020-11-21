@@ -14,7 +14,6 @@
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
-    "samples": "node build/sample-runner.js",
     "dev": "npm run dev:core -- -w & npm run dev:compiler -- -w",
     "dev:core": "rollup -c build/config.js --o dist/index.js --environment TARGET:nativescript-vue",
     "dev:compiler": "rollup -c build/config.js --environment TARGET:nativescript-vue-template-compiler",
