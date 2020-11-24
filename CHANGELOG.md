@@ -1,3 +1,12 @@
+## [2.8.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.2...v2.8.3) (2020-11-24)
+
+
+### Bug Fixes
+
+* patchTemplate should flush pending callbacks ([9125286](https://github.com/nativescript-vue/nativescript-vue/commit/91252861a7f1f8ca02dbf5704e7edac81250b0cf))
+
+
+
 ## [2.8.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.1...v2.8.2) (2020-11-21)
 
 
