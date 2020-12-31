@@ -52,6 +52,12 @@ NativeScript-Vue is an MIT-licensed open source project made possible by our spo
           <img height="50px" src="https://nativescripting.com/img/logo_full.svg">
         </a>
       </td>
+      <td align="center" valign="middle">
+        <a href="https://www.exigency.net/?source=nativescript-vue-github" target="_blank">
+          <img height="50px" src="https://art.nativescript-vue.org/sponsors/exigencytr.png">
+        </a>
+      </td>
+      <td></td>
     </tr>
   </tbody>
 </table>
