@@ -39,6 +39,14 @@
 * upgrade to NS7 ([261f701](https://github.com/nativescript-vue/nativescript-vue/commit/261f7015d606d7ca82a135d9b531baa47d9ec9fe))
 
 
+## [2.7.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.1...v2.7.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* patchTemplate should flush pending callbacks ([#790](https://github.com/nativescript-vue/nativescript-vue/issues/790)) ([199a31a](https://github.com/nativescript-vue/nativescript-vue/commit/199a31a967040ae29ddee6a51c1c796b549db027))
+
+
 
 ## [2.7.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.0...v2.7.1) (2020-07-23)
 
