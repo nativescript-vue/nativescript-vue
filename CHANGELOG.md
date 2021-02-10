@@ -1,3 +1,21 @@
+## [2.7.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.1...v2.7.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* patchTemplate should flush pending callbacks ([#790](https://github.com/nativescript-vue/nativescript-vue/issues/790)) ([199a31a](https://github.com/nativescript-vue/nativescript-vue/commit/199a31a967040ae29ddee6a51c1c796b549db027))
+
+
+
+## [2.7.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.0...v2.7.1) (2020-07-23)
+
+
+### Bug Fixes
+
+* double navigation is certain conditions ([6a710aa](https://github.com/nativescript-vue/nativescript-vue/commit/6a710aaa31eaa4d2c6d7e1b0ae41869c3908f25d))
+
+
+
 # [2.7.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.6.4...v2.7.0) (2020-07-15)
 
 
