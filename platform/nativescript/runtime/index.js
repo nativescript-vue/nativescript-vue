@@ -5,6 +5,7 @@ import '@nativescript/core/ui/frame'
 
 import { warn } from 'core/util/index'
 import { patch } from './patch'
+import { flushCallbacks } from 'core/util/next-tick'
 import { mountComponent } from 'core/instance/lifecycle'
 import { compileToFunctions } from '../compiler/index'
 import { mustUseProp, isReservedTag, isUnknownElement } from '../util/index'
@@ -19,6 +20,9 @@ Vue.config.isReservedTag = isReservedTag
 Vue.config.isUnknownElement = isUnknownElement
 
 Vue.$document = Vue.prototype.$document = new DocumentNode()
+
+// Exposed for advanced uses only, not public API
+Vue.__flushCallbacks__ = flushCallbacks
 
 Vue.compile = compileToFunctions
 Vue.registerElement = registerElement

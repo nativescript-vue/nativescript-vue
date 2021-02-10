@@ -1,4 +1,5 @@
 import { patch } from '../patch'
+import { flushCallbacks } from 'core/util/next-tick'
 
 export const VUE_VIEW = '__vueVNodeRef__'
 
@@ -77,6 +78,10 @@ export class TemplateBag {
 
     const nativeView = patch(oldVnode, vnode).nativeView
     nativeView[VUE_VIEW] = vnode
+
+    // force flush Vue callbacks so all changes are applied immediately
+    // rather than on next tick
+    flushCallbacks()
 
     return nativeView
   }
