@@ -220,16 +220,7 @@ export default class ViewNode {
       )
     }
 
-    if (childNode.parentNode === this) {
-      // we don't need to throw an error here, because it is a valid case
-      // for example when switching the order of elements in the tree
-      // fixes #127 - see for more details
-      // fixes #240
-      // throw new Error(`Can't append child, because it is already a child.`)
-    }
-
     childNode.parentNode = this
-
     if (this.lastChild) {
       childNode.prevSibling = this.lastChild
       this.lastChild.nextSibling = childNode
