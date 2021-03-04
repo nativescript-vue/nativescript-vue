@@ -165,13 +165,11 @@ export default class ViewNode {
       throw new Error(`Can't insert child.`)
     }
 
-    // in some rare cases insertBefore is called with a null referenceNode
-    // this makes sure that it get's appended as the last child
-    if (!referenceNode) {
-      return this.appendChild(childNode)
-    }
-
-    if (referenceNode.parentNode && referenceNode.parentNode !== this) {
+    if (
+      referenceNode &&
+      referenceNode.parentNode &&
+      referenceNode.parentNode !== this
+    ) {
       throw new Error(
         `Can't insert child, because the reference node has a different parent.`
       )
@@ -195,6 +193,12 @@ export default class ViewNode {
       // fixes #127 - see for more details
       // fixes #240
       // throw new Error(`Can't insert child, because it is already a child.`)
+    }
+
+    // in some rare cases insertBefore is called with a null referenceNode
+    // this makes sure that it get's appended as the last child
+    if (!referenceNode) {
+      return this.appendChild(childNode)
     }
 
     let index = this.childNodes.indexOf(referenceNode)
