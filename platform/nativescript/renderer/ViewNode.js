@@ -204,6 +204,8 @@ export default class ViewNode {
     let index = this.childNodes.indexOf(referenceNode)
 
     childNode.parentNode = this
+    if (childNode.prevSibling) childNode.prevSibling.nextSibling = childNode
+
     childNode.nextSibling = referenceNode
     childNode.prevSibling = this.childNodes[index - 1]
 
