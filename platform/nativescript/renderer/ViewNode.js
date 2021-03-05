@@ -206,6 +206,7 @@ export default class ViewNode {
     childNode.parentNode = this
     childNode.nextSibling = referenceNode
     childNode.prevSibling = this.childNodes[index - 1]
+    if (childNode.prevSibling) childNode.prevSibling.nextSibling = childNode
 
     referenceNode.prevSibling = childNode
     this.childNodes.splice(index, 0, childNode)
