@@ -75,6 +75,7 @@ export default {
 
       return new Promise(resolve => {
         const frame = getFrameInstance(options.frame)
+        const key = serializeNavigationOptions(options)
         const navEntryInstance = new Vue({
           abstract: true,
           functional: true,
@@ -84,7 +85,7 @@ export default {
           render: h =>
             h(component, {
               props: options.props,
-              key: serializeNavigationOptions(options)
+              key
             })
         })
         const page = navEntryInstance.$mount().$el.nativeView
