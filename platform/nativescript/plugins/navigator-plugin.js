@@ -73,6 +73,9 @@ export default {
       // build options object with defaults
       options = Object.assign({}, defaultOptions, options)
 
+      // create a unique key to distinguish the pages
+      const serializedKey = serializeNavigationOptions(options)
+
       return new Promise(resolve => {
         const frame = getFrameInstance(options.frame)
         const navEntryInstance = new Vue({
@@ -84,7 +87,7 @@ export default {
           render: h =>
             h(component, {
               props: options.props,
-              key: serializeNavigationOptions(options)
+              key: serializedKey
             })
         })
         const page = navEntryInstance.$mount().$el.nativeView
