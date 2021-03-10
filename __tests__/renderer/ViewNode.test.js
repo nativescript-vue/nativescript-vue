@@ -120,6 +120,27 @@ describe('ViewNode', () => {
     expect(refNode.nextSibling).toBeFalsy()
   })
 
+  test('insertBefore sets siblings of both siblings', () => {
+    let parentNode = new ViewNode()
+    let firstNode = new ViewNode()
+    let lastNode = new ViewNode()
+    let childNode = new ViewNode()
+    parentNode.childNodes = [firstNode, lastNode]
+    firstNode.parentNode = parentNode
+    lastNode.parentNode = parentNode
+
+    parentNode.insertBefore(childNode, lastNode)
+
+    expect(parentNode.childNodes.length).toBe(3)
+    expect(childNode.parentNode).toEqual(parentNode)
+    expect(firstNode.nextSibling).toEqual(childNode)
+    expect(lastNode.prevSibling).toEqual(childNode)
+    expect(childNode.prevSibling).toEqual(firstNode)
+    expect(childNode.nextSibling).toEqual(lastNode)
+    expect(firstNode.prevSibling).toBeFalsy()
+    expect(lastNode.nextSibling).toBeFalsy()
+  })
+
   test('appendChild throws if no childNode is given', () => {
     let node = new ViewNode()
 
