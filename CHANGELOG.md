@@ -1,3 +1,13 @@
+## [2.8.4](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.3...v2.8.4) (2021-03-10)
+
+
+### Bug Fixes
+
+* child of NavigationEntry key generated in render ([#813](https://github.com/nativescript-vue/nativescript-vue/issues/813)) ([#814](https://github.com/nativescript-vue/nativescript-vue/issues/814)) ([ee47fc1](https://github.com/nativescript-vue/nativescript-vue/commit/ee47fc1d08ab6b89ff778ff305a90017cb527c44))
+* incorrect nextSibling of prevSibling in appendChild/insertBefore ([#811](https://github.com/nativescript-vue/nativescript-vue/issues/811)) ([5156f20](https://github.com/nativescript-vue/nativescript-vue/commit/5156f20b051dcd7b2e23d01eba80030f053259ad)), closes [#809](https://github.com/nativescript-vue/nativescript-vue/issues/809) [#809](https://github.com/nativescript-vue/nativescript-vue/issues/809)
+
+
+
 ## [2.8.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.2...v2.8.3) (2020-11-24)
 
 
@@ -37,14 +47,6 @@
 ### Features
 
 * upgrade to NS7 ([261f701](https://github.com/nativescript-vue/nativescript-vue/commit/261f7015d606d7ca82a135d9b531baa47d9ec9fe))
-
-
-## [2.7.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.7.1...v2.7.2) (2021-02-10)
-
-
-### Bug Fixes
-
-* patchTemplate should flush pending callbacks ([#790](https://github.com/nativescript-vue/nativescript-vue/issues/790)) ([199a31a](https://github.com/nativescript-vue/nativescript-vue/commit/199a31a967040ae29ddee6a51c1c796b549db027))
 
 
 
