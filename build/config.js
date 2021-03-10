@@ -73,7 +73,8 @@ const genConfig = (name) => {
       file: opts.dest,
       format: opts.format || 'cjs',
       banner: opts.banner,
-      name: opts.moduleName
+      name: opts.moduleName,
+      exports: 'auto'
     },
     // https://github.com/rollup/rollup/issues/2271#issuecomment-455129819
     onwarn(warning) {
@@ -99,6 +100,7 @@ const genConfig = (name) => {
     },
     plugins: [
       replace({
+        preventAssignment: true,
         delimiters: ['', ''],
         // Patch devtools flush calls to use the global hook
         // rather than the devtools variable
@@ -111,6 +113,7 @@ const genConfig = (name) => {
         '_c("div")': '_c("NativeContentView")'
       }),
       replace({
+        preventAssignment: true,
         __WEEX__: false,
         __VERSION__: VueVersion,
         // 'process.env.NODE_ENV': "'development'",
