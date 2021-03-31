@@ -247,6 +247,7 @@ registerElement(
 //   'Repeater',
 //   () => require('@nativescript/core').Repeater
 // )
+registerElement('RootLayout', () => require('@nativescript/core').RootLayout)
 registerElement('ScrollView', () => require('@nativescript/core').ScrollView)
 registerElement('SearchBar', () => require('@nativescript/core').SearchBar, {
   model: {
