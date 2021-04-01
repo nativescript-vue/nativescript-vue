@@ -5,6 +5,7 @@ junit.xml
 npm-debug.log
 node_modules
 samples/package-lock.json
+samples/yarn.lock
 samples/platforms
 samples/hooks/
 test-results.xml

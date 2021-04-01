@@ -138,49 +138,6 @@ registerElement(
   }
 )
 
-registerElement(
-  'BottomNavigation',
-  () => require('@nativescript/core').BottomNavigation,
-  {
-    model: {
-      prop: 'selectedIndex',
-      event: 'selectedIndexChange'
-    },
-    component: builtInComponents.BottomNavigation
-  }
-)
-
-registerElement('Tabs', () => require('@nativescript/core').Tabs, {
-  model: {
-    prop: 'selectedIndex',
-    event: 'selectedIndexChange'
-  },
-  component: builtInComponents.Tabs
-})
-
-registerElement('TabStrip', () => require('@nativescript/core').TabStrip, {
-  skipAddToDom: true,
-  component: builtInComponents.TabStrip
-})
-
-registerElement(
-  'TabStripItem',
-  () => require('@nativescript/core').TabStripItem,
-  {
-    skipAddToDom: true,
-    component: builtInComponents.TabStripItem
-  }
-)
-
-registerElement(
-  'TabContentItem',
-  () => require('@nativescript/core').TabContentItem,
-  {
-    skipAddToDom: true,
-    component: builtInComponents.TabContentItem
-  }
-)
-
 registerElement('transition', null, {
   component: builtInComponents.transition
 })
