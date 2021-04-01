@@ -1,3 +1,13 @@
+# [2.9.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.4...v2.9.0) (2021-04-01)
+
+
+### Features
+
+* add rootlayout to element-registry ([#808](https://github.com/nativescript-vue/nativescript-vue/issues/808)) ([ae69033](https://github.com/nativescript-vue/nativescript-vue/commit/ae690337a896a10c450e804a965fb406914cdf28))
+* ns8 ([2a14f4a](https://github.com/nativescript-vue/nativescript-vue/commit/2a14f4adcd5577821401fe9464152e9d1926bf1a))
+
+
+
 ## [2.8.4](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.3...v2.8.4) (2021-03-10)
 
 
