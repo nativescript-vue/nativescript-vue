@@ -20,6 +20,9 @@
     <a href="https://codecov.io/gh/nativescript-vue/nativescript-vue">
        <img src="https://img.shields.io/codecov/c/github/nativescript-vue/nativescript-vue.svg" alt="Codecov">
     </a>
+    <a href="https://stakes.social/0x92f4c210aEc2D7e34aA226f4319aa879d253f206">
+       <img src="https://badge.devprotocol.xyz/0x92f4c210aEc2D7e34aA226f4319aa879d253f206/descriptive" alt="Stake to support us">
+    </a>
 </p>
 
 <h2 align="center">Supporting NativeScript-Vue</h2>
