@@ -92,6 +92,9 @@ and these awesome backers:
 - Robertino Vasilescu
 - Marc Lewis
 - Tom Coonen
+- John McAuley
+- Christian Quispe
+- Nhut Tran
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
