@@ -1,7 +1,4 @@
-const Vue = require('nativescript-vue')
-
-const VueDevtools = require('nativescript-vue-devtools')
-Vue.use(VueDevtools)
+import Vue from 'nativescript-vue'
 
 Vue.config.devtools = true
 Vue.config.debug = false //true

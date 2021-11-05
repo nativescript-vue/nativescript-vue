@@ -1,1 +1,1 @@
-require('./list')
+require('./app-to-check-hmr')
