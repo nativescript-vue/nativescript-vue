@@ -95,6 +95,7 @@ and these awesome backers:
 - John McAuley
 - Christian Quispe
 - Nhut Tran
+- Antonio
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
