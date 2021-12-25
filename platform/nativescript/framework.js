@@ -6,14 +6,15 @@ import { setVue } from './util'
 
 Vue.config.silent = true
 Vue.config.suppressRenderLogs = false
+Vue.config.fastSync = false
 
 setVue(Vue)
 
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
 
-global.__onLiveSyncCore = () => {
-  const frame = require('@nativescript/core').Frame.topmost()
+global.__onLiveSyncCore = function () {
+  var frame = require('@nativescript/core').Frame.topmost()
   if (frame) {
     if (frame.currentPage && frame.currentPage.modal) {
       frame.currentPage.modal.closeModal()
@@ -23,6 +24,15 @@ global.__onLiveSyncCore = () => {
       frame.currentPage.addCssFile(
         require('@nativescript/core').Application.getCssFileName()
       )
+    }
+
+    if (Vue.config.fastSync) {
+      console.log('Performing fast sync')
+      const vueEntry = Vue.prototype.$fastSyncEntries[frame.currentEntry.uuid]
+      if (vueEntry) {
+        const result = Vue.prototype.$buildPage(vueEntry)
+        frame.replacePage(result.entry)
+      }
     }
   }
 }
