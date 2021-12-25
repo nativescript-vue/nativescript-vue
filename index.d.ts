@@ -80,6 +80,7 @@ export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptV
 
 interface NativeScriptVueConfiguration extends VueConfiguration {
   suppressRenderLogs: boolean;
+  fastSync: boolean;
 }
 
 export const NativeScriptVue: NativeScriptVueConstructor

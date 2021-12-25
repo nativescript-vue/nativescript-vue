@@ -13,8 +13,8 @@ setVue(Vue)
 Vue.use(ModalPlugin)
 Vue.use(NavigatorPlugin)
 
-global.__onLiveSyncCore = function () {
-  var frame = require('@nativescript/core').Frame.topmost()
+global.__onLiveSyncCore = () => {
+  const frame = require('@nativescript/core').Frame.topmost()
   if (frame) {
     if (frame.currentPage && frame.currentPage.modal) {
       frame.currentPage.modal.closeModal()
@@ -27,11 +27,14 @@ global.__onLiveSyncCore = function () {
     }
 
     if (Vue.config.fastSync) {
+      const defaultFrame =
+        require('@nativescript/core').Frame.getFrameById('default')
       console.log('Performing fast sync')
-      const vueEntry = Vue.prototype.$fastSyncEntries[frame.currentEntry.uuid]
+      const vueEntry =
+        Vue.prototype.$fastSyncEntries[defaultFrame.currentEntry.uuid]
       if (vueEntry) {
         const result = Vue.prototype.$buildPage(vueEntry)
-        frame.replacePage(result.entry)
+        defaultFrame.replacePage(result.entry)
       }
     }
   }
