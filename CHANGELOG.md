@@ -1,3 +1,12 @@
+## [2.9.1-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.9.0...v2.9.1-rc.0) (2022-03-02)
+
+
+### Bug Fixes
+
+* fallback frame when navigating ([2bbf28e](https://github.com/nativescript-vue/nativescript-vue/commit/2bbf28e5c7a9052efffa040ada870a547b0e97ac))
+
+
+
 # [2.9.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.8.4...v2.9.0) (2021-04-01)
 
 
