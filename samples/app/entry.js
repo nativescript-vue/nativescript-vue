@@ -1,1 +1,1 @@
-require('./app-to-check-hmr')
+require('./multiple-default-frames')
