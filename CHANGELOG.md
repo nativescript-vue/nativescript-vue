@@ -1,4 +1,4 @@
-## [2.9.1-rc.0](https://github.com/nativescript-vue/nativescript-vue/compare/v2.9.0...v2.9.1-rc.0) (2022-03-02)
+## [2.9.1](https://github.com/nativescript-vue/nativescript-vue/compare/v2.9.0...v2.9.1-rc.0) (2022-03-02)
 
 
 ### Bug Fixes
