@@ -7,13 +7,13 @@
   "license": "MIT",
   "readme": "NativeScriptVue Samples Application",
   "dependencies": {
-    "@nativescript/core": "~8.1.5",
+    "@nativescript/core": "^8.2.0-alpha.12",
     "lorem-ipsum": "2.0.4",
     "vuex": "3.6.2"
   },
   "devDependencies": {
-    "@nativescript/android": "8.1.1",
-    "@nativescript/ios": "8.1.0",
+    "@nativescript/android": "^8.2.0-alpha.11",
+    "@nativescript/ios": "^8.2.0-alpha.6",
     "@nativescript/webpack": "~5.0.0",
     "nativescript-vue-template-compiler": "file:../packages/nativescript-vue-template-compiler"
   }

@@ -34,7 +34,7 @@ export function getFrameInstance(frame) {
     frame = frame.nativeView
   }
   // finally get the component instance for this frame
-  return getFrame(frame.id)
+  return getFrame(frame.id, frame)
 }
 
 export function findParentFrame(vm) {
