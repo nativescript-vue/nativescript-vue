@@ -64,12 +64,13 @@ export default {
       return new Promise(resolve => {
         let resolved = false
         const closeCb = data => {
+          modalPage.closeModal(data)
+        }
+        const closeCallback = data => {
           if (resolved) return
 
           resolved = true
           resolve(data)
-          modalPage.closeModal()
-
           // emitted to show up in devtools
           // for debugging purposes
           navEntryInstance.$emit('modal:close', data)
@@ -84,7 +85,7 @@ export default {
           options,
           {
             context: null,
-            closeCallback: closeCb
+            closeCallback: closeCallback
           }
         )
 
