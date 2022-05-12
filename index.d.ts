@@ -39,30 +39,32 @@ export interface ModalOptions extends Partial<ShowModalOptions> {
     props?: Record<string, any>;
 }
 
-// create a nativescript vue class that extends vue.js
-export interface NativeScriptVue<V = View> extends Vue {
-    nativeView: V
+declare module 'vue/types/vue' {
+    // 3. Declare augmentation for Vue
+    interface Vue<V = View> {
+        nativeView: V
 
-    $navigateTo: navigateTo
-    $navigateBack: navigateBack
-
-    $modal?: { close: (data?: any) => Promise<typeof data> };
-
-    /**
-     * Open a modal using a component
-     * @param {typeof Vue} component
-     * @param {ModalOptions} options
-     * @returns {any}
-     */
-    $showModal: (component: typeof Vue, options?: ModalOptions) => Promise<any>;
-
-    /**
-     * starts the nativescript application
-     */
-    $start: () => void
-}
-
-export interface NativeScriptVueConstructor extends VueConstructor<NativeScriptVue>
+        $navigateTo: navigateTo
+        $navigateBack: navigateBack
+    
+        $modal?: { close: (data?: any) => Promise<typeof data> };
+    
+        /**
+         * Open a modal using a component
+         * @param {typeof Vue} component
+         * @param {ModalOptions} options
+         * @returns {any}
+         */
+        $showModal: (component: typeof Vue, options?: ModalOptions) => Promise<any>;
+    
+        /**
+         * starts the nativescript application
+         */
+        $start: () => void
+    }
+  }
+export interface NativeScriptVue<V = View> extends Vue<V>{};
+export interface NativeScriptVueConstructor<V = View> extends VueConstructor<NativeScriptVue<V>>
 {
     navigateTo: navigateTo
     navigateBack: navigateBack
