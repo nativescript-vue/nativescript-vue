@@ -85,7 +85,13 @@ export default {
       const context = this.getItemContext(currentItem, index)
       const oldVnode = args.view && args.view[VUE_VIEW]
 
-      args.view = this.$templates.patchTemplate(name, context, oldVnode)
+      if (args.view) {
+        args.view._batchUpdate(() => {
+          args.view = this.$templates.patchTemplate(name, context, oldVnode)
+        })
+      } else {
+        args.view = this.$templates.patchTemplate(name, context, oldVnode)
+      }
     },
     refresh() {
       this.$refs.listView.nativeView.refresh()
