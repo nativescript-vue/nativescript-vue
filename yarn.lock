@@ -6040,9 +6040,9 @@ rollup-pluginutils@^1.5.2:
     minimatch "^3.0.2"
 
 rollup@^2.72.1:
-  version "2.72.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.72.1.tgz#861c94790537b10008f0ca0fbc60e631aabdd045"
-  integrity sha512-NTc5UGy/NWFGpSqF1lFY8z9Adri6uhyMLI6LvPAXdBKoPRFhIIiBUpt+Qg2awixqO3xvzSijjhnb4+QEZwJmxA==
+  version "2.75.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.75.0.tgz#c4c1c2bf46c706823f5f0eee046c7a1cbdda5038"
+  integrity sha512-1/wxtweHJ7YwI2AIK3ZgCBU3nbW8sLnBIFwN46cwOTnVzt8f1o6J8zPKjwoiuADvzSjmnLqJce31p0q2vQ+dqw==
   optionalDependencies:
     fsevents "~2.3.2"
 
