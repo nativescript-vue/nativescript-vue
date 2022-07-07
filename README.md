@@ -96,6 +96,7 @@ and these awesome backers:
 - Christian Quispe
 - Nhut Tran
 - Antonio
+- Benjamin Hanzl
 
 If you'd like to join them, please consider [becoming a backer / sponsor on Patreon](https://www.patreon.com/rigor789).
 
