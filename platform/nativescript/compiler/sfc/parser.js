@@ -46,6 +46,10 @@ export function parseComponent(
       currentBlock = {
         type: tag,
         content: '',
+        tags: {
+          open: { start, end },
+          close: null
+        },
         start: end,
         attrs: attrs.reduce((cumulated, { name, value }) => {
           cumulated[name] = value || true
@@ -98,6 +102,7 @@ export function parseComponent(
       if (currentBlock.type !== 'template' && options.pad) {
         text = padContent(currentBlock, options.pad) + text
       }
+      currentBlock.tags.close = { start, end }
       currentBlock.content = text
       currentBlock = null
     }
