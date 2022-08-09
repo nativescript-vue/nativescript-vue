@@ -1,4 +1,9 @@
-## [2.9.2](https://github.com/nativescript-vue/nativescript-vue/compare/v2.9.1...v2.9.2) (2022-05-12)
+## [2.9.3](https://github.com/nativescript-vue/nativescript-vue/compare/v2.9.1...v2.9.3) (2022-08-09)
+
+
+### Features
+
+* **template-compiler:** include sfc tag locations ([792e6ba](https://github.com/nativescript-vue/nativescript-vue/commit/792e6baf5eda9c4fae5be44b1b0ef4e68b400c4c))
 
 
 
