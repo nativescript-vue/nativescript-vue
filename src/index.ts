@@ -7,6 +7,10 @@ import { NSVElement, NSVRoot } from "./dom";
 import { init, startApp } from "./nativescript";
 import { renderer } from "./renderer";
 
+import { install as modalsPlugin } from "./plugins/modals";
+import { install as navigationPlugin } from "./plugins/navigation";
+import { isKnownView } from "./registry";
+
 declare module "@vue/runtime-core" {
   interface App {
     start(): ComponentPublicInstance | undefined;
@@ -26,6 +30,8 @@ export * from "./renderer";
 
 export * from "@vue/runtime-dom";
 export { vShow } from "./directives/vShow";
+export { $showModal } from "./plugins/modals";
+export { $navigateTo, $navigateBack } from "./plugins/navigation";
 
 export const render = renderer.render;
 export const createApp = ((...args) => {
@@ -46,14 +52,19 @@ export const createApp = ((...args) => {
     return componentInstance;
   };
 
+  app.use(modalsPlugin);
+  app.use(navigationPlugin);
+
   return app;
 }) as CreateAppFunction<NSVElement>;
 
 export function resolveComponent(name: string, maybeSelReference: boolean) {
-  console.log("RESOLVE COMPONENT", name);
-
   if (BUILT_IN_COMPONENTS[name]) {
     return BUILT_IN_COMPONENTS[name];
+  }
+
+  if (isKnownView(name)) {
+    return name;
   }
 
   const component = resolveComponentCore(name, maybeSelReference);

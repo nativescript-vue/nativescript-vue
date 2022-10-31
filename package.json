@@ -12,6 +12,7 @@
     "@vue/compiler-dom": "^3.2.41",
     "@vue/runtime-dom": "^3.2.41",
     "esbuild": "^0.15.12",
+    "set-value": "^4.1.0",
     "tsx": "^3.11.0",
     "typescript": "^4.8.4",
     "vue": "^3.2.41"

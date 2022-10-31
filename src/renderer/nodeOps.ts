@@ -16,7 +16,6 @@ export function insert(
 }
 
 export function remove(el: NSVNode): void {
-  // console.log("remove", el);
   if (el.parentNode != null) {
     el.parentNode.removeChild(el);
   }

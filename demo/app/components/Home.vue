@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import Test from "./Test.vue";
+import { goHome } from "~/composables/goHome";
+
+defineProps<{
+  depth?: number;
+}>();
+
 const message = "Hello World";
 
 interface Test {
@@ -7,7 +14,7 @@ interface Test {
   bool: boolean;
 }
 
-const items: Test[] = Array(10000)
+const items: Test[] = Array(1000)
   .fill(0)
   .map((_, i) => ({
     name: `Item ${i}`,
@@ -15,39 +22,46 @@ const items: Test[] = Array(10000)
     bool: true,
   }));
 
-
-function selector() {
-  return "default";
+function selector(item: ListItem<Test>) {
+  return item.even ? "default" : "odd";
 }
+
 </script>
 
 <template>
-  <GridLayout rows="auto, *">
-    <Label class="info" :text="message" />
-    <!-- <ScrollView row="1">
-      <StackLayout>
-        <template v-for="i in 50">
-          <Label :text="`Lorem ipsum dolor sit amet ${i}`" />
-        </template>
-      </StackLayout>
-    </ScrollView> -->
+  <Page>
+    <StackLayout>
+      <Label class="info" :text="message + ' ' + depth" />
+      <Button text="Go home" @tap="goHome(depth + 1)" />
+      <Button text="Go home Modal" @tap="goHome(depth + 1, true)" />
+      <Test />
 
-    <ListView row="1" :items="items" :itemTemplateSelector="selector">
-      <template #default="{ item, index, even, odd }: ListItem<Test>">
-        <Label
-          :text="`item: ${JSON.stringify(
-            item
-          )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
-          textWrap="true"
-          padding="16"
-        />
+      <template v-if="depth > 2">
+        <Label text="Hello?" />
       </template>
-      <!-- <v-template if="item.name === 'whatever'">
-        <Label/>
-      </v-template> -->
-      <!-- <template #foo="{ item, index }">
-        <Label :text="'FOO ' + item" />
-      </template> -->
-    </ListView>
-  </GridLayout>
+
+      <ListView height="500" :items="items" :itemTemplateSelector="selector">
+        <template #default="{ item, index, even, odd }: ListItem<Test>">
+          <Label
+            :text="`item: ${JSON.stringify(
+              item
+            )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
+            textWrap="true"
+            padding="16"
+          />
+        </template>
+
+        <template #odd="{ item, index, even, odd }: ListItem<Test>">
+          <Label
+            backgroundColor="red"
+            :text="`item: ${JSON.stringify(
+              item
+            )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
+            textWrap="true"
+            padding="16"
+          />
+        </template>
+      </ListView>
+    </StackLayout>
+  </Page>
 </template>

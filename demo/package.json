@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@nativescript/core": "~8.3.0"
+    "@nativescript/core": "~8.3.0",
+    "@vueuse/core": "^9.4.0"
   },
   "devDependencies": {
     "@nativescript/android": "8.3.1",

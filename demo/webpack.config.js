@@ -3,7 +3,6 @@ const { VueLoaderPlugin } = require("vue-loader");
 
 const path = require("path");
 
-const compilerPath = path.resolve(__dirname, "../dist/compiler.cjs");
 const nsVuePath = path.resolve(__dirname, "../src/index.ts");
 
 module.exports = (env) => {
@@ -12,6 +11,7 @@ module.exports = (env) => {
 
   webpack.chainWebpack((config) => {
     config.resolve.alias.set("vue", nsVuePath);
+
     config.plugin("VueLoaderPlugin").use(VueLoaderPlugin);
 
     config.module
@@ -24,9 +24,8 @@ module.exports = (env) => {
           ...options,
           isServerBuild: false,
           compilerOptions: {
-            isCustomElement: () => true
-          }
-          // compiler: compilerPath,
+            // isCustomElement: () => true
+          },
         };
       });
 
@@ -39,13 +38,13 @@ module.exports = (env) => {
       return args;
     });
 
+    // disable vue fork ts checker, as it doesn't work with vue3 yet?
     config.plugin("ForkTsCheckerWebpackPlugin").tap((args) => {
       args[0] = webpack.merge(args[0], {
         typescript: {
           extensions: {
             vue: {
               enabled: false,
-              // compiler: compilerPath,
             },
           },
         },

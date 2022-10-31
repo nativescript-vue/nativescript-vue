@@ -5,7 +5,7 @@ import {
   NSVViewMeta,
 } from "../registry";
 import { ELEMENT_REF } from "../runtimeHelpers";
-// import set from 'set-value'
+import setValue from "set-value";
 // import unset from 'unset-value'
 
 const __TEST__ = false;
@@ -97,6 +97,7 @@ export class NSVElement extends NSVNode {
   private readonly _tagName: string;
   private readonly _nativeView: any;
   private _meta: NSVViewMeta | undefined;
+  private _attributeOriginalValue: Map<string, unknown> = new Map();
 
   constructor(tagName: string) {
     super(NSVNodeTypes.ELEMENT);
@@ -156,8 +157,8 @@ export class NSVElement extends NSVNode {
         self.removeEventListener(event, handler);
       };
     }
-    // this.nativeView.addEventListener(event, handler);
 
+    this.nativeView.addEventListener(event, handler);
     // temporary, @loaded becomes `onLoaded` -> `Loaded`
     this.nativeView.addEventListener(event.toLowerCase(), handler);
   }
@@ -175,11 +176,23 @@ export class NSVElement extends NSVNode {
   }
 
   setAttribute(name: string, value: unknown) {
-    this.nativeView[name] = value
-    // set(this.nativeView, name, value);
+    if (!this._attributeOriginalValue.has(name)) {
+      this._attributeOriginalValue.set(name, this.nativeView[name]);
+    }
+    // this.nativeView[name] = value;
+    setValue(this.nativeView, name, value);
   }
 
   removeAttribute(name: string) {
+    // only remove attributes that we have set previously
+    if (this._attributeOriginalValue.has(name)) {
+      const originalValue = this._attributeOriginalValue.get(name);
+      this._attributeOriginalValue.delete(name);
+
+      // this.nativeView[name] = originalValue;
+      setValue(this.nativeView, name, originalValue);
+    }
+
     // potential issue: unsetValue is an empty object
     // not all properties/attributes may know/check for this
     // set(this.nativeView, name, unsetValue);
@@ -295,6 +308,12 @@ export class NSVRoot extends NSVNode {
       this.el = el;
     }
     // no-op
+  }
+
+  removeChild(el: NSVNode) {
+    if (el === this.el) {
+      this.el = null;
+    }
   }
 }
 

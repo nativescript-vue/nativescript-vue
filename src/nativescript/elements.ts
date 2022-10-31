@@ -95,6 +95,7 @@ export function registerCoreElements() {
       },
       remove(child: NSVElement, parent: NSVElement): void {
         // ignore? warn? throw? navigate back?
+        // console.log("REMOVE CHILD FROM FRAME", child);
       },
     },
   });
@@ -156,13 +157,13 @@ export function registerCoreElements() {
       },
     }
   );
-  registerElement(
-    "InternalListView",
-    () => require("@nativescript/core").ListView,
-    {
-      viewFlags: NSVViewFlags.NO_CHILDREN,
-    }
-  );
+  // registerElement(
+  //   "InternalListView",
+  //   () => require("@nativescript/core").ListView,
+  //   {
+  //     viewFlags: NSVViewFlags.NO_CHILDREN,
+  //   }
+  // );
   registerElement(
     "Placeholder",
     () => require("@nativescript/core").Placeholder

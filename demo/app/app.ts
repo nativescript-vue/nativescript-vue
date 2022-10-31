@@ -1,7 +1,7 @@
-import {
-  createApp,
-} from "../../src";
+import { createApp } from "../../src";
 
-import Home from './components/Bench.vue'
+// import Home from './components/Home.vue'
 
-createApp(Home).start()
+import App from "./App.vue";
+
+createApp(App).start();
