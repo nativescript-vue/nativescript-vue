@@ -23,7 +23,9 @@ module.exports = function (hookArgs) {
     deleteFolderSync(toolsDir)
 
     const readme = path.join(appRootFolder, 'README.md')
-    fs.unlinkSync(readme)
+    if(fs.existsSync(readme)) {
+      fs.unlinkSync(readme)
+    }
 
     deleteFolderSync(__dirname)
   } catch (error) {

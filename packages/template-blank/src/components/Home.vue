@@ -5,8 +5,8 @@ import {
   onMounted,
   onUnmounted,
   $navigateTo,
-} from 'nativescript-vue';
-import Details from './Details.vue';
+} from "nativescript-vue";
+import Details from "./Details.vue";
 
 const counter = ref(0);
 const message = computed(() => {
@@ -14,17 +14,17 @@ const message = computed(() => {
 });
 
 function logMessage() {
-  console.log('You have tapped the message!');
+  console.log("You have tapped the message!");
 }
 
-let interval;
+let interval: any;
 onMounted(() => {
-  console.log('mounted');
+  console.log("mounted");
   interval = setInterval(() => counter.value++, 100);
 });
 
 onUnmounted(() => {
-  console.log('unmounted');
+  console.log("unmounted");
   clearInterval(interval);
 });
 </script>
@@ -47,9 +47,11 @@ onUnmounted(() => {
         <Button
           row="2"
           @tap="$navigateTo(Details)"
-          class="mt-4 bg-white border-2 border-blue-400 rounded-lg"
-          >View Details</Button
+          class="mt-4 px-4 py-2 bg-white border-2 border-blue-400 rounded-lg"
+          horizontalAlignment="center"
         >
+          View Details
+        </Button>
       </GridLayout>
     </Page>
   </Frame>
