@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://nativescript-vue.org">
-        <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg" height="400">
+        <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg">
     </a>
 </p>
 
