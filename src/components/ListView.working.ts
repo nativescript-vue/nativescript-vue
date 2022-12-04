@@ -2,11 +2,20 @@ import { defineComponent, h, warn } from "@vue/runtime-core";
 
 import {
   ItemEventData,
+  Label,
   ListView as NSCListView,
   ObservableArray,
+  StackLayout,
 } from "@nativescript/core";
 
-import { getCurrentInstance, ref, VNode, watch, PropType } from "..";
+import {
+  getCurrentInstance,
+  ref,
+  VNode,
+  watch,
+  onBeforeUpdate,
+  onUpdated,
+} from "..";
 import { NSVElement, NSVViewFlags } from "../dom";
 import { registerElement } from "../registry";
 import { ELEMENT_REF } from "../runtimeHelpers";
@@ -15,16 +24,18 @@ registerElement("NSCListView", () => NSCListView, {
   viewFlags: NSVViewFlags.NO_CHILDREN,
 });
 
-// declare global {
-export interface ListItem<T = any> {
-  item: T;
-  index: number;
-  even: boolean;
-  odd: boolean;
-}
-// }
+registerElement("NSCListViewDummyHolder", () => StackLayout);
 
-function getListItem(item: any, index: number): ListItem {
+declare global {
+  interface ListItem<T = any> {
+    item: T;
+    index: number;
+    even: boolean;
+    odd: boolean;
+  }
+}
+
+function getListItem(item, index): ListItem {
   return {
     item,
     index,
@@ -37,11 +48,7 @@ const LIST_CELL_ID = Symbol("list_cell_id");
 
 export const ListView = /*#__PURE__*/ defineComponent({
   props: {
-    items: {
-      validator(value) {
-        return Array.isArray(value) || value instanceof ObservableArray;
-      },
-    },
+    items: Array<any>,
     itemTemplateSelector: Function,
   },
   setup(props, ctx) {
@@ -53,7 +60,6 @@ export const ListView = /*#__PURE__*/ defineComponent({
         },
       };
     });
-
     const getSlotName = (itemCtx: ListItem) =>
       props.itemTemplateSelector?.(itemCtx) ?? "default";
 
@@ -62,12 +68,8 @@ export const ListView = /*#__PURE__*/ defineComponent({
     const vm = getCurrentInstance();
 
     watch(props, () => {
+      console.log("props changed?");
       try {
-        if (props.items instanceof ObservableArray) {
-          return;
-        }
-        console.log("props changed?");
-
         const lv: NSCListView = listView.value?.nativeView;
         lv?.refresh();
       } catch (err) {
@@ -113,6 +115,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
 
       // finally, set the event.view to the rendered cellEl
       event.view = cellEl;
+      // event.view = new Label();
     }
 
     function itemTemplateSelector(item, index) {
@@ -120,32 +123,39 @@ export const ListView = /*#__PURE__*/ defineComponent({
       return getSlotName(getListItem(item, index));
     }
 
-    // render all realized templates as children
-    const cellVNODES = () =>
-      Object.entries(cells.value).map(([id, entry]) => {
-        const vnodes: VNode[] = ctx.slots[entry.slotName]?.(
-          entry.itemCtx
-        ) ?? [
-          // default template is just a label
-          h("Label", {
-            text: entry.itemCtx.item,
-          }),
-        ];
-
-        if (vnodes.length > 1) {
-          warn(
-            `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`
-          );
-        }
-
-        const vnode: VNode = vnodes[0];
-        // set the key to the list cell id, so we can find this cell later...
-        vnode.key = id;
-
-        return vnode;
-      });
+    onBeforeUpdate(() => {
+      console.time("update");
+    });
+    onUpdated(() => {
+      console.timeEnd("update");
+    });
 
     return () => {
+      console.log("RENDER");
+      // return h("StackLayout", [
+      //   h("NSCListView", {
+      //     ref: listView,
+      //     items: props.items,
+      //     itemTemplates,
+      //     itemTemplateSelector,
+      //     onitemLoading,
+      //   }),
+      //   ...Object.entries(cells.value).map(([id, child]) => {
+      //     const vnodes: VNode[] = ctx.slots[child.slotName](child.itemCtx);
+
+      //     if (vnodes.length > 1) {
+      //       warn(
+      //         `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`
+      //       );
+      //     }
+
+      //     const vnode: VNode = vnodes[0];
+      //     // set the key to the list cell id, so we can find this cell later...
+      //     vnode.key = id;
+
+      //     return vnode;
+      //   }),
+      // ]);
       return h(
         "NSCListView",
         {
@@ -155,7 +165,22 @@ export const ListView = /*#__PURE__*/ defineComponent({
           itemTemplateSelector,
           onitemLoading,
         },
-        cellVNODES()
+        // render all realized templates as children
+        Object.entries(cells.value).map(([id, child]) => {
+          const vnodes: VNode[] = ctx.slots[child.slotName](child.itemCtx);
+
+          if (vnodes.length > 1) {
+            warn(
+              `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`
+            );
+          }
+
+          const vnode: VNode = vnodes[0];
+          // set the key to the list cell id, so we can find this cell later...
+          vnode.key = id;
+
+          return vnode;
+        })
       );
     };
   },

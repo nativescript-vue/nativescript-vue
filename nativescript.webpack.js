@@ -1,17 +1,12 @@
-const webpack = require("@nativescript/webpack");
 const { VueLoaderPlugin } = require("vue-loader");
 
-const path = require("path");
-
-const nsVuePath = path.resolve(__dirname, "../src/index.ts");
-
-module.exports = (env) => {
-  webpack.init(env);
+/**
+ * @param {typeof import("@nativescript/webpack")} webpack
+ */
+module.exports = (webpack) => {
   webpack.useConfig("vue");
 
   webpack.chainWebpack((config) => {
-    config.resolve.alias.set("vue", nsVuePath);
-
     config.plugin("VueLoaderPlugin").use(VueLoaderPlugin);
 
     config.module
@@ -53,9 +48,4 @@ module.exports = (env) => {
       return args;
     });
   });
-
-  // Learn how to customize:
-  // https://docs.nativescript.org/webpack
-
-  return webpack.resolveConfig();
 };

@@ -4,12 +4,13 @@ import type { CreateAppFunction } from "@vue/runtime-core";
 import { BUILT_IN_COMPONENTS } from "./components";
 
 import { NSVElement, NSVRoot } from "./dom";
-import { init, startApp } from "./nativescript";
+import { init, resetRoot, startApp } from "./nativescript";
 import { renderer } from "./renderer";
 
 import { install as modalsPlugin } from "./plugins/modals";
 import { install as navigationPlugin } from "./plugins/navigation";
 import { isKnownView } from "./registry";
+import { ListView } from "./components/ListView";
 
 declare module "@vue/runtime-core" {
   interface App {
@@ -19,6 +20,16 @@ declare module "@vue/runtime-core" {
       isHydrate?: boolean,
       isSVG?: boolean
     ): ComponentPublicInstance;
+  }
+
+  interface GlobalComponents {
+    Frame: DefineComponent<{}>;
+    Page: DefineComponent;
+    StackLayout: DefineComponent;
+    GridLayout: DefineComponent;
+    Label: DefineComponent<{ text?: unknown }>;
+    Button: DefineComponent<{ text?: unknown }>;
+    ListView: typeof ListView
   }
 }
 
@@ -33,6 +44,34 @@ export { vShow } from "./directives/vShow";
 export { $showModal } from "./plugins/modals";
 export { $navigateTo, $navigateBack } from "./plugins/navigation";
 
+// creates a special root container that calls resetRoot whenever it's children change
+function createAppRoot() {
+  const defaultRoot = new NSVRoot();
+
+  // flag to indicate when we need to call resetRoot
+  // usually happens when the root component is re-mounted (HMR)
+  let shouldResetRoot = false;
+
+  const appendChild = defaultRoot.appendChild.bind(defaultRoot);
+  const removeChild = defaultRoot.removeChild.bind(defaultRoot);
+
+  defaultRoot.removeChild = (el) => {
+    removeChild(el);
+
+    shouldResetRoot = true;
+  };
+
+  defaultRoot.appendChild = (el) => {
+    appendChild(el);
+
+    if (shouldResetRoot) {
+      resetRoot((el as NSVElement).nativeView);
+    }
+  };
+
+  return defaultRoot;
+}
+
 export const render = renderer.render;
 export const createApp = ((...args) => {
   const app = renderer.createApp(...args);
@@ -46,7 +85,7 @@ export const createApp = ((...args) => {
   };
 
   app.start = () => {
-    const componentInstance = app.mount();
+    const componentInstance = app.mount(createAppRoot(), false, false);
     startApp(componentInstance);
 
     return componentInstance;

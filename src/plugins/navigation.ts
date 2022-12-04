@@ -1,6 +1,6 @@
 import { App, Component, isRef, Ref } from "@vue/runtime-core";
 import { Frame, NavigationEntry, Page } from "@nativescript/core";
-import { createApp, NSVElement } from "..";
+import { createApp, NSVElement, NSVRoot } from "..";
 import { NavigatedData } from "@nativescript/core";
 
 declare module "@vue/runtime-core" {
@@ -64,6 +64,58 @@ function resolveFrame(frame: ResolvableFrame): Frame {
   return Frame.getFrameById(frame);
 }
 
+function createNavigationRoot(cb: (view: any) => void) {
+  console.log("createNavigationRoot");
+  const defaultRoot = new NSVRoot();
+
+  // flag to indicate when we need to call resetRoot
+  // usually happens when the root component is re-mounted (HMR)
+  let shouldResetRoot = false;
+
+  const appendChild = defaultRoot.appendChild.bind(defaultRoot);
+  const removeChild = defaultRoot.removeChild.bind(defaultRoot);
+
+  defaultRoot.removeChild = (el) => {
+    removeChild(el);
+
+    shouldResetRoot = true;
+    console.log("remove child", (el as NSVElement).tagName);
+  };
+
+  defaultRoot.appendChild = (el) => {
+    appendChild(el);
+
+    if (shouldResetRoot) {
+      shouldResetRoot = false;
+      console.log("append child", (el as NSVElement).tagName);
+      cb((el as NSVElement).nativeView);
+    }
+  };
+
+  return defaultRoot;
+}
+
+function attachDisposeCallbacks(
+  targetPage: Page,
+  disposeCallback: (targetPage: Page) => void
+) {
+  // const handler = (args: NavigatedData) => {
+  //   if (args.isBackNavigation) {
+  //     console.log("navigatedFrom called.");
+  //     targetPage.off("navigatedFrom", handler as any);
+  //     disposeCallback();
+  //   }
+  // };
+  // targetPage.on("navigatedFrom", handler);
+
+  const dispose = targetPage.disposeNativeView;
+  targetPage.disposeNativeView = () => {
+    console.log("dispose native view called.");
+    disposeCallback(targetPage);
+    dispose.call(targetPage);
+  };
+}
+
 export async function $navigateTo(
   target: Component,
   options?: NavigationOptions
@@ -78,22 +130,42 @@ export async function $navigateTo(
       throw new Error("Failed to resolve frame. Make sure your frame exists.");
     }
 
-    const navigationApp = createApp(target, options.props);
-    const targetPage = navigationApp.mount().$el.nativeView as unknown as Page;
-
-    const handler = (args: NavigatedData) => {
-      if (args.isBackNavigation) {
-        targetPage.off("navigatedFrom", handler as any);
+    const cleanup = (page) => {
+      if (page === latestPage) {
+        console.log("DISPOSE NAVIGATION APP");
         navigationApp.unmount();
+      } else {
+        console.log("no dispose we have replaced page");
       }
     };
-    targetPage.on("navigatedFrom", handler);
 
-    const dispose = targetPage.disposeNativeView;
-    targetPage.disposeNativeView = () => {
-      navigationApp.unmount();
-      dispose.call(targetPage);
-    };
+    const navigationApp = createApp(target, options.props);
+    const targetPage = navigationApp.mount(
+      createNavigationRoot((newPage) => {
+        latestPage = newPage;
+        attachDisposeCallbacks(newPage, cleanup);
+
+        // cache the original transition of the current page
+        const originalTransition = frame.currentEntry.transition;
+
+        // replace current page
+        frame.replacePage({
+          ...options,
+          transition: {
+            name: "fade",
+            duration: 10,
+          },
+          create: () => newPage,
+        });
+
+        // reset the transition to the original one
+        frame.once("navigatedTo", () => {
+          frame.currentEntry.transition = originalTransition;
+        });
+      })
+    ).$el.nativeView as unknown as Page;
+    let latestPage = targetPage;
+    attachDisposeCallbacks(targetPage, cleanup);
 
     frame.navigate({
       ...options,
@@ -101,8 +173,8 @@ export async function $navigateTo(
     });
     return targetPage;
   } catch (e) {
-    console.log("[$navigateTo] Failed to navigate:\n\n");
-    console.log(e);
+    console.error("[$navigateTo] Failed to navigate:\n\n");
+    console.error(e, e.stack);
     throw e;
   }
 }

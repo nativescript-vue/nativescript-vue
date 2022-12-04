@@ -1,3 +1,4 @@
 **/dist
+*.tgz
 
 yarn-error.log

@@ -13,5 +13,9 @@
         "**/.idea": false,
         "**/.tscache": true,
         "**/node_modules": false
-    }
+    },
+
+    "html.customData": [
+        "./test.json"
+    ]
 }

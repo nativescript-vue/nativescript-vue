@@ -59,13 +59,6 @@ export function registerCoreElements() {
   );
 
   // ActionBar
-  registerElement(
-    "InternalActionBar",
-    () => require("@nativescript/core").ActionBar,
-    {
-      viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
-    }
-  );
   registerElement("ActionItem", () => require("@nativescript/core").ActionItem);
   registerElement(
     "NavigationButton",
@@ -157,13 +150,6 @@ export function registerCoreElements() {
       },
     }
   );
-  // registerElement(
-  //   "InternalListView",
-  //   () => require("@nativescript/core").ListView,
-  //   {
-  //     viewFlags: NSVViewFlags.NO_CHILDREN,
-  //   }
-  // );
   registerElement(
     "Placeholder",
     () => require("@nativescript/core").Placeholder

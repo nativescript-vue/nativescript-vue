@@ -1,54 +1,50 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { goHome } from "./composables/goHome";
-
-import { useTimeAgo } from "@vueuse/core";
+import { useFPS } from "./composables/useFPS";
 
 const navigate = () => {
   goHome();
 };
 
-const timeAgo = useTimeAgo(new Date());
+const { fps } = useFPS();
 
-// const items = computed(() => {
-//   return ["a", "b", "c", "d", "e", "f", "g", "h"];
-// });
-const items: string[] = Array(1000)
-  .fill(0)
-  .map((_, i) => `Item ${i}`);
+const something = "SOMETHING";
+const somethingElse = "SOMETHING_ELSE";
+const whatever = "WHATEVER";
 
-const ts = ref(new Date().getTime());
+const data = ref([{ name: "foo" }, { name: "bar" }, { name: "baz" }]);
+
+const blink = ref(true);
+
 setInterval(() => {
-  ts.value = new Date().getTime();
-}, 500);
+  blink.value = !blink.value;
+}, 1000);
 
-const selector = (item: ListItem) => {
-  return item.even ? "default" : "odd";
-};
 </script>
 
 <template>
   <Frame>
     <Page>
-      <GridLayout rows="auto, auto, auto, *">
+      <StackLayout>
         <Button text="Navigate" @tap="navigate" />
-
-        <Label :text="timeAgo" row="1" />
-        <Label :text="ts" row="2" />
-
-        <ListView row="3" :items="items" :itemTemplateSelector="selector">
-          <template #default="{ item: aliased }: ListItem<string>">
-            <Label :text="`Item: ${aliased} Time: ${ts}`" padding="16" />
-          </template>
-          <template #odd="{ item: aliased }: ListItem<string>">
-            <Label
-              :text="`ODD: ${aliased} Time: ${ts}!!`"
-              padding="16"
-              backgroundColor="rgba(255, 0, 0, 0.2)"
-            />
-          </template>
-        </ListView>
-      </GridLayout>
+        <Label
+          :text="fps"
+          color="green"
+          fontFamily="monospace"
+          textAlignment="right"
+          fontSize="32"
+          fontWeight="bold"
+        />
+        <Label>{{ blink }}</Label>
+        <Label :text="blink" />
+        <Label v-for="(item, i) in data" textWrap>
+          #{{ i }}: {{ item.name }} This is
+          {{ blink ? something : somethingElse }} and
+          {{ blink ? somethingElse : "" }} with a bit of
+          {{ blink && whatever }} sprinkled in. And ofc some {{ fps }}...
+        </Label>
+      </StackLayout>
     </Page>
   </Frame>
 </template>

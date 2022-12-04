@@ -1,18 +1,27 @@
 {
-  "name": "ns-vue-next-v2",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "nativescript-vue",
+  "version": "3.0.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist/",
+    "nativescript.webpack.js"
+  ],
   "license": "MIT",
   "scripts": {
-    "build": "esbuild --bundle --define:__VUE_OPTIONS_API__=true --define:__VUE_PROD_DEVTOOLS__=true --sourcemap --format=esm --outdir=dist --out-extension:.js=.mjs ./src/test.ts",
-    "build:compiler": "esbuild --bundle --define:__VUE_OPTIONS_API__=true --define:__VUE_PROD_DEVTOOLS__=true --sourcemap --format=cjs --outdir=dist --out-extension:.js=.cjs ./src/compiler.ts"
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@vue/compiler-dom": "^3.2.41",
+    "@vue/runtime-dom": "^3.2.41",
+    "@vue/compiler-sfc": "^3.2.41",
+    "set-value": "^4.1.0",
+    "vue-loader": "^17.0.0"
   },
   "devDependencies": {
     "@nativescript/core": "^8.3.5",
-    "@vue/compiler-dom": "^3.2.41",
-    "@vue/runtime-dom": "^3.2.41",
+    "@nativescript/webpack": "~5.0.12",
     "esbuild": "^0.15.12",
-    "set-value": "^4.1.0",
     "tsx": "^3.11.0",
     "typescript": "^4.8.4",
     "vue": "^3.2.41"

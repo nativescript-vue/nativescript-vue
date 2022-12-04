@@ -1,4 +1,4 @@
-import { VNodeProps } from "@vue/runtime-core";
+import { VNodeProps, RendererOptions } from "@vue/runtime-dom";
 
 import { NSVComment, NSVElement, NSVNode, NSVText } from "../dom";
 
@@ -7,8 +7,9 @@ export function insert(
   parent: NSVElement,
   anchor?: NSVNode | null | undefined
 ): void {
-  // console.log("insert", el, parent, anchor);
+  // console.log("insert", el, parent.tagName, anchor);
   if (anchor !== null) {
+    console.log('insert before!')
     parent.insertBefore(el, anchor);
   } else {
     parent.appendChild(el);
@@ -27,7 +28,7 @@ export function createElement(
   isCustomizedBuiltIn?: string | undefined,
   vnodeProps?: (VNodeProps & { [key: string]: any }) | null | undefined
 ): NSVElement {
-  // console.log("createElement");
+  console.log("createElement", type);
   return new NSVElement(type);
 }
 
@@ -52,7 +53,7 @@ export function setElementText(node: NSVElement, text: string): void {
 }
 
 export function parentNode(node: NSVNode): NSVElement | null {
-  // console.log("parentNode?", node);
+  // console.log("parentNode?", node.nodeType);
   return node.parentNode;
 }
 
@@ -60,7 +61,25 @@ export function nextSibling(node: NSVNode): NSVNode | null {
   return node.nextSibling;
 }
 
-export const nodeOps = {
+export function cloneNode(node: NSVNode): NSVNode {
+  console.log("CLONE NODE");
+  return node;
+}
+// insertStaticContent?(content: string, parent: HostElement, anchor: HostNode | null, isSVG: boolean, start?: HostNode | null, end?: HostNode | null): [HostNode, HostNode];
+export function insertStaticContent(
+  content: string,
+  parent: NSVElement,
+  anchor: NSVNode,
+  isSvg: boolean,
+  start?: NSVNode,
+  end?: NSVNode
+): [NSVNode, NSVNode] {
+  console.log("insert static content??!!");
+
+  return [undefined, undefined];
+}
+
+export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
   insert,
   remove,
   createElement,
@@ -70,6 +89,9 @@ export const nodeOps = {
   setElementText,
   parentNode,
   nextSibling,
+
+  cloneNode,
+  insertStaticContent,
   //   querySelector,
   //   setScopeId,
 };

@@ -1,4 +1,4 @@
-import { Application } from "@nativescript/core";
+import { Application, View } from "@nativescript/core";
 import { ComponentPublicInstance } from "@vue/runtime-core";
 import { NSVRoot } from "../dom";
 import { registerCoreElements } from "./elements";
@@ -7,13 +7,27 @@ import { registerCoreElements } from "./elements";
 
 export function init() {
   registerCoreElements();
+
+  global.__onLiveSyncCore = () => {
+    Application.getRootView()?._onCssStateChange();
+  };
 }
 
 export function startApp(rootComponent: ComponentPublicInstance) {
   console.log("starting app...");
   Application.run({
     create() {
-      return rootComponent.$el.nativeView
+      return rootComponent.$el.nativeView;
+    },
+  });
+}
+
+export function resetRoot(view: View) {
+  console.log("reset root...");
+
+  Application.resetRootView({
+    create() {
+      return view;
     },
   });
 }

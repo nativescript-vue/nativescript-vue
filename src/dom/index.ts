@@ -45,6 +45,10 @@ export abstract class NSVNode {
   }
   public set text(value: string | undefined) {
     this._text = value;
+
+    if (this.parentNode?.nodeType === NSVNodeTypes.ELEMENT) {
+      this.parentNode.updateText();
+    }
   }
 
   parentNode: NSVElement | null = null;
@@ -269,11 +273,12 @@ export class NSVElement extends NSVNode {
   updateText() {
     this.setAttribute(
       "text",
-      this.childNodes
-        .filter((node) => node.nodeType === NSVNodeTypes.TEXT)
-        .reduce((text: string, currentNode) => {
-          return text + currentNode.text;
-        }, "")
+      this.childNodes.reduce((text: string, currentNode) => {
+        if (currentNode.nodeType !== NSVNodeTypes.TEXT) {
+          return text;
+        }
+        return text + currentNode.text;
+      }, "")
     );
   }
 }
@@ -311,9 +316,17 @@ export class NSVRoot extends NSVNode {
   }
 
   removeChild(el: NSVNode) {
+    // console.log('NSVRoot->removeCchild()');
     if (el === this.el) {
       this.el = null;
     }
+  }
+
+  insertBefore(el: NSVNode, anchor?: NSVNode | null) {
+    // console.error(
+    //   "insertBefore called on NSVRoot - root element must contain a single child."
+    // );
+    return this.appendChild(el);
   }
 }
 
@@ -341,7 +354,7 @@ function addChild(child: NSVElement, parent: NSVElement, atIndex?: number) {
   }
 
   if (parent.meta.viewFlags & NSVViewFlags.LAYOUT_VIEW) {
-    if (atIndex) {
+    if (typeof atIndex === 'number') {
       parentView.insertChild(childView, atIndex);
     } else {
       parentView.addChild(childView);
