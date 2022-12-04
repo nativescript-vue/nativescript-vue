@@ -9,7 +9,7 @@ export function insert(
 ): void {
   // console.log("insert", el, parent.tagName, anchor);
   if (anchor !== null) {
-    console.log('insert before!')
+    // console.log('insert before!')
     parent.insertBefore(el, anchor);
   } else {
     parent.appendChild(el);
@@ -28,7 +28,7 @@ export function createElement(
   isCustomizedBuiltIn?: string | undefined,
   vnodeProps?: (VNodeProps & { [key: string]: any }) | null | undefined
 ): NSVElement {
-  console.log("createElement", type);
+  // console.log("createElement", type);
   return new NSVElement(type);
 }
 
@@ -74,7 +74,7 @@ export function insertStaticContent(
   start?: NSVNode,
   end?: NSVNode
 ): [NSVNode, NSVNode] {
-  console.log("insert static content??!!");
+  console.log("insert static content - not implemented.");
 
   return [undefined, undefined];
 }

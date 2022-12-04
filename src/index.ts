@@ -10,7 +10,6 @@ import { renderer } from "./renderer";
 import { install as modalsPlugin } from "./plugins/modals";
 import { install as navigationPlugin } from "./plugins/navigation";
 import { isKnownView } from "./registry";
-import { ListView } from "./components/ListView";
 
 declare module "@vue/runtime-core" {
   interface App {
@@ -20,16 +19,6 @@ declare module "@vue/runtime-core" {
       isHydrate?: boolean,
       isSVG?: boolean
     ): ComponentPublicInstance;
-  }
-
-  interface GlobalComponents {
-    Frame: DefineComponent<{}>;
-    Page: DefineComponent;
-    StackLayout: DefineComponent;
-    GridLayout: DefineComponent;
-    Label: DefineComponent<{ text?: unknown }>;
-    Button: DefineComponent<{ text?: unknown }>;
-    ListView: typeof ListView
   }
 }
 

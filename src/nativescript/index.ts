@@ -1,6 +1,5 @@
 import { Application, View } from "@nativescript/core";
 import { ComponentPublicInstance } from "@vue/runtime-core";
-import { NSVRoot } from "../dom";
 import { registerCoreElements } from "./elements";
 
 // export all ns stuff in a single file to allow easy mocking for testing...
@@ -14,7 +13,6 @@ export function init() {
 }
 
 export function startApp(rootComponent: ComponentPublicInstance) {
-  console.log("starting app...");
   Application.run({
     create() {
       return rootComponent.$el.nativeView;
@@ -23,8 +21,6 @@ export function startApp(rootComponent: ComponentPublicInstance) {
 }
 
 export function resetRoot(view: View) {
-  console.log("reset root...");
-
   Application.resetRootView({
     create() {
       return view;

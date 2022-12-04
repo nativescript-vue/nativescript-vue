@@ -26,10 +26,10 @@ export function compileToFunction(
     hoistStatic: true,
     prefixIdentifiers: true,
     onWarn(warn: CompilerError) {
-      console.warn("warn", warn);
+      console.warn("Template Compile Warning", warn);
     },
     onError(err: CompilerError) {
-      console.log("err", err);
+      console.error("Template Compile Error", err);
     },
     ...options,
   });

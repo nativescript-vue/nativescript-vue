@@ -65,7 +65,6 @@ function resolveFrame(frame: ResolvableFrame): Frame {
 }
 
 function createNavigationRoot(cb: (view: any) => void) {
-  console.log("createNavigationRoot");
   const defaultRoot = new NSVRoot();
 
   // flag to indicate when we need to call resetRoot
@@ -79,7 +78,7 @@ function createNavigationRoot(cb: (view: any) => void) {
     removeChild(el);
 
     shouldResetRoot = true;
-    console.log("remove child", (el as NSVElement).tagName);
+    // console.log("remove child", (el as NSVElement).tagName);
   };
 
   defaultRoot.appendChild = (el) => {
@@ -87,7 +86,7 @@ function createNavigationRoot(cb: (view: any) => void) {
 
     if (shouldResetRoot) {
       shouldResetRoot = false;
-      console.log("append child", (el as NSVElement).tagName);
+      // console.log("append child", (el as NSVElement).tagName);
       cb((el as NSVElement).nativeView);
     }
   };
@@ -110,7 +109,7 @@ function attachDisposeCallbacks(
 
   const dispose = targetPage.disposeNativeView;
   targetPage.disposeNativeView = () => {
-    console.log("dispose native view called.");
+    // console.log("dispose native view called.");
     disposeCallback(targetPage);
     dispose.call(targetPage);
   };
@@ -121,7 +120,7 @@ export async function $navigateTo(
   options?: NavigationOptions
 ): Promise<Page> {
   options = Object.assign({}, options);
-  console.log("$navigateTo");
+  // console.log("$navigateTo");
 
   try {
     const frame = resolveFrame(options.frame);
@@ -132,10 +131,10 @@ export async function $navigateTo(
 
     const cleanup = (page) => {
       if (page === latestPage) {
-        console.log("DISPOSE NAVIGATION APP");
+        // console.log("DISPOSE NAVIGATION APP");
         navigationApp.unmount();
       } else {
-        console.log("no dispose we have replaced page");
+        // console.log("no dispose we have replaced page");
       }
     };
 

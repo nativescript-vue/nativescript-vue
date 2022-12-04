@@ -66,12 +66,11 @@ export const ListView = /*#__PURE__*/ defineComponent({
         if (props.items instanceof ObservableArray) {
           return;
         }
-        console.log("props changed?");
 
         const lv: NSCListView = listView.value?.nativeView;
         lv?.refresh();
       } catch (err) {
-        console.log(err);
+        console.error("Error while refreshing ListView", err);
       }
     });
 
@@ -123,9 +122,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
     // render all realized templates as children
     const cellVNODES = () =>
       Object.entries(cells.value).map(([id, entry]) => {
-        const vnodes: VNode[] = ctx.slots[entry.slotName]?.(
-          entry.itemCtx
-        ) ?? [
+        const vnodes: VNode[] = ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [
           // default template is just a label
           h("Label", {
             text: entry.itemCtx.item,
