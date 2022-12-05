@@ -10,7 +10,7 @@
        <img src="https://img.shields.io/npm/v/nativescript-vue/beta.svg" alt="npm">
     </a>
     <a href="https://github.com/nativescript-vue/nativescript-vue/blob/master/LICENSE">
-       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue-next.svg" alt="license">
+       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
     </a>
 </p>
 
