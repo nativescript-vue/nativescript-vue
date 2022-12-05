@@ -34,6 +34,8 @@ ns run ios|android
 
 If you encounter any issues, please open a new issue with as much detail as possible. This is **beta** software, so there might be bugs.
 
+- [Join Discord](https://nativescript.org/discord)
+
 
 ## Looking for V2?
 
