@@ -33,3 +33,8 @@ ns run ios|android
 ## Issues
 
 If you encounter any issues, please open a new issue with as much detail as possible. This is **beta** software, so there might be bugs.
+
+
+## Looking for V2?
+
+The V2 version has been moved to the [v2 branch](https://github.com/nativescript-vue/nativescript-vue/tree/v2)
