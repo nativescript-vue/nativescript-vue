@@ -32,6 +32,13 @@ export function registerCoreElements() {
     }
   );
   registerElement(
+    "RootLayout",
+    () => require("@nativescript/core").RootLayout,
+    {
+      viewFlags: NSVViewFlags.LAYOUT_VIEW,
+    }
+  );
+  registerElement(
     "StackLayout",
     () => require("@nativescript/core").StackLayout,
     { viewFlags: NSVViewFlags.LAYOUT_VIEW }
