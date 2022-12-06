@@ -1,42 +1,74 @@
 import { NSVElement } from "../../dom";
+import { NormalizedStyle } from "@vue/shared";
 
 type Style = string | null;
 
-function isRule(node: any): boolean {
-  return node.type === "rule";
+function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
+  if (!style) {
+    return null;
+  }
+
+  if (typeof style === "string" && style?.trim().charAt(0) === "{") {
+    return JSON.parse(style);
+  }
+
+  return style as NormalizedStyle;
 }
 
-function isDeclaration(node: any): boolean {
-  return node.type === "declaration";
+function normalizeProperty(property: string) {
+  if (property.endsWith("Align")) {
+    // NativeScript uses Alignment instead of Align, this ensures that text-align works
+    property += "ment";
+  }
+
+  return property;
 }
 
-function createDeclaration(decl: any): any {
-  return { property: decl.property.toLowerCase(), value: decl.value };
+export const STYLE_ORIGINAL_VALUE = Symbol("style_original_value");
+
+function addStyleProperty(el: NSVElement, property: string, value: any) {
+  const _sov: Map<string, any> = (el[STYLE_ORIGINAL_VALUE] ??= new Map());
+  property = normalizeProperty(property);
+
+  if (!_sov.has(property)) {
+    _sov.set(property, el.style[property]);
+  }
+
+  el.style[property] = value;
 }
 
-function declarationsFromAstNodes(astRules: any[]): any[] {
-  return astRules.filter(isRule).map((rule) => {
-    return rule.declarations.filter(isDeclaration).map(createDeclaration);
-  });
+function removeStyleProperty(el: NSVElement, property: string) {
+  const _sov: Map<string, any> = (el[STYLE_ORIGINAL_VALUE] ??= new Map());
+  property = normalizeProperty(property);
+
+  // only delete styles we added
+  if (_sov.has(property)) {
+    const originalValue = _sov.get(property);
+    _sov.delete(property);
+    // edge case: if a style property also exists as an attribute (ie backgroundColor)
+    // changing the attribute will not update our originalValue, so when removing
+    // the previous color will be applied. Fixing this would involve listening to
+    // individual attribute changes, and it's not worth the overhead.
+    el.style[property] = originalValue;
+  }
 }
 
 export function patchStyle(el: NSVElement, prev: Style, next: Style) {
   if (prev) {
-    // todo: check if we can substitute cssTreeParse with parseInlineCSS from compiler/transforms/transformStyle (by extracting it to shared)
-    // reset previous styles
-    const localStyle = `local { ${prev} }`;
-    // const ast: any = cssTreeParse(localStyle, undefined)
-    // const [declarations] = declarationsFromAstNodes(ast.stylesheet.rules)
-
-    // declarations.forEach((d: any) => {
-    //   ;(el.nativeView.style as any)[d.property] = unsetValue
-    // })
+    const style = normalizeStyle(prev);
+    // undo old styles
+    Object.keys(style).forEach((property) => {
+      removeStyleProperty(el, property);
+    });
   }
 
   if (!next) {
     el.removeAttribute("style");
   } else {
     // set new styles
-    el.style = next;
+    const style = normalizeStyle(next);
+    Object.keys(style).forEach((property) => {
+      addStyleProperty(el, property, style[property]);
+    });
   }
 }
