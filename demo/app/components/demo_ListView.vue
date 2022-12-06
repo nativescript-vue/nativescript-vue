@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { goHome } from "./composables/goHome";
-import { UseTimeAgo } from "@vueuse/components";
-import { useFPS } from "./composables/useFPS";
-import { ref } from "vue";
 import { ObservableArray } from "@nativescript/core";
-import { debounceFilter, useDebounceFn } from "@vueuse/shared";
+import { useDebounceFn } from "@vueuse/shared";
+import { ref } from "vue";
+import { goHome } from "../composables/goHome";
+import { useFPS } from "../composables/useFPS";
 
 const navigate = () => {
   goHome();

@@ -23,8 +23,9 @@ module.exports = (env) => {
         return {
           ...options,
           isServerBuild: false,
+          // compiler: path.resolve(__dirname, '../dist/compiler-sfc'),
           compilerOptions: {
-            // isCustomElement: (el) => el.toLowerCase() === 'label',
+            // isCustomElement: (el) => true,
             // transformHoist: null
           },
         };

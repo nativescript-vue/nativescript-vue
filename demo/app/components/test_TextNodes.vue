@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { goHome } from "./composables/goHome";
-import { useFPS } from "./composables/useFPS";
+import { goHome } from "../composables/goHome";
+import { useFPS } from "../composables/useFPS";
 
 const navigate = () => {
   goHome();
