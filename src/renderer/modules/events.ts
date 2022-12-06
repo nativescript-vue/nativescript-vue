@@ -69,8 +69,16 @@ function parseName(name: string): [string, EventListenerOptions | undefined] {
       options;
     }
   }
+
+  // todo: optimise if necessary
+  // this isn't technically perfect, 
+  // since if the event name was UPPER then we'll convert it to uPPER
+  // but for the majority of cases, this should be the right thing to do.
+  name = name.slice(name.startsWith("on:") ? 3 : 2);
+  name = name.charAt(0).toLowerCase() + name.slice(1);
+
   // return event name by removing on prefix. eg. onitemTap -> itemTap
-  return [name.slice(2), options];
+  return [name, options];
   // return [hyphenate(name.slice(2)), options]
 }
 

@@ -163,8 +163,6 @@ export class NSVElement extends NSVNode {
     }
 
     this.nativeView.addEventListener(event, handler);
-    // temporary, @loaded becomes `onLoaded` -> `Loaded`
-    this.nativeView.addEventListener(event.toLowerCase(), handler);
   }
 
   removeEventListener(event: string, handler?: any) {
