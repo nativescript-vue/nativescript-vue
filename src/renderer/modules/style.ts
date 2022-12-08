@@ -27,7 +27,8 @@ function normalizeProperty(property: string) {
 export const STYLE_ORIGINAL_VALUE = Symbol("style_original_value");
 
 function addStyleProperty(el: NSVElement, property: string, value: any) {
-  const _sov: Map<string, any> = (el[STYLE_ORIGINAL_VALUE] ??= new Map());
+  const _sov: Map<string, any> =
+    el[STYLE_ORIGINAL_VALUE] ?? (el[STYLE_ORIGINAL_VALUE] = new Map());
   property = normalizeProperty(property);
 
   if (!_sov.has(property)) {
@@ -38,7 +39,8 @@ function addStyleProperty(el: NSVElement, property: string, value: any) {
 }
 
 function removeStyleProperty(el: NSVElement, property: string) {
-  const _sov: Map<string, any> = (el[STYLE_ORIGINAL_VALUE] ??= new Map());
+  const _sov: Map<string, any> =
+    el[STYLE_ORIGINAL_VALUE] ?? (el[STYLE_ORIGINAL_VALUE] = new Map());
   property = normalizeProperty(property);
 
   // only delete styles we added
@@ -53,6 +55,7 @@ function removeStyleProperty(el: NSVElement, property: string) {
   }
 }
 
+// todo: perhaps mimic dom version with prefixing stripped out: https://github.com/vuejs/core/blob/main/packages/runtime-dom/src/modules/style.ts
 export function patchStyle(el: NSVElement, prev: Style, next: Style) {
   if (prev) {
     const style = normalizeStyle(prev);
