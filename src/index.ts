@@ -9,7 +9,7 @@ import { renderer } from "./renderer";
 
 import { install as modalsPlugin } from "./plugins/modals";
 import { install as navigationPlugin } from "./plugins/navigation";
-import { isKnownView } from "./registry";
+import { isKnownView, registerElement } from "./registry";
 
 declare module "@vue/runtime-core" {
   interface App {
@@ -19,6 +19,7 @@ declare module "@vue/runtime-core" {
       isHydrate?: boolean,
       isSVG?: boolean
     ): ComponentPublicInstance;
+    registerElement: typeof registerElement;
   }
 }
 
@@ -65,6 +66,7 @@ export const render = renderer.render;
 export const createApp = ((...args) => {
   const app = renderer.createApp(...args);
   const { mount } = app;
+  app.registerElement = registerElement;
 
   app.mount = (...args) => {
     if (!args.length) {
