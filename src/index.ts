@@ -1,5 +1,5 @@
 import { resolveComponent as resolveComponentCore } from "@vue/runtime-core";
-import type { CreateAppFunction } from "@vue/runtime-core";
+import type { CreateAppFunction, Plugin } from "@vue/runtime-core";
 
 import { BUILT_IN_COMPONENTS } from "./components";
 
@@ -34,6 +34,8 @@ export { vShow } from "./directives/vShow";
 export { $showModal } from "./plugins/modals";
 export { $navigateTo, $navigateBack } from "./plugins/navigation";
 
+export const APP_USES = Symbol("app_uses");
+
 // creates a special root container that calls resetRoot whenever it's children change
 function createAppRoot() {
   const defaultRoot = new NSVRoot();
@@ -62,10 +64,14 @@ function createAppRoot() {
   return defaultRoot;
 }
 
+// plugins applied to the root app
+let rootAppUses: Array<[Plugin, ...any[]]> = [];
+
 export const render = renderer.render;
 export const createApp = ((...args) => {
   const app = renderer.createApp(...args);
-  const { mount } = app;
+  const { mount, use } = app;
+
   app.registerElement = registerElement;
 
   app.mount = (...args) => {
@@ -78,12 +84,24 @@ export const createApp = ((...args) => {
   app.start = () => {
     const componentInstance = app.mount(createAppRoot(), false, false);
     startApp(componentInstance);
+    rootAppUses = app[APP_USES];
 
     return componentInstance;
   };
 
-  app.use(modalsPlugin);
-  app.use(navigationPlugin);
+  app[APP_USES] = [];
+  app.use = (...args) => {
+    app[APP_USES].push([...args]);
+    return use(...args);
+  };
+
+  // always added core plugins, no need to track them through app.use...
+  use(modalsPlugin);
+  use(navigationPlugin);
+
+  rootAppUses.forEach((args) => {
+    use(...args);
+  });
 
   return app;
 }) as CreateAppFunction<NSVElement>;
