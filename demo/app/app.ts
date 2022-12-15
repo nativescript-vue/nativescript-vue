@@ -4,6 +4,10 @@ import { createApp } from "vue";
 global.window = global;
 // import Home from './components/Home.vue'
 
-import App from "./components/GH1010.vue";
+import App from "./components/demo_ListView.vue";
 
-createApp(App).start();
+createApp(App)
+  .use(() => {
+    console.log("test1");
+  })
+  .start();

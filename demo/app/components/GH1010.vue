@@ -1,3 +1,4 @@
+<!-- https://github.com/nativescript-vue/nativescript-vue/issues/1010 -->
 <script lang="ts" setup>
 import { ref } from "vue";
 

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import Test from "./Test.vue";
 import { goHome } from "~/composables/goHome";
+import { onUnmounted } from "vue";
 
 defineProps<{
   depth?: number;
 }>();
 
-const message = "Hello World";
+const message = "Hello World!";
 
 interface Test {
   name: string;
@@ -26,10 +27,14 @@ function selector(item: ListItem<Test>) {
   return item.even ? "default" : "odd";
 }
 
+onUnmounted(() => {
+  console.log("UNMOUNTED HOME");
+});
 </script>
 
 <template>
   <Page>
+    <ActionBar :title="`Depth: ${depth}`"></ActionBar>
     <StackLayout>
       <Label class="info" :text="message + ' ' + depth" />
       <Button text="Go home" @tap="goHome(depth + 1)" />

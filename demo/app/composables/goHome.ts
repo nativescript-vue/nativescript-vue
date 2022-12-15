@@ -10,7 +10,7 @@ export function goHome(depth = 0, modal = false) {
     });
   }
   $navigateTo(Home, {
-    clearHistory: true,
+    // clearHistory: true,
     props: {
       depth,
     },

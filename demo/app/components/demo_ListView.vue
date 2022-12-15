@@ -81,7 +81,6 @@ const onItemTap = useDebounceFn((item) => {
   <Frame>
     <Page>
       <GridLayout rows="auto, auto, *">
-        <Button text="Navigate" @tap="navigate" />
         <Label
           rew="1"
           :text="fps"
@@ -91,6 +90,8 @@ const onItemTap = useDebounceFn((item) => {
           fontSize="32"
           fontWeight="bold"
         />
+        <Button text="Navigate" @tap="navigate" padding="32" fontSize="24" />
+
         <StackLayout row="2">
           <Label>Hello: {{ name }}</Label>
           <Button
