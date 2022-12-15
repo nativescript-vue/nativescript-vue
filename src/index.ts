@@ -1,4 +1,9 @@
-import { resolveComponent as resolveComponentCore } from "@vue/runtime-core";
+import {
+  AppContext,
+  RendererElement,
+  resolveComponent as resolveComponentCore,
+  VNode,
+} from "@vue/runtime-core";
 import type { CreateAppFunction, Plugin } from "@vue/runtime-core";
 
 import { BUILT_IN_COMPONENTS } from "./components";
@@ -8,7 +13,7 @@ import { init, resetRoot, startApp } from "./nativescript";
 import { renderer } from "./renderer";
 
 import { install as modalsPlugin } from "./plugins/modals";
-import { install as navigationPlugin } from "./plugins/navigation";
+import { install as navigationPlugin } from "./plugins/navigation.v2";
 import { isKnownView, registerElement } from "./registry";
 
 declare module "@vue/runtime-core" {
@@ -32,7 +37,7 @@ export * from "./renderer";
 export * from "@vue/runtime-dom";
 export { vShow } from "./directives/vShow";
 export { $showModal } from "./plugins/modals";
-export { $navigateTo, $navigateBack } from "./plugins/navigation";
+export { $navigateTo, $navigateBack } from "./plugins/navigation.v2";
 
 export const APP_USES = Symbol("app_uses");
 
@@ -64,13 +69,19 @@ function createAppRoot() {
   return defaultRoot;
 }
 
-// plugins applied to the root app
-let rootAppUses: Array<[Plugin, ...any[]]> = [];
+export let rootAppContext: AppContext;
+export const renderInRootAppContext = (
+  vnode: VNode,
+  container: RendererElement
+) => {
+  vnode.appContext = rootAppContext;
+  render(vnode, container);
+};
 
 export const render = renderer.render;
 export const createApp = ((...args) => {
   const app = renderer.createApp(...args);
-  const { mount, use } = app;
+  const { mount } = app;
 
   app.registerElement = registerElement;
 
@@ -84,24 +95,14 @@ export const createApp = ((...args) => {
   app.start = () => {
     const componentInstance = app.mount(createAppRoot(), false, false);
     startApp(componentInstance);
-    rootAppUses = app[APP_USES];
+    rootAppContext = app._context;
 
     return componentInstance;
   };
 
-  app[APP_USES] = [];
-  app.use = (...args) => {
-    app[APP_USES].push([...args]);
-    return use(...args);
-  };
-
-  // always added core plugins, no need to track them through app.use...
-  use(modalsPlugin);
-  use(navigationPlugin);
-
-  rootAppUses.forEach((args) => {
-    use(...args);
-  });
+  // core plugins
+  app.use(modalsPlugin);
+  app.use(navigationPlugin);
 
   return app;
 }) as CreateAppFunction<NSVElement>;
