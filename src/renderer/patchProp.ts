@@ -5,6 +5,7 @@ import { patchEvent } from "./modules/events";
 import { patchStyle } from "./modules/style";
 
 import { isOn } from "../runtimeHelpers";
+import { getViewMeta, NSVModelDescriptor } from "../registry";
 
 export function patchProp(
   el: NSVElement,
@@ -29,7 +30,21 @@ export function patchProp(
       break;
     case "modelValue":
     case "onUpdate:modelValue":
-      // handled by v-model directive
+      try {
+        // v-model - maps modelValue/onUpdate:modelValue to the correct prop/events from the registry meta
+        const { prop, event } = getViewMeta(el.tagName)
+          .model as NSVModelDescriptor;
+        if (key === "modelValue") {
+          patchAttr(el, prop, prevValue, nextValue);
+        } else {
+          const cb = nextValue
+            ? ($event) => nextValue($event.object[prop])
+            : nextValue;
+          patchEvent(el, `on:${event}`, prevValue, cb);
+        }
+      } catch (err) {
+        // ignore if the view meta can't be found.
+      }
       break;
     default:
       if (isOn(key)) {
