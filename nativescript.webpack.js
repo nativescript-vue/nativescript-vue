@@ -8,6 +8,7 @@ module.exports = (webpack) => {
 
   webpack.chainWebpack((config) => {
     config.resolve.alias.set('vue', 'nativescript-vue');
+    config.resolve.alias.set('nativescript-vue3', 'nativescript-vue');
     
     config.plugin("VueLoaderPlugin").use(VueLoaderPlugin);
 
