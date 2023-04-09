@@ -3,15 +3,18 @@ import {
   Component,
   ComponentInternalInstance,
   ComponentPublicInstance,
+  createVNode,
   Ref,
   warn,
 } from "@vue/runtime-core";
-import { Application, ShowModalOptions, View } from "@nativescript/core";
-import { createApp, NSVElement } from "..";
+import { Application, Page, ShowModalOptions, View } from "@nativescript/core";
 import { isObject } from "@vue/shared";
+import { NSVElement, NSVRoot } from "../dom";
+import { rootContext } from '../runtimeHelpers'
+import { renderer } from '../renderer'
 
 declare module "@vue/runtime-core" {
-  interface ComponentCustomProperties {
+  export interface ComponentCustomProperties {
     /**
      * todo: update docblock
      */
@@ -19,6 +22,9 @@ declare module "@vue/runtime-core" {
       component: Component,
       options?: ModalOptions
     ) => Promise<T | false | undefined>;
+    $modal: {
+      close: (arg: any) => void
+    };
   }
 }
 
@@ -71,31 +77,29 @@ export async function $showModal<T = any>(
     if (__DEV__) {
       warn(`could not open modal because the target does not exist`);
     }
-    return false;
+    return;
   }
 
   return new Promise((resolve) => {
-    const modalApp = createApp(component, options ? options.props : null);
-    let isResolved = false;
+    let container = new NSVRoot();
+
     const closeCallback = (data?: T) => {
-      if (isResolved) return;
-      isResolved = true;
+      renderer.render(null, container);
+      container = null;
 
-      try {
-        modalContent.closeModal();
-      } catch (e) {
-        // ignore?
-      }
-
-      modalApp.unmount();
       resolve(data);
     };
 
-    modalApp.config.globalProperties.$modal = {
-      close: closeCallback,
-    };
+    let vnode = createVNode(component, options.props)
 
-    const modalContent = modalApp.mount().$el.nativeView;
+    vnode.appContext = Object.assign({}, rootContext)
+    vnode.appContext.config.globalProperties.$modal = {
+      close: (...args: any[]) => modalContent.closeModal(...args)
+    }
+
+    renderer.render(vnode, container);
+
+    const modalContent = vnode.el.nativeView as Page
 
     modalTarget.showModal(modalContent, {
       ...options,
