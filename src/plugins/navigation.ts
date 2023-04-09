@@ -6,7 +6,7 @@ import { NavigatedData } from "@nativescript/core";
 import { rootContext } from '../runtimeHelpers'
 
 declare module "@vue/runtime-core" {
-  interface ComponentCustomProperties {
+  export interface ComponentCustomProperties {
     /**
      * todo: update docblock
      * Navigate to {target} component.
@@ -160,12 +160,12 @@ export async function $navigateTo(
     });
 
     const vnode = createVNode(target, options.props)
-    
+
     vnode.appContext = rootContext
 
     renderer.render(vnode, navRoot)
 
-    const targetPage = vnode.component.proxy.$el?.nativeView as Page
+    const targetPage = vnode.el.nativeView as Page
 
     let latestPage = targetPage;
     attachDisposeCallbacks(targetPage, cleanup);
