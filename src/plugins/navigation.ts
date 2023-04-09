@@ -1,7 +1,9 @@
-import { App, Component, isRef, Ref } from "@vue/runtime-core";
+import { App, Component, createVNode, Ref, unref } from "@vue/runtime-core";
 import { Frame, NavigationEntry, Page } from "@nativescript/core";
-import { createApp, NSVElement, NSVRoot } from "..";
+import { NSVElement, NSVRoot } from "../dom";
+import { renderer } from "../renderer";
 import { NavigatedData } from "@nativescript/core";
+import { rootContext } from '../runtimeHelpers'
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -40,28 +42,25 @@ export function install(app: App) {
   app.config.globalProperties.$navigateBack = $navigateBack;
 }
 
-function resolveFrame(frame: ResolvableFrame): Frame {
+function resolveFrame(frame?: ResolvableFrame): Frame {
   if (!frame) {
     return Frame.topmost();
   }
 
-  if (frame instanceof Frame) {
-    return frame;
+  const ob = unref(frame);
+
+  if (ob instanceof Frame) {
+    return ob;
   }
 
-  // todo: check if refs work this way or not
-  if (isRef(frame)) {
-    return frame.value as any;
-  }
-
-  if (frame instanceof NSVElement) {
-    return frame.nativeView;
+  if (ob instanceof NSVElement) {
+    return ob.nativeView;
   }
 
   // todo: either change core Frame to add frames to the stack when they are created
   // or do as we did in 2.x - handle a Map of frames.
   // right now, empty frames can't be navigated as they are not recognized by `getFrameById`
-  return Frame.getFrameById(frame);
+  return Frame.getFrameById(ob);
 }
 
 function createNavigationRoot(cb: (view: any) => void) {
@@ -132,37 +131,42 @@ export async function $navigateTo(
     const cleanup = (page) => {
       if (page === latestPage) {
         // console.log("DISPOSE NAVIGATION APP");
-        navigationApp.unmount();
+        // the next two statements does what app.unmount does
+        renderer.render(null, navRoot);
+        navRoot = null
       } else {
         // console.log("no dispose we have replaced page");
       }
     };
 
-    const navigationApp = createApp(target, options.props);
-    const targetPage = navigationApp.mount(
-      createNavigationRoot((newPage) => {
-        latestPage = newPage;
-        attachDisposeCallbacks(newPage, cleanup);
+    let navRoot = createNavigationRoot((newPage) => {
+      latestPage = newPage;
+      attachDisposeCallbacks(newPage, cleanup);
+      // cache the original transition of the current page
+      const originalTransition = frame.currentEntry.transition;
+      // replace current page
+      frame.replacePage({
+        ...options,
+        transition: {
+          name: "fade",
+          duration: 10,
+        },
+        create: () => newPage,
+      });
+      // reset the transition to the original one
+      frame.once("navigatedTo", () => {
+        frame.currentEntry.transition = originalTransition;
+      });
+    });
 
-        // cache the original transition of the current page
-        const originalTransition = frame.currentEntry.transition;
+    const vnode = createVNode(target, options.props)
+    
+    vnode.appContext = rootContext
 
-        // replace current page
-        frame.replacePage({
-          ...options,
-          transition: {
-            name: "fade",
-            duration: 10,
-          },
-          create: () => newPage,
-        });
+    renderer.render(vnode, navRoot)
 
-        // reset the transition to the original one
-        frame.once("navigatedTo", () => {
-          frame.currentEntry.transition = originalTransition;
-        });
-      })
-    ).$el.nativeView as unknown as Page;
+    const targetPage = vnode.component.proxy.$el?.nativeView as Page
+
     let latestPage = targetPage;
     attachDisposeCallbacks(targetPage, cleanup);
 

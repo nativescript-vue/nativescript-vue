@@ -6,7 +6,7 @@ import {
   ObservableArray,
 } from "@nativescript/core";
 
-import { getCurrentInstance, ref, VNode, watch, PropType } from "..";
+import { getCurrentInstance, ref, VNode, watch } from "@vue/runtime-dom";
 import { NSVElement, NSVViewFlags } from "../dom";
 import { registerElement } from "../registry";
 import { ELEMENT_REF } from "../runtimeHelpers";

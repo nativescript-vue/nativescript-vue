@@ -1,4 +1,4 @@
-import { registerRuntimeCompiler } from "./";
+import { registerRuntimeCompiler } from "@vue/runtime-dom";
 import { compileToFunction } from "./compiler";
 
 registerRuntimeCompiler(compileToFunction);

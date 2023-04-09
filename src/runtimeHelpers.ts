@@ -1,5 +1,12 @@
+import { AppContext } from '@vue/runtime-dom'
+
 const __DEV__ = true;
 
+export let rootContext = null
+
+export const setRootContext = (context: AppContext) => {
+  rootContext = context
+}
 
 export const ELEMENT_REF = Symbol(__DEV__ ? `elementRef` : ``);
 

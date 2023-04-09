@@ -1,5 +1,5 @@
 import { resolveComponent as resolveComponentCore } from "@vue/runtime-core";
-import type { CreateAppFunction, Plugin } from "@vue/runtime-core";
+import type { CreateAppFunction } from "@vue/runtime-core";
 
 import { BUILT_IN_COMPONENTS } from "./components";
 
@@ -10,6 +10,7 @@ import { renderer } from "./renderer";
 import { install as modalsPlugin } from "./plugins/modals";
 import { install as navigationPlugin } from "./plugins/navigation";
 import { isKnownView, registerElement } from "./registry";
+import { setRootContext } from './runtimeHelpers'
 
 declare module "@vue/runtime-core" {
   interface App {
@@ -33,8 +34,6 @@ export * from "@vue/runtime-dom";
 export { vShow } from "./directives/vShow";
 export { $showModal } from "./plugins/modals";
 export { $navigateTo, $navigateBack } from "./plugins/navigation";
-
-export const APP_USES = Symbol("app_uses");
 
 // creates a special root container that calls resetRoot whenever it's children change
 function createAppRoot() {
@@ -64,13 +63,10 @@ function createAppRoot() {
   return defaultRoot;
 }
 
-// plugins applied to the root app
-let rootAppUses: Array<[Plugin, ...any[]]> = [];
-
 export const render = renderer.render;
 export const createApp = ((...args) => {
   const app = renderer.createApp(...args);
-  const { mount, use } = app;
+  const { mount } = app;
 
   app.registerElement = registerElement;
 
@@ -83,25 +79,15 @@ export const createApp = ((...args) => {
 
   app.start = () => {
     const componentInstance = app.mount(createAppRoot(), false, false);
+    
     startApp(componentInstance);
-    rootAppUses = app[APP_USES];
+    setRootContext(componentInstance.$.appContext);
 
     return componentInstance;
   };
 
-  app[APP_USES] = [];
-  app.use = (...args) => {
-    app[APP_USES].push([...args]);
-    return use(...args);
-  };
-
-  // always added core plugins, no need to track them through app.use...
-  use(modalsPlugin);
-  use(navigationPlugin);
-
-  rootAppUses.forEach((args) => {
-    use(...args);
-  });
+  app.use(modalsPlugin);
+  app.use(navigationPlugin);
 
   return app;
 }) as CreateAppFunction<NSVElement>;
