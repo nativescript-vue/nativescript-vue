@@ -30,7 +30,7 @@ export * from "./dom";
 export * from "./registry";
 export * from "./renderer";
 
-export * from "@vue/runtime-dom";
+export * from "@vue/runtime-core";
 export { vShow } from "./directives/vShow";
 export { $showModal } from "./plugins/modals";
 export { $navigateTo, $navigateBack } from "./plugins/navigation";

@@ -1,4 +1,4 @@
-import { VNodeProps, RendererOptions } from "@vue/runtime-dom";
+import { VNodeProps, RendererOptions } from "@vue/runtime-core";
 
 import { NSVComment, NSVElement, NSVNode, NSVText } from "../dom";
 

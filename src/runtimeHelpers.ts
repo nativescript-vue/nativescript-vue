@@ -1,4 +1,4 @@
-import { AppContext } from '@vue/runtime-dom'
+import { AppContext } from '@vue/runtime-core'
 
 const __DEV__ = true;
 

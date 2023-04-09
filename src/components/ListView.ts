@@ -1,4 +1,12 @@
-import { defineComponent, h, warn } from "@vue/runtime-core";
+import {
+  defineComponent,
+  getCurrentInstance,
+  h,
+  VNode,
+  warn,
+  watch,
+  ref
+} from "@vue/runtime-core";
 
 import {
   ItemEventData,
@@ -6,7 +14,6 @@ import {
   ObservableArray,
 } from "@nativescript/core";
 
-import { getCurrentInstance, ref, VNode, watch } from "@vue/runtime-dom";
 import { NSVElement, NSVViewFlags } from "../dom";
 import { registerElement } from "../registry";
 import { ELEMENT_REF } from "../runtimeHelpers";

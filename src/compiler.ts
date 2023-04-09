@@ -1,5 +1,5 @@
 import { compile, CompilerError, CompilerOptions } from "@vue/compiler-dom";
-import { RenderFunction, warn } from "@vue/runtime-dom";
+import { RenderFunction, warn } from "@vue/runtime-core";
 import * as runtime from "./index";
 
 const NOOP = () => {};
