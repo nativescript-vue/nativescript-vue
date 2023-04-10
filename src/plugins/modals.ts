@@ -3,7 +3,7 @@ import {
   Component,
   ComponentInternalInstance,
   ComponentPublicInstance,
-  createVNode,
+  h,
   Ref,
   warn,
 } from "@vue/runtime-core";
@@ -90,7 +90,7 @@ export async function $showModal<T = any>(
       resolve(data);
     };
 
-    let vnode = createVNode(component, options.props)
+    let vnode = h(component, options.props)
 
     vnode.appContext = Object.assign({}, rootContext)
     vnode.appContext.config.globalProperties.$modal = {

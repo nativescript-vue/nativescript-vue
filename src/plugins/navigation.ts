@@ -1,4 +1,4 @@
-import { App, Component, createVNode, Ref, unref } from "@vue/runtime-core";
+import { App, Component, h, Ref, unref } from "@vue/runtime-core";
 import { Frame, NavigationEntry, Page } from "@nativescript/core";
 import { NSVElement, NSVRoot } from "../dom";
 import { renderer } from "../renderer";
@@ -159,7 +159,7 @@ export async function $navigateTo(
       });
     });
 
-    const vnode = createVNode(target, options.props)
+    const vnode = h(target, options.props)
 
     vnode.appContext = rootContext
 
