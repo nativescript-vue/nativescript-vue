@@ -1,9 +1,8 @@
-import { App, Component, h, Ref, unref } from "@vue/runtime-core";
+import { App, Component, Ref, unref } from "@vue/runtime-core";
 import { Frame, NavigationEntry, Page } from "@nativescript/core";
 import { NSVElement, NSVRoot } from "../dom";
-import { renderer } from "../renderer";
 import { NavigatedData } from "@nativescript/core";
-import { rootContext } from '../runtimeHelpers'
+import { createNativeView } from "../runtimeHelpers";
 
 declare module "@vue/runtime-core" {
   export interface ComponentCustomProperties {
@@ -131,8 +130,8 @@ export async function $navigateTo(
     const cleanup = (page) => {
       if (page === latestPage) {
         // console.log("DISPOSE NAVIGATION APP");
-        // the next two statements does what app.unmount does
-        renderer.render(null, navRoot);
+        view.unmount()
+        view = null
         navRoot = null
       } else {
         // console.log("no dispose we have replaced page");
@@ -159,13 +158,9 @@ export async function $navigateTo(
       });
     });
 
-    const vnode = h(target, options.props)
+    let view = createNativeView<Page>(target, options.props)
 
-    vnode.appContext = rootContext
-
-    renderer.render(vnode, navRoot)
-
-    const targetPage = vnode.el.nativeView as Page
+    const targetPage = view.mount(navRoot)
 
     let latestPage = targetPage;
     attachDisposeCallbacks(targetPage, cleanup);

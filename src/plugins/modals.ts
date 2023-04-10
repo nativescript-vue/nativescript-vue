@@ -3,15 +3,13 @@ import {
   Component,
   ComponentInternalInstance,
   ComponentPublicInstance,
-  h,
   Ref,
   warn,
 } from "@vue/runtime-core";
-import { Application, Page, ShowModalOptions, View } from "@nativescript/core";
+import { Application, ShowModalOptions, View } from "@nativescript/core";
 import { isObject } from "@vue/shared";
-import { NSVElement, NSVRoot } from "../dom";
-import { rootContext } from '../runtimeHelpers'
-import { renderer } from '../renderer'
+import { NSVElement } from "../dom";
+import { createNativeView } from "../runtimeHelpers";
 
 declare module "@vue/runtime-core" {
   export interface ComponentCustomProperties {
@@ -22,6 +20,7 @@ declare module "@vue/runtime-core" {
       component: Component,
       options?: ModalOptions
     ) => Promise<T | false | undefined>;
+    $closeModal: (arg: any) => void;
     $modal: {
       close: (arg: any) => void
     };
@@ -81,25 +80,20 @@ export async function $showModal<T = any>(
   }
 
   return new Promise((resolve) => {
-    let container = new NSVRoot();
+    let view = createNativeView(component, options.props);
+    const closeModal = (...args: any[]) => modalContent.closeModal(...args);
 
     const closeCallback = (data?: T) => {
-      renderer.render(null, container);
-      container = null;
+      view.unmount();
+      view = null;
 
       resolve(data);
     };
 
-    let vnode = h(component, options.props)
+    view.context.config.globalProperties.$closeModal = closeModal;
+    view.context.config.globalProperties.$modal = { close: closeModal };
 
-    vnode.appContext = Object.assign({}, rootContext)
-    vnode.appContext.config.globalProperties.$modal = {
-      close: (...args: any[]) => modalContent.closeModal(...args)
-    }
-
-    renderer.render(vnode, container);
-
-    const modalContent = vnode.el.nativeView as Page
+    const modalContent = view.mount();
 
     modalTarget.showModal(modalContent, {
       ...options,
