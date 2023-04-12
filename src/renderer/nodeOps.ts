@@ -79,6 +79,10 @@ export function insertStaticContent(
   return [undefined, undefined];
 }
 
+export function setScopeId(el: NSVElement, scopeId: string) {
+  el.setAttribute(scopeId, '')
+}
+
 export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
   insert,
   remove,
@@ -92,6 +96,8 @@ export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
 
   cloneNode,
   insertStaticContent,
+
+  setScopeId,
+  
   //   querySelector,
-  //   setScopeId,
 };
