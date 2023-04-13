@@ -23,7 +23,7 @@ export interface NSVElementDescriptor {
 }
 
 export let defaultViewMeta: NSVViewMeta = {
-  viewFlags: 0 // NSVViewFlags.NONE, // tsx can't resolve NSVViewFlags here?
+  viewFlags: 0, // NSVViewFlags.NONE, // tsx can't resolve NSVViewFlags here?
 };
 
 let elementMap: Record<string, NSVElementDescriptor> = {};

@@ -1,7 +1,6 @@
-import { App, Component, Ref, unref } from "@vue/runtime-core";
 import { Frame, NavigationEntry, Page } from "@nativescript/core";
+import { App, Component, Ref, unref } from "@vue/runtime-core";
 import { NSVElement, NSVRoot } from "../dom";
-import { NavigatedData } from "@nativescript/core";
 import { createNativeView } from "../runtimeHelpers";
 
 declare module "@vue/runtime-core" {

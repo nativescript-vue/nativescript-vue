@@ -80,10 +80,10 @@ export function insertStaticContent(
 }
 
 export function setScopeId(el: NSVElement, scopeId: string) {
-  el.setAttribute(scopeId, '')
+  el.setAttribute(scopeId, "");
 }
 
-export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
+export const nodeOps: Omit<RendererOptions, "patchProp"> = {
   insert,
   remove,
   createElement,
@@ -98,6 +98,6 @@ export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
   insertStaticContent,
 
   setScopeId,
-  
+
   //   querySelector,
 };

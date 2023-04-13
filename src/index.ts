@@ -10,7 +10,7 @@ import { renderer } from "./renderer";
 import { install as modalsPlugin } from "./plugins/modals";
 import { install as navigationPlugin } from "./plugins/navigation";
 import { isKnownView, registerElement } from "./registry";
-import { setRootContext } from './runtimeHelpers'
+import { setRootContext } from "./runtimeHelpers";
 
 declare module "@vue/runtime-core" {
   interface App {
@@ -80,7 +80,7 @@ export const createApp = ((...args) => {
 
   app.start = () => {
     const componentInstance = app.mount(createAppRoot(), false, false);
-    
+
     startApp(componentInstance);
     setRootContext(componentInstance.$.appContext);
 

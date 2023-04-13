@@ -71,7 +71,7 @@ function parseName(name: string): [string, EventListenerOptions | undefined] {
   }
 
   // todo: optimise if necessary
-  // this isn't technically perfect, 
+  // this isn't technically perfect,
   // since if the event name was UPPER then we'll convert it to uPPER
   // but for the majority of cases, this should be the right thing to do.
   name = name.slice(name.startsWith("on:") ? 3 : 2);
