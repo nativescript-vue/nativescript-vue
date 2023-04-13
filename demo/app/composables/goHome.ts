@@ -7,6 +7,8 @@ export function goHome(depth = 0, modal = false) {
       props: {
         depth,
       },
+    }).then((res) => {
+      console.log("MODAL CLOSED", res);
     });
   }
   $navigateTo(Home, {
