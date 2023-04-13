@@ -1,3 +1,4 @@
+import { Application, ShowModalOptions, View } from "@nativescript/core";
 import {
   App,
   Component,
@@ -6,12 +7,12 @@ import {
   Ref,
   warn,
 } from "@vue/runtime-core";
-import { Application, ShowModalOptions, View } from "@nativescript/core";
-import { createApp, NSVElement } from "..";
 import { isObject } from "@vue/shared";
+import { NSVElement } from "../dom";
+import { createNativeView } from "../runtimeHelpers";
 
 declare module "@vue/runtime-core" {
-  interface ComponentCustomProperties {
+  export interface ComponentCustomProperties {
     /**
      * todo: update docblock
      */
@@ -19,6 +20,10 @@ declare module "@vue/runtime-core" {
       component: Component,
       options?: ModalOptions
     ) => Promise<T | false | undefined>;
+    $closeModal: (arg: any) => void;
+    $modal: {
+      close: (arg: any) => void
+    };
   }
 }
 
@@ -71,31 +76,27 @@ export async function $showModal<T = any>(
     if (__DEV__) {
       warn(`could not open modal because the target does not exist`);
     }
-    return false;
+    return;
   }
 
   return new Promise((resolve) => {
-    const modalApp = createApp(component, options ? options.props : null);
     let isResolved = false;
+    let view = createNativeView(component, options.props);
+
+    const closeModal = (...args: any[]) => modalContent.closeModal(...args);
     const closeCallback = (data?: T) => {
-      if (isResolved) return;
+      if(isResolved) return;
       isResolved = true;
+      view.unmount();
+      view = null;
 
-      try {
-        modalContent.closeModal();
-      } catch (e) {
-        // ignore?
-      }
-
-      modalApp.unmount();
       resolve(data);
     };
 
-    modalApp.config.globalProperties.$modal = {
-      close: closeCallback,
-    };
+    view.context.config.globalProperties.$closeModal = closeModal;
+    view.context.config.globalProperties.$modal = { close: closeModal };
 
-    const modalContent = modalApp.mount().$el.nativeView;
+    const modalContent = view.mount();
 
     modalTarget.showModal(modalContent, {
       ...options,

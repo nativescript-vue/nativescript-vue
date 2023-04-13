@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@vue/compiler-dom": "^3.2.41",
-    "@vue/runtime-dom": "^3.2.41",
     "@vue/compiler-sfc": "^3.2.41",
     "set-value": "^4.1.0",
     "vue-loader": "^17.0.0"
