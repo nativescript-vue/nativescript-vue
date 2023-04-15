@@ -44,7 +44,7 @@ function removeStyleProperty(el: NSVElement, property: string) {
   property = normalizeProperty(property);
 
   // only delete styles we added
-  if (_sov.has(property)) {
+  if (_sov.has(property) && _sov.get(property)) {
     const originalValue = _sov.get(property);
     _sov.delete(property);
     // edge case: if a style property also exists as an attribute (ie backgroundColor)
