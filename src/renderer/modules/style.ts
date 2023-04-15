@@ -1,7 +1,7 @@
 import { NSVElement } from "../../dom";
 import { NormalizedStyle } from "@vue/shared";
 
-type Style = string | null;
+type Style = string | Record<string, string> | null;
 
 function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
   if (!style) {
@@ -32,7 +32,7 @@ function addStyleProperty(el: NSVElement, property: string, value: any) {
   property = normalizeProperty(property);
 
   if (!_sov.has(property)) {
-    _sov.set(property, el.style[property]);
+    _sov.set(property, value);
   }
 
   el.style[property] = value;
@@ -44,7 +44,7 @@ function removeStyleProperty(el: NSVElement, property: string) {
   property = normalizeProperty(property);
 
   // only delete styles we added
-  if (_sov.has(property) && _sov.get(property)) {
+  if (_sov.has(property)) {
     const originalValue = _sov.get(property);
     _sov.delete(property);
     // edge case: if a style property also exists as an attribute (ie backgroundColor)
