@@ -3,8 +3,8 @@
   "main": "src/app.ts",
   "version": "3.0.0-beta.5",
   "dependencies": {
-    "@nativescript/core": "~8.4.0",
-    "nativescript-vue": "3.0.0-beta.5"
+    "@nativescript/core": "~8.5.0",
+    "nativescript-vue": "3.0.0-beta.6"
   },
   "devDependencies": {
     "@nativescript/tailwind": "^2.0.1",
@@ -14,5 +14,10 @@
     "tailwindcss": "^3.1.8",
     "typescript": "~4.8.4",
     "vue": "^3.2.45"
+  },
+  "stackblitz": {
+    "installDependencies": true,
+    "compileTrigger": "save",
+    "startCommand": "./node_modules/.bin/preview-cli"
   }
 }
