@@ -1,5 +1,11 @@
 import { NSVElement } from "../../dom";
-import { NormalizedStyle } from "@vue/shared";
+import {
+  NormalizedStyle,
+  parseStringStyle,
+  isArray,
+  isString,
+  isObject,
+} from "@vue/shared";
 
 type Style = string | Record<string, string | number> | null;
 
@@ -8,14 +14,31 @@ function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
     return null;
   }
 
-  if (typeof style === "string") {
-    if (style?.trim().charAt(0) === "{") {
+  if (isString(style)) {
+    if (style.trim().charAt(0) === "{") {
       return JSON.parse(style);
     }
-    // todo: check if a style can be a string but not json?
+
+    return parseStringStyle(style);
   }
 
-  return style as NormalizedStyle;
+  if (isArray(style)) {
+    return style.reduce(
+      (
+        normalizedStyle: NormalizedStyle,
+        currentStyle: NormalizedStyle | Style
+      ) => {
+        return Object.assign(normalizedStyle, normalizeStyle(currentStyle));
+      },
+      {}
+    );
+  }
+
+  if (isObject(style)) {
+    return style as NormalizedStyle;
+  }
+
+  return {};
 }
 
 function normalizeProperty(property: string) {
