@@ -1,15 +1,18 @@
 import { NSVElement } from "../../dom";
 import { NormalizedStyle } from "@vue/shared";
 
-type Style = string | Record<string, string> | null;
+type Style = string | Record<string, string | number> | null;
 
 function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
   if (!style) {
     return null;
   }
 
-  if (typeof style === "string" && style?.trim().charAt(0) === "{") {
-    return JSON.parse(style);
+  if (typeof style === "string") {
+    if (style?.trim().charAt(0) === "{") {
+      return JSON.parse(style);
+    }
+    // todo: check if a style can be a string but not json?
   }
 
   return style as NormalizedStyle;
@@ -32,7 +35,7 @@ function addStyleProperty(el: NSVElement, property: string, value: any) {
   property = normalizeProperty(property);
 
   if (!_sov.has(property)) {
-    _sov.set(property, value);
+    _sov.set(property, el.style[property]);
   }
 
   el.style[property] = value;
@@ -51,7 +54,14 @@ function removeStyleProperty(el: NSVElement, property: string) {
     // changing the attribute will not update our originalValue, so when removing
     // the previous color will be applied. Fixing this would involve listening to
     // individual attribute changes, and it's not worth the overhead.
-    el.style[property] = originalValue;
+    try {
+      el.style[property] = originalValue;
+    } catch (err) {
+      // hack: if the original value is invalid, we can't set it back to it's original value
+      // instead we set it to null, which will remove the style, however this may
+      // still lead to incorrect styling in some cases.
+      el.style[property] = null;
+    }
   }
 }
 
