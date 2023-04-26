@@ -4,14 +4,15 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["dom", "esnext"],
+    "lib": ["esnext", "WebWorker"],
     "sourceMap": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "vue": ["node_modules/nativescript-vue"]
     },
     "typeRoots": ["types"],
     "types": ["node"],
@@ -20,6 +21,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
+  },
+  "vueCompilerOptions": {
+    "target": 3
   },
   "include": ["src", "types"],
   "exclude": ["node_modules", "platforms"]
