@@ -1,4 +1,4 @@
-import { $navigateTo, $showModal } from "../../../src";
+import { $navigateTo, $showModal } from "nativescript-vue";
 import Home from "../components/Home.vue";
 
 export function goHome(depth = 0, modal = false) {

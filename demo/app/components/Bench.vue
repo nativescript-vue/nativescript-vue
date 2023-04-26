@@ -6,7 +6,7 @@ export default {
       show: false,
       iter: 0,
 
-      times: [],
+      times: [] as number[],
     };
   },
   methods: {
@@ -64,10 +64,10 @@ export default {
       <template v-if="show">
         <Label
           v-for="i in 2000"
-          :key="this.iter + 'item' + i"
+          :key="iter + 'item' + i"
           text="Hello World"
         />
-        <Label @loaded="end" :key="this.iter + 'end'" text="End" />
+        <Label @loaded="end" :key="iter + 'end'" text="End" />
       </template>
     </GridLayout>
   </Page>

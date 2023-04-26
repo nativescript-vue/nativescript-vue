@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from "nativescript-vue";
 import { goHome } from "../composables/goHome";
 import { useFPS } from "../composables/useFPS";
 

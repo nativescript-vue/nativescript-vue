@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ObservableArray } from "@nativescript/core";
 import { useDebounceFn } from "@vueuse/shared";
-import { ref } from "vue";
+import { ref } from "nativescript-vue";
 import { goHome } from "../composables/goHome";
 import { useFPS } from "../composables/useFPS";
+import type { ListItem } from "nativescript-vue";
 
 const navigate = () => {
   goHome();
 };
 
 interface Item {
+  name: string;
   title: string;
   text: string;
   date: Date;
@@ -67,7 +69,7 @@ setInterval(() => {
 //   items2.value.push({ name: name.value });
 // }, 100);
 
-const onItemTap = useDebounceFn((item) => {
+const onItemTap = useDebounceFn((item: Item) => {
   console.log("ITEM TAP", item);
   if (selected.value.includes(item)) {
     selected.value.splice(selected.value.indexOf(item), 1);
@@ -111,7 +113,7 @@ const onItemTap = useDebounceFn((item) => {
           <Label>Selected: {{ selected.length }}</Label>
 
           <ListView :items="items2" height="800">
-            <template #default="{ item, index }: ListItem<{ name: string }>">
+            <template #default="{ item, index }: ListItem<Item>">
               <StackLayout
                 @tap="onItemTap(item)"
                 :backgroundColor="selected.includes(item) ? '#ffedd5' : ''"

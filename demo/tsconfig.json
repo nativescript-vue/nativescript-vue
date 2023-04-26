@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "strict": false,
-    "target": "es2017",
+    "strict": true,
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["dom", "es2017"],
+    "lib": ["esnext", "WebWorker"],
     "sourceMap": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["app/*"],
-      "@/*": ["app/*"]
+      "@/*": ["app/*"],
+      "vue": ["node_modules/nativescript-vue"]
     },
     "typeRoots": ["types"],
     "types": ["node"],
@@ -20,6 +21,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
+  },
+  "vueCompilerOptions": {
+    "target": 3
   },
   "include": ["app", "types"],
   "exclude": ["node_modules", "platforms"]

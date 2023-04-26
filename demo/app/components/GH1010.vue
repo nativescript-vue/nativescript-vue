@@ -1,6 +1,7 @@
 <!-- https://github.com/nativescript-vue/nativescript-vue/issues/1010 -->
 <script lang="ts" setup>
-import { ref } from "vue";
+import { EventData } from "@nativescript/core";
+import { ref } from "nativescript-vue";
 
 const tapCount = ref(0);
 
@@ -9,7 +10,7 @@ function onTap() {
   console.trace("Tapped!", tapCount.value);
 }
 
-function onLoaded(args) {
+function onLoaded(_args: EventData) {
   console.log("STACK LOADED")
 }
 </script>
