@@ -1,5 +1,5 @@
-import { ObjectDirective } from "@vue/runtime-core";
-import { NSVElement } from "../dom";
+import { ObjectDirective } from '@vue/runtime-core';
+import { NSVElement } from '../dom';
 
 interface VShowElement extends NSVElement {
   // _vod = vue original display
@@ -9,9 +9,9 @@ interface VShowElement extends NSVElement {
 export const vShow: ObjectDirective<VShowElement> = {
   beforeMount(el, { value }, { transition }) {
     el._vod =
-      el.getAttribute("visibility") === "none"
-        ? ""
-        : (el.getAttribute("visibility") as string);
+      el.getAttribute('visibility') === 'none'
+        ? ''
+        : (el.getAttribute('visibility') as string);
     if (transition && value) {
       transition.beforeEnter(el);
     } else {
@@ -45,5 +45,5 @@ export const vShow: ObjectDirective<VShowElement> = {
 };
 
 function setDisplay(el: VShowElement, value: unknown): void {
-  el.setAttribute("visibility", value ? el._vod : "collapsed");
+  el.setAttribute('visibility', value ? el._vod : 'collapsed');
 }

@@ -1,11 +1,14 @@
 <script lang="ts" setup>
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+import type { Button, EventData } from '@nativescript/core';
+import { Color } from '@nativescript/core';
 
-async function animateIn(args) {
-  console.log("ANIMATE")
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function animateIn(args: EventData) {
+  console.log('ANIMATE');
   await wait(1);
-  const view = args.object;
-  view.color = "green";
+  const view = args.object as Button;
+  view.color = new Color('green');
   view.scaleX = 0;
   view.scaleY = 0;
 
@@ -19,7 +22,7 @@ async function animateIn(args) {
       duration: 3000,
     })
     .then(() => {
-      view.color = "red";
+      view.color = new Color('red');
     })
     .catch((err) => console.log(err));
 }

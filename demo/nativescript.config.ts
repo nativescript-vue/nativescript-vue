@@ -6,6 +6,9 @@ export default {
   appResourcesPath: 'App_Resources',
   android: {
     v8Flags: '--expose_gc',
-    markingMode: 'none'
-  }
+    markingMode: 'none',
+  },
+  cli: {
+    packageManager: 'yarn',
+  },
 } as NativeScriptConfig;

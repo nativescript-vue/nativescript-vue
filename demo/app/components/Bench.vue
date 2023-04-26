@@ -6,7 +6,7 @@ export default {
       show: false,
       iter: 0,
 
-      times: [],
+      times: [] as number[],
     };
   },
   methods: {
@@ -24,11 +24,11 @@ export default {
 
       if (this.iter < 5) {
         setTimeout(() => {
-          console.log("hide now");
+          console.log('hide now');
           this.show = false;
 
           setTimeout(() => {
-            console.log("and. start.");
+            console.log('and. start.');
             this.start();
           }, 5000);
         }, 2000);
@@ -62,12 +62,8 @@ export default {
       />
 
       <template v-if="show">
-        <Label
-          v-for="i in 2000"
-          :key="this.iter + 'item' + i"
-          text="Hello World"
-        />
-        <Label @loaded="end" :key="this.iter + 'end'" text="End" />
+        <Label v-for="i in 2000" :key="iter + 'item' + i" text="Hello World" />
+        <Label @loaded="end" :key="iter + 'end'" text="End" />
       </template>
     </GridLayout>
   </Page>

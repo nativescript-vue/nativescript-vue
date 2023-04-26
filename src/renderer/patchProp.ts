@@ -1,11 +1,11 @@
-import { NSVElement } from "../dom";
-import { patchAttr } from "./modules/attrs";
-import { patchClass } from "./modules/class";
-import { patchEvent } from "./modules/events";
-import { patchStyle } from "./modules/style";
+import { NSVElement } from '../dom';
+import { patchAttr } from './modules/attrs';
+import { patchClass } from './modules/class';
+import { patchEvent } from './modules/events';
+import { patchStyle } from './modules/style';
 
-import { isOn } from "../runtimeHelpers";
-import { getViewMeta, NSVModelDescriptor } from "../registry";
+import { isOn } from '../runtimeHelpers';
+import { getViewMeta, NSVModelDescriptor } from '../registry';
 
 export function patchProp(
   el: NSVElement,
@@ -20,21 +20,21 @@ export function patchProp(
 ) {
   switch (key) {
     // special
-    case "class":
+    case 'class':
       // console.log('->patchProp+Class')
       patchClass(el, nextValue);
       break;
-    case "style":
+    case 'style':
       // console.log('->patchProp+Style')
       patchStyle(el, prevValue, nextValue);
       break;
-    case "modelValue":
-    case "onUpdate:modelValue":
+    case 'modelValue':
+    case 'onUpdate:modelValue':
       try {
         // v-model - maps modelValue/onUpdate:modelValue to the correct prop/events from the registry meta
         const { prop, event } = getViewMeta(el.tagName)
           .model as NSVModelDescriptor;
-        if (key === "modelValue") {
+        if (key === 'modelValue') {
           patchAttr(el, prop, prevValue, nextValue);
         } else {
           const cb = nextValue

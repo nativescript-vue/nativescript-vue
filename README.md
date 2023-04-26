@@ -4,7 +4,6 @@
 
 <h1 align="center">NativeScript-Vue3 Beta</h1>
 
-
 <p align="center">
     <a href="https://www.npmjs.com/package/nativescript-vue">
        <img src="https://img.shields.io/npm/v/nativescript-vue/beta.svg" alt="npm">
@@ -13,7 +12,6 @@
        <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
     </a>
 </p>
-
 
 NativeScript-Vue with Vue3 support now in beta!
 
@@ -37,7 +35,6 @@ ns run ios|android
 If you encounter any issues, please open a new issue with as much detail as possible. This is **beta** software, so there might be bugs.
 
 - [Join Discord](https://nativescript.org/discord)
-
 
 ## Looking for V2?
 

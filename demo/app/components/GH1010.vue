@@ -1,23 +1,24 @@
 <!-- https://github.com/nativescript-vue/nativescript-vue/issues/1010 -->
 <script lang="ts" setup>
-import { ref } from "vue";
+import { EventData } from '@nativescript/core';
+import { ref } from 'nativescript-vue';
 
 const tapCount = ref(0);
 
 function onTap() {
   tapCount.value++;
-  console.trace("Tapped!", tapCount.value);
+  console.trace('Tapped!', tapCount.value);
 }
 
-function onLoaded(args) {
-  console.log("STACK LOADED")
+function onLoaded(_args: EventData) {
+  console.log('STACK LOADED');
 }
 </script>
 
 <template>
   <StackLayout @loaded="onLoaded" @LOADED="onLoaded" @lOaD="onLoaded">
     <Label>Tap count: {{ tapCount }}</Label>
-    <Button @tap="(tapCount = 0)">Reset</Button>
+    <Button @tap="tapCount = 0">Reset</Button>
 
     <!-- correct: fires only once -->
     <Button @tap="onTap">Tap: Button</Button>
@@ -26,4 +27,3 @@ function onLoaded(args) {
     <Label @tap="onTap">Tap: Label</Label>
   </StackLayout>
 </template>
-

@@ -1,6 +1,6 @@
-import { VNodeProps, RendererOptions } from "@vue/runtime-core";
+import { VNodeProps, RendererOptions } from '@vue/runtime-core';
 
-import { NSVComment, NSVElement, NSVNode, NSVText } from "../dom";
+import { NSVComment, NSVElement, NSVNode, NSVText } from '../dom';
 
 export function insert(
   el: NSVNode,
@@ -62,7 +62,7 @@ export function nextSibling(node: NSVNode): NSVNode | null {
 }
 
 export function cloneNode(node: NSVNode): NSVNode {
-  console.log("CLONE NODE");
+  console.log('CLONE NODE');
   return node;
 }
 // insertStaticContent?(content: string, parent: HostElement, anchor: HostNode | null, isSVG: boolean, start?: HostNode | null, end?: HostNode | null): [HostNode, HostNode];
@@ -74,16 +74,16 @@ export function insertStaticContent(
   start?: NSVNode,
   end?: NSVNode
 ): [NSVNode, NSVNode] {
-  console.log("insert static content - not implemented.");
+  console.log('insert static content - not implemented.');
 
   return [undefined, undefined];
 }
 
 export function setScopeId(el: NSVElement, scopeId: string) {
-  el.setAttribute(scopeId, "");
+  el.setAttribute(scopeId, '');
 }
 
-export const nodeOps: Omit<RendererOptions, "patchProp"> = {
+export const nodeOps: Omit<RendererOptions, 'patchProp'> = {
   insert,
   remove,
   createElement,

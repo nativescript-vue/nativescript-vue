@@ -5,31 +5,29 @@ import {
   VNode,
   warn,
   watch,
-  ref
-} from "@vue/runtime-core";
+  ref,
+} from '@vue/runtime-core';
 
 import {
   ItemEventData,
   ListView as NSCListView,
   ObservableArray,
-} from "@nativescript/core";
+} from '@nativescript/core';
 
-import { NSVElement, NSVViewFlags } from "../dom";
-import { registerElement } from "../registry";
-import { ELEMENT_REF } from "../runtimeHelpers";
+import { NSVElement, NSVViewFlags } from '../dom';
+import { registerElement } from '../registry';
+import { ELEMENT_REF } from '../runtimeHelpers';
 
-registerElement("NSCListView", () => NSCListView, {
+registerElement('NSCListView', () => NSCListView, {
   viewFlags: NSVViewFlags.NO_CHILDREN,
 });
 
-// declare global {
 export interface ListItem<T = any> {
   item: T;
   index: number;
   even: boolean;
   odd: boolean;
 }
-// }
 
 function getListItem(item: any, index: number): ListItem {
   return {
@@ -40,7 +38,7 @@ function getListItem(item: any, index: number): ListItem {
   };
 }
 
-const LIST_CELL_ID = Symbol("list_cell_id");
+const LIST_CELL_ID = Symbol('list_cell_id');
 
 export const ListView = /*#__PURE__*/ defineComponent({
   props: {
@@ -62,7 +60,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
     });
 
     const getSlotName = (itemCtx: ListItem) =>
-      props.itemTemplateSelector?.(itemCtx) ?? "default";
+      props.itemTemplateSelector?.(itemCtx) ?? 'default';
 
     const listView = ref(null);
 
@@ -77,7 +75,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
         const lv: NSCListView = listView.value?.nativeView;
         lv?.refresh();
       } catch (err) {
-        console.error("Error while refreshing ListView", err);
+        console.error('Error while refreshing ListView', err);
       }
     });
 
@@ -131,7 +129,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
       Object.entries(cells.value).map(([id, entry]) => {
         const vnodes: VNode[] = ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [
           // default template is just a label
-          h("Label", {
+          h('Label', {
             text: entry.itemCtx.item,
           }),
         ];
@@ -151,7 +149,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
 
     return () => {
       return h(
-        "NSCListView",
+        'NSCListView',
         {
           ref: listView,
           items: props.items,

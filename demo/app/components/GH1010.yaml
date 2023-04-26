@@ -1,8 +1,8 @@
 appId: org.nativescript.demo
 ---
 - launchApp
-- assertVisible: "Tap Count: 0"
-- tapOn: "Tap: Button"
-- assertVisible: "Tap Count: 1"
-- tapOn: "Tap: Label"
-- assertVisible: "Tap Count: 2"
+- assertVisible: 'Tap Count: 0'
+- tapOn: 'Tap: Button'
+- assertVisible: 'Tap Count: 1'
+- tapOn: 'Tap: Label'
+- assertVisible: 'Tap Count: 2'
