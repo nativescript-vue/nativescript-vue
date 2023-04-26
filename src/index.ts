@@ -1,18 +1,18 @@
-import { resolveComponent as resolveComponentCore } from "@vue/runtime-core";
-import type { CreateAppFunction } from "@vue/runtime-core";
+import { resolveComponent as resolveComponentCore } from '@vue/runtime-core';
+import type { CreateAppFunction } from '@vue/runtime-core';
 
-import { BUILT_IN_COMPONENTS } from "./components";
+import { BUILT_IN_COMPONENTS } from './components';
 
-import { NSVElement, NSVRoot } from "./dom";
-import { init, resetRoot, startApp } from "./nativescript";
-import { renderer } from "./renderer";
+import { NSVElement, NSVRoot } from './dom';
+import { init, resetRoot, startApp } from './nativescript';
+import { renderer } from './renderer';
 
-import { install as modalsPlugin } from "./plugins/modals";
-import { install as navigationPlugin } from "./plugins/navigation";
-import { isKnownView, registerElement } from "./registry";
-import { setRootContext } from "./runtimeHelpers";
+import { install as modalsPlugin } from './plugins/modals';
+import { install as navigationPlugin } from './plugins/navigation';
+import { isKnownView, registerElement } from './registry';
+import { setRootContext } from './runtimeHelpers';
 
-declare module "@vue/runtime-core" {
+declare module '@vue/runtime-core' {
   interface App {
     start(): ComponentPublicInstance | undefined;
     mount(
@@ -26,16 +26,16 @@ declare module "@vue/runtime-core" {
 
 init();
 
-export * from "./dom";
-export * from "./registry";
-export * from "./renderer";
-export * from "./components";
-export { createNativeView } from "./runtimeHelpers";
+export * from './dom';
+export * from './registry';
+export * from './renderer';
+export * from './components';
+export { createNativeView } from './runtimeHelpers';
 
-export * from "@vue/runtime-core";
-export { vShow } from "./directives/vShow";
-export { $showModal } from "./plugins/modals";
-export { $navigateTo, $navigateBack } from "./plugins/navigation";
+export * from '@vue/runtime-core';
+export { vShow } from './directives/vShow';
+export { $showModal } from './plugins/modals';
+export { $navigateTo, $navigateBack } from './plugins/navigation';
 
 // creates a special root container that calls resetRoot whenever it's children change
 function createAppRoot() {

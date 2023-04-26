@@ -3,12 +3,12 @@ import {
   ActionBar as NSCActionBar,
   NavigationButton as NSCNavigationButton,
   ActionItem as NSCActionItem,
-} from "@nativescript/core";
-import { defineComponent, h, warn } from "@vue/runtime-core";
-import { NSVElement, NSVViewFlags } from "../dom";
-import { registerElement } from "../registry";
+} from '@nativescript/core';
+import { defineComponent, h, warn } from '@vue/runtime-core';
+import { NSVElement, NSVViewFlags } from '../dom';
+import { registerElement } from '../registry';
 
-registerElement("NSCActionBar", () => NSCActionBar, {
+registerElement('NSCActionBar', () => NSCActionBar, {
   viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
   nodeOps: {
     insert(child, parent, atIndex) {
@@ -52,7 +52,7 @@ export const ActionBar = /*#__PURE__*/ defineComponent({
   setup(props, ctx) {
     return () => {
       return h(
-        "NSCActionBar",
+        'NSCActionBar',
         {
           ...ctx.attrs,
           onVnodeMounted(vnode) {

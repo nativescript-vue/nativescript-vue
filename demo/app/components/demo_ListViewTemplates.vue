@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { goHome } from "../composables/goHome";
+import { ListItem, ref } from 'nativescript-vue';
+import { goHome } from '../composables/goHome';
 
-import { useTimeAgo } from "@vueuse/core";
+import { useTimeAgo } from '@vueuse/core';
 
 const navigate = () => {
   goHome();
@@ -21,7 +21,7 @@ const items: string[] = Array(1000)
   .map((_, i) => `Item ${i}`);
 
 const selector = (item: ListItem) => {
-  return item.even ? "default" : "odd";
+  return item.even ? 'default' : 'odd';
 };
 
 const ts = ref(new Date().getTime());

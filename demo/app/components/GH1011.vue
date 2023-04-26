@@ -4,6 +4,6 @@
     text="Test text"
     class="text-2xl m-6"
     backgroundColor="yellow"
-    style="background-color: red;"
+    style="background-color: red"
   ></Label>
 </template>

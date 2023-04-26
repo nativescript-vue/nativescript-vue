@@ -1,9 +1,9 @@
 // import { hyphenate } from '@vue/shared'
-import { NSVElement } from "../../dom";
+import { NSVElement } from '../../dom';
 import {
   callWithAsyncErrorHandling,
   ComponentInternalInstance,
-} from "@vue/runtime-core";
+} from '@vue/runtime-core';
 
 interface Invoker extends EventListener {
   value: EventValue;
@@ -74,7 +74,7 @@ function parseName(name: string): [string, EventListenerOptions | undefined] {
   // this isn't technically perfect,
   // since if the event name was UPPER then we'll convert it to uPPER
   // but for the majority of cases, this should be the right thing to do.
-  name = name.slice(name.startsWith("on:") ? 3 : 2);
+  name = name.slice(name.startsWith('on:') ? 3 : 2);
   name = name.charAt(0).toLowerCase() + name.slice(1);
 
   // return event name by removing on prefix. eg. onitemTap -> itemTap

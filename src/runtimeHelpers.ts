@@ -1,7 +1,14 @@
-import { View } from "@nativescript/core";
-import { AppContext, Component, h, VNode } from "@vue/runtime-core";
-import { NSVNode, NSVRoot } from "./dom";
-import { renderer } from "./renderer";
+import { View } from '@nativescript/core';
+import {
+  AppContext,
+  Component,
+  h,
+  RendererElement,
+  RendererNode,
+  VNode,
+} from '@vue/runtime-core';
+import { NSVNode, NSVRoot } from './dom';
+import { renderer } from './renderer';
 
 type Props = Record<string, unknown>;
 
@@ -22,13 +29,17 @@ export const createNativeView = <T = View>(
   let container: NSVNode;
   const context = { ...rootContext };
 
+  type M = VNode<RendererNode, RendererElement, { nativeView: T }>;
+
   return {
     context,
     get nativeView(): T {
       return vnode.el.nativeView;
     },
-    mount(root: NSVNode = new NSVRoot()): T {
-      if (isMounted) return vnode.el.nativeView;
+    mount(root: NSVNode = new NSVRoot()) {
+      if (isMounted) {
+        return vnode as M;
+      }
 
       vnode = h(component, props);
 
@@ -39,7 +50,7 @@ export const createNativeView = <T = View>(
       isMounted = true;
       container = root;
 
-      return vnode.el.nativeView;
+      return vnode as M;
     },
     unmount() {
       if (!isMounted) return;
@@ -55,10 +66,10 @@ export const ELEMENT_REF = Symbol(__DEV__ ? `elementRef` : ``);
 const onRE = /^on.+/;
 export const isOn = (key: string) => onRE.test(key);
 
-export const isAndroidKey = (key: string) => key.startsWith("android:");
+export const isAndroidKey = (key: string) => key.startsWith('android:');
 
-export const isIOSKey = (key: string) => key.startsWith("ios:");
+export const isIOSKey = (key: string) => key.startsWith('ios:');
 
 export const isBoolean = (value: unknown): boolean => {
-  return typeof value === "boolean" || value instanceof Boolean;
+  return typeof value === 'boolean' || value instanceof Boolean;
 };

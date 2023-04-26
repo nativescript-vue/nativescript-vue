@@ -1,11 +1,11 @@
-import { NSVElement } from "../../dom";
+import { NSVElement } from '../../dom';
 import {
   NormalizedStyle,
   parseStringStyle,
   isArray,
   isString,
   isObject,
-} from "@vue/shared";
+} from '@vue/shared';
 
 type Style = string | Record<string, string | number> | null;
 
@@ -15,7 +15,7 @@ function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
   }
 
   if (isString(style)) {
-    if (style.trim().charAt(0) === "{") {
+    if (style.trim().charAt(0) === '{') {
       return JSON.parse(style);
     }
 
@@ -42,15 +42,15 @@ function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
 }
 
 function normalizeProperty(property: string) {
-  if (property.endsWith("Align")) {
+  if (property.endsWith('Align')) {
     // NativeScript uses Alignment instead of Align, this ensures that text-align works
-    property += "ment";
+    property += 'ment';
   }
 
   return property;
 }
 
-export const STYLE_ORIGINAL_VALUE = Symbol("style_original_value");
+export const STYLE_ORIGINAL_VALUE = Symbol('style_original_value');
 
 function addStyleProperty(el: NSVElement, property: string, value: any) {
   const _sov: Map<string, any> =
@@ -99,7 +99,7 @@ export function patchStyle(el: NSVElement, prev: Style, next: Style) {
   }
 
   if (!next) {
-    el.removeAttribute("style");
+    el.removeAttribute('style');
   } else {
     // set new styles
     const style = normalizeStyle(next);

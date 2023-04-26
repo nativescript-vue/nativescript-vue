@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 ActionBar {
-    background-color: #65adf1;
-    color: white;
+  background-color: #65adf1;
+  color: white;
 }

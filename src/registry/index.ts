@@ -1,4 +1,4 @@
-import { NSVElement, NSVViewFlags } from "../dom";
+import { NSVElement, NSVViewFlags } from '../dom';
 
 export type NSVElementResolver = () => any;
 
@@ -23,7 +23,7 @@ export interface NSVElementDescriptor {
 }
 
 export let defaultViewMeta: NSVViewMeta = {
-  viewFlags: 0, // NSVViewFlags.NONE, // tsx can't resolve NSVViewFlags here?
+  viewFlags: 0, // NSVViewFlags.NONE - circular dependency, using constant value instead
 };
 
 let elementMap: Record<string, NSVElementDescriptor> = {};
@@ -71,7 +71,7 @@ export function getViewClass(elementName: string): any {
 }
 
 export function normalizeElementName(elementName: string): string {
-  return elementName.replace(/-/g, "").toLowerCase();
+  return elementName.replace(/-/g, '').toLowerCase();
 }
 
 export function registerElement(

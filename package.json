@@ -9,20 +9,36 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky install",
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@vue/compiler-dom": "^3.2.41",
-    "@vue/compiler-sfc": "^3.2.41",
+    "@vue/compiler-sfc": "^3.2.47",
+    "@vue/runtime-core": "^3.2.47",
+    "@vue/shared": "^3.2.47",
     "set-value": "^4.1.0",
-    "vue-loader": "^17.0.0"
+    "vue-loader": "^17.1.0"
   },
   "devDependencies": {
-    "@nativescript/core": "^8.3.5",
-    "@nativescript/webpack": "~5.0.12",
-    "esbuild": "^0.15.12",
-    "tsx": "^3.11.0",
-    "typescript": "^4.8.4",
-    "vue": "^3.2.41"
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "@nativescript/core": "~8.5.0",
+    "@nativescript/webpack": "~5.0.14",
+    "esbuild": "^0.17.19",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
+    "typescript": "^4.9.5"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --ignore-unknown --write"
+    ]
+  },
+  "prettier": {
+    "useTabs": false,
+    "singleQuote": true
   }
 }

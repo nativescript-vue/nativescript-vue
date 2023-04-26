@@ -1,5 +1,5 @@
-import { $navigateTo, $showModal } from "../../../src";
-import Home from "../components/Home.vue";
+import { $navigateTo, $showModal } from 'nativescript-vue';
+import Home from '../components/Home.vue';
 
 export function goHome(depth = 0, modal = false) {
   if (modal) {
@@ -8,7 +8,7 @@ export function goHome(depth = 0, modal = false) {
         depth,
       },
     }).then((res) => {
-      console.log("MODAL CLOSED", res);
+      console.log('MODAL CLOSED', res);
     });
   }
   $navigateTo(Home, {

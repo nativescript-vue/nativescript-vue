@@ -1,6 +1,6 @@
-import { NSVElement } from "../../dom";
-import { isBoolean, isAndroidKey, isIOSKey } from "../../runtimeHelpers";
-import { isAndroid, isIOS } from "../../nativescript";
+import { NSVElement } from '../../dom';
+import { isBoolean, isAndroidKey, isIOSKey } from '../../runtimeHelpers';
+import { isAndroid, isIOS } from '../../nativescript';
 
 export function patchAttr(
   el: NSVElement,
@@ -24,7 +24,7 @@ export function patchAttr(
 
   // detect expandable attrs for boolean values
   // see https://vuejs.org/v2/guide/components-props.html#Passing-a-Boolean
-  if (isBoolean(el.getAttribute(key)) && nextValue === "") {
+  if (isBoolean(el.getAttribute(key)) && nextValue === '') {
     nextValue = true;
   }
 

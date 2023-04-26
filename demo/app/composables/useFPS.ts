@@ -3,8 +3,8 @@ import {
   removeCallback,
   start,
   stop,
-} from "@nativescript/core/fps-meter";
-import { ref } from "vue";
+} from '@nativescript/core/fps-meter';
+import { ref } from 'nativescript-vue';
 
 export function useFPS() {
   const fps = ref(60);
