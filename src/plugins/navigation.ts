@@ -1,9 +1,9 @@
-import { Frame, NavigationEntry, Page } from "@nativescript/core";
-import { App, Component, Ref, nextTick, unref } from "@vue/runtime-core";
-import { NSVElement } from "../dom";
-import { createNativeView } from "../runtimeHelpers";
+import { Frame, NavigationEntry, Page } from '@nativescript/core';
+import { App, Component, Ref, nextTick, unref } from '@vue/runtime-core';
+import { NSVElement } from '../dom';
+import { createNativeView } from '../runtimeHelpers';
 
-declare module "@vue/runtime-core" {
+declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
     /**
      * todo: update docblock
@@ -13,10 +13,7 @@ declare module "@vue/runtime-core" {
      * @param target
      * @param options
      */
-    $navigateTo: (
-      target: Component,
-      options?: NavigationOptions
-    ) => Page;
+    $navigateTo: (target: Component, options?: NavigationOptions) => Page;
     $navigateBack: (options?: NavigationOptions) => void;
   }
 }
@@ -69,7 +66,7 @@ export function $navigateTo(
     const frame = resolveFrame(options?.frame);
 
     if (!frame) {
-      throw new Error("Failed to resolve frame. Make sure your frame exists.");
+      throw new Error('Failed to resolve frame. Make sure your frame exists.');
     }
 
     let view = createNativeView<Page>(target, options?.props);
@@ -86,7 +83,7 @@ export function $navigateTo(
         view.unmount();
         view = null;
       });
-    }
+    };
 
     frame.navigate({
       ...options,
@@ -95,7 +92,7 @@ export function $navigateTo(
 
     return page;
   } catch (e) {
-    console.error("[$navigateTo] Failed to navigate:\n\n");
+    console.error('[$navigateTo] Failed to navigate:\n\n');
     console.error(e, e.stack);
     throw e;
   }
@@ -105,7 +102,7 @@ export async function $navigateBack(options?: BackNavigationOptions) {
   const frame = resolveFrame(options?.frame);
 
   if (!frame) {
-    throw new Error("Failed to resolve frame. Make sure your frame exists.");
+    throw new Error('Failed to resolve frame. Make sure your frame exists.');
   }
 
   if (!frame.canGoBack()) {

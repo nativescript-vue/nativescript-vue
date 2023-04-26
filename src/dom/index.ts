@@ -3,18 +3,18 @@ import {
   getViewMeta,
   normalizeElementName,
   NSVViewMeta,
-} from "../registry";
-import { ELEMENT_REF } from "../runtimeHelpers";
-import setValue from "set-value";
+} from '../registry';
+import { ELEMENT_REF } from '../runtimeHelpers';
+import setValue from 'set-value';
 // import unset from 'unset-value'
 
 const __TEST__ = false;
 
 export const enum NSVNodeTypes {
-  TEXT = "text",
-  ELEMENT = "element",
-  COMMENT = "comment",
-  ROOT = "root",
+  TEXT = 'text',
+  ELEMENT = 'element',
+  COMMENT = 'comment',
+  ROOT = 'root',
 }
 
 // View Flags indicate the kind of view the element is
@@ -270,13 +270,13 @@ export class NSVElement extends NSVNode {
 
   updateText() {
     this.setAttribute(
-      "text",
+      'text',
       this.childNodes.reduce((text: string, currentNode) => {
         if (currentNode.nodeType !== NSVNodeTypes.TEXT) {
           return text;
         }
         return text + currentNode.text;
-      }, "")
+      }, '')
     );
   }
 }

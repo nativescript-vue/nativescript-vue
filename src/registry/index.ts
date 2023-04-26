@@ -1,4 +1,4 @@
-import { NSVElement, NSVViewFlags } from "../dom";
+import { NSVElement, NSVViewFlags } from '../dom';
 
 export type NSVElementResolver = () => any;
 
@@ -71,7 +71,7 @@ export function getViewClass(elementName: string): any {
 }
 
 export function normalizeElementName(elementName: string): string {
-  return elementName.replace(/-/g, "").toLowerCase();
+  return elementName.replace(/-/g, '').toLowerCase();
 }
 
 export function registerElement(

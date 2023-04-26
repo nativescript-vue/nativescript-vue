@@ -1,51 +1,51 @@
-import { Frame as NSCFrame, Page as NSCPage } from "@nativescript/core";
+import { Frame as NSCFrame, Page as NSCPage } from '@nativescript/core';
 
-import { warn } from "@vue/runtime-core";
+import { warn } from '@vue/runtime-core';
 
-import { NSVElement, NSVViewFlags } from "../dom";
-import { registerElement } from "../registry";
+import { NSVElement, NSVViewFlags } from '../dom';
+import { registerElement } from '../registry';
 
 export function registerCoreElements() {
   // layouts
   registerElement(
-    "AbsoluteLayout",
-    () => require("@nativescript/core").AbsoluteLayout,
+    'AbsoluteLayout',
+    () => require('@nativescript/core').AbsoluteLayout,
     { viewFlags: NSVViewFlags.LAYOUT_VIEW }
   );
   registerElement(
-    "DockLayout",
-    () => require("@nativescript/core").DockLayout,
+    'DockLayout',
+    () => require('@nativescript/core').DockLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
     }
   );
   registerElement(
-    "FlexboxLayout",
-    () => require("@nativescript/core").FlexboxLayout,
+    'FlexboxLayout',
+    () => require('@nativescript/core').FlexboxLayout,
     { viewFlags: NSVViewFlags.LAYOUT_VIEW }
   );
   registerElement(
-    "GridLayout",
-    () => require("@nativescript/core").GridLayout,
+    'GridLayout',
+    () => require('@nativescript/core').GridLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
     }
   );
   registerElement(
-    "RootLayout",
-    () => require("@nativescript/core").RootLayout,
+    'RootLayout',
+    () => require('@nativescript/core').RootLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
     }
   );
   registerElement(
-    "StackLayout",
-    () => require("@nativescript/core").StackLayout,
+    'StackLayout',
+    () => require('@nativescript/core').StackLayout,
     { viewFlags: NSVViewFlags.LAYOUT_VIEW }
   );
   registerElement(
-    "WrapLayout",
-    () => require("@nativescript/core").WrapLayout,
+    'WrapLayout',
+    () => require('@nativescript/core').WrapLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
     }
@@ -53,27 +53,27 @@ export function registerCoreElements() {
 
   // ContentViews
   registerElement(
-    "ContentView",
-    () => require("@nativescript/core").ContentView,
+    'ContentView',
+    () => require('@nativescript/core').ContentView,
     { viewFlags: NSVViewFlags.CONTENT_VIEW }
   );
   registerElement(
-    "ScrollView",
-    () => require("@nativescript/core").ScrollView,
+    'ScrollView',
+    () => require('@nativescript/core').ScrollView,
     {
       viewFlags: NSVViewFlags.CONTENT_VIEW,
     }
   );
 
   // ActionBar
-  registerElement("ActionItem", () => require("@nativescript/core").ActionItem);
+  registerElement('ActionItem', () => require('@nativescript/core').ActionItem);
   registerElement(
-    "NavigationButton",
-    () => require("@nativescript/core").NavigationButton
+    'NavigationButton',
+    () => require('@nativescript/core').NavigationButton
   );
 
   // navigation
-  registerElement("Frame", () => require("@nativescript/core").Frame, {
+  registerElement('Frame', () => require('@nativescript/core').Frame, {
     // todo: move into Frame.ts when we end up creating a component for Frame
     nodeOps: {
       insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
@@ -99,33 +99,33 @@ export function registerCoreElements() {
       },
     },
   });
-  registerElement("Page", () => require("@nativescript/core").Page, {
+  registerElement('Page', () => require('@nativescript/core').Page, {
     viewFlags: NSVViewFlags.CONTENT_VIEW,
   });
 
   // html
-  registerElement("HtmlView", () => require("@nativescript/core").HtmlView);
-  registerElement("WebView", () => require("@nativescript/core").WebView);
+  registerElement('HtmlView', () => require('@nativescript/core').HtmlView);
+  registerElement('WebView', () => require('@nativescript/core').WebView);
 
   // components
   registerElement(
-    "ActivityIndicator",
-    () => require("@nativescript/core").ActivityIndicator
+    'ActivityIndicator',
+    () => require('@nativescript/core').ActivityIndicator
   );
-  registerElement("Button", () => require("@nativescript/core").Button);
+  registerElement('Button', () => require('@nativescript/core').Button);
   registerElement(
-    "DatePicker",
-    () => require("@nativescript/core").DatePicker,
+    'DatePicker',
+    () => require('@nativescript/core').DatePicker,
     {
       model: {
-        prop: "date",
-        event: "dateChange",
+        prop: 'date',
+        event: 'dateChange',
       },
     }
   );
   registerElement(
-    "FormattedString",
-    () => require("@nativescript/core").FormattedString,
+    'FormattedString',
+    () => require('@nativescript/core').FormattedString,
     {
       nodeOps: {
         insert(child, parent, atIndex) {
@@ -145,75 +145,75 @@ export function registerCoreElements() {
       },
     }
   );
-  registerElement("Image", () => require("@nativescript/core").Image);
-  registerElement("Label", () => require("@nativescript/core").Label);
+  registerElement('Image', () => require('@nativescript/core').Image);
+  registerElement('Label', () => require('@nativescript/core').Label);
   registerElement(
-    "ListPicker",
-    () => require("@nativescript/core").ListPicker,
+    'ListPicker',
+    () => require('@nativescript/core').ListPicker,
     {
       model: {
-        prop: "selectedIndex",
-        event: "selectedIndexChange",
+        prop: 'selectedIndex',
+        event: 'selectedIndexChange',
       },
     }
   );
   registerElement(
-    "Placeholder",
-    () => require("@nativescript/core").Placeholder
+    'Placeholder',
+    () => require('@nativescript/core').Placeholder
   );
-  registerElement("Progress", () => require("@nativescript/core").Progress);
-  registerElement("SearchBar", () => require("@nativescript/core").SearchBar, {
+  registerElement('Progress', () => require('@nativescript/core').Progress);
+  registerElement('SearchBar', () => require('@nativescript/core').SearchBar, {
     model: {
-      prop: "text",
-      event: "textChange",
+      prop: 'text',
+      event: 'textChange',
     },
   });
   registerElement(
-    "SegmentedBar",
-    () => require("@nativescript/core").SegmentedBar,
+    'SegmentedBar',
+    () => require('@nativescript/core').SegmentedBar,
     {
       model: {
-        prop: "selectedIndex",
-        event: "selectedIndexChange",
+        prop: 'selectedIndex',
+        event: 'selectedIndexChange',
       },
     }
   );
   registerElement(
-    "SegmentedBarItem",
-    () => require("@nativescript/core").SegmentedBarItem
+    'SegmentedBarItem',
+    () => require('@nativescript/core').SegmentedBarItem
   );
-  registerElement("Slider", () => require("@nativescript/core").Slider, {
+  registerElement('Slider', () => require('@nativescript/core').Slider, {
     model: {
-      prop: "value",
-      event: "valueChange",
+      prop: 'value',
+      event: 'valueChange',
     },
   });
-  registerElement("Span", () => require("@nativescript/core").Span);
-  registerElement("Switch", () => require("@nativescript/core").Switch, {
+  registerElement('Span', () => require('@nativescript/core').Span);
+  registerElement('Switch', () => require('@nativescript/core').Switch, {
     model: {
-      prop: "checked",
-      event: "checkedChange",
+      prop: 'checked',
+      event: 'checkedChange',
     },
   });
-  registerElement("TextField", () => require("@nativescript/core").TextField, {
+  registerElement('TextField', () => require('@nativescript/core').TextField, {
     model: {
-      prop: "text",
-      event: "textChange",
+      prop: 'text',
+      event: 'textChange',
     },
   });
-  registerElement("TextView", () => require("@nativescript/core").TextView, {
+  registerElement('TextView', () => require('@nativescript/core').TextView, {
     model: {
-      prop: "text",
-      event: "textChange",
+      prop: 'text',
+      event: 'textChange',
     },
   });
   registerElement(
-    "TimePicker",
-    () => require("@nativescript/core").TimePicker,
+    'TimePicker',
+    () => require('@nativescript/core').TimePicker,
     {
       model: {
-        prop: "time",
-        event: "timeChange",
+        prop: 'time',
+        event: 'timeChange',
       },
     }
   );

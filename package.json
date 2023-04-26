@@ -9,6 +9,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "format": "prettier --config ./.prettierrc.js -w .",
+    "format:check": "prettier --config ./.prettierrc.js -l .",
+    "prepare": "husky install",
     "prepack": "npm run build"
   },
   "dependencies": {
@@ -17,10 +20,15 @@
     "set-value": "^4.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
     "@nativescript/core": "^8.3.5",
     "@nativescript/webpack": "~5.0.12",
     "@vue/compiler-sfc": "^3.2.47",
     "esbuild": "^0.15.12",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
     "tsx": "^3.11.0",
     "typescript": "^4.9.5",
     "vue-loader": "^17.1.0"

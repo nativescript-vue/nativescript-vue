@@ -1,4 +1,4 @@
-import { Application, ShowModalOptions, View } from "@nativescript/core";
+import { Application, ShowModalOptions, View } from '@nativescript/core';
 import {
   App,
   Component,
@@ -6,12 +6,12 @@ import {
   Ref,
   unref,
   warn,
-} from "@vue/runtime-core";
-import { NSVElement } from "../dom";
-import { createNativeView } from "../runtimeHelpers";
-import { isObject } from '@vue/shared'
+} from '@vue/runtime-core';
+import { NSVElement } from '../dom';
+import { createNativeView } from '../runtimeHelpers';
+import { isObject } from '@vue/shared';
 
-declare module "@vue/runtime-core" {
+declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
     /**
      * todo: update docblock
@@ -22,15 +22,12 @@ declare module "@vue/runtime-core" {
     ) => Promise<T | false | undefined>;
     $closeModal: (arg: any) => void;
     $modal: {
-      close: (arg: any) => void
+      close: (arg: any) => void;
     };
   }
 }
 
-type ResolvableModalTarget =
-  | ComponentPublicInstance
-  | NSVElement
-  | View;
+type ResolvableModalTarget = ComponentPublicInstance | NSVElement | View;
 
 export interface ModalOptions extends Partial<ShowModalOptions> {
   props?: Record<string, any>;
@@ -44,7 +41,9 @@ export function install(app: App) {
   app.config.globalProperties.$showModal = $showModal;
 }
 
-function resolveModalTarget(target: Ref<ResolvableModalTarget> | ResolvableModalTarget): View | false {
+function resolveModalTarget(
+  target: Ref<ResolvableModalTarget> | ResolvableModalTarget
+): View | false {
   const ob = unref<ResolvableModalTarget>(target);
 
   if (ob instanceof NSVElement) {
@@ -62,7 +61,9 @@ export async function $showModal<T = any>(
   component: Component,
   options: ModalOptions = {}
 ): Promise<T | false | undefined> {
-  const modalTarget = resolveModalTarget(options.target ?? Application.getRootView());
+  const modalTarget = resolveModalTarget(
+    options.target ?? Application.getRootView()
+  );
 
   if (!modalTarget) {
     if (__DEV__) {
@@ -77,7 +78,7 @@ export async function $showModal<T = any>(
 
     const closeModal = (...args: any[]) => modalContent.closeModal(...args);
     const closeCallback = (data?: T) => {
-      if(isResolved) return;
+      if (isResolved) return;
       isResolved = true;
       view.unmount();
       view = null;

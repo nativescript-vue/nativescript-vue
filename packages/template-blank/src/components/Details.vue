@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, $navigateBack } from "nativescript-vue";
+import { ref, $navigateBack } from 'nativescript-vue';
 
 const items = ref(
   Array(1000)
