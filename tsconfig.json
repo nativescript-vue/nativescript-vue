@@ -7,10 +7,7 @@
     "strict": false,
     "sourceMap": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@vue/compiler-dom": ["./node_modules/@vue/compiler-dom/dist/compiler-dom.esm-bundler.js"]
-    }
+    "skipLibCheck": true
   },
   "include": ["src"]
 }
