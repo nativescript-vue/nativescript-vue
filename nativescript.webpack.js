@@ -1,3 +1,4 @@
+const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
 
 /**
@@ -6,26 +7,29 @@ const { VueLoaderPlugin } = require("vue-loader");
 module.exports = (webpack) => {
   webpack.useConfig("vue");
 
-  webpack.chainWebpack((config) => {
-    config.resolve.alias.set('vue', 'nativescript-vue');
-    
-    config.plugin("VueLoaderPlugin").use(VueLoaderPlugin);
+  const projectRoot = webpack.Utils.project.getProjectRootPath();
 
-    config.module
-      .rule("vue")
-      .test(/\.vue$/)
-      .use("vue-loader")
-      .loader(require.resolve("vue-loader"))
-      .tap((options) => {
-        return {
-          ...options,
-          isServerBuild: false,
-          compilerOptions: {
-            // isCustomElement: (el) => el.toLowerCase() === 'label',
-            // transformHoist: null
-          },
-        };
-      });
+  webpack.chainWebpack(config => {
+    // try to resolve loaders from the project node_modules before others
+    config.resolveLoader.modules
+      .prepend(path.resolve(projectRoot, "node_modules"));
+
+    config.module.rules
+      .get("css")
+      .uses.get("vue-css-loader")
+      .loader("vue-loader/dist/stylePostLoader.js");
+
+    config.module.rules
+      .get("scss")
+      .uses.get("vue-css-loader")
+      .loader("vue-loader/dist/stylePostLoader.js");
+
+    config.module.rules
+      .get("vue")
+      .uses.get("vue-loader")
+      .tap(options => ({ ...options, isServerBuild: false }));
+
+    config.plugins.get("VueLoaderPlugin").use(VueLoaderPlugin);
 
     config.plugin("DefinePlugin").tap((args) => {
       Object.assign(args[0], {
@@ -36,7 +40,7 @@ module.exports = (webpack) => {
       return args;
     });
 
-    // disable vue fork ts checker, as it doesn't work with vue3 yet?
+    // disable vue fork ts checker, as it doesn"t work with vue3 yet?
     config.plugin("ForkTsCheckerWebpackPlugin").tap((args) => {
       args[0] = webpack.merge(args[0], {
         typescript: {
@@ -47,6 +51,7 @@ module.exports = (webpack) => {
           },
         },
       });
+
       return args;
     });
   });

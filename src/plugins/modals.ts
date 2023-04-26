@@ -2,14 +2,14 @@ import { Application, ShowModalOptions, View } from "@nativescript/core";
 import {
   App,
   Component,
-  ComponentInternalInstance,
   ComponentPublicInstance,
   Ref,
+  unref,
   warn,
 } from "@vue/runtime-core";
-import { isObject } from "@vue/shared";
 import { NSVElement } from "../dom";
 import { createNativeView } from "../runtimeHelpers";
+import { isObject } from '@vue/shared'
 
 declare module "@vue/runtime-core" {
   export interface ComponentCustomProperties {
@@ -28,12 +28,9 @@ declare module "@vue/runtime-core" {
 }
 
 type ResolvableModalTarget =
-  | Ref
-  | ComponentInternalInstance
   | ComponentPublicInstance
   | NSVElement
-  | View
-  | any;
+  | View;
 
 export interface ModalOptions extends Partial<ShowModalOptions> {
   props?: Record<string, any>;
@@ -47,13 +44,15 @@ export function install(app: App) {
   app.config.globalProperties.$showModal = $showModal;
 }
 
-function resolveModalTarget(target: ResolvableModalTarget): View | false {
-  if (isObject(target) && isObject(target.$el)) {
-    return target.$el.nativeView;
-  } else if (target instanceof NSVElement) {
-    return target.nativeView;
-  } else if (target instanceof View) {
-    return target;
+function resolveModalTarget(target: Ref<ResolvableModalTarget> | ResolvableModalTarget): View | false {
+  const ob = unref<ResolvableModalTarget>(target);
+
+  if (ob instanceof NSVElement) {
+    return ob.nativeView;
+  } else if (ob instanceof View) {
+    return ob;
+  } else if (isObject(ob) && isObject(ob.$el)) {
+    return ob.$el.nativeView;
   }
 
   return false;
@@ -61,16 +60,9 @@ function resolveModalTarget(target: ResolvableModalTarget): View | false {
 
 export async function $showModal<T = any>(
   component: Component,
-  options?: ModalOptions
+  options: ModalOptions = {}
 ): Promise<T | false | undefined> {
-  options = Object.assign(
-    {
-      target: Application.getRootView(),
-    },
-    options
-  );
-
-  const modalTarget = resolveModalTarget(options.target);
+  const modalTarget = resolveModalTarget(options.target ?? Application.getRootView());
 
   if (!modalTarget) {
     if (__DEV__) {
@@ -96,7 +88,9 @@ export async function $showModal<T = any>(
     view.context.config.globalProperties.$closeModal = closeModal;
     view.context.config.globalProperties.$modal = { close: closeModal };
 
-    const modalContent = view.mount();
+    view.mount();
+
+    const modalContent = view.nativeView;
 
     modalTarget.showModal(modalContent, {
       ...options,

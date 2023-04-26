@@ -22,14 +22,12 @@ registerElement("NSCListView", () => NSCListView, {
   viewFlags: NSVViewFlags.NO_CHILDREN,
 });
 
-// declare global {
 export interface ListItem<T = any> {
   item: T;
   index: number;
   even: boolean;
   odd: boolean;
 }
-// }
 
 function getListItem(item: any, index: number): ListItem {
   return {
