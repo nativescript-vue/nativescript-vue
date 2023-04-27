@@ -11,8 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["app/*"],
-      "@/*": ["app/*"],
-      "vue": ["node_modules/nativescript-vue"]
+      "@/*": ["app/*"]
     },
     "typeRoots": ["types"],
     "types": ["node"],
@@ -23,7 +22,8 @@
     "skipLibCheck": true
   },
   "vueCompilerOptions": {
-    "target": 3
+    "target": 3,
+    "lib": "nativescript-vue"
   },
   "include": ["app", "types"],
   "exclude": ["node_modules", "platforms"]

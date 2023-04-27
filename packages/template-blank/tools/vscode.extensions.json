@@ -1,3 +1,6 @@
 {
-  "recommendations": ["nativescript.nativescript"]
+  "recommendations": [
+    "nativescript.nativescript",
+    "vue.volar"
+  ]
 }
