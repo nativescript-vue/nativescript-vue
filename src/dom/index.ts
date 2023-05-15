@@ -1,3 +1,4 @@
+import { markRaw } from "@vue/runtime-core";
 import {
   getViewClass,
   getViewMeta,
@@ -108,7 +109,7 @@ export class NSVElement extends NSVNode {
 
     this._tagName = normalizeElementName(tagName);
     const viewClass = getViewClass(tagName);
-    this._nativeView = new viewClass();
+    this._nativeView = markRaw(new viewClass());
     this._nativeView[ELEMENT_REF] = this;
   }
 
