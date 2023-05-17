@@ -7,7 +7,7 @@ import {
   unref,
   warn,
 } from '@vue/runtime-core';
-import { NSVElement } from '../dom';
+import { NSVElement, NSVRoot } from '../dom';
 import { createNativeView } from '../runtimeHelpers';
 import { isObject } from '@vue/shared';
 
@@ -74,11 +74,35 @@ export async function $showModal<T = any>(
 
   return new Promise((resolve) => {
     let isResolved = false;
-    let view = createNativeView(component, options.props);
+    let isReloading = false;
+    let root = new NSVRoot();
 
-    const closeModal = (...args: any[]) => modalContent.closeModal(...args);
+    const reloadModal = () => {
+      isReloading = true;
+      closeModal();
+      // reopening is done in `closeCallback`
+    };
+
+    let view = createNativeView(component, options.props, {
+      reload: reloadModal,
+    });
+
     const closeCallback = (data?: T) => {
       if (isResolved) return;
+
+      if (isReloading) {
+        view.unmount();
+        view.mount(root);
+        openModal({
+          // todo: for this to work nicely, we'd need to add `animated: false` to `closeModal` as well
+          // but not currently possible without a core change.
+          // animated: false,
+        });
+        isReloading = false;
+
+        return;
+      }
+
       isResolved = true;
       view.unmount();
       view = null;
@@ -86,17 +110,20 @@ export async function $showModal<T = any>(
       resolve(data);
     };
 
+    const openModal = (additionalOptions?: Partial<ShowModalOptions>) => {
+      modalTarget.showModal(view.nativeView, {
+        ...options,
+        context: null,
+        closeCallback,
+        ...additionalOptions,
+      });
+    };
+    const closeModal = (...args: any[]) => view.nativeView?.closeModal(...args);
+
     view.context.config.globalProperties.$closeModal = closeModal;
     view.context.config.globalProperties.$modal = { close: closeModal };
 
-    view.mount();
-
-    const modalContent = view.nativeView;
-
-    modalTarget.showModal(modalContent, {
-      ...options,
-      context: null,
-      closeCallback,
-    });
+    view.mount(root);
+    openModal();
   });
 }
