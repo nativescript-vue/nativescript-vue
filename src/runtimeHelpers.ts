@@ -22,12 +22,13 @@ export const setRootContext = (context: AppContext) => {
 
 export const createNativeView = <T = View>(
   component: Component,
-  props?: Props
+  props?: Props,
+  contextOverrides?: any
 ) => {
   let vnode: VNode;
   let isMounted = false;
   let container: NSVNode;
-  const context = { ...rootContext };
+  const context = { ...rootContext, ...contextOverrides };
 
   type M = VNode<RendererNode, RendererElement, { nativeView: T }>;
 
@@ -54,8 +55,9 @@ export const createNativeView = <T = View>(
     },
     unmount() {
       if (!isMounted) return;
-      renderer.render(null, container);
       vnode = null;
+      renderer.render(null, container);
+      isMounted = false;
       container = null;
     },
   };
