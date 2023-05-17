@@ -1,6 +1,6 @@
 import { Frame, NavigationEntry, Page } from '@nativescript/core';
 import { App, Component, Ref, nextTick, unref } from '@vue/runtime-core';
-import { NSVElement } from '../dom';
+import { NSVElement, NSVRoot } from '../dom';
 import { createNativeView } from '../runtimeHelpers';
 
 declare module '@vue/runtime-core' {
@@ -69,28 +69,75 @@ export function $navigateTo(
       throw new Error('Failed to resolve frame. Make sure your frame exists.');
     }
 
-    let view = createNativeView<Page>(target, options?.props);
+    const root = new NSVRoot();
+    let isReloading = false;
 
-    view.mount();
+    const attachDisposeCallback = (page: Page) => {
+      const dispose = page.disposeNativeView;
 
-    const page = view.nativeView;
-    const dispose = page.disposeNativeView;
+      page.disposeNativeView = () => {
+        dispose.call(page);
 
-    page.disposeNativeView = () => {
-      dispose.call(page);
+        // if we are reloading, don't unmount the view, as the reload will unmount/remount it.
+        if (!isReloading) {
+          view.unmount();
+          view = null;
+        }
+      };
+    };
+    const reloadPage = () => {
+      if (isReloading) {
+        return;
+      }
 
-      nextTick(() => {
-        view.unmount();
-        view = null;
+      // if the page we are reloading is not the current page, wait for it to be navigated to
+      if (frame.currentPage !== view.nativeView) {
+        view.nativeView.once('navigatedTo', () => {
+          nextTick(() => {
+            reloadPage();
+          });
+        });
+        return;
+      }
+
+      isReloading = true;
+      view.unmount();
+      view.mount(root);
+      attachDisposeCallback(view.nativeView);
+
+      const originalTransition = frame.currentEntry.transition;
+      // replace current page
+      frame.replacePage({
+        ...options,
+        transition: {
+          name: 'fade',
+          duration: 10,
+        },
+        create: () => view.nativeView,
+      });
+      // reset the transition to the original one
+      frame.once('navigatedTo', () => {
+        frame.currentEntry.transition = originalTransition;
+        isReloading = false;
       });
     };
 
-    frame.navigate({
-      ...options,
-      create: () => page,
+    let view = createNativeView<Page>(target, options?.props, {
+      /**
+       * Called by @vue/runtime-core when the component is reloaded during HMR.
+       */
+      reload: reloadPage,
     });
 
-    return page;
+    view.mount(root);
+    attachDisposeCallback(view.nativeView);
+
+    frame.navigate({
+      ...options,
+      create: () => view.nativeView,
+    });
+
+    return view.nativeView;
   } catch (e) {
     console.error('[$navigateTo] Failed to navigate:\n\n');
     console.error(e, e.stack);

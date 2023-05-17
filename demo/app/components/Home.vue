@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import Test from './Test.vue';
+import { ListItem, onMounted, onUnmounted } from 'nativescript-vue';
 import { goHome } from '~/composables/goHome';
-import { onUnmounted } from 'nativescript-vue';
-import { ListItem } from 'nativescript-vue';
+import Test from './Test.vue';
 
 defineProps({
   depth: {
@@ -11,7 +10,7 @@ defineProps({
   },
 });
 
-const message = 'Hello World!';
+const message = 'Hello World!!';
 
 interface Test {
   name: string;
@@ -30,6 +29,10 @@ const items: Test[] = Array(1000)
 function selector(item: ListItem<Test>) {
   return item.even ? 'default' : 'odd';
 }
+
+onMounted(() => {
+  console.log('MOUNTED HOME');
+});
 
 onUnmounted(() => {
   console.log('UNMOUNTED HOME');
