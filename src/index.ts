@@ -1,6 +1,5 @@
 import type { CreateAppFunction } from '@vue/runtime-core';
 import {
-  createBaseVNode as createBaseVNodeCore,
   createBlock as createBlockCore,
   createElementBlock as createElementBlockCore,
   createElementVNode as createElementVNodeCore,
@@ -147,7 +146,6 @@ function wrapCreate<T>(originalFunction: T): T {
   }) as T;
 }
 
-export const createBaseVNode = wrapCreate(createBaseVNodeCore);
 export const createBlock = wrapCreate(createBlockCore);
 export const createElementBlock = wrapCreate(createElementBlockCore);
 export const createElementVNode = wrapCreate(createElementVNodeCore);
