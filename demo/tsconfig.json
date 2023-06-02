@@ -10,8 +10,8 @@
     "importHelpers": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["app/*"],
-      "@/*": ["app/*"],
+      "~/*": ["src/*"],
+      "@/*": ["src/*"],
       "nativescript-vue": ["../src/index.ts"]
     },
     "typeRoots": ["types"],
@@ -26,6 +26,6 @@
     "target": 3,
     "lib": "nativescript-vue"
   },
-  "include": ["app", "types"],
+  "include": ["src", "types"],
   "exclude": ["node_modules", "platforms"]
 }

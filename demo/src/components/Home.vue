@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ListItem, onMounted, onUnmounted } from 'nativescript-vue';
-import { goHome } from '~/composables/goHome';
+import { goHome } from '../composables/goHome';
 import Test from './Test.vue';
 
 defineProps({

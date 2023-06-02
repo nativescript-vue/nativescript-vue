@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "main": "app/app.ts",
+  "main": "src/app.ts",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
