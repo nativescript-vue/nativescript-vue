@@ -4,6 +4,8 @@ import { registerCoreElements } from './elements';
 
 // export all ns stuff in a single file to allow easy mocking for testing...
 
+declare const global: any;
+
 export function init() {
   registerCoreElements();
 
