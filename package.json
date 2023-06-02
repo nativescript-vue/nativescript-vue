@@ -15,11 +15,11 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.2.47",
-    "@vue/runtime-core": "^3.2.47",
-    "@vue/shared": "^3.2.47",
+    "@vue/compiler-sfc": "^3.3.4",
+    "@vue/runtime-core": "^3.3.4",
+    "@vue/shared": "^3.3.4",
     "set-value": "^4.1.0",
-    "vue-loader": "^17.1.0"
+    "vue-loader": "^17.2.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
