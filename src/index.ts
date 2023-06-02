@@ -1,5 +1,12 @@
-import { resolveComponent as resolveComponentCore } from '@vue/runtime-core';
 import type { CreateAppFunction } from '@vue/runtime-core';
+import {
+  createBaseVNode as createBaseVNodeCore,
+  createBlock as createBlockCore,
+  createElementBlock as createElementBlockCore,
+  createElementVNode as createElementVNodeCore,
+  createVNode as createVNodeCore,
+  resolveComponent as resolveComponentCore,
+} from '@vue/runtime-core';
 
 import { BUILT_IN_COMPONENTS } from './components';
 
@@ -106,3 +113,42 @@ export function resolveComponent(name: string, maybeSelReference: boolean) {
   const component = resolveComponentCore(name, maybeSelReference);
   return component;
 }
+
+/**
+ * Checks if the type has a constructor.name that matches a known view or built-in component
+ * If so, returns the name of the view or component. This allows {N} element imports to be
+ * used inside script setup context without requiring aliasing.
+ */
+function maybeConvertToKnownComponentOrViewName(type: any) {
+  const name = type?.prototype?.constructor?.name;
+  if (name) {
+    if (BUILT_IN_COMPONENTS[name]) {
+      return BUILT_IN_COMPONENTS[name];
+    }
+
+    if (isKnownView(name)) {
+      return name;
+    }
+  }
+
+  return type;
+}
+
+/**
+ * Wraps the original function and replaces the first argument if it matches
+ * a known view or built-in component.
+ */
+function wrapCreate<T>(originalFunction: T): T {
+  return ((type: any, ...args: any) => {
+    return (originalFunction as any)(
+      maybeConvertToKnownComponentOrViewName(type),
+      ...args
+    );
+  }) as T;
+}
+
+export const createBaseVNode = wrapCreate(createBaseVNodeCore);
+export const createBlock = wrapCreate(createBlockCore);
+export const createElementBlock = wrapCreate(createElementBlockCore);
+export const createElementVNode = wrapCreate(createElementVNodeCore);
+export const createVNode: typeof createVNodeCore = wrapCreate(createVNodeCore);
