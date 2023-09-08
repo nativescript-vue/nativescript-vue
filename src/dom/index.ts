@@ -1,4 +1,4 @@
-import { markRaw } from "@vue/runtime-core";
+import { markRaw } from '@vue/runtime-core';
 import {
   getViewClass,
   getViewMeta,

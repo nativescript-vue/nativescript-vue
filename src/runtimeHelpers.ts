@@ -1,8 +1,8 @@
 import { View } from '@nativescript/core';
 import {
+  App,
   AppContext,
   Component,
-  h,
   RendererElement,
   RendererNode,
   VNode,
@@ -14,51 +14,56 @@ type Props = Record<string, unknown>;
 
 const __DEV__ = true;
 
-let rootContext: AppContext = null;
+let rootApp: App = null;
 
-export const setRootContext = (context: AppContext) => {
-  rootContext = context;
+export const setRootApp = (app: App) => {
+  rootApp = app;
 };
 
 export const createNativeView = <T = View>(
   component: Component,
   props?: Props,
-  contextOverrides?: any
+  contextOverrides?: Partial<AppContext & { reload(): void }>
 ) => {
-  let vnode: VNode;
   let isMounted = false;
-  let container: NSVNode;
-  const context = { ...rootContext, ...contextOverrides };
+  const newApp = renderer.createApp(component, props);
+  const context = { ...rootApp._context, ...contextOverrides };
 
   type M = VNode<RendererNode, RendererElement, { nativeView: T }>;
 
   return {
     context,
+    get vnode() {
+      return newApp._instance?.vnode;
+    },
     get nativeView(): T {
-      return vnode.el.nativeView;
+      return this.vnode?.el.nativeView;
     },
     mount(root: NSVNode = new NSVRoot()) {
       if (isMounted) {
-        return vnode as M;
+        return this.vnode as M;
       }
 
-      vnode = h(component, props);
+      Object.keys(rootApp.config).forEach((key) => {
+        newApp.config[key] = rootApp.config[key];
+      });
 
-      vnode.appContext = context;
+      Object.keys(context).forEach((key) => {
+        newApp._context[key] = context[key];
+      });
 
-      renderer.render(vnode, root);
+      newApp.mount(root);
 
       isMounted = true;
-      container = root;
 
-      return vnode as M;
+      return this.vnode as M;
     },
     unmount() {
       if (!isMounted) return;
-      vnode = null;
-      renderer.render(null, container);
+
+      newApp.unmount();
+
       isMounted = false;
-      container = null;
     },
   };
 };
