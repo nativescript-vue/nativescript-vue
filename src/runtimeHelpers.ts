@@ -1,7 +1,6 @@
 import { View } from '@nativescript/core';
 import {
   App,
-  AppContext,
   Component,
   RendererElement,
   RendererNode,
@@ -23,11 +22,13 @@ export const setRootApp = (app: App) => {
 export const createNativeView = <T = View>(
   component: Component,
   props?: Props,
-  contextOverrides?: Partial<AppContext & { reload(): void }>
+  contextOverrides?: { reload?(): void }
 ) => {
   let isMounted = false;
   const newApp = renderer.createApp(component, props);
-  const context = { ...rootApp._context, ...contextOverrides };
+  // Destructure so as not to copy over the root app instance
+  const { app, ...rootContext } = rootApp._context;
+  const context = { ...rootContext, ...contextOverrides };
 
   type M = VNode<RendererNode, RendererElement, { nativeView: T }>;
 
@@ -43,10 +44,6 @@ export const createNativeView = <T = View>(
       if (isMounted) {
         return this.vnode as M;
       }
-
-      Object.keys(rootApp.config).forEach((key) => {
-        newApp.config[key] = rootApp.config[key];
-      });
 
       Object.keys(context).forEach((key) => {
         newApp._context[key] = context[key];
