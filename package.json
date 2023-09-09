@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "files": [
     "dist/",
+    "devtools.js",
     "nativescript.webpack.js"
   ],
   "license": "MIT",
@@ -16,8 +17,10 @@
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.3.4",
+    "@vue/devtools": "^6.5.0",
     "@vue/runtime-core": "^3.3.4",
     "@vue/shared": "^3.3.4",
+    "cross-spawn": "^7.0.3",
     "set-value": "^4.1.0",
     "vue-loader": "^17.2.2"
   },

@@ -1,12 +1,17 @@
+const spawn = require('cross-spawn');
 const { VueLoaderPlugin } = require('vue-loader');
 
 /**
  * @param {typeof import("@nativescript/webpack")} webpack
  */
-module.exports = (webpack) => {
+module.exports = ({ env, ...webpack }) => {
   webpack.useConfig('vue');
 
   webpack.chainWebpack((config) => {
+    if (!!env.vueDevtools) {
+      config.entry('bundle').prepend(require.resolve('./devtools.js'));
+    }
+
     // resolve any imports from "vue" to "nativescript-vue"
     config.resolve.alias.set('vue', 'nativescript-vue');
 
@@ -62,4 +67,8 @@ module.exports = (webpack) => {
       return args;
     });
   });
+
+  if (!!env.vueDevtools) {
+    spawn(require.resolve('@vue/devtools/bin.js'), [], { stdio: 'ignore' });
+  }
 };
