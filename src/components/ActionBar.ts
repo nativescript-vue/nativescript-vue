@@ -49,6 +49,7 @@ registerElement('NSCActionBar', () => NSCActionBar, {
 });
 
 export const ActionBar = /*#__PURE__*/ defineComponent({
+  name: 'ActionBar',
   setup(props, ctx) {
     return () => {
       return h(
