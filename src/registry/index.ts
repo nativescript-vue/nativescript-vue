@@ -77,7 +77,7 @@ export function normalizeElementName(elementName: string): string {
 export function registerElement(
   elementName: string,
   resolver?: NSVElementResolver,
-  meta?: Partial<NSVViewMeta>
+  meta?: Partial<NSVViewMeta>,
 ) {
   const normalizedName = normalizeElementName(elementName);
   const mergedMeta = Object.assign({}, defaultViewMeta, meta);
@@ -85,7 +85,7 @@ export function registerElement(
   if (elementMap[normalizedName] && !mergedMeta.overwriteExisting) {
     throw new Error(
       `Element for ${elementName} already registered.\n` +
-        `If this is intentional set 'overwriteExisting: true' in 'meta'`
+        `If this is intentional set 'overwriteExisting: true' in 'meta'`,
     );
   }
 

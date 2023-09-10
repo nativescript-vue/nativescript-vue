@@ -43,8 +43,8 @@ const items2 = ref(
         return {
           name: `Item ${i}`,
         };
-      })
-  )
+      }),
+  ),
 );
 const name = ref('Vue 3');
 

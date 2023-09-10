@@ -24,7 +24,7 @@ declare module '@vue/runtime-core' {
     mount(
       rootContainer?: NSVRoot | string,
       isHydrate?: boolean,
-      isSVG?: boolean
+      isSVG?: boolean,
     ): ComponentPublicInstance;
     registerElement: typeof registerElement;
   }
@@ -141,7 +141,7 @@ function wrapCreate<T>(originalFunction: T): T {
   return ((type: any, ...args: any) => {
     return (originalFunction as any)(
       maybeConvertToKnownComponentOrViewName(type),
-      ...args
+      ...args,
     );
   }) as T;
 }

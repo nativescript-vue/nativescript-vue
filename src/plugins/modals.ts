@@ -18,7 +18,7 @@ declare module '@vue/runtime-core' {
      */
     $showModal: <T = any>(
       component: Component,
-      options?: ModalOptions
+      options?: ModalOptions,
     ) => Promise<T | false | undefined>;
     $closeModal: (arg: any) => void;
     $modal: {
@@ -42,7 +42,7 @@ export function install(app: App) {
 }
 
 function resolveModalTarget(
-  target: Ref<ResolvableModalTarget> | ResolvableModalTarget
+  target: Ref<ResolvableModalTarget> | ResolvableModalTarget,
 ): View | false {
   const ob = unref<ResolvableModalTarget>(target);
 
@@ -59,10 +59,10 @@ function resolveModalTarget(
 
 export async function $showModal<T = any>(
   component: Component,
-  options: ModalOptions = {}
+  options: ModalOptions = {},
 ): Promise<T | false | undefined> {
   const modalTarget = resolveModalTarget(
-    options.target ?? Application.getRootView()
+    options.target ?? Application.getRootView(),
   );
 
   if (!modalTarget) {

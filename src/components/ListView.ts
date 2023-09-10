@@ -95,7 +95,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
         props.items instanceof ObservableArray
           ? props.items.getItem(event.index)
           : props.items[event.index],
-        event.index
+        event.index,
       );
 
       // update the cell data with the current row
@@ -137,7 +137,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
 
         if (vnodes.length > 1) {
           warn(
-            `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`
+            `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`,
           );
         }
 
@@ -158,7 +158,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
           itemTemplateSelector,
           onitemLoading,
         },
-        cellVNODES()
+        cellVNODES(),
       );
     };
   },

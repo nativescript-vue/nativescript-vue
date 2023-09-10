@@ -58,7 +58,7 @@ onUnmounted(() => {
         <template #default="{ item, index, even, odd }: ListItem<Test>">
           <Label
             :text="`item: ${JSON.stringify(
-              item
+              item,
             )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
             textWrap="true"
             padding="16"
@@ -69,7 +69,7 @@ onUnmounted(() => {
           <Label
             backgroundColor="red"
             :text="`item: ${JSON.stringify(
-              item
+              item,
             )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
             textWrap="true"
             padding="16"

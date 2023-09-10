@@ -22,7 +22,7 @@ export const setRootApp = (app: App) => {
 export const createNativeView = <T = View>(
   component: Component,
   props?: Props,
-  contextOverrides?: { reload?(): void }
+  contextOverrides?: { reload?(): void },
 ) => {
   let isMounted = false;
   const newApp = renderer.createApp(component, props);

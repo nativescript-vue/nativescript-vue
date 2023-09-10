@@ -67,13 +67,13 @@ export const ActionBar = /*#__PURE__*/ defineComponent({
               if (__DEV__) {
                 warn(
                   `<ActionBar> must be a direct child of a <Page> element - ` +
-                    `got <${parent.nativeView.constructor.name}> instead.`
+                    `got <${parent.nativeView.constructor.name}> instead.`,
                 );
               }
             }
           },
         },
-        ctx.slots.default ? ctx.slots.default() : undefined
+        ctx.slots.default ? ctx.slots.default() : undefined,
       );
     };
   },

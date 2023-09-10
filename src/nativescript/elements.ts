@@ -10,66 +10,66 @@ export function registerCoreElements() {
   registerElement(
     'AbsoluteLayout',
     () => require('@nativescript/core').AbsoluteLayout,
-    { viewFlags: NSVViewFlags.LAYOUT_VIEW }
+    { viewFlags: NSVViewFlags.LAYOUT_VIEW },
   );
   registerElement(
     'DockLayout',
     () => require('@nativescript/core').DockLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    }
+    },
   );
   registerElement(
     'FlexboxLayout',
     () => require('@nativescript/core').FlexboxLayout,
-    { viewFlags: NSVViewFlags.LAYOUT_VIEW }
+    { viewFlags: NSVViewFlags.LAYOUT_VIEW },
   );
   registerElement(
     'GridLayout',
     () => require('@nativescript/core').GridLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    }
+    },
   );
   registerElement(
     'RootLayout',
     () => require('@nativescript/core').RootLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    }
+    },
   );
   registerElement(
     'StackLayout',
     () => require('@nativescript/core').StackLayout,
-    { viewFlags: NSVViewFlags.LAYOUT_VIEW }
+    { viewFlags: NSVViewFlags.LAYOUT_VIEW },
   );
   registerElement(
     'WrapLayout',
     () => require('@nativescript/core').WrapLayout,
     {
       viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    }
+    },
   );
 
   // ContentViews
   registerElement(
     'ContentView',
     () => require('@nativescript/core').ContentView,
-    { viewFlags: NSVViewFlags.CONTENT_VIEW }
+    { viewFlags: NSVViewFlags.CONTENT_VIEW },
   );
   registerElement(
     'ScrollView',
     () => require('@nativescript/core').ScrollView,
     {
       viewFlags: NSVViewFlags.CONTENT_VIEW,
-    }
+    },
   );
 
   // ActionBar
   registerElement('ActionItem', () => require('@nativescript/core').ActionItem);
   registerElement(
     'NavigationButton',
-    () => require('@nativescript/core').NavigationButton
+    () => require('@nativescript/core').NavigationButton,
   );
 
   // navigation
@@ -88,7 +88,7 @@ export function registerCoreElements() {
           if (__DEV__) {
             warn(
               `<Frame> must only contain <Page> elements - ` +
-                `got <${child.nativeView.constructor.name}> instead.`
+                `got <${child.nativeView.constructor.name}> instead.`,
             );
           }
         }
@@ -110,7 +110,7 @@ export function registerCoreElements() {
   // components
   registerElement(
     'ActivityIndicator',
-    () => require('@nativescript/core').ActivityIndicator
+    () => require('@nativescript/core').ActivityIndicator,
   );
   registerElement('Button', () => require('@nativescript/core').Button);
   registerElement(
@@ -121,7 +121,7 @@ export function registerCoreElements() {
         prop: 'date',
         event: 'dateChange',
       },
-    }
+    },
   );
   registerElement(
     'FormattedString',
@@ -143,7 +143,7 @@ export function registerCoreElements() {
           }
         },
       },
-    }
+    },
   );
   registerElement('Image', () => require('@nativescript/core').Image);
   registerElement('Label', () => require('@nativescript/core').Label);
@@ -155,11 +155,11 @@ export function registerCoreElements() {
         prop: 'selectedIndex',
         event: 'selectedIndexChange',
       },
-    }
+    },
   );
   registerElement(
     'Placeholder',
-    () => require('@nativescript/core').Placeholder
+    () => require('@nativescript/core').Placeholder,
   );
   registerElement('Progress', () => require('@nativescript/core').Progress);
   registerElement('SearchBar', () => require('@nativescript/core').SearchBar, {
@@ -176,11 +176,11 @@ export function registerCoreElements() {
         prop: 'selectedIndex',
         event: 'selectedIndexChange',
       },
-    }
+    },
   );
   registerElement(
     'SegmentedBarItem',
-    () => require('@nativescript/core').SegmentedBarItem
+    () => require('@nativescript/core').SegmentedBarItem,
   );
   registerElement('Slider', () => require('@nativescript/core').Slider, {
     model: {
@@ -215,6 +215,6 @@ export function registerCoreElements() {
         prop: 'time',
         event: 'timeChange',
       },
-    }
+    },
   );
 }

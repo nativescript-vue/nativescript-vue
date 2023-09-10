@@ -23,7 +23,7 @@ if (__DEV__) {
     _global.window ??= _global;
 
     console.warn(
-      `[VueDevtools] Connecting to ${global.__VUE_DEVTOOLS_HOST__}:${global.__VUE_DEVTOOLS_PORT__}...`
+      `[VueDevtools] Connecting to ${global.__VUE_DEVTOOLS_HOST__}:${global.__VUE_DEVTOOLS_PORT__}...`,
     );
     require('@vue/devtools/build/hook.js');
     require('@vue/devtools/build/backend.js');

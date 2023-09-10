@@ -15,7 +15,7 @@ export function addEventListener(
   el: NSVElement,
   event: string,
   handler: EventListener,
-  options: EventListenerOptions = {}
+  options: EventListenerOptions = {},
 ) {
   el.addEventListener(event, handler, options);
 }
@@ -24,7 +24,7 @@ export function removeEventListener(
   el: NSVElement,
   event: string,
   handler: EventListener,
-  options: EventListenerOptions = {}
+  options: EventListenerOptions = {},
 ) {
   el.removeEventListener(event, handler);
 }
@@ -34,7 +34,7 @@ export function patchEvent(
   rawName: string,
   prevValue: EventValue | null,
   nextValue: EventValue | null,
-  instance: ComponentInternalInstance | null = null
+  instance: ComponentInternalInstance | null = null,
 ) {
   // vei = vue event invokers
   const invokers = el._vei || (el._vei = {});
@@ -84,7 +84,7 @@ function parseName(name: string): [string, EventListenerOptions | undefined] {
 
 function createInvoker(
   initialValue: EventValue,
-  instance: ComponentInternalInstance | null
+  instance: ComponentInternalInstance | null,
 ) {
   const invoker: Invoker = (e: Event) => {
     callWithAsyncErrorHandling(invoker.value, instance, 5, [e]);

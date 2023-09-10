@@ -16,7 +16,7 @@ export function patchProp(
   prevChildren: any,
   parentComponent: any,
   parentSuspense: any,
-  unmountChildren: any
+  unmountChildren: any,
 ) {
   switch (key) {
     // special

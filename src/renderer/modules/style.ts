@@ -26,11 +26,11 @@ function normalizeStyle(style: NormalizedStyle | Style): NormalizedStyle {
     return style.reduce(
       (
         normalizedStyle: NormalizedStyle,
-        currentStyle: NormalizedStyle | Style
+        currentStyle: NormalizedStyle | Style,
       ) => {
         return Object.assign(normalizedStyle, normalizeStyle(currentStyle));
       },
-      {}
+      {},
     );
   }
 

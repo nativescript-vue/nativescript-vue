@@ -45,7 +45,7 @@ function startVueDevtools(port, isAndroid = false) {
   console.log(`[VueDevtools] Starting standalone Vue Devtools on port ${port}`);
   if (isAndroid) {
     console.log(
-      `[VueDevtools] If the app doesn't automatically connect, check if http traffic is allowed. (e.g. on Android, you may need to set android:usesCleartextTraffic="true" in AndroidManifest.xml)`
+      `[VueDevtools] If the app doesn't automatically connect, check if http traffic is allowed. (e.g. on Android, you may need to set android:usesCleartextTraffic="true" in AndroidManifest.xml)`,
     );
   }
   spawn(require.resolve('@vue/devtools/bin.js'), [], {

@@ -60,7 +60,7 @@ function resolveFrame(frame?: ResolvableFrame): Frame {
 
 export function $navigateTo(
   target: Component,
-  options?: NavigationOptions
+  options?: NavigationOptions,
 ): Page {
   try {
     const frame = resolveFrame(options?.frame);

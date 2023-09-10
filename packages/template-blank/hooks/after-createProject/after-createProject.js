@@ -55,7 +55,7 @@ module.exports = function (hookArgs) {
         .resolve('@nativescript/webpack/package.json', {
           paths: [appRootFolder],
         })
-        .replace('package.json', 'dist/bin/index.js')
+        .replace('package.json', 'dist/bin/index.js'),
     );
 
     // init webpack config

@@ -61,7 +61,7 @@ export abstract class NSVNode {
     }
 
     const selfIndex = this.parentNode.childNodes.findIndex(
-      (n) => n.nodeId === this.nodeId
+      (n) => n.nodeId === this.nodeId,
     );
 
     if (selfIndex > -1 && selfIndex < this.parentNode.childNodes.length - 1) {
@@ -77,7 +77,7 @@ export abstract class NSVNode {
     }
 
     const selfIndex = this.parentNode.childNodes.findIndex(
-      (n) => n.nodeId === this.nodeId
+      (n) => n.nodeId === this.nodeId,
     );
 
     if (selfIndex > 0) {
@@ -148,7 +148,7 @@ export class NSVElement extends NSVNode {
   addEventListener(
     event: string,
     handler: any,
-    options: AddEventListenerOptions = {}
+    options: AddEventListenerOptions = {},
   ) {
     const { capture, once } = options;
     if (capture) {
@@ -212,7 +212,7 @@ export class NSVElement extends NSVNode {
     }
 
     const refIndex = this.childNodes.findIndex(
-      (node) => node.nodeId === anchor.nodeId
+      (node) => node.nodeId === anchor.nodeId,
     );
 
     if (refIndex === -1) {
@@ -246,7 +246,7 @@ export class NSVElement extends NSVNode {
 
   removeChild(el: NSVNode) {
     const index = this.childNodes.findIndex(
-      (node) => node.nodeId === el.nodeId
+      (node) => node.nodeId === el.nodeId,
     );
 
     if (index > -1) {
@@ -277,7 +277,7 @@ export class NSVElement extends NSVNode {
           return text;
         }
         return text + currentNode.text;
-      }, '')
+      }, ''),
     );
   }
 }

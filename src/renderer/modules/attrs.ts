@@ -6,7 +6,7 @@ export function patchAttr(
   el: NSVElement,
   key: string,
   prevValue: any,
-  nextValue: any
+  nextValue: any,
 ) {
   if (isAndroidKey(key)) {
     if (!isAndroid) {

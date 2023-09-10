@@ -5,7 +5,7 @@ import { NSVComment, NSVElement, NSVNode, NSVText } from '../dom';
 export function insert(
   el: NSVNode,
   parent: NSVElement,
-  anchor?: NSVNode | null | undefined
+  anchor?: NSVNode | null | undefined,
 ): void {
   // console.log("insert", el, parent.tagName, anchor);
   if (anchor !== null) {
@@ -26,7 +26,7 @@ export function createElement(
   type: string,
   isSVG?: boolean | undefined,
   isCustomizedBuiltIn?: string | undefined,
-  vnodeProps?: (VNodeProps & { [key: string]: any }) | null | undefined
+  vnodeProps?: (VNodeProps & { [key: string]: any }) | null | undefined,
 ): NSVElement {
   // console.log("createElement", type);
   return new NSVElement(type);
@@ -72,7 +72,7 @@ export function insertStaticContent(
   anchor: NSVNode,
   isSvg: boolean,
   start?: NSVNode,
-  end?: NSVNode
+  end?: NSVNode,
 ): [NSVNode, NSVNode] {
   console.log('insert static content - not implemented.');
 
