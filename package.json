@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "simple-git-hooks",
-    "prepack": "npm run build"
+    "pack:template": "npm pack ./packages/template-blank",
+    "prepack": "npm run build && npm run pack:template"
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.3.4",
