@@ -1,5 +1,6 @@
 **/dist
 *.tgz
 
+package-lock.json
 yarn-error.log
 node_modules
