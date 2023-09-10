@@ -41,6 +41,7 @@ function getListItem(item: any, index: number): ListItem {
 const LIST_CELL_ID = Symbol('list_cell_id');
 
 export const ListView = /*#__PURE__*/ defineComponent({
+  name: 'ListView',
   props: {
     items: {
       validator(value) {
