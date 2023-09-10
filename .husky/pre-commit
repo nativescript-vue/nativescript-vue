@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-echo "\n---- Lint Staged ----\n";
-npx --no-install lint-staged --config=package.json

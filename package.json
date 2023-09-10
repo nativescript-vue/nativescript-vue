@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue",
-  "version": "3.0.0-beta.8",
+  "version": "3.0.0-beta.9",
   "main": "dist/index.js",
   "files": [
     "dist/",
@@ -12,7 +12,7 @@
     "build": "tsc",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install",
+    "prepare": "simple-git-hooks",
     "prepack": "npm run build"
   },
   "dependencies": {
@@ -25,15 +25,19 @@
     "vue-loader": "^17.2.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.5",
-    "@commitlint/config-conventional": "^17.6.5",
-    "@nativescript/core": "~8.5.0",
-    "@nativescript/webpack": "~5.0.14",
-    "esbuild": "^0.17.19",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8",
-    "typescript": "^5.1.3"
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@nativescript/core": "~8.5.9",
+    "@nativescript/webpack": "~5.0.17",
+    "esbuild": "^0.19.2",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "simple-git-hooks": "^2.9.0",
+    "typescript": "^5.2.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx --no-install lint-staged --config=package.json",
+    "commit-msg": "npx --no-install commitlint --edit"
   },
   "lint-staged": {
     "*": [
