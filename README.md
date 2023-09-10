@@ -44,7 +44,7 @@ On android, you must enable cleartext http traffic, otherwise any connections ar
 
 ```diff
 <application ...
-+ 	android:usesCleartextTraffic="true"
++  android:usesCleartextTraffic="true"
 .../>
 ```
 
