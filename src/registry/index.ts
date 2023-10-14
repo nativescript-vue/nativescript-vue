@@ -1,4 +1,4 @@
-import { NSVElement, NSVViewFlags } from '../dom';
+import type { NSVElement, NSVViewFlags } from '../dom';
 
 export type NSVElementResolver = () => any;
 
