@@ -162,6 +162,7 @@ export function registerCoreElements() {
     () => require('@nativescript/core').Placeholder,
   );
   registerElement('Progress', () => require('@nativescript/core').Progress);
+  registerElement('ProxyViewContainer', () => require('@nativescript/core').ProxyViewContainer);
   registerElement('SearchBar', () => require('@nativescript/core').SearchBar, {
     model: {
       prop: 'text',
