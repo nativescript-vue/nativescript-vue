@@ -2,6 +2,7 @@ import { View } from '@nativescript/core';
 import {
   App,
   Component,
+  ComponentPublicInstance,
   RendererElement,
   RendererNode,
   VNode,
@@ -25,6 +26,7 @@ export const createNativeView = <T = View>(
   contextOverrides?: { reload?(): void },
 ) => {
   let isMounted = false;
+  let vm: ComponentPublicInstance | null;
   const newApp = renderer.createApp(component, props);
   // Destructure so as not to copy over the root app instance
   const { app, ...rootContext } = rootApp._context;
@@ -35,7 +37,7 @@ export const createNativeView = <T = View>(
   return {
     context,
     get vnode() {
-      return newApp._instance?.vnode;
+      return vm?.$.vnode;
     },
     get nativeView(): T {
       return this.vnode?.el.nativeView;
@@ -49,7 +51,7 @@ export const createNativeView = <T = View>(
         newApp._context[key] = context[key];
       });
 
-      newApp.mount(root);
+      vm = newApp.mount(root);
 
       isMounted = true;
 
@@ -58,6 +60,7 @@ export const createNativeView = <T = View>(
     unmount() {
       if (!isMounted) return;
 
+      vm = null;
       newApp.unmount();
 
       isMounted = false;
