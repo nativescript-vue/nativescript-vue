@@ -1,4 +1,9 @@
-import { Frame as NSCFrame, Page as NSCPage } from '@nativescript/core';
+import {
+  Frame as NSCFrame,
+  Page as NSCPage,
+  TabView as NSCTabView,
+  TabViewItem as NSCTabViewItem,
+} from '@nativescript/core';
 
 import { warn } from '@vue/runtime-core';
 
@@ -218,4 +223,33 @@ export function registerCoreElements() {
       },
     },
   );
+
+  registerElement(
+    'TabViewItem',
+    () => require('@nativescript/core').TabViewItem,
+  );
+
+  registerElement('TabView', () => require('@nativescript/core').TabView, {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange',
+    },
+    nodeOps: {
+      insert(child, parent) {
+        const tabView = parent.nativeView as NSCTabView;
+
+        if (child.nativeView instanceof NSCTabViewItem) {
+          const items = tabView.items || [];
+
+          parent.setAttribute('items', items.concat([child.nativeView]));
+        }
+      },
+      remove(child, parent) {
+        const tabView = parent.nativeView as NSCTabView;
+        const items = tabView.items.filter((item) => item !== child.nativeView);
+
+        parent.setAttribute('items', items);
+      },
+    },
+  });
 }
