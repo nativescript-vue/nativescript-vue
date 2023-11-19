@@ -1,6 +1,6 @@
 {
   "name": "nativescript-vue",
-  "version": "3.0.0-beta.10",
+  "version": "3.0.0-beta.11",
   "main": "dist/index.js",
   "files": [
     "dist/",
@@ -17,22 +17,22 @@
     "prepack": "npm run build && npm run pack:template"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.3.4",
-    "@vue/devtools": "^6.5.0",
-    "@vue/runtime-core": "^3.3.4",
-    "@vue/shared": "^3.3.4",
+    "@vue/compiler-sfc": "^3.3.8",
+    "@vue/devtools": "^6.5.1",
+    "@vue/runtime-core": "^3.3.8",
+    "@vue/shared": "^3.3.8",
     "cross-spawn": "^7.0.3",
     "set-value": "^4.1.0",
-    "vue-loader": "^17.2.2"
+    "vue-loader": "^17.3.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.7.0",
-    "@nativescript/core": "~8.5.9",
-    "@nativescript/webpack": "~5.0.17",
-    "esbuild": "^0.19.2",
-    "lint-staged": "^14.0.1",
-    "prettier": "^3.0.3",
+    "@commitlint/cli": "^18.4.2",
+    "@commitlint/config-conventional": "^18.4.2",
+    "@nativescript/core": "~8.6.1",
+    "@nativescript/webpack": "~5.0.18",
+    "esbuild": "^0.19.6",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.2.2"
   },

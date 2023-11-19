@@ -3,14 +3,14 @@
   "main": "src/app.ts",
   "version": "1.0.0",
   "dependencies": {
-    "@nativescript/core": "~8.5.0",
-    "nativescript-vue": "3.0.0-beta.10"
+    "@nativescript/core": "~8.6.1",
+    "nativescript-vue": "3.0.0-beta.11"
   },
   "devDependencies": {
     "@nativescript/preview-cli": "1.0.5",
     "@nativescript/stackblitz": "0.0.8",
-    "@nativescript/tailwind": "^2.0.1",
-    "@nativescript/types": "~8.5.0",
+    "@nativescript/tailwind": "~2.0.1",
+    "@nativescript/types": "~8.6.1",
     "@nativescript/webpack": "~5.0.0",
     "@types/node": "~17.0.21",
     "tailwindcss": "^3.1.8",
