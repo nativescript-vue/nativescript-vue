@@ -15,6 +15,7 @@
 
 NativeScript-Vue with Vue3 support now in beta!
 
+
 ## Quick start
 
 <!-- To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/nativescript-vue3-beta) -->
@@ -28,6 +29,121 @@ ns create myAwesomeApp --template @nativescript-vue/template-blank@beta
 
 cd myAwesomeApp
 ns run ios|android
+```
+
+## Update to v3 from v2
+
+### Start of the application
+As the way of starting a vue application, NativeScript-Vue has changed, has also done so to follow the vueE3 format.
+
+Before (v2)
+```ts
+import Vue from 'nativescript-vue'
+import Home from './components/Home.vue'
+
+new Vue({
+  render: (h) => h('frame', [h(Home)]),
+}).$start()
+```
+
+Now (v3)
+```ts
+import { createApp } from 'nativescript-vue';
+import Home from './components/Home.vue';
+
+const app = createApp(Home);
+app.start();
+```
+
+Note that now we do not pass the `Frame` main of its application. Place the `Frame` in its main component. Example: https://github.com/nativescript-vue/nativescript-vue/blob/main/packages/template-blank/src/components/Home.vue#L33
+
+### Plugins
+The way of declaring plugins has also changed, now the function `registerElement` imported from Nativescript-Vue is now used.
+
+Before (v2)
+```ts
+import Vue from 'nativescript-vue'
+import Home from './components/Home.vue'
+
+Vue.registerElement('Gradient', () => require('nativescript-gradient').Gradient);
+
+new Vue({
+  render: (h) => h('frame', [h(Home)]),
+}).$start()
+```
+
+Now (v3)
+```ts
+import { createApp, registerElement } from 'nativescript-vue';
+import Home from './components/Home.vue';
+
+registerElement('Gradient', () => require('nativescript-gradient').Gradient);
+
+const app = createApp(Home);
+app.start();
+```
+
+There are plugins that support the `.use` of Vue3 format as `@nativescript-comminky/ui-collectionView`, if the plugin supports this format can declare it as follows. Usually, with `registerElement` they should be able to declare all plugins.
+
+Now (v3)
+```ts
+import { createApp, registerElement } from 'nativescript-vue';
+import Home from './components/Home.vue';
+import CollectionView from '@nativescript-community/ui-collectionview/vue3';
+
+const app = createApp(Home);
+app.use(CollectionView);
+app.start();
+```
+
+### Navigation
+The navigation has undergone few changes, the only change is that we must import the functions `$navigateTo`, `$navigateBack` and `$showModal` from NativeSscript-Vue.
+
+```ts
+<script lang="ts" setup>
+import { $navigateTo, $navigateBack, $showModal } from 'nativescript-vue';
+import MyComponent from './components/MyComponent.vue';
+
+function navigate(){
+    $navigateTo(MyComponent, {...});
+}
+
+function back(){
+    $navigateBack();
+}
+
+function showModal(){
+    $showModal(MyComponent, {...});
+}
+</script>
+```
+
+
+### ListView
+In the lists there are 2 changes.
+1. Before the lists expected a `for`, now awaits an`: items` in which we will pass our array or observablearray.
+2. `v-template` is now `template`, waiting `#default=" {item, index}` to be able to access the current item and index. Note in the example that your item can typar.`#Default` is the name of his template, if he has a template that is called `header` for example, declare this `#header="{item, index}`.
+
+Before (v2)
+```html
+<ListView for="item in listOfItems" @itemTap="onItemTap">
+  <v-template>
+    <!-- Shows the list item label in the default color and style. -->
+    <Label :text="item.text" />
+  </v-template>
+</ListView>
+```
+
+Now (v3)
+```html
+ <ListView :items="items" >
+    <template #default="{ item, index } : { item: MyType, index: number }">
+      <GridLayout columns="*, auto" class="px-4">
+        <Label :text="item" />
+        <Label :text="index" />
+      </GridLayout>
+    </template>
+</ListView>
 ```
 
 ## Vue Devtools
