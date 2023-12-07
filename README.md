@@ -58,7 +58,7 @@ app.start();
 Note that now we do not pass the `Frame` main of its application. Place the `Frame` in its main component. Example: https://github.com/nativescript-vue/nativescript-vue/blob/main/packages/template-blank/src/components/Home.vue#L33
 
 ### Plugins
-The way of declaring plugins has also changed, now the function `registerElement` imported from Nativescript-Vue is now used.
+The way of declaring plugins has also changed, now the function `registerElement` imported from Nativescript-Vue is used.
 
 Before (v2)
 ```ts
