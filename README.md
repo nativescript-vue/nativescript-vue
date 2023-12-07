@@ -34,7 +34,7 @@ ns run ios|android
 ## Update to v3 from v2
 
 ### Start of the application
-As the way of starting a vue application, NativeScript-Vue has changed, has also done so to follow the vueE3 format.
+As the way of starting a vue application, NativeScript-Vue has changed, has also done so to follow the vue 3 format.
 
 Before (v2)
 ```ts
@@ -122,13 +122,12 @@ function showModal(){
 ### ListView
 In the lists there are 2 changes.
 1. Before the lists expected a `for`, now awaits an `:items` in which we will pass our array or observablearray.
-2. `v-template` is now `template`, waiting `#default="{ item, index }` to be able to access the current item and index. Note that in the following example of V3 you can strongly typed your item with TS.`#default` is the name of his template, if he has a template that is called `header` for example, declare this `#header="{ item, index }`.
+2. `v-template` is now `template`, waiting `#default="{ item, index }` to be able to access the current item and index. Note that in the following example of V3 you can strongly typed your item with TS. `#default` is the name of his template, if he has a template that is called `header` for example, declare this `#header="{ item, index }`.
 
 Before (v2)
 ```html
 <ListView for="item in listOfItems" @itemTap="onItemTap">
   <v-template>
-    <!-- Shows the list item label in the default color and style. -->
     <Label :text="item.text" />
   </v-template>
 </ListView>
