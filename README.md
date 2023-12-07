@@ -135,7 +135,7 @@ Before (v2)
 
 Now (v3)
 ```html
- <ListView :items="items" >
+<ListView :items="items" >
     <template #default="{ item, index } : { item: MyType, index: number }">
       <GridLayout columns="*, auto" class="px-4">
         <Label :text="item" />
