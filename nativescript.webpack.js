@@ -48,7 +48,8 @@ function startVueDevtools(port, isAndroid = false) {
       `[VueDevtools] If the app doesn't automatically connect, check if http traffic is allowed. (e.g. on Android, you may need to set android:usesCleartextTraffic="true" in AndroidManifest.xml)`,
     );
   }
-  spawn(require.resolve('@vue/devtools/bin.js'), [], {
+  // require.resolve('@vue/devtools/cli.mjs')
+  spawn(`npx`, ['vue-devtools'], {
     stdio: 'ignore',
     env: {
       ...process.env,

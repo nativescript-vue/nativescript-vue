@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.4.3",
-    "@vue/devtools": "^6.5.1",
+    "@vue/devtools": "^7.0.2",
     "@vue/runtime-core": "^3.4.3",
     "@vue/shared": "^3.4.3",
     "cross-spawn": "^7.0.3",

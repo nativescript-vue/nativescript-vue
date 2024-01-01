@@ -1,3 +1,5 @@
+import { devtools } from '@vue/devtools';
+
 if (__DEV__) {
   try {
     const _global = globalThis.global;
@@ -25,8 +27,17 @@ if (__DEV__) {
     console.warn(
       `[VueDevtools] Connecting to ${global.__VUE_DEVTOOLS_HOST__}:${global.__VUE_DEVTOOLS_PORT__}...`,
     );
-    require('@vue/devtools/build/hook.js');
-    require('@vue/devtools/build/backend.js');
+    // require('@vue/devtools/build/hook.js');
+    // require('@vue/devtools/build/backend.js');
+    devtools
+      .connect(host, port)
+      .then(() => {
+        console.warn('[VueDevtools] Connected!');
+        console.log(devtools);
+      })
+      .catch((err) => {
+        console.error('[VueDevtools] Failed to connect:', err);
+      });
   } catch (e) {
     console.warn('[VueDevtools] Failed to init:', e);
   }
