@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@nativescript/core": "~8.6.1",
-    "@vueuse/components": "^10.6.1",
-    "@vueuse/core": "^10.6.1",
+    "@nativescript/core": "~8.6.2",
+    "@vueuse/components": "^10.7.1",
+    "@vueuse/core": "^10.7.1",
     "nativescript-vue": "link:.."
   },
   "devDependencies": {
@@ -14,6 +14,6 @@
     "@nativescript/ios": "~8.6.3",
     "@nativescript/types": "~8.6.1",
     "@nativescript/webpack": "~5.0.18",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   }
 }
