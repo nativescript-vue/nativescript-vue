@@ -6,6 +6,7 @@ import {
   warn,
   watch,
   ref,
+  Comment,
 } from '@vue/runtime-core';
 
 import {
@@ -128,20 +129,27 @@ export const ListView = /*#__PURE__*/ defineComponent({
     // render all realized templates as children
     const cellVNODES = () =>
       Object.entries(cells.value).map(([id, entry]) => {
-        const vnodes: VNode[] = ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [
-          // default template is just a label
-          h('Label', {
-            text: entry.itemCtx.item,
-          }),
-        ];
+        const vnodes: VNode[] =
+          ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [];
+        const nonCommentVnodes = vnodes.filter(
+          (vnode) => vnode.type !== Comment,
+        );
 
-        if (vnodes.length > 1) {
+        if (nonCommentVnodes.length === 0) {
+          warn(`ListView template must contain at least one element.`);
+        } else if (nonCommentVnodes.length > 1) {
           warn(
             `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`,
           );
         }
 
-        const vnode: VNode = vnodes[0];
+        const vnode: VNode =
+          nonCommentVnodes.at(0) ??
+          // default template is just a label
+          h('Label', {
+            text: entry.itemCtx.item,
+          });
+
         // set the key to the list cell id, so we can find this cell later...
         vnode.key = id;
 

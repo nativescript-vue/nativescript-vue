@@ -114,6 +114,10 @@ const onItemTap = useDebounceFn((item: Item) => {
 
           <ListView :items="items2" height="800">
             <template #default="{ item, index }: ListItem<Item>">
+              <!-- TEST -->
+              <!-- TEST -->
+              <!-- TEST -->
+              <!-- TEST -->
               <StackLayout
                 @tap="onItemTap(item)"
                 :backgroundColor="selected.includes(item) ? '#ffedd5' : ''"
