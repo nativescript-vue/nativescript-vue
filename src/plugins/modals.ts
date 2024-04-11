@@ -31,6 +31,7 @@ type ResolvableModalTarget = ComponentPublicInstance | NSVElement | View;
 
 export interface ModalOptions extends Partial<ShowModalOptions> {
   props?: Record<string, any>;
+  on?: Record<string, (...args: any[]) => any>;
   target?: ResolvableModalTarget;
 }
 
@@ -83,7 +84,7 @@ export async function $showModal<T = any>(
       // reopening is done in `closeCallback`
     };
 
-    let view = createNativeView(component, options.props, {
+    let view = createNativeView(component, options, {
       reload: reloadModal,
     });
 

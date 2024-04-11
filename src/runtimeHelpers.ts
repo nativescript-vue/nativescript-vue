@@ -10,7 +10,10 @@ import {
 import { NSVNode, NSVRoot } from './dom';
 import { renderer } from './renderer';
 
-type Props = Record<string, unknown>;
+type VueViewOptions = {
+  props?: Record<string, unknown>;
+  on?: Record<string, (...args: any[]) => any>;
+};
 
 const __DEV__ = true;
 
@@ -22,12 +25,14 @@ export const setRootApp = (app: App) => {
 
 export const createNativeView = <T = View>(
   component: Component,
-  props?: Props,
+  options?: VueViewOptions,
   contextOverrides?: { reload?(): void },
 ) => {
   let isMounted = false;
   let vm: ComponentPublicInstance | null;
-  const newApp = renderer.createApp(component, props);
+
+  const propsAndListeners = buildPropsAndListeners(options);
+  const newApp = renderer.createApp(component, propsAndListeners);
   // Destructure so as not to copy over the root app instance
   const { app, ...rootContext } = rootApp._context;
   const context = { ...rootContext, ...contextOverrides };
@@ -80,3 +85,12 @@ export const isIOSKey = (key: string) => key.startsWith('ios:');
 export const isBoolean = (value: unknown): boolean => {
   return typeof value === 'boolean' || value instanceof Boolean;
 };
+
+function buildPropsAndListeners(options: VueViewOptions){
+  const listeners = Object.entries(options?.on ?? {}).reduce((listeners, [key, value]) => {
+    listeners['on' + key.charAt(0).toUpperCase() + key.slice(1)] = value;
+    return listeners;
+  }, {} as { [key: string]: (...args: any[]) => any });
+
+  return Object.assign(options?.props ?? {}, listeners);
+}

@@ -22,6 +22,7 @@ type ResolvableFrame = string | Ref | NSVElement | Frame | undefined;
 
 export interface NavigationOptions extends NavigationEntry {
   props?: Record<string, any>;
+  on?: Record<string, (...args: any[]) => any>;
   frame?: ResolvableFrame;
 }
 
@@ -122,7 +123,7 @@ export function $navigateTo(
       });
     };
 
-    let view = createNativeView<Page>(target, options?.props, {
+    let view = createNativeView<Page>(target, options, {
       /**
        * Called by @vue/runtime-core when the component is reloaded during HMR.
        */
