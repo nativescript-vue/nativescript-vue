@@ -130,8 +130,17 @@ export async function $showModal<T = any, P = any>(
       view.nativeView?.closeModal(...args);
     };
 
-    view.context.config.globalProperties.$closeModal = closeModal;
-    view.context.config.globalProperties.$modal = { close: closeModal };
+    // clone the config and globalProperties to avoid mutating the root app's config/globalProperties
+    const context = view.context;
+    context.config = Object.assign({}, context.config);
+    context.config.globalProperties = Object.assign(
+      {},
+      context.config.globalProperties,
+      {
+        $closeModal: closeModal,
+        $modal: { close: closeModal },
+      },
+    );
 
     view.mount(root);
     openModal();
