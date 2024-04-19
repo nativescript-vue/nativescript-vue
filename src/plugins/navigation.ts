@@ -1,7 +1,7 @@
 import { Frame, NavigationEntry, Page } from '@nativescript/core';
 import { App, Component, Ref, nextTick, unref } from '@vue/runtime-core';
 import { NSVElement, NSVRoot } from '../dom';
-import { createNativeView } from '../runtimeHelpers';
+import { CreateNativeViewProps, createNativeView } from '../runtimeHelpers';
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
@@ -13,21 +13,24 @@ declare module '@vue/runtime-core' {
      * @param target
      * @param options
      */
-    $navigateTo: (target: Component, options?: NavigationOptions) => Page;
-    $navigateBack: (options?: NavigationOptions) => void;
+    $navigateTo: <P = any>(
+      target: Component<P>,
+      options?: NavigateToOptions<P>,
+    ) => Page;
+    $navigateBack: (options?: NavigateBackOptions) => void;
   }
 }
 
 type ResolvableFrame = string | Ref | NSVElement | Frame | undefined;
 
-export interface NavigationOptions extends NavigationEntry {
-  props?: Record<string, any>;
+export type NavigateToOptions<P = any> = NavigationEntry & {
+  props?: CreateNativeViewProps<P>;
   frame?: ResolvableFrame;
-}
+};
 
-export interface BackNavigationOptions {
+export type NavigateBackOptions = {
   frame?: ResolvableFrame;
-}
+};
 
 /**
  * @internal
@@ -58,9 +61,9 @@ function resolveFrame(frame?: ResolvableFrame): Frame {
   return Frame.getFrameById(ob);
 }
 
-export function $navigateTo(
-  target: Component,
-  options?: NavigationOptions,
+export function $navigateTo<P = any>(
+  target: Component<P>,
+  options?: NavigateToOptions<P>,
 ): Page {
   try {
     const frame = resolveFrame(options?.frame);
@@ -145,7 +148,7 @@ export function $navigateTo(
   }
 }
 
-export async function $navigateBack(options?: BackNavigationOptions) {
+export async function $navigateBack(options?: NavigateBackOptions) {
   const frame = resolveFrame(options?.frame);
 
   if (!frame) {

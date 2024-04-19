@@ -1,4 +1,8 @@
-import { Application, ShowModalOptions, View } from '@nativescript/core';
+import {
+  Application,
+  ShowModalOptions as CoreShowModalOptions,
+  View,
+} from '@nativescript/core';
 import {
   App,
   Component,
@@ -7,32 +11,32 @@ import {
   unref,
   warn,
 } from '@vue/runtime-core';
-import { NSVElement, NSVRoot } from '../dom';
-import { createNativeView } from '../runtimeHelpers';
 import { isObject } from '@vue/shared';
+import { NSVElement, NSVRoot } from '../dom';
+import { CreateNativeViewProps, createNativeView } from '../runtimeHelpers';
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
-    /**
-     * todo: update docblock
-     */
-    $showModal: <T = any>(
-      component: Component,
-      options?: ModalOptions,
+    $showModal: <T = any, P = any>(
+      component: Component<P>,
+      options?: ShowModalOptions<P, T>,
     ) => Promise<T | false | undefined>;
-    $closeModal: (arg: any) => void;
+    $closeModal: <T = any>(data: T, ...args: any[]) => void;
     $modal: {
-      close: (arg: any) => void;
+      close: <T = any>(data: T, ...args: any[]) => void;
     };
   }
 }
 
 type ResolvableModalTarget = ComponentPublicInstance | NSVElement | View;
 
-export interface ModalOptions extends Partial<ShowModalOptions> {
-  props?: Record<string, any>;
+export type ShowModalOptions<P = any, T = any> = Partial<
+  Omit<CoreShowModalOptions, 'closeCallback'>
+> & {
+  closeCallback?: (data?: T, ...args: any[]) => void;
+  props?: CreateNativeViewProps<P>;
   target?: ResolvableModalTarget;
-}
+};
 
 /**
  * @internal
@@ -57,9 +61,9 @@ function resolveModalTarget(
   return false;
 }
 
-export async function $showModal<T = any>(
-  component: Component,
-  options: ModalOptions = {},
+export async function $showModal<T = any, P = any>(
+  component: Component<P>,
+  options: ShowModalOptions<P, T> = {},
 ): Promise<T | false | undefined> {
   const modalTarget = resolveModalTarget(
     options.target ?? Application.getRootView(),
@@ -87,7 +91,7 @@ export async function $showModal<T = any>(
       reload: reloadModal,
     });
 
-    const closeCallback = (data?: T) => {
+    const closeCallback = (data?: T, ...args: any) => {
       if (isResolved) return;
 
       if (isReloading) {
@@ -107,6 +111,10 @@ export async function $showModal<T = any>(
       view.unmount();
       view = null;
 
+      // call the closeCallback if it exists with all arguments
+      options.closeCallback?.(data, ...args);
+
+      // resolve the promise with the first argument, since Promise.resolve() expects only one argument
       resolve(data);
     };
 
@@ -118,7 +126,9 @@ export async function $showModal<T = any>(
         ...additionalOptions,
       });
     };
-    const closeModal = (...args: any[]) => view.nativeView?.closeModal(...args);
+    const closeModal = (...args: any[]) => {
+      view.nativeView?.closeModal(...args);
+    };
 
     view.context.config.globalProperties.$closeModal = closeModal;
     view.context.config.globalProperties.$modal = { close: closeModal };

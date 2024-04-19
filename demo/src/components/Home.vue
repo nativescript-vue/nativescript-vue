@@ -3,12 +3,17 @@ import { ListItem, onMounted, onUnmounted } from 'nativescript-vue';
 import { goHome } from '../composables/goHome';
 import Test from './Test.vue';
 
-defineProps({
-  depth: {
-    type: Number,
-    default: 0,
+withDefaults(
+  defineProps<{
+    depth?: number;
+    title?: string;
+    items?: (string | number)[];
+    enabled?: boolean;
+  }>(),
+  {
+    depth: 0,
   },
-});
+);
 
 const message = 'Hello World!!';
 
@@ -46,7 +51,10 @@ onUnmounted(() => {
       <Label class="info" :text="message + ' ' + depth" />
       <Button text="Go home" @tap="goHome(depth + 1)" />
       <Button text="Go home Modal" @tap="goHome(depth + 1, true)" />
-      <Button text="Close Modal" @tap="$modal?.close({ depth, foo: 'bar' })" />
+      <Button
+        text="Close Modal"
+        @tap="$modal?.close({ depth, foo: 'bar' }, 'arg1', 'arg2')"
+      />
 
       <Test />
 
@@ -62,6 +70,7 @@ onUnmounted(() => {
             )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
             textWrap="true"
             padding="16"
+            @tap="$emit('customEvent', { item, index, even, odd })"
           />
         </template>
 
@@ -73,6 +82,7 @@ onUnmounted(() => {
             )}\n\nindex: ${index} even: ${even} odd: ${odd}`"
             textWrap="true"
             padding="16"
+            @tap="$emit('customEvent', { item, index, even, odd })"
           />
         </template>
       </ListView>

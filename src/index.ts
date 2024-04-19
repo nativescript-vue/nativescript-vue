@@ -78,7 +78,7 @@ export const createApp = ((...args) => {
 
   app.registerElement = registerElement;
 
-  app.mount = (...args) => {
+  app.mount = (...args: Parameters<typeof mount>) => {
     if (!args.length) {
       return mount(new NSVRoot(), false, false);
     }

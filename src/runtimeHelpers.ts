@@ -6,25 +6,26 @@ import {
   RendererElement,
   RendererNode,
   VNode,
+  VNodeProps,
 } from '@vue/runtime-core';
 import { NSVNode, NSVRoot } from './dom';
 import { renderer } from './renderer';
 
-type Props = Record<string, unknown>;
-
-const __DEV__ = true;
-
 let rootApp: App = null;
-
 export const setRootApp = (app: App) => {
   rootApp = app;
 };
 
-export const createNativeView = <T = View>(
-  component: Component,
-  props?: Props,
-  contextOverrides?: { reload?(): void },
-) => {
+export type ContextOverrides = { reload?(): void };
+export type CreateNativeViewProps<P> = Partial<
+  P & VNodeProps & Record<string, any>
+>;
+
+export function createNativeView<T = View, P = any>(
+  component: Component<P>,
+  props?: CreateNativeViewProps<P>,
+  contextOverrides?: ContextOverrides,
+) {
   let isMounted = false;
   let vm: ComponentPublicInstance | null;
   const newApp = renderer.createApp(component, props);
@@ -33,7 +34,6 @@ export const createNativeView = <T = View>(
   const context = { ...rootContext, ...contextOverrides };
 
   type M = VNode<RendererNode, RendererElement, { nativeView: T }>;
-
   return {
     context,
     get vnode() {
@@ -66,7 +66,7 @@ export const createNativeView = <T = View>(
       isMounted = false;
     },
   };
-};
+}
 
 export const ELEMENT_REF = Symbol(__DEV__ ? `elementRef` : ``);
 
