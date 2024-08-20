@@ -15,7 +15,7 @@ import { isObject } from '@vue/shared';
 import { NSVElement, NSVRoot } from '../dom';
 import { CreateNativeViewProps, createNativeView } from '../runtimeHelpers';
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     $showModal: <T = any, P = any>(
       component: Component<P>,

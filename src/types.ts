@@ -1,6 +1,6 @@
 import type { DefineComponent } from '@vue/runtime-core';
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   interface GlobalComponents {
     Frame: DefineComponent<{}>;
     Page: DefineComponent;
