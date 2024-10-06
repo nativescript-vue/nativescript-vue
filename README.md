@@ -60,7 +60,11 @@ NativeScript-Vue is an MIT-licensed open source project made possible by our spo
           <img height="50px" src="https://art.nativescript-vue.org/sponsors/exigencytr.png">
         </a>
       </td>
-      <td></td>
+      <td align="center" valign="middle">
+        <a href="https://www.dotcom-monitor.com/sponsoring-open-source-projects/?source=nativescript-vue-github" target="_blank">
+          <img height="50px" src="https://art.nativescript-vue.org/sponsors/dotcom-monitor.svg">
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
