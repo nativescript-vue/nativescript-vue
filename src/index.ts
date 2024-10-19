@@ -40,7 +40,7 @@ export { ELEMENT_REF, createNativeView } from './runtimeHelpers';
 
 export * from '@vue/runtime-core';
 export { vShow } from './directives/vShow';
-export { $showModal } from './plugins/modals';
+export { $showModal, $closeModal } from './plugins/modals';
 export { $navigateTo, $navigateBack } from './plugins/navigation';
 
 // creates a special root container that calls resetRoot whenever it's children change
