@@ -97,6 +97,14 @@ export const createApp = ((...args) => {
   app.use(modalsPlugin);
   app.use(navigationPlugin);
 
+  app.config.errorHandler =  (err, instance, info) => {
+    console.error((info ? `Error during execution of ${info}: ` : ``) + err);
+
+    if(__DEV__) {
+      throw err;
+    }
+  };
+
   return app;
 }) as CreateAppFunction<NSVElement>;
 
