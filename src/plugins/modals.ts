@@ -61,6 +61,8 @@ function resolveModalTarget(
   return false;
 }
 
+const modalStack = [];
+
 export async function $showModal<T = any, P = any>(
   component: Component<P>,
   options: ShowModalOptions<P, T> = {},
@@ -127,6 +129,9 @@ export async function $showModal<T = any, P = any>(
       });
     };
     const closeModal = (...args: any[]) => {
+      // remove view from modalStack
+      modalStack.splice(modalStack.indexOf(view), 1);
+
       view.nativeView?.closeModal(...args);
     };
 
@@ -144,5 +149,12 @@ export async function $showModal<T = any, P = any>(
 
     view.mount(root);
     openModal();
+    modalStack.push(view);
   });
+}
+
+export function $closeModal(...args) {
+  const view = modalStack.at(-1);
+
+  view?.context.config.globalProperties.$closeModal(...args);
 }
