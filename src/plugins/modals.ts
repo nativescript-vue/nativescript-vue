@@ -110,6 +110,8 @@ export async function $showModal<T = any, P = any>(
       }
 
       isResolved = true;
+      view.context.config.globalProperties.$closeModal = undefined;
+      view.context.config.globalProperties.$modal = undefined;
       view.unmount();
       view = null;
 
