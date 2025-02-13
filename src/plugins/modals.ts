@@ -22,9 +22,7 @@ declare module '@vue/runtime-core' {
       options?: ShowModalOptions<P, T>,
     ) => Promise<T | false | undefined>;
     $closeModal: <T = any>(data: T, ...args: any[]) => void;
-    $modal: {
-      close: <T = any>(data: T, ...args: any[]) => void;
-    };
+    $modal: { close: <T = any>(data: T, ...args: any[]) => void };
   }
 }
 
@@ -141,10 +139,7 @@ export async function $showModal<T = any, P = any>(
     context.config.globalProperties = Object.assign(
       {},
       context.config.globalProperties,
-      {
-        $closeModal: closeModal,
-        $modal: { close: closeModal },
-      },
+      { $closeModal: closeModal, $modal: { close: closeModal } },
     );
 
     view.mount(root);

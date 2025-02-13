@@ -4,16 +4,16 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@nativescript/core": "~8.7.0",
-    "@vueuse/components": "^10.9.0",
-    "@vueuse/core": "^10.9.0",
+    "@nativescript/core": "~8.8.6",
+    "@vueuse/components": "^12.5.0",
+    "@vueuse/core": "^12.5.0",
     "nativescript-vue": "link:.."
   },
   "devDependencies": {
-    "@nativescript/android": "~8.7.0",
-    "@nativescript/ios": "~8.7.0",
-    "@nativescript/types": "~8.7.0",
+    "@nativescript/android": "~8.8.6",
+    "@nativescript/ios": "~8.8.2",
+    "@nativescript/types": "~8.8.0",
     "@nativescript/webpack": "~5.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.7.3"
   }
 }

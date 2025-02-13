@@ -2,6 +2,7 @@
 import { ListItem, onMounted, onUnmounted } from 'nativescript-vue';
 import { goHome } from '../composables/goHome';
 import Test from './Test.vue';
+import { $closeModal } from 'nativescript-vue';
 
 withDefaults(
   defineProps<{
@@ -10,9 +11,7 @@ withDefaults(
     items?: (string | number)[];
     enabled?: boolean;
   }>(),
-  {
-    depth: 0,
-  },
+  { depth: 0 },
 );
 
 const message = 'Hello World!!';
@@ -25,11 +24,7 @@ interface Test {
 
 const items: Test[] = Array(1000)
   .fill(0)
-  .map((_, i) => ({
-    name: `Item ${i}`,
-    foo: i,
-    bool: true,
-  }));
+  .map((_, i) => ({ name: `Item ${i}`, foo: i, bool: true }));
 
 function selector(item: ListItem<Test>) {
   return item.even ? 'default' : 'odd';
@@ -42,6 +37,10 @@ onMounted(() => {
 onUnmounted(() => {
   console.log('UNMOUNTED HOME');
 });
+
+function close() {
+  $closeModal('closed via $closeModal');
+}
 </script>
 
 <template>
@@ -55,6 +54,7 @@ onUnmounted(() => {
         text="Close Modal"
         @tap="$modal?.close({ depth, foo: 'bar' }, 'arg1', 'arg2')"
       />
+      <Button text="Close Modal (via $closeModal)" @tap="close" />
 
       <Test />
 

@@ -11,7 +11,6 @@ import type {
   ComponentInternalInstance,
   ElementNamespace,
   RendererOptions,
-  SuspenseBoundary,
 } from '@vue/runtime-core';
 
 export const patchProp: RendererOptions['patchProp'] = (
@@ -20,10 +19,7 @@ export const patchProp: RendererOptions['patchProp'] = (
   prevValue: any,
   nextValue: any,
   namespace?: ElementNamespace,
-  prevChildren?: any[],
   parentComponent?: ComponentInternalInstance | null,
-  parentSuspense?: SuspenseBoundary | null,
-  unmountChildren?: any,
 ) => {
   switch (key) {
     // special
