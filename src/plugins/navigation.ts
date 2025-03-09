@@ -138,6 +138,7 @@ export function $navigateTo<P = any>(
     });
 
     view.mount(root);
+    view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
     view.nativeView.on(ViewBase.disposeNativeViewEvent, disposeCallback);
 
     frame.navigate({
