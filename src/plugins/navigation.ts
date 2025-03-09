@@ -110,6 +110,7 @@ export function $navigateTo<P = any>(
       isReloading = true;
       view.unmount();
       view.mount(root);
+      view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
       view.nativeView.on(ViewBase.disposeNativeViewEvent, disposeCallback);
 
       const originalTransition = frame.currentEntry.transition;
