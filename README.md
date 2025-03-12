@@ -1,45 +1,47 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg">
-  <i>Yes, the image needs to be updated :)</i>
+  <img src="https://github.com/user-attachments/assets/2bbcb9c7-57ad-4649-9891-d1b901ac268f">
 </p>
 
-<h1 align="center">NativeScript-Vue3 RC</h1>
+<h1 align="center">NativeScript-Vue3</h1>
 
 <p align="center">
     <a href="https://www.npmjs.com/package/nativescript-vue">
-       <img src="https://img.shields.io/npm/v/nativescript-vue/rc.svg" alt="npm">
+       <img src="https://img.shields.io/npm/v/nativescript-vue/latest.svg" alt="npm"/>
     </a>
     <a href="https://github.com/nativescript-vue/nativescript-vue/blob/master/LICENSE">
-       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
+       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license"/>
     </a>
 </p>
 
-NativeScript-Vue with Vue3 support now in RC!
+NativeScript-Vue now supports Vue 3 and is generally available! This version brings improved reactivity, a modern plugin system, and better TypeScript support.
 
-## Quick start
+## Quick Start
 
-To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/github/nativescript-vue/nativescript-vue/tree/main/packages/stackblitz-template?file=src%2Fcomponents%2FHome.vue&title=NativeScript%20Starter%20Vue3)
+To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/github/nativescript-vue/nativescript-vue/tree/main/packages/stackblitz-template?file=src%2Fcomponents%2FHome.vue&title=NativeScript%20Starter%20Vue3%20Beta).
 
-...or locally:
+Or, set up locally:
 
-```bash
-ns create myAwesomeApp --template @nativescript-vue/template-blank@rc
+```sh
+ns create myAwesomeApp --template @nativescript-vue/template-blank@latest
 
 cd myAwesomeApp
 ns run ios|android
 ```
 
-## Vue Devtools
+## Upgrading to v3
 
-To use VueDevtools, run:
+Please refer to our [Upgrade Guide](http://nativescript-vue.org/docs/getting-started/upgrade-guide).
 
-```bash
+## Using Vue Devtools
+
+To enable Vue Devtools, run:
+
+```sh
 ns run ios|android --env.vueDevtools
 ```
 
-This will launch the standalone VueDevtools, and connect to it once the app launches. Right now, devtools are only supported on iOS Simulators and Android Emulators, but physical device support should come soon (requires configuring a host/port that the device can connect to.).
-
-On android, you must enable cleartext http traffic, otherwise any connections are silently dropped by the system. In the `App_Resources/Android/src/main/AndroidManifext.xml` add the following to your existing `<application>` tag:
+🛠️ **Android Users:**
+To allow Vue Devtools to connect, enable **cleartext HTTP traffic** in your `AndroidManifest.xml`:
 
 ```diff
 <application ...
