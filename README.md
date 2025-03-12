@@ -1,6 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg">
-  <i>Yes, the image needs to be updated :)</i>
+  <img src="https://github.com/user-attachments/assets/2bbcb9c7-57ad-4649-9891-d1b901ac268f">
 </p>
 
 <h1 align="center">NativeScript-Vue3</h1>
