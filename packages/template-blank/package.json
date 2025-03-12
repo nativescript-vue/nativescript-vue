@@ -1,10 +1,10 @@
 {
   "name": "@nativescript-vue/template-blank",
   "main": "src/app.ts",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "dependencies": {
     "@nativescript/core": "~8.8.6",
-    "nativescript-vue": "3.0.0-rc.3"
+    "nativescript-vue": "3.0.0"
   },
   "devDependencies": {
     "@nativescript/tailwind": "~2.1.0",
