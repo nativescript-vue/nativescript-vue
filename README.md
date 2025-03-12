@@ -2,51 +2,53 @@
     <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg">
 </p>
 
-<h1 align="center">NativeScript-Vue3 Beta</h1>
+<h1 align="center">NativeScript-Vue3</h1>
 
 <p align="center">
     <a href="https://www.npmjs.com/package/nativescript-vue">
-       <img src="https://img.shields.io/npm/v/nativescript-vue/beta.svg" alt="npm">
+       <img src="https://img.shields.io/npm/v/nativescript-vue/latest.svg" alt="npm">
     </a>
     <a href="https://github.com/nativescript-vue/nativescript-vue/blob/master/LICENSE">
        <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
     </a>
 </p>
 
-NativeScript-Vue with Vue3 support now in beta!
+NativeScript-Vue now supports Vue 3 and is generally available! This version brings improved reactivity, a modern plugin system, and better TypeScript support.
 
+## Quick Start
 
-## Quick start
+To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/github/nativescript-vue/nativescript-vue/tree/main/packages/stackblitz-template?file=src%2Fcomponents%2FHome.vue&title=NativeScript%20Starter%20Vue3%20Beta).
 
-<!-- To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/nativescript-vue3-beta) -->
+Or, set up locally:
 
-To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/github/nativescript-vue/nativescript-vue/tree/main/packages/stackblitz-template?file=src%2Fcomponents%2FHome.vue&title=NativeScript%20Starter%20Vue3%20Beta)
-
-...or locally:
-
-```bash
-ns create myAwesomeApp --template @nativescript-vue/template-blank@beta
+```sh
+ns create myAwesomeApp --template @nativescript-vue/template-blank@latest
 
 cd myAwesomeApp
 ns run ios|android
 ```
 
-## Update to v3 from v2
+## Upgrading from v2 to v3
 
-### Start of the application
-As the way of starting a vue application, NativeScript-Vue has changed, has also done so to follow the vue 3 format.
+<details>
 
-Before (v2)
+<summary>Expand upgrade instructions</summary>
+
+### Application Initialization Changes
+
+In Vue 2, the app was initialized like this:
+
 ```ts
-import Vue from 'nativescript-vue'
-import Home from './components/Home.vue'
+import Vue from 'nativescript-vue';
+import Home from './components/Home.vue';
 
 new Vue({
   render: (h) => h('frame', [h(Home)]),
-}).$start()
+}).$start();
 ```
 
-Now (v3)
+In Vue 3, you now use `createApp`:
+
 ```ts
 import { createApp } from 'nativescript-vue';
 import Home from './components/Home.vue';
@@ -55,39 +57,81 @@ const app = createApp(Home);
 app.start();
 ```
 
-Note that now we do not pass the `Frame` main of its application. Place the `Frame` in its main component. Example: https://github.com/nativescript-vue/nativescript-vue/blob/main/packages/template-blank/src/components/Home.vue#L33
+✅ **Key Changes:**
 
-### Plugins
-The way of declaring plugins has also changed, now the function `registerElement` imported from Nativescript-Vue is used.
+- Use `createApp(Home)` instead of `new Vue()`.
+- The root `<Frame>` component should now be inside `Home.vue` (depending on your frame/navigation setup), not in the `createApp` function.
 
-Before (v2)
-```ts
-import Vue from 'nativescript-vue'
-import Home from './components/Home.vue'
+[Example Implementation](https://github.com/nativescript-vue/nativescript-vue/blob/main/packages/template-blank/src/components/Home.vue#L33)
 
-Vue.registerElement('Gradient', () => require('nativescript-gradient').Gradient);
+### Navigation Changes in Vue 3
 
-new Vue({
-  render: (h) => h('frame', [h(Home)]),
-}).$start()
+Navigation functions like `$navigateTo`, `$navigateBack`, and `$showModal` must now be **imported** instead of being accessed from `this`.
+
+```html
+<script lang="ts" setup>
+  import { $navigateTo, $navigateBack, $showModal } from 'nativescript-vue';
+  import MyComponent from './components/MyComponent.vue';
+
+  function navigate() {
+    $navigateTo(MyComponent, {
+      /* options */
+    });
+  }
+
+  function goBack() {
+    $navigateBack();
+  }
+
+  function openModal() {
+    $showModal(MyComponent, {
+      /* options */
+    });
+  }
+</script>
 ```
 
-Now (v3)
+> ✅ **Why the change?**
+>
+> Vue 3 now uses **composition API** and removes `$navigateTo` from the component instance.
+
+> **Note** Vue3 also supports the options API, where these methods are still available on `this`, however we recommend using the composition API.
+
+### Plugin Registration
+
+Plugins are now registered using `registerElement` instead of modifying the Vue instance.
+
+#### **Before (Vue 2)**
+
+```ts
+import Vue from 'nativescript-vue';
+
+Vue.registerElement(
+  'Gradient',
+  () => require('nativescript-gradient').Gradient,
+);
+```
+
+#### **Now (Vue 3)**
+
 ```ts
 import { createApp, registerElement } from 'nativescript-vue';
 import Home from './components/Home.vue';
 
 registerElement('Gradient', () => require('nativescript-gradient').Gradient);
 
+// or using import statements
+import { Gradient } from 'nativescript-gradient';
+registerElement('Gradient', () => Gradient);
+
 const app = createApp(Home);
 app.start();
 ```
 
-There are plugins that support the `.use` of Vue3 format as `@nativescript-comminky/ui-collectionView`, if the plugin supports this format can declare it as follows. Usually, with `registerElement` they should be able to declare all plugins.
+> ✅ **Note** Some plugins export a Vue3 compatible plugin, that can be used with `.use()`, like `@nativescript-community/ui-collectionview/vue3`. Consult the plugin documentation and if it doesn't specify this, use `registerElement` normally.
 
-Now (v3)
 ```ts
-import { createApp, registerElement } from 'nativescript-vue';
+import { createApp } from 'nativescript-vue';
 import Home from './components/Home.vue';
 import CollectionView from '@nativescript-community/ui-collectionview/vue3';
 
@@ -96,66 +140,78 @@ app.use(CollectionView);
 app.start();
 ```
 
-### Navigation
-The navigation has undergone few changes, the only change is that we must import the functions `$navigateTo`, `$navigateBack` and `$showModal` from NativeSscript-Vue.
+### ListView Changes
 
-```ts
-<script lang="ts" setup>
-import { $navigateTo, $navigateBack, $showModal } from 'nativescript-vue';
-import MyComponent from './components/MyComponent.vue';
+1. Instead of `for="item in listOfItems"`, use `:items="items"`
+1. Instead of `if="condition"` us `:itemTemplateSelector="function"`
+1. Use `#default="{ item, index }"` inside `<template>`
 
-function navigate(){
-    $navigateTo(MyComponent, {...});
-}
+**Before (Vue 2)**
 
-function back(){
-    $navigateBack();
-}
-
-function showModal(){
-    $showModal(MyComponent, {...});
-}
-</script>
-```
-
-
-### ListView
-In the lists there are 2 changes.
-1. Before the lists expected a `for`, now awaits an `:items` in which we will pass our array or ObservableArray.
-2. `v-template` is now `template`, waiting `#default="{ item, index }` to be able to access the current item and index. Note that in the following example of V3 you can strongly typed your item with TS. `#default` is the name of his template, if he has a template that is called `header` for example, declare this `#header="{ item, index }`.
-
-Before (v2)
 ```html
-<ListView for="item in listOfItems" @itemTap="onItemTap">
+<ListView for="item in listOfItems">
   <v-template>
-    <Label :text="item.text" />
+    <label :text="item.text" />
+  </v-template>
+
+  <v-template if="item.odd">
+    <label :text="item.text" class="bg-red-500" />
   </v-template>
 </ListView>
 ```
 
-Now (v3)
+**Now (Vue 3)**
+
 ```html
-<ListView :items="items" >
-    <template #default="{ item, index } : { item: MyType, index: number }">
-      <GridLayout columns="*, auto" class="px-4">
-        <Label :text="item" />
-        <Label :text="index" />
-      </GridLayout>
+<script lang="ts" setup>
+  const items = ref([
+    /* ... items... */
+  ]);
+
+  function itemTemplateSelector(item, index) {
+    return index % 2 === 0 ? 'default' : 'odd';
+  }
+</script>
+
+<template>
+  <ListView :items="items" :itemTemplateSelector="itemTemplateSelector">
+    <template #default="{ item, index }">
+      <label :text="item.text" />
     </template>
-</ListView>
+
+    <template #odd="{ item, index }">
+      <label :text="item.text" class="bg-red-500" />
+    </template>
+  </ListView>
+</template>
 ```
 
-## Vue Devtools
+🚀 **Bonus:** You can now strongly type `item` using TypeScript!
 
-To use VueDevtools, run:
+```html
+<template
+  #default="{ item, index }: { item: MyType, index: number }"
+></template>
+```
 
-```bash
+Or, using the `ListItem` helper type:
+
+```html
+<template #default="{ item, index }: ListItem<MyType>"></template>
+```
+
+</details>
+
+## Using Vue Devtools
+
+To enable Vue Devtools, run:
+
+```sh
 ns run ios|android --env.vueDevtools
 ```
 
-This will launch the standalone VueDevtools, and connect to it once the app launches. Right now, devtools are only supported on iOS Simulators and Android Emulators, but physical device support should come soon (requires configuring a host/port that the device can connect to.).
-
-On android, you must enable cleartext http traffic, otherwise any connections are silently dropped by the system. In the `App_Resources/Android/src/main/AndroidManifext.xml` add the following to your existing `<application>` tag:
+🛠️ **Android Users:**
+To allow Vue Devtools to connect, enable **cleartext HTTP traffic** in your `AndroidManifest.xml`:
 
 ```diff
 <application ...
