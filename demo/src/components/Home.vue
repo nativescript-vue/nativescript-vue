@@ -89,3 +89,11 @@ function close() {
     </StackLayout>
   </Page>
 </template>
+
+<style scoped>
+.info {
+  text-align: center;
+  font-weight: 500;
+  margin-top: 12;
+}
+</style>
