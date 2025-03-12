@@ -1,4 +1,10 @@
-import { Frame, NavigationEntry, Page } from '@nativescript/core';
+import {
+  EventData,
+  Frame,
+  NavigationEntry,
+  Page,
+  ViewBase,
+} from '@nativescript/core';
 import { App, Component, Ref, nextTick, unref } from '@vue/runtime-core';
 import { NSVElement, NSVRoot } from '../dom';
 import { CreateNativeViewProps, createNativeView } from '../runtimeHelpers';
@@ -75,19 +81,17 @@ export function $navigateTo<P = any>(
     const root = new NSVRoot();
     let isReloading = false;
 
-    const attachDisposeCallback = (page: Page) => {
-      const dispose = page.disposeNativeView;
+    const disposeCallback = (args: EventData) => {
+      const page = args.object as Page;
 
-      page.disposeNativeView = () => {
-        dispose.call(page);
-
-        // if we are reloading, don't unmount the view, as the reload will unmount/remount it.
-        if (!isReloading) {
-          view.unmount();
-          view = null;
-        }
-      };
+      // if we are reloading, don't unmount the view, as the reload will unmount/remount it.
+      if (!isReloading && view) {
+        page.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+        view.unmount();
+        view = null;
+      }
     };
+
     const reloadPage = () => {
       if (isReloading) {
         return;
@@ -106,7 +110,8 @@ export function $navigateTo<P = any>(
       isReloading = true;
       view.unmount();
       view.mount(root);
-      attachDisposeCallback(view.nativeView);
+      view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+      view.nativeView.on(ViewBase.disposeNativeViewEvent, disposeCallback);
 
       const originalTransition = frame.currentEntry.transition;
       // replace current page
@@ -133,7 +138,8 @@ export function $navigateTo<P = any>(
     });
 
     view.mount(root);
-    attachDisposeCallback(view.nativeView);
+    view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+    view.nativeView.on(ViewBase.disposeNativeViewEvent, disposeCallback);
 
     frame.navigate({
       ...options,
