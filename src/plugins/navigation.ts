@@ -1,7 +1,13 @@
-import { Frame, NavigationEntry, Page } from '@nativescript/core';
+import {
+  EventData,
+  Frame,
+  NavigationEntry,
+  Page,
+  ViewBase,
+} from '@nativescript/core';
 import { App, Component, Ref, nextTick, unref } from '@vue/runtime-core';
 import { NSVElement, NSVRoot } from '../dom';
-import { createNativeView } from '../runtimeHelpers';
+import { CreateNativeViewProps, createNativeView } from '../runtimeHelpers';
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
@@ -13,21 +19,24 @@ declare module '@vue/runtime-core' {
      * @param target
      * @param options
      */
-    $navigateTo: (target: Component, options?: NavigationOptions) => Page;
-    $navigateBack: (options?: NavigationOptions) => void;
+    $navigateTo: <P = any>(
+      target: Component<P>,
+      options?: NavigateToOptions<P>,
+    ) => Page;
+    $navigateBack: (options?: NavigateBackOptions) => void;
   }
 }
 
 type ResolvableFrame = string | Ref | NSVElement | Frame | undefined;
 
-export interface NavigationOptions extends NavigationEntry {
-  props?: Record<string, any>;
+export type NavigateToOptions<P = any> = NavigationEntry & {
+  props?: CreateNativeViewProps<P>;
   frame?: ResolvableFrame;
-}
+};
 
-export interface BackNavigationOptions {
+export type NavigateBackOptions = {
   frame?: ResolvableFrame;
-}
+};
 
 /**
  * @internal
@@ -58,9 +67,9 @@ function resolveFrame(frame?: ResolvableFrame): Frame {
   return Frame.getFrameById(ob);
 }
 
-export function $navigateTo(
-  target: Component,
-  options?: NavigationOptions,
+export function $navigateTo<P = any>(
+  target: Component<P>,
+  options?: NavigateToOptions<P>,
 ): Page {
   try {
     const frame = resolveFrame(options?.frame);
@@ -72,19 +81,17 @@ export function $navigateTo(
     const root = new NSVRoot();
     let isReloading = false;
 
-    const attachDisposeCallback = (page: Page) => {
-      const dispose = page.disposeNativeView;
+    const disposeCallback = (args: EventData) => {
+      const page = args.object as Page;
 
-      page.disposeNativeView = () => {
-        dispose.call(page);
-
-        // if we are reloading, don't unmount the view, as the reload will unmount/remount it.
-        if (!isReloading) {
-          view.unmount();
-          view = null;
-        }
-      };
+      // if we are reloading, don't unmount the view, as the reload will unmount/remount it.
+      if (!isReloading && view) {
+        page.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+        view.unmount();
+        view = null;
+      }
     };
+
     const reloadPage = () => {
       if (isReloading) {
         return;
@@ -103,7 +110,8 @@ export function $navigateTo(
       isReloading = true;
       view.unmount();
       view.mount(root);
-      attachDisposeCallback(view.nativeView);
+      view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+      view.nativeView.on(ViewBase.disposeNativeViewEvent, disposeCallback);
 
       const originalTransition = frame.currentEntry.transition;
       // replace current page
@@ -130,7 +138,8 @@ export function $navigateTo(
     });
 
     view.mount(root);
-    attachDisposeCallback(view.nativeView);
+    view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+    view.nativeView.on(ViewBase.disposeNativeViewEvent, disposeCallback);
 
     frame.navigate({
       ...options,
@@ -145,7 +154,7 @@ export function $navigateTo(
   }
 }
 
-export async function $navigateBack(options?: BackNavigationOptions) {
+export async function $navigateBack(options?: NavigateBackOptions) {
   const frame = resolveFrame(options?.frame);
 
   if (!frame) {

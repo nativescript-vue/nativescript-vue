@@ -61,11 +61,10 @@ function startVueDevtools(port, isAndroid = false) {
  * @param {typeof import("@nativescript/webpack")} webpack
  */
 module.exports = (webpack) => {
-  webpack.useConfig('vue');
-
   webpack.chainWebpack((config, env) => {
     const additionalDefines = {
       __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
     };
 
     // todo: support configuring the devtools host/port from the nativescript.config.ts...

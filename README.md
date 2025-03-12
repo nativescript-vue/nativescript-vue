@@ -1,5 +1,6 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg">
+  <img src="https://user-images.githubusercontent.com/879060/205505950-70769439-ff3e-4ecc-b0cd-1385483a847c.jpg">
+  <i>Yes, the image needs to be updated :)</i>
 </p>
 
 <h1 align="center">NativeScript-Vue3</h1>
@@ -7,6 +8,7 @@
 <p align="center">
     <a href="https://www.npmjs.com/package/nativescript-vue">
        <img src="https://img.shields.io/npm/v/nativescript-vue/latest.svg" alt="npm">
+
     </a>
     <a href="https://github.com/nativescript-vue/nativescript-vue/blob/master/LICENSE">
        <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
@@ -221,7 +223,7 @@ To allow Vue Devtools to connect, enable **cleartext HTTP traffic** in your `And
 
 ## Issues
 
-If you encounter any issues, please open a new issue with as much detail as possible. This is **beta** software, so there might be bugs.
+If you encounter any issues, please open a new issue with as much detail as possible.
 
 - [Join Discord](https://nativescript.org/discord)
 

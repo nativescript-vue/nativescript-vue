@@ -5,3 +5,7 @@ StackLayout {
 Label {
   /* background-color: rgb(0, 255, 0, 0.2); */
 }
+
+.modal {
+  background-color: rgb(0, 0, 255, 0.2);
+}

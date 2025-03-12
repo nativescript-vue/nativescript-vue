@@ -40,7 +40,7 @@ export { ELEMENT_REF, createNativeView } from './runtimeHelpers';
 
 export * from '@vue/runtime-core';
 export { vShow } from './directives/vShow';
-export { $showModal } from './plugins/modals';
+export { $showModal, $closeModal } from './plugins/modals';
 export { $navigateTo, $navigateBack } from './plugins/navigation';
 
 // creates a special root container that calls resetRoot whenever it's children change
@@ -78,7 +78,7 @@ export const createApp = ((...args) => {
 
   app.registerElement = registerElement;
 
-  app.mount = (...args) => {
+  app.mount = (...args: Parameters<typeof mount>) => {
     if (!args.length) {
       return mount(new NSVRoot(), false, false);
     }
@@ -96,6 +96,14 @@ export const createApp = ((...args) => {
 
   app.use(modalsPlugin);
   app.use(navigationPlugin);
+
+  app.config.errorHandler =  (err, instance, info) => {
+    console.error((info ? `Error during execution of ${info}: ` : ``) + err);
+
+    if(__DEV__) {
+      throw err;
+    }
+  };
 
   return app;
 }) as CreateAppFunction<NSVElement>;

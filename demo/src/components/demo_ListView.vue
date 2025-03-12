@@ -95,6 +95,7 @@ const onItemTap = useDebounceFn((item: Item) => {
         <Button text="Navigate" @tap="navigate" padding="32" fontSize="24" />
 
         <StackLayout row="2">
+          <TextField v-model="name" style="background-color: #aaa; padding: 4 8; margin: 4 6 12; border-radius: 8;" />
           <Label>Hello: {{ name }}</Label>
           <Button
             @tap="onTap"
@@ -114,6 +115,10 @@ const onItemTap = useDebounceFn((item: Item) => {
 
           <ListView :items="items2" height="800">
             <template #default="{ item, index }: ListItem<Item>">
+              <!-- TEST -->
+              <!-- TEST -->
+              <!-- TEST -->
+              <!-- TEST -->
               <StackLayout
                 @tap="onItemTap(item)"
                 :backgroundColor="selected.includes(item) ? '#ffedd5' : ''"

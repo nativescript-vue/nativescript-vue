@@ -4,20 +4,23 @@ import { patchClass } from './modules/class';
 import { patchEvent } from './modules/events';
 import { patchStyle } from './modules/style';
 
-import { isOn } from '../runtimeHelpers';
 import { getViewMeta, NSVModelDescriptor } from '../registry';
+import { isOn } from '../runtimeHelpers';
 
-export function patchProp(
+import type {
+  ComponentInternalInstance,
+  ElementNamespace,
+  RendererOptions,
+} from '@vue/runtime-core';
+
+export const patchProp: RendererOptions['patchProp'] = (
   el: NSVElement,
   key: string,
   prevValue: any,
   nextValue: any,
-  isSVG = false,
-  prevChildren: any,
-  parentComponent: any,
-  parentSuspense: any,
-  unmountChildren: any,
-) {
+  namespace?: ElementNamespace,
+  parentComponent?: ComponentInternalInstance | null,
+) => {
   switch (key) {
     // special
     case 'class':
@@ -53,4 +56,4 @@ export function patchProp(
         patchAttr(el, key, prevValue, nextValue);
       }
   }
-}
+};

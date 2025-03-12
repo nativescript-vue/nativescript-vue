@@ -1,4 +1,8 @@
-import { VNodeProps, RendererOptions } from '@vue/runtime-core';
+import {
+  VNodeProps,
+  RendererOptions,
+  ElementNamespace,
+} from '@vue/runtime-core';
 
 import { NSVComment, NSVElement, NSVNode, NSVText } from '../dom';
 
@@ -24,7 +28,7 @@ export function remove(el: NSVNode): void {
 
 export function createElement(
   type: string,
-  isSVG?: boolean | undefined,
+  namespace: ElementNamespace,
   isCustomizedBuiltIn?: string | undefined,
   vnodeProps?: (VNodeProps & { [key: string]: any }) | null | undefined,
 ): NSVElement {
@@ -65,12 +69,12 @@ export function cloneNode(node: NSVNode): NSVNode {
   console.log('CLONE NODE');
   return node;
 }
-// insertStaticContent?(content: string, parent: HostElement, anchor: HostNode | null, isSVG: boolean, start?: HostNode | null, end?: HostNode | null): [HostNode, HostNode];
+
 export function insertStaticContent(
   content: string,
   parent: NSVElement,
   anchor: NSVNode,
-  isSvg: boolean,
+  namespace: ElementNamespace,
   start?: NSVNode,
   end?: NSVNode,
 ): [NSVNode, NSVNode] {
