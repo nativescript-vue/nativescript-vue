@@ -7,11 +7,10 @@
 
 <p align="center">
     <a href="https://www.npmjs.com/package/nativescript-vue">
-       <img src="https://img.shields.io/npm/v/nativescript-vue/latest.svg" alt="npm">
-
+       <img src="https://img.shields.io/npm/v/nativescript-vue/latest.svg" alt="npm"/>
     </a>
     <a href="https://github.com/nativescript-vue/nativescript-vue/blob/master/LICENSE">
-       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license">
+       <img src="https://img.shields.io/github/license/nativescript-vue/nativescript-vue.svg" alt="license"/>
     </a>
 </p>
 
