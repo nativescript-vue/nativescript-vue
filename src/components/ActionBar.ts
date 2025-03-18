@@ -1,12 +1,13 @@
 import {
-  Page as NSCPage,
   ActionBar as NSCActionBar,
-  NavigationButton as NSCNavigationButton,
   ActionItem as NSCActionItem,
+  NavigationButton as NSCNavigationButton,
+  Page as NSCPage,
 } from '@nativescript/core';
-import { defineComponent, h, warn } from '@vue/runtime-core';
+import { defineComponent, h } from '@vue/runtime-core';
 import { NSVElement, NSVViewFlags } from '../dom';
 import { registerElement } from '../registry';
+import { logger } from '../util/logger';
 
 registerElement('NSCActionBar', () => NSCActionBar, {
   viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
@@ -65,7 +66,7 @@ export const ActionBar = /*#__PURE__*/ defineComponent({
               parent.nativeView.actionBar = actionBar;
             } else {
               if (__DEV__) {
-                warn(
+                logger.warn(
                   `<ActionBar> must be a direct child of a <Page> element - ` +
                     `got <${parent.nativeView.constructor.name}> instead.`,
                 );
