@@ -1,12 +1,11 @@
 import {
+  Comment,
   defineComponent,
   getCurrentInstance,
   h,
-  VNode,
-  warn,
-  watch,
   ref,
-  Comment,
+  VNode,
+  watch,
 } from '@vue/runtime-core';
 
 import {
@@ -18,6 +17,7 @@ import {
 import { NSVElement, NSVViewFlags } from '../dom';
 import { registerElement } from '../registry';
 import { ELEMENT_REF } from '../runtimeHelpers';
+import { logger } from '../util/logger';
 
 registerElement('NSCListView', () => NSCListView, {
   viewFlags: NSVViewFlags.NO_CHILDREN,
@@ -136,9 +136,9 @@ export const ListView = /*#__PURE__*/ defineComponent({
         );
 
         if (nonCommentVnodes.length === 0) {
-          warn(`ListView template must contain at least one element.`);
+          logger.warn(`ListView template must contain at least one element.`);
         } else if (nonCommentVnodes.length > 1) {
-          warn(
+          logger.warn(
             `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`,
           );
         }

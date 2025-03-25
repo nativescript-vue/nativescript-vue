@@ -32,16 +32,17 @@ declare module '@vue/runtime-core' {
 
 init();
 
+export * from './components';
 export * from './dom';
 export * from './registry';
 export * from './renderer';
-export * from './components';
-export { ELEMENT_REF, createNativeView } from './runtimeHelpers';
+export { createNativeView, ELEMENT_REF } from './runtimeHelpers';
 
 export * from '@vue/runtime-core';
 export { vShow } from './directives/vShow';
-export { $showModal, $closeModal } from './plugins/modals';
-export { $navigateTo, $navigateBack } from './plugins/navigation';
+export { $closeModal, $showModal } from './plugins/modals';
+export { $navigateBack, $navigateTo } from './plugins/navigation';
+export * from './renderer/runtimeDomOverrides';
 
 // creates a special root container that calls resetRoot whenever it's children change
 function createAppRoot() {
@@ -97,10 +98,10 @@ export const createApp = ((...args) => {
   app.use(modalsPlugin);
   app.use(navigationPlugin);
 
-  app.config.errorHandler =  (err, instance, info) => {
+  app.config.errorHandler = (err, instance, info) => {
     console.error((info ? `Error during execution of ${info}: ` : ``) + err);
 
-    if(__DEV__) {
+    if (__DEV__) {
       throw err;
     }
   };

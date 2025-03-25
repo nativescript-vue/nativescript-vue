@@ -28,7 +28,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
-    "@nativescript/core": "~8.8.6",
+    "@nativescript/core": "~8.9.1",
     "@nativescript/webpack": "~5.0.22",
     "esbuild": "^0.25.0",
     "lint-staged": "^15.4.3",
