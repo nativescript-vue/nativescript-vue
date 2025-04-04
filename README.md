@@ -30,7 +30,7 @@ ns run ios|android
 
 ## Upgrading to v3
 
-Please refer to our [Upgrade Guide](http://nativescript-vue.org/docs/getting-started/upgrade-guide).
+Please refer to our [Upgrade Guide](https://nativescript-vue.org/docs/essentials/upgrade-guide).
 
 ## Using Vue Devtools
 
