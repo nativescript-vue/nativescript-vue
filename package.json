@@ -17,24 +17,24 @@
     "prepack": "npm run build && npm run pack:template"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.5.13",
+    "@vue/compiler-sfc": "^3.5.16",
     "@vue/devtools": "^6.5.1",
-    "@vue/runtime-core": "^3.5.13",
-    "@vue/shared": "^3.5.13",
+    "@vue/runtime-core": "^3.5.16",
+    "@vue/shared": "^3.5.16",
     "cross-spawn": "^7.0.6",
     "set-value": "^4.1.0",
     "vue-loader": "^17.4.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.7.1",
-    "@commitlint/config-conventional": "^19.7.1",
-    "@nativescript/core": "~8.9.1",
-    "@nativescript/webpack": "~5.0.22",
-    "esbuild": "^0.25.0",
-    "lint-staged": "^15.4.3",
-    "prettier": "^3.5.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@nativescript/core": "~8.9.2",
+    "@nativescript/webpack": "~5.0.24",
+    "esbuild": "^0.25.5",
+    "lint-staged": "^16.1.0",
+    "prettier": "^3.5.3",
     "simple-git-hooks": "^2.11.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.3"
   },
   "simple-git-hooks": {
     "pre-commit": "npx --no-install lint-staged --config=package.json",
