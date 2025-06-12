@@ -17,7 +17,7 @@ NativeScript-Vue now supports Vue 3 and is generally available! This version bri
 
 ## Quick Start
 
-To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/github/nativescript-vue/nativescript-vue/tree/main/packages/stackblitz-template?file=src%2Fcomponents%2FHome.vue&title=NativeScript%20Starter%20Vue3%20Beta).
+To get started, you can use the [StackBlitz Template](https://stackblitz.com/fork/github/nativescript-vue/nativescript-vue/tree/main/packages/stackblitz-template?file=src%2Fcomponents%2FHome.vue&title=NativeScript%20Starter%20Vue3).
 
 Or, set up locally:
 
@@ -30,7 +30,7 @@ ns run ios|android
 
 ## Upgrading to v3
 
-Please refer to our [Upgrade Guide](http://nativescript-vue.org/docs/getting-started/upgrade-guide).
+Please refer to our [Upgrade Guide](https://nativescript-vue.org/docs/essentials/upgrade-guide).
 
 ## Using Vue Devtools
 
