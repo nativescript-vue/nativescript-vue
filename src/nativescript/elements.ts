@@ -5,10 +5,9 @@ import {
   TabViewItem as NSCTabViewItem,
 } from '@nativescript/core';
 
-import { warn } from '@vue/runtime-core';
-
 import { NSVElement, NSVViewFlags } from '../dom';
 import { registerElement } from '../registry';
+import { logger } from '../util/logger';
 
 export function registerCoreElements() {
   // layouts
@@ -91,7 +90,7 @@ export function registerCoreElements() {
           });
         } else {
           if (__DEV__) {
-            warn(
+            logger.warn(
               `<Frame> must only contain <Page> elements - ` +
                 `got <${child.nativeView.constructor.name}> instead.`,
             );
