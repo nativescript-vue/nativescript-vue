@@ -18,7 +18,7 @@ import { install as navigationPlugin } from './plugins/navigation';
 import { isKnownView, registerElement } from './registry';
 import { setRootApp } from './runtimeHelpers';
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   interface App {
     start(): ComponentPublicInstance | undefined;
     mount(
