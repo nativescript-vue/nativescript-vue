@@ -1,6 +1,6 @@
 import { createApp } from 'nativescript-vue';
 
-import App from './components/HMRTestLoader.vue';
+import App from './components/demo_ListView.vue';
 
 createApp(App)
   .use(() => {
