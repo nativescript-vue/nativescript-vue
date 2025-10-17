@@ -9,7 +9,7 @@ import { App, Component, Ref, nextTick, unref } from '@vue/runtime-core';
 import { NSVElement, NSVRoot } from '../dom';
 import { CreateNativeViewProps, createNativeView } from '../runtimeHelpers';
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     /**
      * todo: update docblock
