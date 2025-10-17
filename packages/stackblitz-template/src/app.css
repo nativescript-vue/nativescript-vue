@@ -4,3 +4,8 @@ ActionBar {
   background-color: #65adf1;
   color: white;
 }
+
+Page {
+  background: white;
+  color: black;
+}
