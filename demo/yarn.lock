@@ -681,7 +681,7 @@
     "@nativescript/types-android" "8.8.0"
     "@nativescript/types-ios" "8.8.0"
 
-"@nativescript/webpack@5.0.24":
+"@nativescript/webpack@~5.0.0":
   version "5.0.24"
   resolved "https://registry.yarnpkg.com/@nativescript/webpack/-/webpack-5.0.24.tgz#ba3726a5f5bfc6b959911fd294bc772b8f6ae634"
   integrity sha512-o6dVzqhIb7Wr/ZIKM2LT/iDpkyTi0RrxglDc2iLo0lMGKRbYc510/rEAH3JplcGTH0VUtGWgpZ2+PUUYMN5z8w==
