@@ -28,7 +28,7 @@ export function createNativeView<T = View, P = any>(
 ) {
   let isMounted = false;
   let vm: ComponentPublicInstance | null;
-  const newApp = renderer.createApp(component, props);
+  let currentApp = renderer.createApp(component, props);
   // Destructure so as not to copy over the root app instance
   const { app, ...rootContext } = rootApp._context;
   const context = { ...rootContext, ...contextOverrides };
@@ -47,11 +47,21 @@ export function createNativeView<T = View, P = any>(
         return this.vnode as M;
       }
 
+      // Create a NEW app instance for remount (after HMR unmount) as Vue doesn't allow mounting the same app instance twice
+      if (!currentApp._instance) {
+        currentApp = renderer.createApp(component, props);
+      }
+
       Object.keys(context).forEach((key) => {
-        newApp._context[key] = context[key];
+        currentApp._context[key] = context[key];
       });
 
-      vm = newApp.mount(root);
+      vm = currentApp.mount(root);
+
+      // Set reload callback on the component instance's appContext, for HMR to work on navigated pages
+      if (context.reload && vm && (vm as any).$?.appContext) {
+        (vm as any).$.appContext.reload = context.reload;
+      }
 
       isMounted = true;
 
@@ -61,7 +71,7 @@ export function createNativeView<T = View, P = any>(
       if (!isMounted) return;
 
       vm = null;
-      newApp.unmount();
+      currentApp.unmount();
 
       isMounted = false;
     },
