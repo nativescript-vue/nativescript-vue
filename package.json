@@ -26,8 +26,8 @@
     "vue-loader": "^17.4.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@nativescript/core": "~8.9.2",
     "@nativescript/webpack": "~5.0.24",
     "esbuild": "^0.25.5",
