@@ -87,6 +87,8 @@ export const createApp = ((...args) => {
   };
 
   app.start = () => {
+    // expose app instance globally for HMR access
+    globalThis.__NS_VUE_APP__ = app;
     const componentInstance = app.mount(createAppRoot(), false, false);
 
     startApp(componentInstance);
