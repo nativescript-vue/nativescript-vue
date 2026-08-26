@@ -98,10 +98,14 @@ export async function $showModal<T = any, P = any>(
         view.unmount();
         view.mount(root);
         openModal({
-          // todo: for this to work nicely, we'd need to add `animated: false` to `closeModal` as well
-          // but not currently possible without a core change.
-          // animated: false,
+          // A Transition/SharedTransition instance is single-use: its state
+          // was consumed by the presentation that just closed. Re-presenting
+          // with it leaves the new modal's dismissal completion permanently
+          // unfired, so no later close (HMR or user) ever calls back.
+          transition: undefined,
+          animated: false,
         });
+        modalStack.push(view);
         isReloading = false;
 
         return;
@@ -128,7 +132,10 @@ export async function $showModal<T = any, P = any>(
     };
     const closeModal = (...args: any[]) => {
       // remove view from modalStack
-      modalStack.splice(modalStack.indexOf(view), 1);
+      const stackIndex = modalStack.indexOf(view);
+      if (stackIndex > -1) {
+        modalStack.splice(stackIndex, 1);
+      }
 
       view.nativeView?.closeModal(...args);
     };
