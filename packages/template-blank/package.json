@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "@nativescript/tailwind": "~4.0.3",
-    "@nativescript/types": "~8.9.1",
-    "@nativescript/webpack": "~5.0.24",
+    "@nativescript/types": "~9.0.0",
+    "@nativescript/webpack": "~5.0.38",
     "@types/node": "~22.14.0",
     "tailwindcss": "^4.1.3",
     "typescript": "^5.8.3"

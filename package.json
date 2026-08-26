@@ -17,10 +17,10 @@
     "prepack": "npm run build && npm run pack:template"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.5.16",
+    "@vue/compiler-sfc": "^3.5.41",
     "@vue/devtools": "^6.5.1",
-    "@vue/runtime-core": "^3.5.16",
-    "@vue/shared": "^3.5.16",
+    "@vue/runtime-core": "^3.5.41",
+    "@vue/shared": "^3.5.41",
     "cross-spawn": "^7.0.6",
     "set-value": "^4.1.0",
     "vue-loader": "^17.4.2"
@@ -48,6 +48,5 @@
   "prettier": {
     "useTabs": false,
     "singleQuote": true
-  },
-  "packageManager": "yarn@1.22.19+sha256.732620bac8b1690d507274f025f3c6cfdc3627a84d9642e38a07452cc00e0f2e"
+  }
 }

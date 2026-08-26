@@ -8,7 +8,4 @@ export default {
     v8Flags: '--expose_gc',
     markingMode: 'none',
   },
-  cli: {
-    packageManager: 'yarn',
-  },
 } as NativeScriptConfig;
