@@ -11,7 +11,8 @@
     "paths": {
       "~/*": ["./src/*"],
       "@/*": ["./src/*"],
-      "nativescript-vue": ["../src/index.ts"]
+      "nativescript-vue": ["../src/index.ts"],
+      "vue": ["../src/index.ts"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

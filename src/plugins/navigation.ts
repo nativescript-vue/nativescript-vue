@@ -23,7 +23,7 @@ declare module '@vue/runtime-core' {
       target: Component<P>,
       options?: NavigateToOptions<P>,
     ) => Page;
-    $navigateBack: (options?: NavigateBackOptions) => void;
+    $navigateBack: (options?: NavigateBackOptions) => Promise<void>;
   }
 }
 
