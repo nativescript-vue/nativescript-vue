@@ -42,7 +42,7 @@ export * from '@vue/runtime-core';
 export { vShow } from './directives/vShow';
 export { $closeModal, $showModal } from './plugins/modals';
 export { $navigateBack, $navigateTo } from './plugins/navigation';
-export * from './renderer/runtimeDomOverrides';
+export { KeepAlive, TransitionGroup } from './renderer/runtimeDomOverrides';
 
 // creates a special root container that calls resetRoot whenever it's children change
 function createAppRoot() {
