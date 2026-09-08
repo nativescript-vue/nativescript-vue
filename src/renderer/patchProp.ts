@@ -6,6 +6,7 @@ import { patchStyle } from './modules/style';
 
 import { getViewMeta, NSVModelDescriptor } from '../registry';
 import { isOn } from '../runtimeHelpers';
+import { logger } from '../util/logger';
 
 import type {
   ComponentInternalInstance,
@@ -32,21 +33,30 @@ export const patchProp: RendererOptions['patchProp'] = (
       patchStyle(el, prevValue, nextValue);
       break;
     case 'modelValue':
-    case 'onUpdate:modelValue':
-      try {
-        // v-model - maps modelValue/onUpdate:modelValue to the correct prop/events from the registry meta
-        const { prop, event } = getViewMeta(el.tagName)
-          .model as NSVModelDescriptor;
-        if (key === 'modelValue') {
-          patchAttr(el, prop, prevValue, nextValue);
-        } else {
-          const cb = nextValue
-            ? ($event) => nextValue($event.object[prop])
-            : nextValue;
-          patchEvent(el, `on:${event}`, prevValue, cb);
-        }
-      } catch (err) {
-        // ignore if the view meta can't be found.
+    case 'onUpdate:modelValue': {
+      // v-model maps modelValue/onUpdate:modelValue to the prop/event pair
+      // declared in the element's registry meta
+      const model = resolveModel(el);
+      if (!model) {
+        break;
+      }
+      if (key === 'modelValue') {
+        patchAttr(el, model.prop, prevValue, nextValue);
+      } else {
+        const cb = nextValue
+          ? ($event) => nextValue($event.object[model.prop])
+          : nextValue;
+        patchEvent(el, `on:${model.event}`, prevValue, cb);
+      }
+      break;
+    }
+    case 'modelModifiers':
+      if (__DEV__ && nextValue && Object.keys(nextValue).length) {
+        logger.warn(
+          `v-model modifiers (.${Object.keys(nextValue).join(', .')}) are ` +
+            `not supported on <${el.tagName}>; apply the transformation in ` +
+            `a computed setter instead.`,
+        );
       }
       break;
     default:
@@ -57,3 +67,20 @@ export const patchProp: RendererOptions['patchProp'] = (
       }
   }
 };
+
+function resolveModel(el: NSVElement): NSVModelDescriptor | undefined {
+  let model: NSVModelDescriptor | undefined;
+  try {
+    model = getViewMeta(el.tagName).model;
+  } catch {
+    // unregistered element, fall through to the warning
+  }
+  if (!model && __DEV__) {
+    logger.warn(
+      `v-model is not supported on <${el.tagName}>: no model prop/event ` +
+        `pair is registered for it. Pass { model: { prop, event } } to ` +
+        `registerElement() to enable it.`,
+    );
+  }
+  return model;
+}
