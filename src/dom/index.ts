@@ -60,12 +60,11 @@ export abstract class NSVNode {
       return null;
     }
 
-    const selfIndex = this.parentNode.childNodes.findIndex(
-      (n) => n.nodeId === this.nodeId,
-    );
+    const siblings = this.parentNode.childNodes;
+    const selfIndex = siblings.indexOf(this);
 
-    if (selfIndex > -1 && selfIndex < this.parentNode.childNodes.length - 1) {
-      return this.parentNode.childNodes[selfIndex + 1];
+    if (selfIndex > -1 && selfIndex < siblings.length - 1) {
+      return siblings[selfIndex + 1];
     }
 
     return null;
@@ -76,12 +75,11 @@ export abstract class NSVNode {
       return null;
     }
 
-    const selfIndex = this.parentNode.childNodes.findIndex(
-      (n) => n.nodeId === this.nodeId,
-    );
+    const siblings = this.parentNode.childNodes;
+    const selfIndex = siblings.indexOf(this);
 
     if (selfIndex > 0) {
-      return this.parentNode.childNodes[selfIndex - 1];
+      return siblings[selfIndex - 1];
     }
 
     return null;
@@ -207,37 +205,38 @@ export class NSVElement extends NSVNode {
   }
 
   insertBefore(el: NSVNode, anchor?: NSVNode | null) {
-    if (!anchor) {
+    if (!anchor || anchor === el) {
       return this.appendChild(el);
     }
 
-    const refIndex = this.childNodes.findIndex(
-      (node) => node.nodeId === anchor.nodeId,
-    );
+    // Detach before locating the anchor: when el is already a child of this
+    // node and sits before the anchor, removing it shifts the anchor's index.
+    el.parentNode?.removeChild(el);
+
+    const refIndex = this.childNodes.indexOf(anchor);
 
     if (refIndex === -1) {
       return this.appendChild(el);
     }
 
-    if (el.parentNode) {
-      el.parentNode.removeChild(el);
-    }
-
     this.childNodes.splice(refIndex, 0, el);
     el.parentNode = this;
 
-    // find index to use for the native view, since non-visual nodes
-    // (comment/text don't exist in the native view hierarchy)
-    // todo: potentially refactor based on my benchmark:
-    // https://www.measurethat.net/Benchmarks/Show/7450/0/filter-findindex
-    const trueIndex = this.childNodes
-      .filter((node) => node.nodeType === NSVNodeTypes.ELEMENT)
-      .findIndex((node) => node.nodeId === el.nodeId);
+    // comment/text nodes don't exist in the native view hierarchy, so the
+    // native index only counts the element nodes preceding el
+    let trueIndex = 0;
+    for (let i = 0; i < refIndex; i++) {
+      if (this.childNodes[i].nodeType === NSVNodeTypes.ELEMENT) {
+        trueIndex++;
+      }
+    }
 
     this.addChild(el, trueIndex);
   }
 
   appendChild(el: NSVNode) {
+    el.parentNode?.removeChild(el);
+
     this.childNodes.push(el);
     el.parentNode = this;
 
@@ -245,9 +244,7 @@ export class NSVElement extends NSVNode {
   }
 
   removeChild(el: NSVNode) {
-    const index = this.childNodes.findIndex(
-      (node) => node.nodeId === el.nodeId,
-    );
+    const index = this.childNodes.indexOf(el);
 
     if (index > -1) {
       this.childNodes.splice(index, 1);
@@ -315,8 +312,8 @@ export class NSVRoot extends NSVNode {
   }
 
   removeChild(el: NSVNode) {
-    // console.log('NSVRoot->removeCchild()');
     if (el === this.el) {
+      el.parentNode = null;
       this.el = null;
     }
   }
