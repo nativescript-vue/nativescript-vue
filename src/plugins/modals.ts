@@ -65,8 +65,12 @@ export async function $showModal<T = any, P = any>(
   component: Component<P>,
   options: ShowModalOptions<P, T> = {},
 ): Promise<T | false | undefined> {
+  // presenting from a view that is already presenting fails on iOS, so a
+  // modal opened while another is open is shown from the topmost one
   const modalTarget = resolveModalTarget(
-    options.target ?? Application.getRootView(),
+    options.target ??
+      modalStack.at(-1)?.nativeView ??
+      Application.getRootView(),
   );
 
   if (!modalTarget) {
@@ -76,7 +80,7 @@ export async function $showModal<T = any, P = any>(
     return;
   }
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     let isResolved = false;
     let isReloading = false;
     let root = new NSVRoot();
@@ -97,14 +101,19 @@ export async function $showModal<T = any, P = any>(
       if (isReloading) {
         view.unmount();
         view.mount(root);
-        openModal({
-          // A Transition/SharedTransition instance is single-use: its state
-          // was consumed by the presentation that just closed. Re-presenting
-          // with it leaves the new modal's dismissal completion permanently
-          // unfired, so no later close (HMR or user) ever calls back.
-          transition: undefined,
-          animated: false,
-        });
+        try {
+          openModal({
+            // A Transition/SharedTransition instance is single-use: its state
+            // was consumed by the presentation that just closed. Re-presenting
+            // with it leaves the new modal's dismissal completion permanently
+            // unfired, so no later close (HMR or user) ever calls back.
+            transition: undefined,
+            animated: false,
+          });
+        } catch (err) {
+          fail(err);
+          return;
+        }
         modalStack.push(view);
         isReloading = false;
 
@@ -112,6 +121,7 @@ export async function $showModal<T = any, P = any>(
       }
 
       isResolved = true;
+      removeFromStack();
       view.unmount();
       view = null;
 
@@ -129,15 +139,26 @@ export async function $showModal<T = any, P = any>(
         closeCallback,
         ...additionalOptions,
       });
+      // core refuses to present (target already presenting, not in the
+      // window hierarchy) by tracing an error and returning; a successful
+      // presentation always links the modal to its parent synchronously
+      if (!view.nativeView._modalParent) {
+        throw new Error(
+          `Could not show modal: ${modalTarget.constructor.name} refused to ` +
+            `present it. Close the modal it is already presenting, or pass a ` +
+            `different target.`,
+        );
+      }
     };
-    const closeModal = (...args: any[]) => {
-      // remove view from modalStack
+    const removeFromStack = () => {
       const stackIndex = modalStack.indexOf(view);
       if (stackIndex > -1) {
         modalStack.splice(stackIndex, 1);
       }
-
-      view.nativeView?.closeModal(...args);
+    };
+    const closeModal = (...args: any[]) => {
+      removeFromStack();
+      view?.nativeView?.closeModal(...args);
     };
 
     // clone the config and globalProperties to avoid mutating the root app's config/globalProperties
@@ -149,8 +170,22 @@ export async function $showModal<T = any, P = any>(
       { $closeModal: closeModal, $modal: { close: closeModal } },
     );
 
+    // a modal that never presented must not keep its app instance alive
+    const fail = (err: unknown) => {
+      isResolved = true;
+      removeFromStack();
+      view?.unmount();
+      view = null;
+      reject(err);
+    };
+
     view.mount(root);
-    openModal();
+    try {
+      openModal();
+    } catch (err) {
+      fail(err);
+      return;
+    }
     modalStack.push(view);
   });
 }
