@@ -126,7 +126,7 @@ function resolveDevtools(projectRoot) {
 const BROWSER_RESOLVED_PACKAGES =
   /[\\/]node_modules[\\/](socket\.io-client|engine\.io-client|socket\.io-parser|engine\.io-parser)[\\/]/;
 
-function startVueDevtools(cli, port, isAndroid) {
+function startVueDevtools(cli, port, isAndroid, debug) {
   console.log(`[VueDevtools] Starting Vue Devtools on port ${port}`);
   if (isAndroid) {
     console.log(
@@ -134,7 +134,7 @@ function startVueDevtools(cli, port, isAndroid) {
     );
   }
   const child = spawn(process.execPath, [cli], {
-    stdio: 'ignore',
+    stdio: debug ? 'inherit' : 'ignore',
     env: {
       ...process.env,
       PORT: String(port),
@@ -203,6 +203,7 @@ module.exports = (webpack) => {
         additionalDefines['__VUE_PROD_DEVTOOLS__'] = true;
         additionalDefines['__NS_VUE_DEVTOOLS_HOST__'] = JSON.stringify(host);
         additionalDefines['__NS_VUE_DEVTOOLS_PORT__'] = port;
+        additionalDefines['__NS_VUE_DEVTOOLS_DEBUG__'] = !!env.vueDevtoolsDebug;
 
         for (const [name, dir] of Object.entries(devtools.aliases)) {
           config.resolve.alias.set(name, dir);
@@ -235,7 +236,12 @@ module.exports = (webpack) => {
         config.entry('bundle').clear().merge(paths);
 
         if (String(env.vueDevtoolsSpawn) !== 'false') {
-          startVueDevtools(devtools.cli, port, isAndroid);
+          startVueDevtools(
+            devtools.cli,
+            port,
+            isAndroid,
+            !!env.vueDevtoolsDebug,
+          );
         }
       }
     }
