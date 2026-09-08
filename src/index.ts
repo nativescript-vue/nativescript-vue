@@ -36,7 +36,7 @@ export * from './components';
 export * from './dom';
 export * from './registry';
 export * from './renderer';
-export { createNativeView, ELEMENT_REF } from './runtimeHelpers';
+export { createNativeView, ELEMENT_REF, isOn } from './runtimeHelpers';
 
 export * from '@vue/runtime-core';
 export { vShow } from './directives/vShow';
