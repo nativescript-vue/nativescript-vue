@@ -14,7 +14,7 @@ withDefaults(
   { depth: 0 },
 );
 
-const message = 'Hello World!!';
+const message = 'Hello World!';
 
 interface Test {
   name: string;
@@ -55,7 +55,7 @@ function close() {
         text="Close Modal"
         @tap="$modal?.close({ depth, foo: 'bar' }, 'arg1', 'arg2')"
       />
-      <Button text="Close Modal (via $closeModal)" @tap="close" />
+      <Button v-if="$modal" text="Close Modal (via $closeModal)" @tap="close" />
 
       <Test />
 
