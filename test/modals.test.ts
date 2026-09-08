@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { $closeModal, $showModal, createApp, h } from '../src';
+import { $closeModal, $showModal, createApp, h, onUnmounted } from '../src';
 import { Application, View } from './stubs/nativescript-core';
 
 const Root = { render: () => h('StackLayout') };
@@ -23,13 +23,68 @@ describe('$showModal / $closeModal', () => {
 
     const first = $showModal(Modal);
     const second = $showModal(Modal);
-    expect(root.__modals).toHaveLength(2);
+    const [firstView] = root.__modals;
+    expect(firstView.__modals).toHaveLength(1);
 
     // the top modal goes away through the platform (back button, swipe)
-    root.__modals[1].__dismissNatively();
+    firstView.__modals[0].__dismissNatively();
     await expect(second).resolves.toBeUndefined();
 
     expect(() => $closeModal('first')).not.toThrow();
     await expect(first).resolves.toBe('first');
+  });
+});
+
+describe('nested modals', () => {
+  it('presents a modal opened while another is open from the open modal', async () => {
+    const root = startApp();
+
+    const outer = $showModal(Modal);
+    expect(root.__modals).toHaveLength(1);
+    const outerView = root.__modals[0];
+
+    const inner = $showModal(Modal);
+    expect(root.__modals).toHaveLength(1);
+    expect(outerView.__modals).toHaveLength(1);
+
+    $closeModal('inner');
+    await expect(inner).resolves.toBe('inner');
+    $closeModal('outer');
+    await expect(outer).resolves.toBe('outer');
+  });
+
+  it('still honors an explicit target', async () => {
+    startApp();
+    const target = new View();
+    const outer = $showModal(Modal);
+    const inner = $showModal(Modal, { target });
+    expect(target.__modals).toHaveLength(1);
+
+    $closeModal();
+    $closeModal();
+    await Promise.all([outer, inner]);
+  });
+});
+
+describe('refused presentation', () => {
+  it('rejects and unmounts when the target refuses to present', async () => {
+    const root = startApp();
+    let unmounted = false;
+    const Inner = {
+      setup() {
+        onUnmounted(() => (unmounted = true));
+        return () => h('Label');
+      },
+    };
+
+    const outer = $showModal(Modal);
+    // root is already presenting, so this cannot be shown from it
+    const refused = $showModal(Inner, { target: root });
+
+    await expect(refused).rejects.toThrow(/refused to present/);
+    expect(unmounted).toBe(true);
+
+    $closeModal('outer');
+    await expect(outer).resolves.toBe('outer');
   });
 });
