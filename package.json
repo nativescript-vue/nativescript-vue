@@ -1,20 +1,40 @@
 {
   "name": "nativescript-vue",
   "version": "3.0.3",
+  "description": "Vue 3 renderer for NativeScript",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nativescript-vue/nativescript-vue.git"
+  },
+  "homepage": "https://nativescript-vue.org",
+  "bugs": "https://github.com/nativescript-vue/nativescript-vue/issues",
+  "keywords": [
+    "nativescript",
+    "vue",
+    "vue3",
+    "renderer",
+    "ios",
+    "android"
+  ],
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/",
     "devtools.js",
     "nativescript.webpack.js"
   ],
-  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "build": "tsc",
+    "clean": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\"",
+    "build": "npm run clean && tsc",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "simple-git-hooks",
-    "pack:template": "npm pack ./packages/template-blank",
-    "prepack": "npm run build && npm run pack:template"
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.5.41",
@@ -25,12 +45,14 @@
     "set-value": "^4.1.0",
     "vue-loader": "^17.4.2"
   },
+  "peerDependencies": {
+    "@nativescript/core": ">=8.9.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@nativescript/core": "~8.9.2",
     "@nativescript/webpack": "~5.0.24",
-    "esbuild": "^0.25.5",
     "lint-staged": "^16.1.0",
     "prettier": "^3.5.3",
     "simple-git-hooks": "^2.11.1",
