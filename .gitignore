@@ -1,6 +1,12 @@
 **/dist
 *.tgz
+coverage
 
 yarn.lock
 yarn-error.log
 node_modules
+.DS_Store
+
+demo/hooks
+demo/platforms
+demo/App_Resources
