@@ -22,7 +22,8 @@ declare module '@vue/runtime-core' {
       options?: ShowModalOptions<P, T>,
     ) => Promise<T | false | undefined>;
     $closeModal: <T = any>(data: T, ...args: any[]) => void;
-    $modal: { close: <T = any>(data: T, ...args: any[]) => void };
+    /** The modal this component is shown in, or false when it is not a modal. */
+    $modal: false | { close: <T = any>(data: T, ...args: any[]) => void };
   }
 }
 
@@ -41,6 +42,8 @@ export type ShowModalOptions<P = any, T = any> = Partial<
  */
 export function install(app: App) {
   app.config.globalProperties.$showModal = $showModal;
+  // lets templates use v-if="$modal" whether or not they are shown modally
+  app.config.globalProperties.$modal = false;
 }
 
 function resolveModalTarget(
@@ -116,10 +119,15 @@ export async function $showModal<T = any, P = any>(
         modalStack.push(view);
         isReloading = false;
       };
+      // the event still fires inside the platform dismissal completion, and
+      // a non-animated dismissal runs that completion synchronously inside
+      // the dismiss call; presenting from there loses the sheet's dimming,
+      // so the present waits for the next run loop turn
+      const representNextTurn = () => setTimeout(represent, 0);
       if (closedEvent) {
-        view.nativeView.once(closedEvent, represent);
+        view.nativeView.once(closedEvent, representNextTurn);
       } else {
-        setTimeout(represent, 0);
+        representNextTurn();
       }
 
       // dismiss without animation so the swap is a blink, not a slide
