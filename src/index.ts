@@ -87,10 +87,13 @@ export const createApp = ((...args) => {
   };
 
   app.start = () => {
+    // mounted hooks run synchronously inside mount, and $navigateTo/$showModal
+    // called from them need the root app context
+    setRootApp(app);
+
     const componentInstance = app.mount(createAppRoot(), false, false);
 
     startApp(componentInstance);
-    setRootApp(app);
 
     return componentInstance;
   };
