@@ -61,7 +61,10 @@ function addStyleProperty(el: NSVElement, property: string, value: any) {
     _sov.set(property, el.style[property]);
   }
 
-  el.style[property] = value;
+  // every style write re-evaluates the native CSS state, so skip no-ops
+  if (el.style[property] !== value) {
+    el.style[property] = value;
+  }
 }
 
 function removeStyleProperty(el: NSVElement, property: string) {
@@ -88,23 +91,19 @@ function removeStyleProperty(el: NSVElement, property: string) {
   }
 }
 
-// todo: perhaps mimic dom version with prefixing stripped out: https://github.com/vuejs/core/blob/main/packages/runtime-dom/src/modules/style.ts
 export function patchStyle(el: NSVElement, prev: Style, next: Style) {
-  if (prev) {
-    const style = normalizeStyle(prev);
-    // undo old styles
-    Object.keys(style).forEach((property) => {
+  const prevStyle = normalizeStyle(prev) ?? {};
+  const nextStyle = normalizeStyle(next) ?? {};
+
+  for (const property in prevStyle) {
+    if (!(property in nextStyle)) {
       removeStyleProperty(el, property);
-    });
+    }
   }
 
-  if (!next) {
-    el.removeAttribute('style');
-  } else {
-    // set new styles
-    const style = normalizeStyle(next);
-    Object.keys(style).forEach((property) => {
-      addStyleProperty(el, property, style[property]);
-    });
+  // next is applied in full rather than diffed against prev: Vue passes the
+  // same object for both when a reactive style object is mutated in place
+  for (const property in nextStyle) {
+    addStyleProperty(el, property, nextStyle[property]);
   }
 }
