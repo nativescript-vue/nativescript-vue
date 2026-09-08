@@ -9,17 +9,21 @@ if (__DEV__) {
     const port = (target.__VUE_DEVTOOLS_PORT__ ??= __NS_VUE_DEVTOOLS_PORT__);
     const url = `${host}:${port}`;
 
-    const { io } = require('socket.io-client');
     const {
       devtools,
       setElectronServerContext,
       createRpcServer,
     } = require('@vue/devtools-kit');
-    const { functions } = require('@vue/devtools-core');
 
-    // must run before the app imports Vue, so the hook is in place when
-    // createApp registers itself
+    // The hook must exist before anything evaluates nativescript-vue: its
+    // renderer reads the hook once at import and, without a window to
+    // replay into, treats a missing hook as "devtools not installed" for
+    // the rest of the session. @vue/devtools-core imports 'vue', which the
+    // webpack alias resolves to nativescript-vue, so it has to come after.
     devtools.init();
+
+    const { io } = require('socket.io-client');
+    const { functions } = require('@vue/devtools-core');
 
     const platform = global.isAndroid ? 'Android' : 'iOS';
     console.log(`[VueDevtools] Connecting to ${url} (${platform})...`);
