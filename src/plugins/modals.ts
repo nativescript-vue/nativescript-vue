@@ -112,6 +112,7 @@ export async function $showModal<T = any, P = any>(
       }
 
       isResolved = true;
+      removeFromStack();
       view.unmount();
       view = null;
 
@@ -130,14 +131,15 @@ export async function $showModal<T = any, P = any>(
         ...additionalOptions,
       });
     };
-    const closeModal = (...args: any[]) => {
-      // remove view from modalStack
+    const removeFromStack = () => {
       const stackIndex = modalStack.indexOf(view);
       if (stackIndex > -1) {
         modalStack.splice(stackIndex, 1);
       }
-
-      view.nativeView?.closeModal(...args);
+    };
+    const closeModal = (...args: any[]) => {
+      removeFromStack();
+      view?.nativeView?.closeModal(...args);
     };
 
     // clone the config and globalProperties to avoid mutating the root app's config/globalProperties

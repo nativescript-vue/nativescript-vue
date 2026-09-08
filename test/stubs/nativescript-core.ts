@@ -87,8 +87,21 @@ export class ViewBase {
 }
 
 export class View extends ViewBase {
-  showModal() {}
-  closeModal() {}
+  _modalOptions: any = null;
+  __modals: View[] = [];
+  showModal(view: View, options: any) {
+    view._modalOptions = options;
+    this.__modals.push(view);
+  }
+  closeModal(...args: any[]) {
+    const options = this._modalOptions;
+    this._modalOptions = null;
+    options?.closeCallback?.(...args);
+  }
+  /** Simulates the platform dismissing the modal (back button, swipe). */
+  __dismissNatively() {
+    this.closeModal();
+  }
 }
 
 export class LayoutBase extends View {
