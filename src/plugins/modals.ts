@@ -92,18 +92,12 @@ export async function $showModal<T = any, P = any>(
 
     const reloadModal = () => {
       isReloading = true;
-      closeModal();
-      // reopening is done in `closeCallback`
-    };
 
-    let view = createNativeView(component, options.props, {
-      reload: reloadModal,
-    });
-
-    const closeCallback = (data?: T, ...args: any) => {
-      if (isResolved) return;
-
-      if (isReloading) {
+      // re-present only once the platform has finished dismissing the old
+      // modal; presenting from inside the dismissal completion (where
+      // closeCallback runs) leaves the presentation half torn down
+      const closedEvent = (View as any).closedModallyEvent;
+      const represent = () => {
         view.unmount();
         view.mount(root);
         try {
@@ -121,7 +115,31 @@ export async function $showModal<T = any, P = any>(
         }
         modalStack.push(view);
         isReloading = false;
+      };
+      if (closedEvent) {
+        view.nativeView.once(closedEvent, represent);
+      } else {
+        setTimeout(represent, 0);
+      }
 
+      // dismiss without animation so the swap is a blink, not a slide
+      const animatedOptions = (view.nativeView as any)._modalAnimatedOptions;
+      if (Array.isArray(animatedOptions)) {
+        animatedOptions.push(false);
+      }
+
+      closeModal();
+    };
+
+    let view = createNativeView(component, options.props, {
+      reload: reloadModal,
+    });
+
+    const closeCallback = (data?: T, ...args: any) => {
+      if (isResolved) return;
+
+      if (isReloading) {
+        // re-presented from reloadModal once dismissal completes
         return;
       }
 
