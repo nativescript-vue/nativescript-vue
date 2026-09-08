@@ -1,14 +1,15 @@
 name: Release
 
-# Publishes nativescript-vue and @nativescript-vue/template-blank to npm with
+# Stages nativescript-vue and @nativescript-vue/template-blank on npm with
 # provenance when a v* tag is pushed. Create the tag with `npm run release`.
+# Nothing goes live from CI: a maintainer approves each staged version with
+# 2FA (`npm stage approve`), which is what publishes it.
 #
 # Requires, once, outside this file:
-# - npm Trusted Publishing configured for both packages, pointing at this
-#   repository and this workflow file (npmjs.com → package → Settings →
-#   Trusted Publisher). No npm token is stored anywhere.
-# - A protected `npm` environment in the repository settings with required
-#   reviewers, so a tag push alone cannot publish.
+# - npm Trusted Publishing for both packages, pointing at this repository,
+#   this workflow file and the `npm` environment, with only the
+#   "stage publish" permission. No npm token is stored anywhere.
+# - The `npm` environment in the repository settings.
 
 on:
   push:
@@ -55,13 +56,13 @@ jobs:
       - name: Build
         run: npm run build
 
-  publish:
-    name: Publish to npm
+  stage:
+    name: Stage on npm
     needs: verify
     runs-on: ubuntu-latest
     environment:
       name: npm
-      url: https://www.npmjs.com/package/nativescript-vue
+      url: https://www.npmjs.com/package/nativescript-vue?activeTab=versions
     permissions:
       contents: write # create the GitHub release
       id-token: write # OIDC token for npm trusted publishing + provenance
@@ -97,19 +98,40 @@ jobs:
             echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publish nativescript-vue
-        run: npm publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
+      - name: Stage nativescript-vue
+        run: npm stage publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
 
-      - name: Publish @nativescript-vue/template-blank
-        run: npm publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
+      - name: Stage @nativescript-vue/template-blank
+        run: npm stage publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
         working-directory: packages/template-blank
 
-      - name: Create GitHub release
+      # Draft until the staged versions are approved, so the GitHub release
+      # never points at a version that is not installable yet.
+      - name: Create draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          args=(--generate-notes --verify-tag)
+          args=(--draft --generate-notes --verify-tag)
           if [[ "$GITHUB_REF_NAME" == *-* ]]; then
             args+=(--prerelease)
           fi
           gh release create "$GITHUB_REF_NAME" "${args[@]}"
+
+      - name: Next steps
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          {
+            echo "## Staged, not published"
+            echo
+            echo "Both packages are staged on npm as \`$version\` with dist-tag \`${{ steps.tag.outputs.dist_tag }}\`."
+            echo "To publish, approve each with 2FA from a machine where you are logged in to npm:"
+            echo
+            echo '```sh'
+            echo "npm stage list nativescript-vue"
+            echo "npm stage approve <stage-id>"
+            echo "npm stage list @nativescript-vue/template-blank"
+            echo "npm stage approve <stage-id>"
+            echo '```'
+            echo
+            echo "Then publish the draft GitHub release for \`$GITHUB_REF_NAME\`."
+          } >> "$GITHUB_STEP_SUMMARY"
