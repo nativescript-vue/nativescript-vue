@@ -17,7 +17,7 @@ import { renderer } from './renderer';
 import { hasOpenModals, install as modalsPlugin } from './plugins/modals';
 import { install as navigationPlugin } from './plugins/navigation';
 import { isKnownView, registerElement } from './registry';
-import { ELEMENT_REF, setRootApp } from './runtimeHelpers';
+import { ELEMENT_REF, nameForDevtools, setRootApp } from './runtimeHelpers';
 import { logger } from './util/logger';
 
 declare module '@vue/runtime-core' {
@@ -128,6 +128,7 @@ function isAwayFromRootPage() {
 
 export const render = renderer.render;
 export const createApp = ((...args) => {
+  nameForDevtools(args[0]);
   const app = renderer.createApp(...args);
   const { mount } = app;
 
