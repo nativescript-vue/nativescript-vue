@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { h, nextTick, ref } from '../src';
+import { h, nextTick, reactive, ref } from '../src';
 import { __setPlatform } from './stubs/nativescript-core';
 import { elementChildren, mount, nativeChildren } from './helpers';
 
@@ -148,5 +148,51 @@ describe('keyed reorders', () => {
     );
     expect(a.prevSibling).toBe(c);
     expect(b.nextSibling).toBe(c);
+  });
+});
+
+describe('style patching', () => {
+  function countingStyle(el: any) {
+    const writes: string[] = [];
+    el.nativeView.style = new Proxy(el.nativeView.style, {
+      set(target, prop, value) {
+        writes.push(String(prop));
+        target[prop as string] = value;
+        return true;
+      },
+    });
+    return writes;
+  }
+
+  it('only writes properties that changed or were removed', async () => {
+    const style = ref<Record<string, any>>({ color: 'red', fontSize: 10 });
+    const { el } = mount({ render: () => h('Label', { style: style.value }) });
+    const writes = countingStyle(el);
+
+    style.value = { color: 'red', fontSize: 12 };
+    await nextTick();
+    expect(writes).toEqual(['fontSize']);
+
+    style.value = { fontSize: 12 };
+    await nextTick();
+    expect(writes).toEqual(['fontSize', 'color']);
+    expect(el.nativeView.style.color).toBeUndefined();
+  });
+
+  it('applies in-place mutations of a reactive style object', async () => {
+    const style = reactive<Record<string, any>>({ color: 'red' });
+    const { el } = mount({ render: () => h('Label', { style }) });
+
+    style.color = 'blue';
+    await nextTick();
+    expect(el.nativeView.style.color).toBe('blue');
+  });
+
+  it('accepts string styles', () => {
+    const { el } = mount({
+      render: () => h('Label', { style: 'color: red; font-size: 10' }),
+    });
+    expect(el.nativeView.style.color).toBe('red');
+    expect(el.nativeView.style['font-size']).toBe('10');
   });
 });
