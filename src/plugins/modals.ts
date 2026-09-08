@@ -61,6 +61,11 @@ function resolveModalTarget(
 
 const modalStack = [];
 
+/** @internal */
+export function hasOpenModals() {
+  return modalStack.length > 0;
+}
+
 export async function $showModal<T = any, P = any>(
   component: Component<P>,
   options: ShowModalOptions<P, T> = {},

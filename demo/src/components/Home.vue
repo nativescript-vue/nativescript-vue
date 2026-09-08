@@ -51,6 +51,7 @@ function close() {
       <Button text="Go home" @tap="goHome(depth + 1)" />
       <Button text="Go home Modal" @tap="goHome(depth + 1, true)" />
       <Button
+        v-if="$modal"
         text="Close Modal"
         @tap="$modal?.close({ depth, foo: 'bar' }, 'arg1', 'arg2')"
       />

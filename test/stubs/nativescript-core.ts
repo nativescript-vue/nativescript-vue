@@ -167,15 +167,26 @@ export class Frame extends View {
   }
   currentPage: any;
   currentEntry: any = {};
+  backStack: any[] = [];
   navigate(entry: any) {
+    if (this.currentPage && !entry.clearHistory) {
+      this.backStack.push(this.currentPage);
+    }
+    if (entry.clearHistory) {
+      this.backStack = [];
+    }
     this.currentPage = entry.create();
     this.currentEntry = entry;
   }
-  replacePage() {}
-  canGoBack() {
-    return false;
+  replacePage(entry: any) {
+    this.currentPage = entry.create();
   }
-  goBack() {}
+  canGoBack() {
+    return this.backStack.length > 0;
+  }
+  goBack() {
+    this.currentPage = this.backStack.pop();
+  }
 }
 
 export class ActionBar extends View {
