@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { VueLoaderPlugin } = require('vue-loader');
@@ -49,22 +50,41 @@ function findFreePort(startingPort = 8098) {
 }
 
 /**
+ * Finds the directory of an installed package the way Node would, without
+ * going through its exports map (most of the devtools packages do not
+ * expose package.json there). Handles hoisted, nested and pnpm layouts.
+ */
+function findPackageDir(name, from) {
+  let dir = from;
+  for (;;) {
+    const candidates = [path.join(dir, 'node_modules', name)];
+    if (path.basename(dir) === 'node_modules') {
+      candidates.push(path.join(dir, name));
+    }
+    for (const candidate of candidates) {
+      if (fs.existsSync(path.join(candidate, 'package.json'))) {
+        return fs.realpathSync(candidate);
+      }
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) {
+      return null;
+    }
+    dir = parent;
+  }
+}
+
+/**
  * Locates @vue/devtools and the client packages it brings along, resolving
  * from the app so a hoisted or nested layout both work.
  */
 function resolveDevtools(projectRoot) {
-  const resolveFrom = (request, from) =>
-    require.resolve(request, { paths: [from] });
-
-  let devtoolsPkg;
-  try {
-    devtoolsPkg = resolveFrom('@vue/devtools/package.json', projectRoot);
-  } catch {
+  const devtoolsDir = findPackageDir('@vue/devtools', projectRoot);
+  if (!devtoolsDir) {
     return null;
   }
 
-  const devtoolsDir = path.dirname(devtoolsPkg);
-  const version = require(devtoolsPkg).version;
+  const version = require(path.join(devtoolsDir, 'package.json')).version;
   const major = parseInt(version.split('.')[0], 10);
   if (major < 8) {
     throw new Error(
@@ -72,23 +92,25 @@ function resolveDevtools(projectRoot) {
     );
   }
 
-  const electronDir = path.dirname(
-    resolveFrom('@vue/devtools-electron/package.json', devtoolsDir),
-  );
+  const requireDir = (name, from) => {
+    const dir = findPackageDir(name, from);
+    if (!dir) {
+      throw new Error(
+        `[VueDevtools] ${name} is missing next to @vue/devtools. Reinstall it: npm i -D @vue/devtools@^8`,
+      );
+    }
+    return dir;
+  };
+
+  const electronDir = requireDir('@vue/devtools-electron', devtoolsDir);
 
   return {
     version,
     cli: path.join(electronDir, 'dist/cli.mjs'),
     aliases: {
-      'socket.io-client': path.dirname(
-        resolveFrom('socket.io-client/package.json', electronDir),
-      ),
-      '@vue/devtools-kit': path.dirname(
-        resolveFrom('@vue/devtools-kit/package.json', devtoolsDir),
-      ),
-      '@vue/devtools-core': path.dirname(
-        resolveFrom('@vue/devtools-core/package.json', electronDir),
-      ),
+      'socket.io-client': requireDir('socket.io-client', electronDir),
+      '@vue/devtools-kit': requireDir('@vue/devtools-kit', devtoolsDir),
+      '@vue/devtools-core': requireDir('@vue/devtools-core', electronDir),
     },
   };
 }
