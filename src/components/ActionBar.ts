@@ -19,7 +19,7 @@ registerElement('NSCActionBar', () => NSCActionBar, {
       if (childView instanceof NSCNavigationButton) {
         actionBar.navigationButton = childView;
       } else if (childView instanceof NSCActionItem) {
-        if (atIndex) {
+        if (typeof atIndex === 'number') {
           const ai: NSCActionItem[] = actionBar.actionItems.getItems();
           ai.splice(atIndex, 0, childView);
           (actionBar.actionItems as any).setItems(ai);
