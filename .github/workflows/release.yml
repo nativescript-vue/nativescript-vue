@@ -1,0 +1,115 @@
+name: Release
+
+# Publishes nativescript-vue and @nativescript-vue/template-blank to npm with
+# provenance when a v* tag is pushed. Create the tag with `npm run release`.
+#
+# Requires, once, outside this file:
+# - npm Trusted Publishing configured for both packages, pointing at this
+#   repository and this workflow file (npmjs.com → package → Settings →
+#   Trusted Publisher). No npm token is stored anywhere.
+# - A protected `npm` environment in the repository settings with required
+#   reviewers, so a tag push alone cannot publish.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions: {}
+
+env:
+  SKIP_SIMPLE_GIT_HOOKS: 1
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Check tag matches package versions
+        run: node scripts/check-release-version.mjs "$GITHUB_REF_NAME"
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Format
+        run: npm run format:check
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  publish:
+    name: Publish to npm
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/nativescript-vue
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # OIDC token for npm trusted publishing + provenance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1.
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Resolve dist-tag
+        id: tag
+        run: |
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            echo "dist_tag=next" >> "$GITHUB_OUTPUT"
+          else
+            echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish nativescript-vue
+        run: npm publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
+
+      - name: Publish @nativescript-vue/template-blank
+        run: npm publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
+        working-directory: packages/template-blank
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          args=(--generate-notes --verify-tag)
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            args+=(--prerelease)
+          fi
+          gh release create "$GITHUB_REF_NAME" "${args[@]}"
