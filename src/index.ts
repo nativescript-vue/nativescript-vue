@@ -35,6 +35,7 @@ init();
 export * from './components';
 export * from './dom';
 export * from './registry';
+export * from './types';
 export * from './renderer';
 export { createNativeView, ELEMENT_REF, isOn } from './runtimeHelpers';
 
