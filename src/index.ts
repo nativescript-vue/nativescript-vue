@@ -1,4 +1,5 @@
-import type { CreateAppFunction } from '@vue/runtime-core';
+import type { App, CreateAppFunction } from '@vue/runtime-core';
+import { Frame } from '@nativescript/core';
 import {
   createBlock as createBlockCore,
   createElementBlock as createElementBlockCore,
@@ -13,10 +14,11 @@ import { NSVElement, NSVRoot } from './dom';
 import { init, resetRoot, startApp } from './nativescript';
 import { renderer } from './renderer';
 
-import { install as modalsPlugin } from './plugins/modals';
+import { hasOpenModals, install as modalsPlugin } from './plugins/modals';
 import { install as navigationPlugin } from './plugins/navigation';
 import { isKnownView, registerElement } from './registry';
-import { setRootApp } from './runtimeHelpers';
+import { ELEMENT_REF, setRootApp } from './runtimeHelpers';
+import { logger } from './util/logger';
 
 declare module '@vue/runtime-core' {
   interface App {
@@ -27,6 +29,10 @@ declare module '@vue/runtime-core' {
       isSVG?: boolean,
     ): ComponentPublicInstance;
     registerElement: typeof registerElement;
+  }
+  interface AppContext {
+    /** Set by runtime-core in development; re-renders the root vnode. */
+    reload?(): void;
   }
 }
 
@@ -73,6 +79,53 @@ function createAppRoot() {
   return defaultRoot;
 }
 
+/**
+ * Vue's own root reload re-renders the root vnode, which remounts the root
+ * component and, through createAppRoot, replaces the app's root view: every
+ * navigated page and open modal is lost. While the user is away from the
+ * root page, re-render the root in place instead. Only the template is
+ * refreshed that way; a changed <script> needs the full remount, which
+ * happens the next time the root reloads with nothing on top of it.
+ */
+function keepPlaceOnRootReload(app: App) {
+  const remount = app._context.reload;
+
+  app._context.reload = () => {
+    const instance = (app as any)._instance;
+
+    if (!instance || !isAwayFromRootPage()) {
+      return remount?.();
+    }
+
+    instance.render = instance.type.render ?? instance.render;
+    instance.update();
+    logger.warn(
+      `[HMR] Root component re-rendered in place to keep the current page ` +
+        `and modals. Changes to its <script> apply after a restart, or once ` +
+        `you return to the root page and it reloads again.`,
+    );
+  };
+}
+
+function isAwayFromRootPage() {
+  if (hasOpenModals()) {
+    return true;
+  }
+
+  const frame = Frame.topmost();
+  if (!frame) {
+    return false;
+  }
+  if (frame.backStack.length > 0) {
+    return true;
+  }
+
+  // pages rendered by the root app live under a <Frame> element; pages
+  // from $navigateTo are mounted into a detached root
+  const current = frame.currentPage?.[ELEMENT_REF] as NSVElement | undefined;
+  return !!current && !(current.parentNode instanceof NSVElement);
+}
+
 export const render = renderer.render;
 export const createApp = ((...args) => {
   const app = renderer.createApp(...args);
@@ -95,6 +148,10 @@ export const createApp = ((...args) => {
     const componentInstance = app.mount(createAppRoot(), false, false);
 
     startApp(componentInstance);
+
+    if (__DEV__) {
+      keepPlaceOnRootReload(app);
+    }
 
     return componentInstance;
   };
