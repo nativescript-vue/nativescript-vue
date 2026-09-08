@@ -108,12 +108,23 @@ function resolveDevtools(projectRoot) {
     version,
     cli: path.join(electronDir, 'dist/cli.mjs'),
     aliases: {
-      'socket.io-client': requireDir('socket.io-client', electronDir),
+      // the package entry resolves to the Node build under NativeScript's
+      // node target; the app needs the browser build (global XMLHttpRequest)
+      'socket.io-client': path.join(
+        requireDir('socket.io-client', electronDir),
+        'build/esm/index.js',
+      ),
       '@vue/devtools-kit': requireDir('@vue/devtools-kit', devtoolsDir),
       '@vue/devtools-core': requireDir('@vue/devtools-core', electronDir),
     },
   };
 }
+
+// packages whose imports must resolve with browser conditions and fields,
+// otherwise the socket.io stack pulls in ws, xmlhttprequest-ssl and Node
+// core modules that do not exist in the app
+const BROWSER_RESOLVED_PACKAGES =
+  /[\\/]node_modules[\\/](socket\.io-client|engine\.io-client|socket\.io-parser|engine\.io-parser)[\\/]/;
 
 function startVueDevtools(cli, port, isAndroid) {
   console.log(`[VueDevtools] Starting Vue Devtools on port ${port}`);
@@ -197,6 +208,18 @@ module.exports = (webpack) => {
           config.resolve.alias.set(name, dir);
         }
 
+        const clientRule = config.module
+          .rule('vue-devtools-client')
+          .test(BROWSER_RESOLVED_PACKAGES);
+        clientRule.resolve.set('conditionNames', [
+          'browser',
+          'import',
+          'module',
+          'default',
+        ]);
+        clientRule.resolve.aliasFields.add('browser');
+        clientRule.resolve.mainFields.merge(['browser', 'module', 'main']);
+
         const devtoolsEntryPath = require.resolve('./devtools.js');
         const entryPath = webpack.Utils.platform.getEntryPath();
         const paths = config.entry('bundle').values();
@@ -211,7 +234,9 @@ module.exports = (webpack) => {
 
         config.entry('bundle').clear().merge(paths);
 
-        startVueDevtools(devtools.cli, port, isAndroid);
+        if (String(env.vueDevtoolsSpawn) !== 'false') {
+          startVueDevtools(devtools.cli, port, isAndroid);
+        }
       }
     }
 

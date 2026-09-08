@@ -50,7 +50,8 @@ ns run ios|android --env.vueDevtools
 
 A free port from 8098 up is picked automatically; pass `--env.vueDevtoolsPort=9000`
 to pin one, or `--env.vueDevtoolsHost=http://192.168.1.10` to reach the
-devtools from a physical device.
+devtools from a physical device. `--env.vueDevtoolsSpawn=false` skips
+launching the devtools app, for when one is already running.
 
 🛠️ **Android Users:**
 To allow Vue Devtools to connect, enable **cleartext HTTP traffic** in your `AndroidManifest.xml`:
