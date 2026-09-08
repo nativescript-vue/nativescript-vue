@@ -49,6 +49,27 @@ To allow Vue Devtools to connect, enable **cleartext HTTP traffic** in your `And
 .../>
 ```
 
+## TypeScript
+
+Types for every core element, `$navigateTo`, `$showModal` and friends ship
+with the package. Third-party libraries such as Pinia or vue-i18n augment the
+`vue` module, and code often imports from `vue`. The templates map `vue` to
+`nativescript-vue` in `tsconfig.json` so both resolve; add this to existing
+projects:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "vue": ["./node_modules/nativescript-vue"]
+    }
+  },
+  "vueCompilerOptions": {
+    "lib": "nativescript-vue"
+  }
+}
+```
+
 ## Issues
 
 If you encounter any issues, please open a new issue with as much detail as possible.
