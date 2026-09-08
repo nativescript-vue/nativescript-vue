@@ -88,14 +88,25 @@ export class ViewBase {
 
 export class View extends ViewBase {
   _modalOptions: any = null;
+  _modalParent: View | null = null;
   __modals: View[] = [];
+  /** Mirrors core: a view already presenting refuses silently. */
   showModal(view: View, options: any) {
+    if (this.__modals.length) {
+      return;
+    }
     view._modalOptions = options;
+    view._modalParent = this;
     this.__modals.push(view);
   }
   closeModal(...args: any[]) {
     const options = this._modalOptions;
+    const parent = this._modalParent;
     this._modalOptions = null;
+    this._modalParent = null;
+    if (parent) {
+      parent.__modals = parent.__modals.filter((m) => m !== this);
+    }
     options?.closeCallback?.(...args);
   }
   /** Simulates the platform dismissing the modal (back button, swipe). */
