@@ -7,6 +7,7 @@ type Listener = (...args: any[]) => void;
 
 export class ViewBase {
   static disposeNativeViewEvent = 'disposeNativeView';
+  static closedModallyEvent = 'closedModally';
 
   _parent: ViewBase | null = null;
   _children: ViewBase[] = [];
@@ -97,17 +98,27 @@ export class View extends ViewBase {
     }
     view._modalOptions = options;
     view._modalParent = this;
+    view._modalAnimatedOptions.push(options.animated !== false);
     this.__modals.push(view);
   }
+  _modalAnimatedOptions: boolean[] = [];
+  /** Mirrors core: closeCallback runs first, closedModally after teardown. */
   closeModal(...args: any[]) {
     const options = this._modalOptions;
     const parent = this._modalParent;
+    if (!options) {
+      return;
+    }
     this._modalOptions = null;
     this._modalParent = null;
     if (parent) {
       parent.__modals = parent.__modals.filter((m) => m !== this);
     }
-    options?.closeCallback?.(...args);
+    this.__closedAnimated = this._modalAnimatedOptions.at(-1) ?? true;
+    this._modalAnimatedOptions.pop();
+    options.closeCallback?.(...args);
+    this.__tornDown = true;
+    this.notify({ eventName: 'closedModally', object: this });
   }
   /** Simulates the platform dismissing the modal (back button, swipe). */
   __dismissNatively() {
@@ -167,15 +178,26 @@ export class Frame extends View {
   }
   currentPage: any;
   currentEntry: any = {};
+  backStack: any[] = [];
   navigate(entry: any) {
+    if (this.currentPage && !entry.clearHistory) {
+      this.backStack.push(this.currentPage);
+    }
+    if (entry.clearHistory) {
+      this.backStack = [];
+    }
     this.currentPage = entry.create();
     this.currentEntry = entry;
   }
-  replacePage() {}
-  canGoBack() {
-    return false;
+  replacePage(entry: any) {
+    this.currentPage = entry.create();
   }
-  goBack() {}
+  canGoBack() {
+    return this.backStack.length > 0;
+  }
+  goBack() {
+    this.currentPage = this.backStack.pop();
+  }
 }
 
 export class ActionBar extends View {

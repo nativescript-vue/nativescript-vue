@@ -22,7 +22,8 @@ declare module '@vue/runtime-core' {
       options?: ShowModalOptions<P, T>,
     ) => Promise<T | false | undefined>;
     $closeModal: <T = any>(data: T, ...args: any[]) => void;
-    $modal: { close: <T = any>(data: T, ...args: any[]) => void };
+    /** The modal this component is shown in, or false when it is not a modal. */
+    $modal: false | { close: <T = any>(data: T, ...args: any[]) => void };
   }
 }
 
@@ -41,6 +42,8 @@ export type ShowModalOptions<P = any, T = any> = Partial<
  */
 export function install(app: App) {
   app.config.globalProperties.$showModal = $showModal;
+  // lets templates use v-if="$modal" whether or not they are shown modally
+  app.config.globalProperties.$modal = false;
 }
 
 function resolveModalTarget(
@@ -60,6 +63,11 @@ function resolveModalTarget(
 }
 
 const modalStack = [];
+
+/** @internal */
+export function hasOpenModals() {
+  return modalStack.length > 0;
+}
 
 export async function $showModal<T = any, P = any>(
   component: Component<P>,
@@ -87,18 +95,12 @@ export async function $showModal<T = any, P = any>(
 
     const reloadModal = () => {
       isReloading = true;
-      closeModal();
-      // reopening is done in `closeCallback`
-    };
 
-    let view = createNativeView(component, options.props, {
-      reload: reloadModal,
-    });
-
-    const closeCallback = (data?: T, ...args: any) => {
-      if (isResolved) return;
-
-      if (isReloading) {
+      // re-present only once the platform has finished dismissing the old
+      // modal; presenting from inside the dismissal completion (where
+      // closeCallback runs) leaves the presentation half torn down
+      const closedEvent = (View as any).closedModallyEvent;
+      const represent = () => {
         view.unmount();
         view.mount(root);
         try {
@@ -116,7 +118,36 @@ export async function $showModal<T = any, P = any>(
         }
         modalStack.push(view);
         isReloading = false;
+      };
+      // the event still fires inside the platform dismissal completion, and
+      // a non-animated dismissal runs that completion synchronously inside
+      // the dismiss call; presenting from there loses the sheet's dimming,
+      // so the present waits for the next run loop turn
+      const representNextTurn = () => setTimeout(represent, 0);
+      if (closedEvent) {
+        view.nativeView.once(closedEvent, representNextTurn);
+      } else {
+        representNextTurn();
+      }
 
+      // dismiss without animation so the swap is a blink, not a slide
+      const animatedOptions = (view.nativeView as any)._modalAnimatedOptions;
+      if (Array.isArray(animatedOptions)) {
+        animatedOptions.push(false);
+      }
+
+      closeModal();
+    };
+
+    let view = createNativeView(component, options.props, {
+      reload: reloadModal,
+    });
+
+    const closeCallback = (data?: T, ...args: any) => {
+      if (isResolved) return;
+
+      if (isReloading) {
+        // re-presented from reloadModal once dismissal completes
         return;
       }
 
