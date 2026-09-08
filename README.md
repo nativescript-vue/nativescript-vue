@@ -34,11 +34,23 @@ Please refer to our [Upgrade Guide](https://nativescript-vue.org/docs/essentials
 
 ## Using Vue Devtools
 
-To enable Vue Devtools, run:
+Install the standalone devtools in your app (it is not pulled in by
+nativescript-vue because it depends on Electron):
+
+```sh
+npm i -D @vue/devtools@^8
+```
+
+Then run with the `vueDevtools` flag. The devtools window opens on the host
+machine and the app connects to it:
 
 ```sh
 ns run ios|android --env.vueDevtools
 ```
+
+A free port from 8098 up is picked automatically; pass `--env.vueDevtoolsPort=9000`
+to pin one, or `--env.vueDevtoolsHost=http://192.168.1.10` to reach the
+devtools from a physical device.
 
 🛠️ **Android Users:**
 To allow Vue Devtools to connect, enable **cleartext HTTP traffic** in your `AndroidManifest.xml`:

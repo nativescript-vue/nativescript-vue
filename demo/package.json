@@ -16,6 +16,7 @@
     "@nativescript/types": "~9.1.1",
     "@nativescript/webpack": "~5.0.38",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "@vue/devtools": "^8.2.1"
   }
 }
