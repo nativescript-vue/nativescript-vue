@@ -17,6 +17,23 @@ export const setRootApp = (app: App) => {
 };
 
 export type ContextOverrides = { reload?(): void };
+
+/**
+ * Devtools label each app after its root component's `name`. Script-setup
+ * SFCs only carry `__name`, which Vue already treats as the fallback
+ * everywhere else, so every page and modal would otherwise show as "App N".
+ */
+export function nameForDevtools(component: Component) {
+  if (
+    __DEV__ &&
+    component &&
+    typeof component === 'object' &&
+    !(component as any).name &&
+    (component as any).__name
+  ) {
+    (component as any).name = (component as any).__name;
+  }
+}
 export type CreateNativeViewProps<P> = Partial<
   P & VNodeProps & Record<string, any>
 >;
@@ -28,6 +45,7 @@ export function createNativeView<T = View, P = any>(
 ) {
   let isMounted = false;
   let vm: ComponentPublicInstance | null;
+  nameForDevtools(component);
   let currentApp = renderer.createApp(component, props);
   // Destructure so as not to copy over the root app instance
   const { app, ...rootContext } = rootApp._context;
