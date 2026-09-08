@@ -30,11 +30,50 @@ if (__DEV__) {
       reconnectionDelayMax: 5000,
     });
 
+    if (__NS_VUE_DEVTOOLS_DEBUG__) {
+      const preview = (args) =>
+        args.map((a) => String(a).slice(0, 160)).join(' ');
+      socket.onAny((event, ...args) =>
+        console.log(`[VueDevtools] <- ${event} ${preview(args)}`),
+      );
+      socket.onAnyOutgoing((event, ...args) =>
+        console.log(`[VueDevtools] -> ${event} ${preview(args)}`),
+      );
+      socket.on('disconnect', (reason) =>
+        console.log(`[VueDevtools] disconnected: ${reason}`),
+      );
+      socket.io.on('reconnect_attempt', (n) =>
+        console.log(`[VueDevtools] reconnect attempt ${n}`),
+      );
+      socket.io.on('error', (err) =>
+        console.log(`[VueDevtools] transport error: ${err.message}`),
+      );
+    }
+
+    let serverReady = false;
     socket.on('connect', () => {
-      setElectronServerContext(socket);
-      createRpcServer(functions, { preset: 'electron' });
+      // the Socket instance survives reconnects, so the RPC server only
+      // needs wiring once; the devtools window needs init after every
+      // (re)connect because it is what evicted us in the first place
+      if (!serverReady) {
+        setElectronServerContext(socket);
+        createRpcServer(functions, { preset: 'electron' });
+        serverReady = true;
+      }
       socket.emit('vue-devtools:init');
       console.log(`[VueDevtools] Connected to ${url}`);
+
+      if (__NS_VUE_DEVTOOLS_DEBUG__) {
+        setTimeout(() => {
+          const { devtoolsState } = require('@vue/devtools-kit');
+          console.log(
+            `[VueDevtools] state: apps=${devtoolsState.appRecords.length} ` +
+              `connected=${devtoolsState.connected} ` +
+              `clientConnected=${devtoolsState.clientConnected} ` +
+              `vue=${devtoolsState.vueVersion}`,
+          );
+        }, 2000);
+      }
     });
 
     // the devtools app tells every other client to leave whenever a new
