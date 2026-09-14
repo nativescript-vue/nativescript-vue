@@ -95,6 +95,10 @@ export default defineConfig({
           { text: 'Gotchas', link: '/docs/essentials/gotchas' },
           { text: 'TypeScript', link: '/docs/essentials/typescript' },
           {
+            text: 'Common Snippets',
+            link: '/docs/essentials/common-snippets',
+          },
+          {
             text: 'Upgrade Guide',
             link: '/docs/essentials/upgrade-guide',
           },
