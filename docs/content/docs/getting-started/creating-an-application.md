@@ -1,20 +1,33 @@
 ---
-contributors: [vallemar]
+contributors: [vallemar, rigor789]
 ---
 
 # Creating a NativeScript-Vue Application
 
-A Nativescript-Vue application is initialized as we are used to doing in Vue, but with the difference that instead of calling `app.mount`, we will use `app.start`.
+A NativeScript-Vue application is created the same way as a Vue web application, with one difference: instead of mounting the app onto a DOM element with `app.mount`, you start it with `app.start`.
 
-An example of a traditional application input file is the following.
+The entry file of the blank template, `src/app.ts`, is as small as this:
 
 ```ts
 import { createApp } from 'nativescript-vue';
-// import the root component App from a single-file component.
-import App from './App.vue';
+import Home from './components/Home.vue';
 
-const app = createApp(App);
-app.start();
+createApp(Home).start();
 ```
 
-As we are used to, we can use `app.use` and everything that a Vue application can do with the `app` instance since this is a real Vue application and it is only bitamined with some methods like in this case `.start`.
+`createApp` returns a real Vue application instance, so everything you would do with one on the web — `app.use(plugin)`, `app.component(...)`, `app.provide(...)`, `app.config.globalProperties` — works here as well. `start()` is the NativeScript-specific addition: it renders the root component and hands its native view to NativeScript's `Application.run()`.
+
+The root component is expected to render a `<Frame>` with a `<Page>` inside, which is what enables [navigation](/docs/essentials/routing). The template's `Home.vue` does exactly that:
+
+```vue
+<template>
+  <Frame>
+    <Page>
+      <ActionBar title="Home" />
+      <StackLayout>
+        <Label text="Hello, NativeScript-Vue!" />
+      </StackLayout>
+    </Page>
+  </Frame>
+</template>
+```

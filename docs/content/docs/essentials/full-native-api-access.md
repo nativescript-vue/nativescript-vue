@@ -1,3 +1,7 @@
+---
+contributors: [rigor789]
+---
+
 # Full Native API Access
 
 NativeScript exposes all available native APIs directly to your JavaScript. It does not convert your JavaScript to native code (ie. to Java/Objective-C). To understand this concept let's look at some examples.
@@ -7,9 +11,9 @@ NativeScript exposes all available native APIs directly to your JavaScript. It d
 In Objective-C you can get the current UIDevice, and read the `batteryLevel` (see [Apple batteryLevel docs](https://developer.apple.com/documentation/uikit/uidevice/1620042-batterylevel?language=objc)):
 
 ```objc
-float batteryLevel = UIDevice.currentDevice.batteryLevel
+float batteryLevel = UIDevice.currentDevice.batteryLevel;
 
-print("The battery level is \(batteryLevel)")
+NSLog(@"The battery level is %f", batteryLevel);
 ```
 
 In NativeScript you can do the same in **JavaScript**
@@ -33,17 +37,17 @@ For example:
 
 @objcMembers class MyControllerA: UIViewController {
   func doSomething() {}
-  doSomethingElse() {}
+  @nonobjc func doSomethingElse() {}
 }
 
 @objc class MyControllerB: UIViewController {
-  @objc doSomething() {}
-  doSomethingElse() {}
+  @objc func doSomething() {}
+  func doSomethingElse() {}
 }
 
 class MyControllerC: UIViewController {
-  @objc doSomething() {}
-  doSomethingElse() {}
+  @objc func doSomething() {}
+  func doSomethingElse() {}
 }
 ```
 
@@ -72,12 +76,13 @@ This works because metadata is generated at compile time for all available APIs 
 Similar to iOS, the same concepts work on Android. For example, getting the current time in Java/Android can be done with the [Calendar class](<https://developer.android.com/reference/java/util/Calendar#getTime()>).
 
 ```java
+import android.util.Log;
 import java.util.Calendar;
 import java.util.Date;
 
 Date currentTime = Calendar.getInstance().getTime();
 
-Log.d("The current time is: " + currentTime.toString());
+Log.d("Example", "The current time is: " + currentTime.toString());
 ```
 
 In NativeScript, you can access the same API from **JavaScript**:

@@ -4,42 +4,63 @@ contributors: [rigor789, vallemar]
 
 # Using NativeScript Plugins
 
-Plugins work as in [any other NativeScript app](https://docs.nativescript.org/plugins/), but you may wonder how _UI_ plugins work with Vue.
+Plugins work as in [any other NativeScript app](https://docs.nativescript.org/plugins/). Non-UI plugins — camera, geolocation, secure storage and the like — need nothing extra: install them and import them. Plugins that provide a _view_ have to be registered as an element before they can be used in a `<template>`.
 
-UI plugins work almost identically to how you'd use a NativeScript UI plugin in an Angular app.
+## Registering a view with `registerElement`
 
-## Sample use: nativescript-gradient
+`registerElement(name, resolver, meta?)` maps a tag name to a NativeScript view class. The resolver is a function returning the class, so the plugin is only loaded when the element is first rendered.
 
-Let's review how you can use [nativescript-gradient](https://github.com/EddyVerbruggen/nativescript-gradient).
-
-### Install plugin
+Take the [`@nativescript/pdf`](https://github.com/NativeScript/plugins/tree/main/packages/pdf) plugin, whose `PDFView` class renders a PDF:
 
 ```shell
-$ npm install --save nativescript-gradient
+npm install @nativescript/pdf
 ```
 
-> **NOTE:** If your plugin doesn't work right away, you might need to clean the project by removing the Platforms folders:
+Register it in the app entry file (`src/app.ts` in the blank template) before `createApp(...).start()`:
 
-```shell
-$ rm -rf platforms
+```ts
+import { createApp, registerElement } from 'nativescript-vue';
+import Home from './components/Home.vue';
+
+registerElement('PDFView', () => require('@nativescript/pdf').PDFView);
+
+createApp(Home).start();
 ```
 
-### Register the plugin in your app
-
-Open your app entry file (likely `app.js`, `main.js`, `app.ts` or `main.ts`) and add the following line at the top:
-
-```JavaScript
-import { registerElement } from "nativescript-vue";
-
-registerElement('Gradient', () => require('nativescript-gradient').Gradient)
-```
-
-This requires and registers the plugin in your `Vue` instance. The `registerElement` function expects the name of the `<Element>` as the first argument, and a function that returns the plugin as its second argument. Provide the element name exactly as you are supposed to call it in your code. Provide the plugin name exactly as its npm package name.
-
-### Use the plugin in your app
+Then use it in any template, binding props and listening to events as with any other view:
 
 ```vue-html
-<Gradient direction="to right" colors="#FF0077, red, #FF00FF">
-  <Label text="Best gradient." style="color: white; padding: 20" />
-</Gradient>
+<PDFView src="https://example.com/file.pdf" @load="onLoad" />
 ```
+
+The tag name is up to you, and lookups are case-insensitive, so `<PDFView>` and `<pdf-view>` resolve to the same element. Registering a name twice throws unless the meta sets `overwriteExisting: true`.
+
+::: tip
+If a freshly installed plugin does not work, its native dependencies were probably not picked up by a stale build. Remove the `platforms` folder and run the app again.
+:::
+
+### Supporting `v-model`
+
+`v-model` only works on elements that declare which prop and event form the model. Pass the pair in the `meta` argument:
+
+```ts
+registerElement('Rating', () => require('some-rating-plugin').Rating, {
+  model: { prop: 'value', event: 'valueChange' },
+});
+```
+
+See [Gotchas](/docs/essentials/gotchas#v-model-only-works-on-elements-that-declare-a-model-pair) for the elements that support `v-model` out of the box.
+
+## Plugins that ship a Vue plugin
+
+Some plugins, in particular those from [nativescript-community](https://github.com/nativescript-community), export a Vue plugin that registers their elements for you. Those are installed with `app.use()` instead of `registerElement`:
+
+```ts
+import { createApp } from 'nativescript-vue';
+import CollectionView from '@nativescript-community/ui-collectionview/vue3';
+import Home from './components/Home.vue';
+
+createApp(Home).use(CollectionView).start();
+```
+
+Check the plugin's documentation for a `vue3` (or `vue`) entry point. When there is none, `registerElement` works for any plugin that exposes a view class.

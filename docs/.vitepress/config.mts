@@ -106,7 +106,7 @@ export default defineConfig({
         text: 'Utilities',
         items: [
           {
-            text: 'NativeScript View',
+            text: 'createNativeView',
             link: '/docs/utilities/nativescript-view',
           },
         ],
