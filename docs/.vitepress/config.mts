@@ -1,7 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
-import path from 'path';
 import { defineConfig } from 'vitepress';
-import { componentMarkdownUtils } from './theme/utils/ComponentMarkdownUtils';
+import { componentMarkdownUtils } from './theme/utils/ComponentMarkdownUtils.ts';
 
 const links = {
   playground:
@@ -19,8 +18,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
     resolve: {
       alias: {
-        '@components': path.resolve(__dirname, './theme/components'),
-        '@data': path.resolve(__dirname, './theme/data'),
+        '@components': new URL('./theme/components', import.meta.url).pathname,
+        '@data': new URL('./theme/data', import.meta.url).pathname,
       },
     },
   },
