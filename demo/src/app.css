@@ -9,3 +9,32 @@ Label {
 .modal {
   background-color: rgb(0, 0, 255, 0.2);
 }
+
+.switcher-panel {
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 16;
+}
+
+.switcher-title {
+  color: white;
+  font-size: 22;
+  font-weight: bold;
+  margin-bottom: 8;
+}
+
+.switcher-item {
+  color: white;
+  background-color: #333;
+  text-align: left;
+  margin: 4 0;
+  border-radius: 8;
+}
+
+.switcher-item.active {
+  background-color: #1e88e5;
+}
+
+.switcher-item.focused {
+  border-width: 2;
+  border-color: white;
+}

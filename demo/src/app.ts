@@ -1,8 +1,11 @@
 import { createApp } from 'nativescript-vue';
 
-import App from './components/demo_ListView.vue';
+import DemoSwitcher from './DemoSwitcher.vue';
+import { installSwitcherShortcut } from './switcherShortcut';
 
-createApp(App)
+installSwitcherShortcut();
+
+createApp(DemoSwitcher)
   .use(() => {
     console.log('test1');
   })
