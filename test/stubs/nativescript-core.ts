@@ -63,6 +63,13 @@ export class ViewBase {
     }
   }
 
+  eachChild(callback: (child: ViewBase) => boolean) {
+    for (const child of this._children) {
+      if (callback(child) === false) {
+        return;
+      }
+    }
+  }
   _addView(view: ViewBase, atIndex?: number) {
     if (view._parent) {
       throw new Error(
@@ -119,6 +126,9 @@ export class View extends ViewBase {
     options.closeCallback?.(...args);
     this.__tornDown = true;
     this.notify({ eventName: 'closedModally', object: this });
+  }
+  _getRootModalViews() {
+    return this.__modals;
   }
   /** Simulates the platform dismissing the modal (back button, swipe). */
   __dismissNatively() {
@@ -179,6 +189,11 @@ export class Frame extends View {
   currentPage: any;
   currentEntry: any = {};
   backStack: any[] = [];
+  eachChild(callback: (child: ViewBase) => boolean) {
+    if (this.currentPage) {
+      callback(this.currentPage);
+    }
+  }
   navigate(entry: any) {
     if (this.currentPage && !entry.clearHistory) {
       this.backStack.push(this.currentPage);
