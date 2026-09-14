@@ -25,6 +25,16 @@ if (template.dependencies['nativescript-vue'] !== version) {
     `template-blank depends on nativescript-vue@${template.dependencies['nativescript-vue']}`,
   );
 }
+// npm rejects a provenance bundle whose repository does not match this field
+if (
+  !template.repository?.url?.includes(
+    root.repository.url.replace(/^git\+/, '').replace(/\.git$/, ''),
+  )
+) {
+  problems.push(
+    `packages/template-blank/package.json repository.url must point at ${root.repository.url}`,
+  );
+}
 
 if (problems.length) {
   console.error(`Tag ${tag} does not match:\n  ${problems.join('\n  ')}`);
