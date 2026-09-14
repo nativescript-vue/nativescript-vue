@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      vue:
+        patterns: ['@vue/*', 'vue-loader']
+      nativescript:
+        patterns: ['@nativescript/*']
+      dev:
+        dependency-type: development

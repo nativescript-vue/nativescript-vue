@@ -1,3 +1,4 @@
+import * as NSCore from '@nativescript/core';
 import {
   Frame as NSCFrame,
   Page as NSCPage,
@@ -11,73 +12,42 @@ import { logger } from '../util/logger';
 
 export function registerCoreElements() {
   // layouts
-  registerElement(
-    'AbsoluteLayout',
-    () => require('@nativescript/core').AbsoluteLayout,
-    { viewFlags: NSVViewFlags.LAYOUT_VIEW },
-  );
-  registerElement(
-    'DockLayout',
-    () => require('@nativescript/core').DockLayout,
-    {
-      viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    },
-  );
-  registerElement(
-    'FlexboxLayout',
-    () => require('@nativescript/core').FlexboxLayout,
-    { viewFlags: NSVViewFlags.LAYOUT_VIEW },
-  );
-  registerElement(
-    'GridLayout',
-    () => require('@nativescript/core').GridLayout,
-    {
-      viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    },
-  );
-  registerElement(
-    'RootLayout',
-    () => require('@nativescript/core').RootLayout,
-    {
-      viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    },
-  );
-  registerElement(
-    'StackLayout',
-    () => require('@nativescript/core').StackLayout,
-    { viewFlags: NSVViewFlags.LAYOUT_VIEW },
-  );
-  registerElement(
-    'WrapLayout',
-    () => require('@nativescript/core').WrapLayout,
-    {
-      viewFlags: NSVViewFlags.LAYOUT_VIEW,
-    },
-  );
+  registerElement('AbsoluteLayout', () => NSCore.AbsoluteLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
+  registerElement('DockLayout', () => NSCore.DockLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
+  registerElement('FlexboxLayout', () => NSCore.FlexboxLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
+  registerElement('GridLayout', () => NSCore.GridLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
+  registerElement('RootLayout', () => NSCore.RootLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
+  registerElement('StackLayout', () => NSCore.StackLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
+  registerElement('WrapLayout', () => NSCore.WrapLayout, {
+    viewFlags: NSVViewFlags.LAYOUT_VIEW,
+  });
 
   // ContentViews
-  registerElement(
-    'ContentView',
-    () => require('@nativescript/core').ContentView,
-    { viewFlags: NSVViewFlags.CONTENT_VIEW },
-  );
-  registerElement(
-    'ScrollView',
-    () => require('@nativescript/core').ScrollView,
-    {
-      viewFlags: NSVViewFlags.CONTENT_VIEW,
-    },
-  );
+  registerElement('ContentView', () => NSCore.ContentView, {
+    viewFlags: NSVViewFlags.CONTENT_VIEW,
+  });
+  registerElement('ScrollView', () => NSCore.ScrollView, {
+    viewFlags: NSVViewFlags.CONTENT_VIEW,
+  });
 
   // ActionBar
-  registerElement('ActionItem', () => require('@nativescript/core').ActionItem);
-  registerElement(
-    'NavigationButton',
-    () => require('@nativescript/core').NavigationButton,
-  );
+  registerElement('ActionItem', () => NSCore.ActionItem);
+  registerElement('NavigationButton', () => NSCore.NavigationButton);
 
   // navigation
-  registerElement('Frame', () => require('@nativescript/core').Frame, {
+  registerElement('Frame', () => NSCore.Frame, {
     // todo: move into Frame.ts when we end up creating a component for Frame
     nodeOps: {
       insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
@@ -103,135 +73,100 @@ export function registerCoreElements() {
       },
     },
   });
-  registerElement('Page', () => require('@nativescript/core').Page, {
+  registerElement('Page', () => NSCore.Page, {
     viewFlags: NSVViewFlags.CONTENT_VIEW,
   });
 
   // html
-  registerElement('HtmlView', () => require('@nativescript/core').HtmlView);
-  registerElement('WebView', () => require('@nativescript/core').WebView);
+  registerElement('HtmlView', () => NSCore.HtmlView);
+  registerElement('WebView', () => NSCore.WebView);
 
   // components
-  registerElement(
-    'ActivityIndicator',
-    () => require('@nativescript/core').ActivityIndicator,
-  );
-  registerElement('Button', () => require('@nativescript/core').Button);
-  registerElement(
-    'DatePicker',
-    () => require('@nativescript/core').DatePicker,
-    {
-      model: {
-        prop: 'date',
-        event: 'dateChange',
-      },
+  registerElement('ActivityIndicator', () => NSCore.ActivityIndicator);
+  registerElement('Button', () => NSCore.Button);
+  registerElement('DatePicker', () => NSCore.DatePicker, {
+    model: {
+      prop: 'date',
+      event: 'dateChange',
     },
-  );
-  registerElement(
-    'FormattedString',
-    () => require('@nativescript/core').FormattedString,
-    {
-      nodeOps: {
-        insert(child, parent, atIndex) {
-          if (atIndex) {
-            parent.nativeView.spans.splice(atIndex, 0, child.nativeView);
-            return;
-          }
-          parent.nativeView.spans.push(child.nativeView);
-        },
-        remove(child, parent) {
-          const index = parent.nativeView.spans.indexOf(child.nativeView);
+  });
+  registerElement('FormattedString', () => NSCore.FormattedString, {
+    nodeOps: {
+      insert(child, parent, atIndex) {
+        if (atIndex) {
+          parent.nativeView.spans.splice(atIndex, 0, child.nativeView);
+          return;
+        }
+        parent.nativeView.spans.push(child.nativeView);
+      },
+      remove(child, parent) {
+        const index = parent.nativeView.spans.indexOf(child.nativeView);
 
-          if (index > -1) {
-            parent.nativeView.spans.splice(index, 1);
-          }
-        },
+        if (index > -1) {
+          parent.nativeView.spans.splice(index, 1);
+        }
       },
     },
-  );
-  registerElement('Image', () => require('@nativescript/core').Image);
-  registerElement('Label', () => require('@nativescript/core').Label);
-  registerElement(
-    'ListPicker',
-    () => require('@nativescript/core').ListPicker,
-    {
-      model: {
-        prop: 'selectedIndex',
-        event: 'selectedIndexChange',
-      },
+  });
+  registerElement('Image', () => NSCore.Image);
+  registerElement('Label', () => NSCore.Label);
+  registerElement('ListPicker', () => NSCore.ListPicker, {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange',
     },
-  );
-  registerElement(
-    'Placeholder',
-    () => require('@nativescript/core').Placeholder,
-  );
-  registerElement('Progress', () => require('@nativescript/core').Progress);
-  registerElement(
-    'ProxyViewContainer',
-    () => require('@nativescript/core').ProxyViewContainer,
-  );
-  registerElement('SearchBar', () => require('@nativescript/core').SearchBar, {
+  });
+  registerElement('Placeholder', () => NSCore.Placeholder);
+  registerElement('Progress', () => NSCore.Progress);
+  registerElement('ProxyViewContainer', () => NSCore.ProxyViewContainer);
+  registerElement('SearchBar', () => NSCore.SearchBar, {
     model: {
       prop: 'text',
       event: 'textChange',
     },
   });
-  registerElement(
-    'SegmentedBar',
-    () => require('@nativescript/core').SegmentedBar,
-    {
-      model: {
-        prop: 'selectedIndex',
-        event: 'selectedIndexChange',
-      },
+  registerElement('SegmentedBar', () => NSCore.SegmentedBar, {
+    model: {
+      prop: 'selectedIndex',
+      event: 'selectedIndexChange',
     },
-  );
-  registerElement(
-    'SegmentedBarItem',
-    () => require('@nativescript/core').SegmentedBarItem,
-  );
-  registerElement('Slider', () => require('@nativescript/core').Slider, {
+  });
+  registerElement('SegmentedBarItem', () => NSCore.SegmentedBarItem);
+  registerElement('Slider', () => NSCore.Slider, {
     model: {
       prop: 'value',
       event: 'valueChange',
     },
   });
-  registerElement('Span', () => require('@nativescript/core').Span);
-  registerElement('Switch', () => require('@nativescript/core').Switch, {
+  registerElement('Span', () => NSCore.Span);
+  registerElement('Switch', () => NSCore.Switch, {
     model: {
       prop: 'checked',
       event: 'checkedChange',
     },
   });
-  registerElement('TextField', () => require('@nativescript/core').TextField, {
+  registerElement('TextField', () => NSCore.TextField, {
     model: {
       prop: 'text',
       event: 'textChange',
     },
   });
-  registerElement('TextView', () => require('@nativescript/core').TextView, {
+  registerElement('TextView', () => NSCore.TextView, {
     model: {
       prop: 'text',
       event: 'textChange',
     },
   });
-  registerElement(
-    'TimePicker',
-    () => require('@nativescript/core').TimePicker,
-    {
-      model: {
-        prop: 'time',
-        event: 'timeChange',
-      },
+  registerElement('TimePicker', () => NSCore.TimePicker, {
+    model: {
+      prop: 'time',
+      event: 'timeChange',
     },
-  );
+  });
 
-  registerElement(
-    'TabViewItem',
-    () => require('@nativescript/core').TabViewItem,
-  );
+  registerElement('TabViewItem', () => NSCore.TabViewItem);
 
-  registerElement('TabView', () => require('@nativescript/core').TabView, {
+  registerElement('TabView', () => NSCore.TabView, {
     model: {
       prop: 'selectedIndex',
       event: 'selectedIndexChange',
