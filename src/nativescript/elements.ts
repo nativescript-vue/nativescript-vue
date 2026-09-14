@@ -68,8 +68,18 @@ export function registerCoreElements() {
         }
       },
       remove(child: NSVElement, parent: NSVElement): void {
-        // ignore? warn? throw? navigate back?
-        // console.log("REMOVE CHILD FROM FRAME", child);
+        // a Page removed by Vue stays on the native backstack; navigation
+        // out of a Frame is only driven through $navigateBack / frame APIs
+        if (__DEV__) {
+          const frame = parent.nativeView as NSCFrame;
+          if (frame.currentPage === child.nativeView) {
+            logger.warn(
+              `Removing the current <Page> from a <Frame> has no effect on ` +
+                `the native navigation stack. Use $navigateBack() or ` +
+                `$navigateTo() instead of v-if/v-for on <Page>.`,
+            );
+          }
+        }
       },
     },
   });
