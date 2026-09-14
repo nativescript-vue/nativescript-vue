@@ -1,0 +1,27 @@
+{
+  "name": "nativescript-vue-docs-metalsmith",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vitepress dev --host",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "check-links": "(vitepress serve . &) && npx wait-on http://localhost:4173 && linkinator http://localhost:4173 --config linkinator.config.json; npx kill-port 4173"
+  },
+  "keywords": [],
+  "author": "Igor Randjelovic",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "kill-port": "^2.0.1",
+    "linkinator": "^6.1.2",
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13",
+    "wait-on": "^8.0.3"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.14",
+    "tailwindcss": "^4.0.14"
+  }
+}
