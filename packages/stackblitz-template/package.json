@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@nativescript/core": "~9.1.1",
-    "nativescript-vue": "3.0.3"
+    "nativescript-vue": "3.1.0"
   },
   "devDependencies": {
     "@nativescript/preview-cli": "1.0.15",
