@@ -11,7 +11,7 @@ This page provides an overview of the currently supported Vue plugins that work 
 
 ## Vue Router
 
-> Currently, integration with Vue Router is **unsupported**. Until the team resolves the issue, please use [routing](/docs/essentials/routing).
+> Vue Router is not supported: navigation is owned by the native `Frame`, see [why not vue-router?](/docs/essentials/routing#why-not-vue-router). Use [routing](/docs/essentials/routing) instead.
 
 ## Pinia
 
