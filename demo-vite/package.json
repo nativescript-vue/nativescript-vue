@@ -13,7 +13,6 @@
     "@nativescript/tailwind": "~4.0.10",
     "@nativescript/types": "~9.1.1",
     "@nativescript/vite": "^8.0.8",
-    "@nativescript/webpack": "~5.0.38",
     "@types/node": "~26.5.0",
     "@vitejs/plugin-vue": "^6.0.9",
     "@vitejs/plugin-vue-jsx": "^5.1.6",
