@@ -1,0 +1,26 @@
+{
+  "name": "nativescript-vue-docs",
+  "private": true,
+  "description": "Source of https://nativescript-vue.org",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vitepress dev --host",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "deploy": "npm run build && wrangler deploy",
+    "check-links": "(vitepress serve . &) && npx wait-on http://localhost:4173 && linkinator http://localhost:4173 --config linkinator.config.json; npx kill-port 4173"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.14",
+    "tailwindcss": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "kill-port": "^2.0.1",
+    "linkinator": "^6.1.2",
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13",
+    "wait-on": "^8.0.3",
+    "wrangler": "^4.131.2"
+  }
+}

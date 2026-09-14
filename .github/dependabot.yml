@@ -18,3 +18,14 @@ updates:
       dependencies:
         patterns: ['*']
         update-types: ['minor', 'patch']
+
+  - package-ecosystem: npm
+    directory: /docs
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      dependencies:
+        patterns: ['*']
+        update-types: ['minor', 'patch']

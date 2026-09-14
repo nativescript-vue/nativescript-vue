@@ -1,0 +1,104 @@
+name: Docs
+
+# Builds the site for every change under docs/ and deploys it to
+# nativescript-vue.org from main. Pull requests from branches of this
+# repository also get a preview URL: a Worker version that is uploaded but
+# not deployed. Forks cannot read the secrets, so they only get the build.
+#
+# Requires, once, in the repository settings: CLOUDFLARE_ACCOUNT_ID and
+# CLOUDFLARE_API_TOKEN secrets. The token needs Workers Scripts:Edit on the
+# account and Workers Routes:Edit on the nativescript-vue.org zone.
+
+on:
+  push:
+    branches: [main]
+    paths: ['docs/**', '.github/workflows/docs.yml']
+  pull_request:
+    paths: ['docs/**', '.github/workflows/docs.yml']
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: docs
+
+jobs:
+  preview:
+    name: Build and preview
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload preview version
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash # -o pipefail, so a wrangler failure is not hidden by tee
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if [[ -z "$CLOUDFLARE_API_TOKEN" ]]; then
+            echo "::notice::CLOUDFLARE_API_TOKEN is not set, skipping the preview upload"
+            exit 0
+          fi
+          npx wrangler versions upload --message "PR #$PR" | tee upload.log
+          url=$(grep -o 'https://[^[:space:]]*workers\.dev[^[:space:]]*' upload.log | head -1)
+          echo "Preview: $url" >> "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    name: Build and deploy
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: docs
+      url: https://nativescript-vue.org
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler deploy
