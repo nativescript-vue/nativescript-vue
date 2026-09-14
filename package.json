@@ -41,15 +41,14 @@
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.5.42",
-    "@vue/devtools": "^6.5.1",
     "@vue/runtime-core": "^3.5.42",
     "@vue/shared": "^3.5.42",
-    "cross-spawn": "^7.0.6",
     "set-value": "^4.1.0",
     "vue-loader": "^17.4.2"
   },
   "peerDependencies": {
-    "@nativescript/core": ">=8.9.0"
+    "@nativescript/core": ">=8.9.0",
+    "@vue/devtools": "^8.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
@@ -74,5 +73,10 @@
   "prettier": {
     "useTabs": false,
     "singleQuote": true
+  },
+  "peerDependenciesMeta": {
+    "@vue/devtools": {
+      "optional": true
+    }
   }
 }
