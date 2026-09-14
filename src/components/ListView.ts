@@ -1,6 +1,7 @@
 import {
   Comment,
   defineComponent,
+  Fragment,
   getCurrentInstance,
   h,
   ref,
@@ -40,6 +41,23 @@ function getListItem(item: any, index: number): ListItem {
 }
 
 const LIST_CELL_ID = Symbol('list_cell_id');
+
+/**
+ * The element vnodes a template renders. Fragments are unwrapped because a
+ * forwarded `<slot>` renders as one, and a cell needs an element to hand to
+ * the native ListView.
+ */
+function templateRoots(vnodes: VNode[]): VNode[] {
+  return vnodes.flatMap((vnode) => {
+    if (vnode.type === Comment) {
+      return [];
+    }
+    if (vnode.type === Fragment) {
+      return templateRoots(vnode.children as VNode[]);
+    }
+    return [vnode];
+  });
+}
 
 export const ListView = /*#__PURE__*/ defineComponent({
   name: 'ListView',
@@ -135,22 +153,20 @@ export const ListView = /*#__PURE__*/ defineComponent({
     // render all realized templates as children
     const cellVNODES = () =>
       Object.entries(cells.value).map(([id, entry]) => {
-        const vnodes: VNode[] =
-          ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [];
-        const nonCommentVnodes = vnodes.filter(
-          (vnode) => vnode.type !== Comment,
+        const roots = templateRoots(
+          ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [],
         );
 
-        if (nonCommentVnodes.length === 0) {
+        if (roots.length === 0) {
           logger.warn(`ListView template must contain at least one element.`);
-        } else if (nonCommentVnodes.length > 1) {
+        } else if (roots.length > 1) {
           logger.warn(
-            `ListView template must contain a single root element. Found: ${vnodes.length}. Only the first one will be used.`,
+            `ListView template must contain a single root element. Found: ${roots.length}. Only the first one will be used.`,
           );
         }
 
         const vnode: VNode =
-          nonCommentVnodes.at(0) ??
+          roots.at(0) ??
           // default template is just a label
           h('Label', {
             text: entry.itemCtx.item,
