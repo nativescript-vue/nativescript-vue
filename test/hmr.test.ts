@@ -28,7 +28,7 @@ function startRootApp() {
   const frame = Application.getRootView() as Frame;
   Frame._topmost = frame;
   const rootPageLabel = () =>
-    (frame.backStack[0] ?? frame.currentPage).content.text;
+    (frame.backStack[0]?.resolvedPage ?? frame.currentPage).content.text;
   const reloadRoot = () =>
     hmr.reload(id, {
       ...Root,
@@ -113,6 +113,6 @@ describe('root component hot reload', () => {
 
     expect(resetSpy).not.toHaveBeenCalled();
     expect(frame.currentPage.content.text).toBe('details');
-    expect(frame.backStack[0].content.text).toBe('n3');
+    expect(frame.backStack[0].resolvedPage.content.text).toBe('n3');
   });
 });

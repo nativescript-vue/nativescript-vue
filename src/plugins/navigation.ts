@@ -1,5 +1,6 @@
 import {
   Application,
+  BackstackEntry,
   EventData,
   Frame,
   NavigationEntry,
@@ -37,6 +38,11 @@ export type NavigateToOptions<P = any> = NavigationEntry & {
 
 export type NavigateBackOptions = {
   frame?: ResolvableFrame;
+  /**
+   * Backstack entry or page to go back to, unwinding every page above it.
+   * Pages are what $navigateTo returns; entries come from frame.backStack.
+   */
+  to?: BackstackEntry | Page;
 };
 
 /**
@@ -201,5 +207,27 @@ export async function $navigateBack(options?: NavigateBackOptions) {
     return;
   }
 
-  frame.goBack();
+  frame.goBack(resolveBackstackEntry(frame, options?.to));
+}
+
+function resolveBackstackEntry(
+  frame: Frame,
+  to?: BackstackEntry | Page,
+): BackstackEntry | undefined {
+  if (!to) {
+    return undefined;
+  }
+
+  const entry =
+    to instanceof Page
+      ? frame.backStack.find((candidate) => candidate.resolvedPage === to)
+      : to;
+
+  if (!entry || !frame.backStack.includes(entry)) {
+    throw new Error(
+      'Failed to navigate back: the target is not in the backstack.',
+    );
+  }
+
+  return entry;
 }
