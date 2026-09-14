@@ -1,5 +1,5 @@
 import { ActionBar } from './ActionBar';
-import { ListView, ListItem } from './ListView';
+import { ListView, ListItem, ListViewItemTapEvent } from './ListView';
 
 export const BUILT_IN_COMPONENTS = {
   ActionBar,
@@ -8,4 +8,4 @@ export const BUILT_IN_COMPONENTS = {
 
 export { ActionBar, ListView };
 
-export type { ListItem };
+export type { ListItem, ListViewItemTapEvent };
