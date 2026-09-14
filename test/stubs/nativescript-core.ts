@@ -211,7 +211,7 @@ export class Frame extends View {
   }
   navigate(entry: any) {
     if (this.currentPage && !entry.clearHistory) {
-      this.backStack.push(this.currentPage);
+      this.backStack.push({ resolvedPage: this.currentPage });
     }
     if (entry.clearHistory) {
       this.backStack = [];
@@ -225,8 +225,12 @@ export class Frame extends View {
   canGoBack() {
     return this.backStack.length > 0;
   }
-  goBack() {
-    this.currentPage = this.backStack.pop();
+  goBack(entry?: any) {
+    const index = entry
+      ? this.backStack.indexOf(entry)
+      : this.backStack.length - 1;
+    this.currentPage = this.backStack[index].resolvedPage;
+    this.backStack.splice(index);
   }
 }
 
