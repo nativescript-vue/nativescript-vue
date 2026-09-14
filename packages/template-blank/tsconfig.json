@@ -3,15 +3,14 @@
     "strict": true,
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "lib": ["esnext", "WebWorker"],
     "sourceMap": true,
     "noEmitHelpers": true,
     "importHelpers": true,
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["src/*"]
+      "~/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

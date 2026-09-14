@@ -37,10 +37,10 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.5.41",
+    "@vue/compiler-sfc": "^3.5.42",
     "@vue/devtools": "^6.5.1",
-    "@vue/runtime-core": "^3.5.41",
-    "@vue/shared": "^3.5.41",
+    "@vue/runtime-core": "^3.5.42",
+    "@vue/shared": "^3.5.42",
     "cross-spawn": "^7.0.6",
     "set-value": "^4.1.0",
     "vue-loader": "^17.4.2"
@@ -49,14 +49,14 @@
     "@nativescript/core": ">=8.9.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@nativescript/core": "~8.9.2",
-    "@nativescript/webpack": "~5.0.24",
-    "lint-staged": "^16.1.0",
-    "prettier": "^3.5.3",
-    "simple-git-hooks": "^2.11.1",
-    "typescript": "^5.8.3"
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@nativescript/core": "~9.1.1",
+    "@nativescript/webpack": "~5.0.38",
+    "lint-staged": "^17.5.0",
+    "prettier": "^3.9.6",
+    "simple-git-hooks": "^2.14.0",
+    "typescript": "^7.0.2"
   },
   "simple-git-hooks": {
     "pre-commit": "npx --no-install lint-staged --config=package.json",
