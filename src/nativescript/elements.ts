@@ -93,7 +93,7 @@ export function registerCoreElements() {
   registerElement('FormattedString', () => NSCore.FormattedString, {
     nodeOps: {
       insert(child, parent, atIndex) {
-        if (atIndex) {
+        if (typeof atIndex === 'number') {
           parent.nativeView.spans.splice(atIndex, 0, child.nativeView);
           return;
         }
@@ -172,18 +172,21 @@ export function registerCoreElements() {
       event: 'selectedIndexChange',
     },
     nodeOps: {
-      insert(child, parent) {
+      insert(child, parent, atIndex) {
         const tabView = parent.nativeView as NSCTabView;
 
         if (child.nativeView instanceof NSCTabViewItem) {
-          const items = tabView.items || [];
+          const items = [...(tabView.items || [])];
+          items.splice(atIndex ?? items.length, 0, child.nativeView);
 
-          parent.setAttribute('items', items.concat([child.nativeView]));
+          parent.setAttribute('items', items);
         }
       },
       remove(child, parent) {
         const tabView = parent.nativeView as NSCTabView;
-        const items = tabView.items.filter((item) => item !== child.nativeView);
+        const items = (tabView.items || []).filter(
+          (item) => item !== child.nativeView,
+        );
 
         parent.setAttribute('items', items);
       },
