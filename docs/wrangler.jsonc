@@ -9,10 +9,5 @@
   },
   "workers_dev": false,
   "preview_urls": true,
-  "routes": [
-    {
-      "pattern": "nativescript-vue.org/*",
-      "zone_name": "nativescript-vue.org",
-    },
-  ],
+  "routes": [{ "pattern": "nativescript-vue.org", "custom_domain": true }],
 }
