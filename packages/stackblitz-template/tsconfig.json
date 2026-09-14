@@ -10,7 +10,8 @@
     "importHelpers": true,
     "paths": {
       "~/*": ["./src/*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "vue": ["./node_modules/nativescript-vue"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
