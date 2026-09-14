@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
     groups:
       actions:
         patterns: ['*']
@@ -11,11 +11,10 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     groups:
-      vue:
-        patterns: ['@vue/*', 'vue-loader']
-      nativescript:
-        patterns: ['@nativescript/*']
-      dev:
-        dependency-type: development
+      dependencies:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
