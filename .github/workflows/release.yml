@@ -1,9 +1,14 @@
 name: Release
 
 # Stages nativescript-vue and @nativescript-vue/template-blank on npm with
-# provenance when a v* tag is pushed. Create the tag with `npm run release`.
-# Nothing goes live from CI: a maintainer approves each staged version with
-# 2FA (`npm stage approve`), which is what publishes it.
+# provenance when a v* tag is pushed, or when dispatched for an existing tag.
+# Create the tag with `npm run release`. Nothing goes live from CI: a
+# maintainer approves each staged version with 2FA (`npm stage approve`),
+# which is what publishes it.
+#
+# Each package is staged in its own job, and a version that is already
+# staged counts as success, so a partial failure can be re-run for the
+# package that failed.
 #
 # Requires, once, outside this file:
 # - npm Trusted Publishing for both packages, pointing at this repository,
@@ -14,11 +19,18 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to stage, e.g. v3.1.0
+        required: true
+        type: string
 
 permissions: {}
 
 env:
   SKIP_SIMPLE_GIT_HOOKS: 1
+  TAG: ${{ inputs.tag || github.ref_name }}
 
 jobs:
   verify:
@@ -30,6 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.tag || github.ref_name }}
           persist-credentials: false
 
       - name: Setup Node
@@ -42,7 +55,7 @@ jobs:
         run: npm ci
 
       - name: Check tag matches package versions
-        run: node scripts/check-release-version.mjs "$GITHUB_REF_NAME"
+        run: node scripts/check-release-version.mjs "$TAG"
 
       - name: Typecheck
         run: npm run typecheck
@@ -57,19 +70,28 @@ jobs:
         run: npm run build
 
   stage:
-    name: Stage on npm
+    name: Stage ${{ matrix.package.name }}
     needs: verify
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - name: nativescript-vue
+            directory: .
+          - name: '@nativescript-vue/template-blank'
+            directory: packages/template-blank
     environment:
       name: npm
-      url: https://www.npmjs.com/package/nativescript-vue?activeTab=versions
+      url: https://www.npmjs.com/package/${{ matrix.package.name }}?activeTab=versions
     permissions:
-      contents: write # create the GitHub release
+      contents: read
       id-token: write # OIDC token for npm trusted publishing + provenance
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.tag || github.ref_name }}
           persist-credentials: false
 
       - name: Setup Node
@@ -87,43 +109,60 @@ jobs:
         run: npm ci
 
       - name: Build
+        if: matrix.package.directory == '.'
         run: npm run build
 
-      - name: Resolve dist-tag
-        id: tag
+      - name: Stage on npm
+        working-directory: ${{ matrix.package.directory }}
         run: |
-          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
-            echo "dist_tag=next" >> "$GITHUB_OUTPUT"
-          else
-            echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
+          if [[ "$TAG" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
+
+          set +e
+          output=$(npm stage publish --provenance --access public --tag "$dist_tag" 2>&1)
+          status=$?
+          set -e
+          echo "$output"
+
+          if [[ $status -ne 0 ]]; then
+            if grep -q 'Cannot stage previously published version' <<< "$output"; then
+              echo "::notice::${{ matrix.package.name }}@${TAG#v} is already staged"
+              exit 0
+            fi
+            exit $status
           fi
 
-      - name: Stage nativescript-vue
-        run: npm stage publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
-
-      - name: Stage @nativescript-vue/template-blank
-        run: npm stage publish --provenance --access public --tag "${{ steps.tag.outputs.dist_tag }}"
-        working-directory: packages/template-blank
-
+  release:
+    name: Draft GitHub release
+    needs: stage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the GitHub release
+    steps:
       # Draft until the staged versions are approved, so the GitHub release
       # never points at a version that is not installable yet.
       - name: Create draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::notice::release $TAG already exists"
+            exit 0
+          fi
           args=(--draft --generate-notes --verify-tag)
-          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+          if [[ "$TAG" == *-* ]]; then
             args+=(--prerelease)
           fi
-          gh release create "$GITHUB_REF_NAME" "${args[@]}"
+          gh release create "$TAG" "${args[@]}"
 
       - name: Next steps
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
+          if [[ "$TAG" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
           {
             echo "## Staged, not published"
             echo
-            echo "Both packages are staged on npm as \`$version\` with dist-tag \`${{ steps.tag.outputs.dist_tag }}\`."
+            echo "Both packages are staged on npm as \`$version\` with dist-tag \`$dist_tag\`."
             echo "To publish, approve each with 2FA from a machine where you are logged in to npm:"
             echo
             echo '```sh'
@@ -133,5 +172,5 @@ jobs:
             echo "npm stage approve <stage-id>"
             echo '```'
             echo
-            echo "Then publish the draft GitHub release for \`$GITHUB_REF_NAME\`."
+            echo "Then publish the draft GitHub release for \`$TAG\`."
           } >> "$GITHUB_STEP_SUMMARY"
