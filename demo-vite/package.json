@@ -23,6 +23,6 @@
     "vue-tsc": "^3.3.11"
   },
   "scripts": {
-    "link-runtime": "cd .. && npm run build && npm pack --silent --pack-destination demo-vite/.runtime && cd demo-vite && npm i --no-save ./.runtime/nativescript-vue-*.tgz"
+    "link-runtime": "cd .. && npm run build && mkdir -p demo-vite/.runtime && npm pack --silent --pack-destination demo-vite/.runtime && cd demo-vite && npm i --no-save ./.runtime/nativescript-vue-*.tgz"
   }
 }
