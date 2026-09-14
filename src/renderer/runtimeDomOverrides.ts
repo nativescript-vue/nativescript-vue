@@ -1,4 +1,8 @@
-import { defineComponent } from '@vue/runtime-core';
+import {
+  getCurrentInstance,
+  KeepAlive as KeepAliveCore,
+} from '@vue/runtime-core';
+import { NSVDetachedContainer } from '../dom';
 import { logger } from '../util/logger';
 
 export const TransitionGroup = {
@@ -8,21 +12,26 @@ export const TransitionGroup = {
   },
 };
 
-let warnedKeepAlive = false;
-
 /**
- * KeepAlive needs a detached container to park deactivated subtrees in,
- * which has no native equivalent. Render the content without caching.
+ * runtime-core's KeepAlive parks deactivated subtrees in a container it
+ * obtains from createElement('div'), which is not a registered view here.
+ * It reads the renderer from the instance context during setup, so hand it
+ * one whose createElement yields a detached container instead. Deactivated
+ * views are removed from their native parent and re-added on activation;
+ * NativeScript recreates their native views then, so the component state
+ * survives but native-only state such as scroll offsets does not.
  */
-export const KeepAlive = /*#__PURE__*/ defineComponent({
-  name: 'KeepAlive',
-  setup(_props, { slots }) {
-    if (__DEV__ && !warnedKeepAlive) {
-      warnedKeepAlive = true;
-      logger.warn(
-        'KeepAlive is not supported; its children are rendered without caching.',
-      );
-    }
-    return () => slots.default?.();
+export const KeepAlive = {
+  ...(KeepAliveCore as any),
+  setup(props: any, ctx: any) {
+    const { ctx: sharedContext } = getCurrentInstance() as any;
+    const renderer = sharedContext.renderer;
+
+    sharedContext.renderer = {
+      ...renderer,
+      o: { ...renderer.o, createElement: () => new NSVDetachedContainer() },
+    };
+
+    return (KeepAliveCore as any).setup(props, ctx);
   },
-});
+} as unknown as typeof KeepAliveCore;

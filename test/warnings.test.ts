@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { h, KeepAlive, nextTick, ref } from '../src';
+import { h, nextTick, ref } from '../src';
 import { mount } from './helpers';
 
 const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -35,18 +35,5 @@ describe('dev warnings', () => {
     expect(warnings()).toEqual([
       expect.stringMatching(/Removing the current <Page>/),
     ]);
-  });
-
-  it('renders KeepAlive children without caching and warns once', () => {
-    const { el } = mount({
-      render: () => h(KeepAlive, null, () => h('Label', { text: 'kept' })),
-    });
-    expect(el.nativeView.text).toBe('kept');
-    expect(warnings()).toEqual([
-      expect.stringMatching(/KeepAlive is not supported/),
-    ]);
-
-    mount({ render: () => h(KeepAlive, null, () => h('Label')) });
-    expect(warnings()).toHaveLength(1);
   });
 });
