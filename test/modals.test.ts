@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { $closeModal, $showModal, createApp, h, onUnmounted } from '../src';
 import { Application, View } from './stubs/nativescript-core';
+import { mount } from './helpers';
 
 const Root = { render: () => h('StackLayout') };
 const Modal = { render: () => h('Label', { text: 'modal' }) };
@@ -86,5 +87,75 @@ describe('refused presentation', () => {
 
     $closeModal('outer');
     await expect(outer).resolves.toBe('outer');
+  });
+});
+
+describe('modal hot reload', () => {
+  const hmr = (globalThis as any).__VUE_HMR_RUNTIME__;
+
+  it('re-presents the new modal only after the old one is fully closed', async () => {
+    const root = startApp();
+    const ReloadableModal = {
+      __hmrId: 'modal-hmr',
+      render: () => h('Label', { text: 'v1' }),
+    };
+    hmr.createRecord('modal-hmr', ReloadableModal);
+
+    const result = $showModal(ReloadableModal, { animated: true });
+    const oldView = root.__modals[0];
+    expect(oldView.text).toBe('v1');
+
+    let presentedDuringTeardown = false;
+    root.showModal = new Proxy(root.showModal, {
+      apply(target, thisArg, args) {
+        if (!oldView.__tornDown) presentedDuringTeardown = true;
+        return Reflect.apply(target, thisArg, args);
+      },
+    });
+
+    hmr.reload('modal-hmr', {
+      ...ReloadableModal,
+      render: () => h('Label', { text: 'v2' }),
+    });
+    expect(root.__modals).toHaveLength(0);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(presentedDuringTeardown).toBe(false);
+    expect(oldView.__closedAnimated).toBe(false);
+    expect(root.__modals).toHaveLength(1);
+    const newView = root.__modals[0];
+    expect(newView).not.toBe(oldView);
+    expect(newView.text).toBe('v2');
+    expect(newView._modalOptions.animated).toBe(false);
+    expect(newView._modalOptions.transition).toBeUndefined();
+
+    $closeModal('after-reload');
+    await expect(result).resolves.toBe('after-reload');
+  });
+});
+
+describe('$modal', () => {
+  it('is false outside a modal and the close handle inside one', async () => {
+    startApp();
+    let outside: unknown;
+    let inside: unknown;
+    const Probe = {
+      render(this: any) {
+        inside = this.$modal;
+        return h('Label');
+      },
+    };
+    mount({
+      render(this: any) {
+        outside = this.$modal;
+        return h('StackLayout');
+      },
+    });
+    expect(outside).toBe(false);
+
+    const modal = $showModal(Probe);
+    expect(inside).toEqual({ close: expect.any(Function) });
+    (inside as any).close('bye');
+    await expect(modal).resolves.toBe('bye');
   });
 });
