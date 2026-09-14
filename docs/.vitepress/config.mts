@@ -93,6 +93,7 @@ export default defineConfig({
           },
           { text: 'Routing', link: '/docs/essentials/routing' },
           { text: 'Gotchas', link: '/docs/essentials/gotchas' },
+          { text: 'TypeScript', link: '/docs/essentials/typescript' },
           {
             text: 'Upgrade Guide',
             link: '/docs/essentials/upgrade-guide',
