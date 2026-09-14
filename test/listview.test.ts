@@ -71,6 +71,27 @@ describe('ListView cells', () => {
   });
 });
 
+describe('ListView itemTap', () => {
+  it('adds the tapped item and its context to the native event', () => {
+    const events: any[] = [];
+    const { el } = mount({
+      render: () =>
+        h(ListView, {
+          items: ['A', 'B'],
+          onItemTap: (e: any) => events.push(e),
+        }),
+    });
+
+    el.nativeView.notify({
+      eventName: 'itemTap',
+      object: el.nativeView,
+      index: 1,
+    });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ index: 1, item: 'B', odd: true });
+  });
+});
+
 describe('ListView slot forwarding', () => {
   function load(el: any, index: number) {
     const event: any = {

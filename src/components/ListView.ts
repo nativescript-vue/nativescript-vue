@@ -31,6 +31,9 @@ export interface ListItem<T = any> {
   odd: boolean;
 }
 
+/** Payload of the ListView `itemTap` event. */
+export type ListViewItemTapEvent<T = any> = ItemEventData & ListItem<T>;
+
 function getListItem(item: any, index: number): ListItem {
   return {
     item,
@@ -69,6 +72,9 @@ export const ListView = /*#__PURE__*/ defineComponent({
     },
     itemTemplateSelector: Function,
   },
+  emits: {
+    itemTap: (event: ListViewItemTapEvent) => !!event,
+  },
   setup(props, ctx) {
     const itemTemplates = Object.keys(ctx.slots).map((slotName) => {
       return {
@@ -105,6 +111,21 @@ export const ListView = /*#__PURE__*/ defineComponent({
     watch(() => props.items, refresh, { deep: 1 });
     watch(() => props.itemTemplateSelector, refresh);
 
+    function listItemAt(index: number): ListItem {
+      return getListItem(
+        props.items instanceof ObservableArray
+          ? props.items.getItem(index)
+          : props.items[index],
+        index,
+      );
+    }
+
+    // the native event carries only the index; the template's item context
+    // is what handlers want
+    function onItemTap(event: ItemEventData) {
+      ctx.emit('itemTap', Object.assign(event, listItemAt(event.index)));
+    }
+
     let cellId = 0;
     interface ItemCellData {
       itemCtx: ListItem;
@@ -116,12 +137,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
       const el = event.view?.[ELEMENT_REF] as NSVElement;
       const id = el?.nativeView[LIST_CELL_ID] ?? `LIST_CELL_${cellId++}`;
 
-      const itemCtx: ListItem = getListItem(
-        props.items instanceof ObservableArray
-          ? props.items.getItem(event.index)
-          : props.items[event.index],
-        event.index,
-      );
+      const itemCtx = listItemAt(event.index);
 
       // update the cell data with the current row
       cells.value[id] = {
@@ -187,6 +203,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
           itemTemplates,
           itemTemplateSelector,
           onItemLoading,
+          onItemTap,
         },
         cellVNODES(),
       );
