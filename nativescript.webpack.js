@@ -283,19 +283,23 @@ module.exports = (webpack) => {
       return args;
     });
 
-    // disable vue fork ts checker, as it doesn't work with vue3 yet?
-    config.plugin('ForkTsCheckerWebpackPlugin').tap((args) => {
-      args[0] = webpack.merge(args[0], {
-        typescript: {
-          extensions: {
-            vue: {
-              enabled: false,
+    // @nativescript/webpack only registers the checker when the project
+    // depends on typescript; tapping an unregistered plugin throws
+    if (config.plugins.has('ForkTsCheckerWebpackPlugin')) {
+      // disable vue fork ts checker, as it doesn't work with vue3 yet?
+      config.plugin('ForkTsCheckerWebpackPlugin').tap((args) => {
+        args[0] = webpack.merge(args[0], {
+          typescript: {
+            extensions: {
+              vue: {
+                enabled: false,
+              },
             },
           },
-        },
-      });
+        });
 
-      return args;
-    });
+        return args;
+      });
+    }
   });
 };
