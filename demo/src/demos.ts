@@ -9,6 +9,7 @@ import Home from './components/Home.vue';
 import demo_KeepAlive from './components/demo_KeepAlive.vue';
 import demo_ListView from './components/demo_ListView.vue';
 import demo_ListViewTemplates from './components/demo_ListViewTemplates.vue';
+import demo_ListViewWrapper from './components/demo_ListViewWrapper.vue';
 import test_TextNodes from './components/test_TextNodes.vue';
 
 /**
@@ -28,6 +29,11 @@ export const demos: Demo[] = [
   {
     name: 'ListView templates',
     component: demo_ListViewTemplates,
+    root: 'frame',
+  },
+  {
+    name: 'ListView wrapper (forwarded slots)',
+    component: demo_ListViewWrapper,
     root: 'frame',
   },
   { name: 'KeepAlive', component: demo_KeepAlive, root: 'frame' },
