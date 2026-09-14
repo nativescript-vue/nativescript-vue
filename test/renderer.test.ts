@@ -36,6 +36,19 @@ describe('renderer', () => {
     expect(el.nativeView.text).toBe('ios');
   });
 
+  it('routes dotted platform keys into the platform settings object', () => {
+    __setPlatform('ios');
+    const { el } = mount({
+      render: () =>
+        h('ActionItem', {
+          'ios.position': 'right',
+          'android.position': 'popup',
+        }),
+    });
+    expect(el.nativeView.ios.position).toBe('right');
+    expect(el.nativeView.android).toBeUndefined();
+  });
+
   it('wires event listeners and unwires them when removed', async () => {
     const calls: string[] = [];
     const handler = ref<(() => void) | null>(() => calls.push('tap'));

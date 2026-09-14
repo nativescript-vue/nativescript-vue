@@ -103,9 +103,20 @@ export const ELEMENT_REF = Symbol(__DEV__ ? `elementRef` : ``);
 const onRE = /^on[^a-z]/;
 export const isOn = (key: string) => onRE.test(key);
 
-export const isAndroidKey = (key: string) => key.startsWith('android:');
+export const isAndroidKey = (key: string) =>
+  key.startsWith('android:') || key.startsWith('android.');
 
-export const isIOSKey = (key: string) => key.startsWith('ios:');
+export const isIOSKey = (key: string) =>
+  key.startsWith('ios:') || key.startsWith('ios.');
+
+/**
+ * `android:foo` targets the view's own `foo`; `android.foo` keeps its path
+ * into the view's platform-specific settings object.
+ */
+export const stripPlatformPrefix = (key: string, platform: string) =>
+  key.charAt(platform.length) === ':'
+    ? key.substring(platform.length + 1)
+    : key;
 
 export const isBoolean = (value: unknown): boolean => {
   return typeof value === 'boolean' || value instanceof Boolean;

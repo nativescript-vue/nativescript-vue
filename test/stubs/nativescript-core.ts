@@ -219,7 +219,15 @@ export class ActionBar extends View {
     },
   };
 }
-export class ActionItem extends View {}
+export class ActionItem extends View {
+  /** Mirrors core: the settings object exists only on its own platform. */
+  get ios() {
+    return isIOS ? (this._ios ??= {}) : undefined;
+  }
+  get android() {
+    return isAndroid ? (this._android ??= {}) : undefined;
+  }
+}
 export class NavigationButton extends ActionItem {}
 export class TabView extends View {
   items: any[] | undefined;
