@@ -94,7 +94,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
     }
     const cells = ref<Record<string, ItemCellData>>({});
 
-    function onitemLoading(event: ItemEventData) {
+    function onItemLoading(event: ItemEventData) {
       const el = event.view?.[ELEMENT_REF] as NSVElement;
       const id = el?.nativeView[LIST_CELL_ID] ?? `LIST_CELL_${cellId++}`;
 
@@ -170,7 +170,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
           items: props.items,
           itemTemplates,
           itemTemplateSelector,
-          onitemLoading,
+          onItemLoading,
         },
         cellVNODES(),
       );

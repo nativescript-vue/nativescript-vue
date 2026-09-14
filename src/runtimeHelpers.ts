@@ -80,7 +80,9 @@ export function createNativeView<T = View, P = any>(
 
 export const ELEMENT_REF = Symbol(__DEV__ ? `elementRef` : ``);
 
-const onRE = /^on.+/;
+// matches Vue's own isOn: "on" followed by anything but a lowercase letter,
+// so onTap and on:textChange are events while onboardingTitle is a prop
+const onRE = /^on[^a-z]/;
 export const isOn = (key: string) => onRE.test(key);
 
 export const isAndroidKey = (key: string) => key.startsWith('android:');

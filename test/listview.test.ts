@@ -36,3 +36,28 @@ describe('ListView', () => {
     expect(el.nativeView.refreshCount).toBeUndefined();
   });
 });
+
+describe('ListView cells', () => {
+  it('renders the slot template for each loaded item', () => {
+    const { el } = mount({
+      render: () =>
+        h(
+          ListView,
+          { items: ['A', 'B'] },
+          {
+            default: ({ item, index }: { item: string; index: number }) =>
+              h('Label', { text: `${index}:${item}` }),
+          },
+        ),
+    });
+    expect(el.nativeView._listeners.has('itemLoading')).toBe(true);
+
+    const event: any = {
+      eventName: 'itemLoading',
+      object: el.nativeView,
+      index: 1,
+    };
+    el.nativeView.notify(event);
+    expect(event.view?.text).toBe('1:B');
+  });
+});
