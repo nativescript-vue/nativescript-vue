@@ -34,7 +34,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "simple-git-hooks",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "release": "node scripts/release.mjs"
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.5.42",
@@ -56,7 +59,8 @@
     "lint-staged": "^17.5.0",
     "prettier": "^3.9.6",
     "simple-git-hooks": "^2.14.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npx --no-install lint-staged --config=package.json",
