@@ -12,6 +12,20 @@ npm run build
 The `demo/` app resolves `nativescript-vue` straight from `src/`, so
 `cd demo && ns run ios|android` exercises uncommitted changes.
 
+## Documentation
+
+The [nativescript-vue.org](https://nativescript-vue.org) site lives in
+`docs/` and is built with VitePress. All content is under `docs/content/`.
+
+```sh
+cd docs
+npm install
+npm run dev
+```
+
+Pushes to `main` deploy it; pull requests get a preview URL from the Docs
+workflow. See `docs/README.md`.
+
 Commits follow [Conventional Commits](https://www.conventionalcommits.org);
 a commit-msg hook enforces it.
 

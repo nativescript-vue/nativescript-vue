@@ -1,40 +1,31 @@
-# NativeScript-Vue website [![Netlify Status](https://api.netlify.com/api/v1/badges/6b14c9ec-0c06-4ede-b8f6-0bdb13de2bfd/deploy-status)](https://app.netlify.com/sites/nativescript-vue/deploys)
+# nativescript-vue.org
 
-This is the source for the [nativescript-vue.org](https://nativescript-vue.org/) website.
+Source of the [nativescript-vue.org](https://nativescript-vue.org) website,
+built with [VitePress](https://vitepress.dev). All content lives in `content/`.
 
-Contributions are welcome, all the content is placed in the `content` directory.
-
-## Setup
-
-Clone this repo to your local machine and install the dependencies.
-
-```bash
-cd nativescript-vue.org/
+```sh
+cd docs
 npm install
+npm run dev       # local dev server
+npm run build     # static site in .vitepress/dist
+npm run preview   # serve the built site
 ```
 
-## Start documentation
+## Deployment
 
-We use VitePress for rapid development and documenting. You can start it locally by
+The site is served by a Cloudflare Worker (static assets only, see
+`wrangler.jsonc`) on the `nativescript-vue.org/*` route. Every push to `main`
+that touches `docs/` deploys it through the Docs workflow. To deploy by hand:
 
-```bash
-npm run dev
+```sh
+npm run deploy    # builds, then `wrangler deploy`
 ```
 
-Now, you can open the URL generated in your browser to see the generated docs.
+The v2 docs stay on Netlify at https://v2.nativescript-vue.org.
 
-## Build documentation
-Run the HTTP server using the already generated `dist/` directory:
+## Checking links
 
-```bash
-npm run build
-npm run preview
-```
-
-## Good practices
-### Check broken links
-If you've modified a large portion of the documentation or added/modified links, it's a good idea to ensure that all the documentation links still work. To do this, you can run the command linkinator, which will return a report of the links that can't be resolved.
-```
+```sh
 npm run build
 npm run check-links
 ```

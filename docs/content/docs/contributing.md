@@ -1,6 +1,6 @@
 ---
 title: Contributing
-contributors: [vallemar]
+contributors: [vallemar, rigor789]
 ---
 
 # Contributing
@@ -8,73 +8,71 @@ contributors: [vallemar]
 Thank you for your interest in contributing to NativeScript-Vue!
 
 ## Development
-Follow these steps to start contributing to the NativeScript-Vue codebase:
+
+The runtime, the project templates and this website all live in the
+[nativescript-vue repository](https://github.com/nativescript-vue/nativescript-vue).
 
 ### Setup
-Clone the [repository](https://github.com/nativescript-vue/nativescript-vue) to your local environment:
+
+Clone the repository and install its dependencies:
 
 ```bash
 git clone https://github.com/nativescript-vue/nativescript-vue.git
-```
-
-Install all necessary dependencies using Yarn:
-
-```bash
-yarn install
-```
-
-Navigate to the demo application:
-
-```bash
-cd demo
-```
-
-Launch the application in debug mode for your chosen platform (iOS or Android):
-
-```bash
-ns debug ios|android
-```
-
-You can now modify the NativeScript-Vue source code located in the `src` directory. Changes made here will automatically reflect in the demo application.
-
-## Documentation
-We warmly welcome contributions to enhance the NativeScript-Vue documentation.
-
-### Setup
-Fork the official documentation repository [nativescript-vue.org](https://github.com/nativescript-vue/nativescript-vue.org), clone your fork locally, and install the required dependencies:
-
-```bash
-git clone https://github.com/<your-username>/nativescript-vue.org.git
-cd nativescript-vue.org/
+cd nativescript-vue
 npm install
 ```
 
-### Running the documentation locally
-
-We utilize VitePress for rapid documentation development. Start the local development server with:
+Run the checks:
 
 ```bash
+npm test            # vitest, runs the renderer against a stubbed @nativescript/core
+npm run typecheck
+npm run build
+```
+
+### Trying changes in an app
+
+The `demo/` app resolves `nativescript-vue` straight from `src/`, so it picks
+up uncommitted changes:
+
+```bash
+cd demo
+npm install
+ns run ios|android
+```
+
+## Documentation
+
+The website is in the `docs/` folder of the same repository and is built with
+[VitePress](https://vitepress.dev). All content is under `docs/content/`, and
+every page has an "Edit this page" link that opens the file on GitHub.
+
+### Running the documentation locally
+
+```bash
+cd docs
+npm install
 npm run dev
 ```
 
-Open the URL provided in your terminal in your web browser to preview your changes live.
+Open the URL printed in your terminal to preview your changes live.
 
 ### Building the documentation
-
-Build and preview the static documentation site locally with the following commands:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-### Best practices
+### Checking for broken links
 
-#### Checking for broken links
-After making extensive changes or modifying any links, it's recommended to verify all documentation links remain functional. Use Linkinator to generate a report highlighting any broken links:
+After changing links or a large portion of a page, verify that all
+documentation links still resolve:
 
 ```bash
 npm run build
 npm run check-links
 ```
 
+Pull requests that touch `docs/` get a preview URL from the Docs workflow, and
+the site deploys automatically when they are merged.

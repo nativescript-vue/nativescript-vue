@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nativescript-vue-docs",
+  "compatibility_date": "2026-09-14",
+  "assets": {
+    "directory": "./.vitepress/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": false,
+  "preview_urls": true,
+  "routes": [
+    { "pattern": "nativescript-vue.org/*", "zone_name": "nativescript-vue.org" }
+  ]
+}
