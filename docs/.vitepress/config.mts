@@ -27,7 +27,6 @@ export default defineConfig({
   srcDir: 'content',
   title: 'NativeScript-Vue',
   description: 'Delightful mobile app development.',
-  ignoreDeadLinks: true,
   cleanUrls: true,
   themeConfig: {
     logo: {
@@ -159,8 +158,6 @@ export default defineConfig({
       provider: 'local',
       options: {
         _render(src, env, md) {
-          if (env.path.includes('archived-docs')) return '';
-
           return md.render(
             componentMarkdownUtils.processSearchableVueContent(src),
             env,
