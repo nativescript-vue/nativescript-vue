@@ -68,8 +68,9 @@ export const ListView = /*#__PURE__*/ defineComponent({
 
     const vm = getCurrentInstance();
 
-    watch(props, () => {
+    function refresh() {
       try {
+        // ObservableArray notifies the native ListView of changes itself
         if (props.items instanceof ObservableArray) {
           return;
         }
@@ -79,7 +80,12 @@ export const ListView = /*#__PURE__*/ defineComponent({
       } catch (err) {
         console.error('Error while refreshing ListView', err);
       }
-    });
+    }
+
+    // depth 1 tracks the array's length and slots without walking into the
+    // items themselves; cells re-render on their own when item fields change
+    watch(() => props.items, refresh, { deep: 1 });
+    watch(() => props.itemTemplateSelector, refresh);
 
     let cellId = 0;
     interface ItemCellData {
