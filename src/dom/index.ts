@@ -16,6 +16,7 @@ export const enum NSVNodeTypes {
   ELEMENT = 'element',
   COMMENT = 'comment',
   ROOT = 'root',
+  DETACHED = 'detached',
 }
 
 // View Flags indicate the kind of view the element is
@@ -323,6 +324,51 @@ export class NSVRoot extends NSVNode {
     //   "insertBefore called on NSVRoot - root element must contain a single child."
     // );
     return this.appendChild(el);
+  }
+}
+
+/**
+ * Parks nodes outside the visual tree, as KeepAlive does with deactivated
+ * subtrees. Children keep their place in the node tree so anchors and
+ * siblings still resolve, but nothing is added to a native parent: a view
+ * moved in here is simply detached until it is moved back out.
+ */
+export class NSVDetachedContainer extends NSVNode {
+  constructor() {
+    super(NSVNodeTypes.DETACHED);
+  }
+
+  appendChild(el: NSVNode) {
+    el.parentNode?.removeChild(el);
+
+    this.childNodes.push(el);
+    el.parentNode = this as any;
+  }
+
+  insertBefore(el: NSVNode, anchor?: NSVNode | null) {
+    if (!anchor || anchor === el) {
+      return this.appendChild(el);
+    }
+
+    el.parentNode?.removeChild(el);
+
+    const refIndex = this.childNodes.indexOf(anchor);
+
+    if (refIndex === -1) {
+      return this.appendChild(el);
+    }
+
+    this.childNodes.splice(refIndex, 0, el);
+    el.parentNode = this as any;
+  }
+
+  removeChild(el: NSVNode) {
+    const index = this.childNodes.indexOf(el);
+
+    if (index > -1) {
+      this.childNodes.splice(index, 1);
+      el.parentNode = null;
+    }
   }
 }
 
