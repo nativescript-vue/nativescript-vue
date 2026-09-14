@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.1 (2026-09-14)
+
+- `@nativescript-vue/template-blank` declares its repository, which npm requires to accept the package's provenance. 3.1.0 was staged for the runtime only and never published; 3.1.1 is the first release of this line for both packages. (#1157)
+- The release workflow stages each package in its own job and can be dispatched for an existing tag. (#1156)
+
 ## 3.1.0 (2026-09-14)
 
 ### Requirements
