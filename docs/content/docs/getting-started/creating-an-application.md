@@ -9,9 +9,9 @@ A Nativescript-Vue application is initialized as we are used to doing in Vue, bu
 An example of a traditional application input file is the following.
 
 ```ts
-import { createApp } from 'nativescript-vue'
+import { createApp } from 'nativescript-vue';
 // import the root component App from a single-file component.
-import App from './App.vue'
+import App from './App.vue';
 
 const app = createApp(App);
 app.start();

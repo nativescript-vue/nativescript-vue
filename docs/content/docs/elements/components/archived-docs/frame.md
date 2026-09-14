@@ -4,7 +4,7 @@ apiRef: https://docs.nativescript.org/api-reference/classes/_ui_frame_.frame
 contributors: [rigor789, PieterHartzer]
 ---
 
-`<Frame>` is a UI component used to display [`<Page>`](/en/docs/elements/components/page) elements. Every app needs at least a single `<Frame>`  element, usually set as the root element. 
+`<Frame>` is a UI component used to display [`<Page>`](/en/docs/elements/components/page) elements. Every app needs at least a single `<Frame>` element, usually set as the root element.
 
 ---
 
@@ -14,15 +14,15 @@ If you are migrating from nativescript 3.x and want to preserve the old behavior
 
 ```js
 new Vue({
-  render: h => h('Frame', [ h(HomePageComponent) ])
-})
+  render: (h) => h('Frame', [h(HomePageComponent)]),
+});
 ```
 
 #### Multiple Frames
 
 If you need to create multiple frames, you can do so by wrapping them in a Layout, for example if you want to have 2 frames side-by-side
 
-```html
+```vue-html
 <GridLayout columns="*, *">
   <Frame col="0"/>
   <Frame col="1"/>
@@ -31,7 +31,7 @@ If you need to create multiple frames, you can do so by wrapping them in a Layou
 
 #### A frame with a default page
 
-```html
+```vue-html
 <Frame>
   <Page>
     <ActionBar title="Default Page Title" />
@@ -44,7 +44,7 @@ If you need to create multiple frames, you can do so by wrapping them in a Layou
 
 #### A frame with a default page from an external component
 
-```html
+```vue-html
 <Frame>
   <Page>
     <Home />
@@ -53,17 +53,17 @@ If you need to create multiple frames, you can do so by wrapping them in a Layou
 ```
 
 ```js
-import Home from './Home'
+import Home from './Home';
 
 export default {
   components: {
-    Home
-  }
-}
+    Home,
+  },
+};
 ```
 
 ## Native component
 
-| Android | iOS |
-|---------|-----|
-| [`org.nativescript.widgets.ContentLayout`](https://github.com/NativeScript/tns-core-modules-widgets/blob/master/android/widgets/src/main/java/org/nativescript/widgets/ContentLayout.java) | [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller)
+| Android                                                                                                                                                                                    | iOS                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| [`org.nativescript.widgets.ContentLayout`](https://github.com/NativeScript/tns-core-modules-widgets/blob/master/android/widgets/src/main/java/org/nativescript/widgets/ContentLayout.java) | [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |

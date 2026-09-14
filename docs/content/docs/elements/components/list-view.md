@@ -9,46 +9,43 @@ contributors: [MisterBrownRSA, rigor789, eddyverbruggen, ikoevska, vallemar]
 
 ```html
 <ListView :items="listOfItems" @itemTap="onItemTap">
-  <template #default="{ item, index, even, odd } : { item: string, index: number, even: boolean, odd: boolean }">
+  <template
+    #default="{ item, index, even, odd } : { item: string, index: number, even: boolean, odd: boolean }"
+  >
     <!-- Shows the list item label in the default color and style. -->
     <StackLayout>
-      <Label :text="item" />
-      <Label :text="`Item index ${index}`" />
-      <Label :text="`Is event ${even}`" />
-      <Label :text="`Is odd ${odd}`" />
+      <label :text="item" />
+      <label :text="`Item index ${index}`" />
+      <label :text="`Is event ${even}`" />
+      <label :text="`Is odd ${odd}`" />
     </StackLayout>
   </template>
 </ListView>
 ```
 
 ---
+
 <img src="https://docs.nativescript.org/assets/ListView.DcB5SJ9c.png" alt="drawing" width="200"/>
-
-
 
 ## Using `<ListView>` with multiple `<template>` slots
 
-The `template` is used to define how each list item is shown on the screen. 
+The `template` is used to define how each list item is shown on the screen.
 
 If you need to visualize one or more list items differently than the rest, you can enclose them in additional `<template>` blocks using `v-slot` and `itemTemplateSelector` function.
 
 ```vue
 <script lang="ts" setup>
-import { ListItem } from "nativescript-vue";
+import { ListItem } from 'nativescript-vue';
 
-function itemTemplate(args: ListItem<CustomType>){
-  return args.item.type === "header" ? "header" : "default";
+function itemTemplate(args: ListItem<CustomType>) {
+  return args.item.type === 'header' ? 'header' : 'default';
 }
-
 </script>
 
 <template>
-  <ListView 
-    :items="listOfItems"  
-    :itemTemplateSelector="itemTemplate"
-  > 
+  <ListView :items="listOfItems" :itemTemplateSelector="itemTemplate">
     <template #default="{ item }">
-      <Label :text="item.text" /> 
+      <Label :text="item.text" />
     </template>
 
     <template #header="{ item }">
@@ -85,12 +82,13 @@ onItemTap(event) {
 | `separatorColor`        | `Color`                                                 | Sets the separator line color. Set to `transparent` to remove it.                                                                                                             |
 | `rowHeight`             | `nubmer`                                                | Gets or sets the row height of the ListView. Useful when your items have a fixed height, as the required calculations are greatly simplified and the rendering can be faster. |
 | `iosEstimatedRowHeight` | `nubmer`, `string`                                      | Gets or sets the estimated height of rows in the ListView. Default value: 44px.                                                                                               |
- 
- See the full documentation for [NativeScript ListView props.](https://docs.nativescript.org/ui/list-view#props)
+
+See the full documentation for [NativeScript ListView props.](https://docs.nativescript.org/ui/list-view#props)
 
 ## Template Scoped Slots
 
 The template receives a `ListItem<T>` type object that is composed of the following properties.
+
 | Name    | Type      | Description                                      |
 | ------- | --------- | ------------------------------------------------ |
 | `item`  | `any`     | Item of array.                                   |
@@ -107,8 +105,8 @@ The template receives a `ListItem<T>` type object that is composed of the follow
 | `loadMoreItems` | Emitted when the user reaches the end of the `ListView`. Useful for loading additional items (ie. infinite scroll).                        |
 | `itemTap`       | Emitted when an item in the `<ListView>` is tapped. To access the tapped item, use `event.item`.                                           |
 | `itemTap`       | Emitted when an item in the `<ListView>` is tapped. To access the tapped item, use `event.item`.                                           |
- 
- See the full documentation for [NativeScript ListView events.](https://docs.nativescript.org/ui/list-view#events)
+
+See the full documentation for [NativeScript ListView events.](https://docs.nativescript.org/ui/list-view#events)
 
 ## Complete documentation
 

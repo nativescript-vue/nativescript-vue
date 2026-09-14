@@ -15,10 +15,9 @@ The method is part of the [`dialogs` module](https://docs.nativescript.org/api-r
 The `alert()` method is available globally. You can call it anywhere in your app.
 
 ```javascript
-alert('Your message')
-  .then(() => {
-    console.log("Alert dialog closed.");
-  });
+alert('Your message').then(() => {
+  console.log('Alert dialog closed.');
+});
 ```
 
 ## Configure dialog options

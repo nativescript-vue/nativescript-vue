@@ -4,7 +4,7 @@ apiRef: https://docs.nativescript.org/api-reference/classes/_ui_action_bar_.acti
 contributors: [rigor789, eddyverbruggen, ikoevska]
 ---
 
-`<ActionBar>` is a UI component that provides a toolbar at the top of the activity window. 
+`<ActionBar>` is a UI component that provides a toolbar at the top of the activity window.
 
 This component is the NativeScript abstraction for the Android [app bar](https://developer.android.com/training/appbar/) and the iOS [navigation bar](https://developer.apple.com/design/human-interface-guidelines/ios/bars/navigation-bars/).
 
@@ -12,13 +12,13 @@ This component is the NativeScript abstraction for the Android [app bar](https:/
 
 #### Using a title
 
-```html
+```vue-html
 <ActionBar title="MyApp" />
 ```
 
 #### Using a custom title view
 
-```html
+```vue-html
 <ActionBar>
   <StackLayout orientation="horizontal">
     <Image src="res://icon" width="40" height="40" verticalAlignment="center" />
@@ -29,7 +29,7 @@ This component is the NativeScript abstraction for the Android [app bar](https:/
 
 #### Setting an app icon for Android
 
-```html
+```vue-html
 <ActionBar title="My App" android.icon="res://icon" android.iconVisibility="always" />
 ```
 
@@ -39,21 +39,21 @@ By default, a border is drawn at the bottom of the `<ActionBar>`. In addition to
 
 To remove this styling from your app, you can set the `flat` property to `true`.
 
-```html
+```vue-html
 <ActionBar title="My App" flat="true" />
 ```
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `title` | `String` | Gets or sets the title shown in the bar.
-| `android.icon` | `String` | Gets or sets the icon to be shown on Android devices.
-| `android.iconVisibility` | `String` | Gets or sets icon visibility on Android devices.
-| `flat` | `boolean` | Removes the border on Android and the translucency on iOS. Default value is `false`.
+| Name                     | Type      | Description                                                                          |
+| ------------------------ | --------- | ------------------------------------------------------------------------------------ |
+| `title`                  | `String`  | Gets or sets the title shown in the bar.                                             |
+| `android.icon`           | `String`  | Gets or sets the icon to be shown on Android devices.                                |
+| `android.iconVisibility` | `String`  | Gets or sets icon visibility on Android devices.                                     |
+| `flat`                   | `boolean` | Removes the border on Android and the translucency on iOS. Default value is `false`. |
 
 ## Native component
 
-| Android | iOS |
-|---------|-----|
-| [`android.widget.Toolbar`](https://developer.android.com/reference/android/widget/Toolbar.html)	| [`UINavigationBar`](https://developer.apple.com/documentation/uikit/uinavigationbar)
+| Android                                                                                         | iOS                                                                                  |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [`android.widget.Toolbar`](https://developer.android.com/reference/android/widget/Toolbar.html) | [`UINavigationBar`](https://developer.apple.com/documentation/uikit/uinavigationbar) |

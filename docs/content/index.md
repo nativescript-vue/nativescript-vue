@@ -3,8 +3,8 @@
 layout: home
 
 hero:
-  name: "NativeScript-Vue"
-  text: "Delightful mobile app development."
+  name: 'NativeScript-Vue'
+  text: 'Delightful mobile app development.'
   tagline: The entire native platform under your fingertips in the comfort of Vue and JavaScript.
   image:
     src: https://art.nativescript-vue.org/misc/phone.svg

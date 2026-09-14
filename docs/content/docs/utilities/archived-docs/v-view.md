@@ -7,13 +7,13 @@ The `v-view` directive lets you set the current element's `View` as a parent pro
 
 ---
 
-```HTML
+```vue-html
 <Child v-view:parentPropertyName />
 <!-- same as: -->
 <Child ~parentPropertyName />
 ```
 
-```HTML
+```vue-html
 <Child v-view:parentArrayPropertyName.array />
 <!-- same as: -->
 <Child ~parentArrayPropertyName.array />
@@ -27,7 +27,7 @@ The `<RadSideDrawer>` component is part of the [Progress NativeScript UI](http:/
 
 The `<RadSideDrawer>` component requires the `drawerContent` and `mainContent` properties to be set to `View` instances. Using the `v-view` directive, you can do this with a few lines of code:
 
-```HTML
+```vue-html
 <RadSideDrawer>
   <StackLayout ~drawerContent />
   <StackLayout ~mainContent />
@@ -36,7 +36,7 @@ The `<RadSideDrawer>` component requires the `drawerContent` and `mainContent` p
 
 Without the `v-view` directive, you need to go a more tedious and error-prone route:
 
-```HTML
+```vue-html
 <RadSideDrawer ref="drawer">
   <StackLayout ref="drawerContent" />
   <StackLayout ref="mainContent" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { componentMarkdownUtils } from "../../utils/ComponentMarkdownUtils";
+import { componentMarkdownUtils } from '../../utils/ComponentMarkdownUtils';
 
 defineProps<{ id: string }>();
 </script>

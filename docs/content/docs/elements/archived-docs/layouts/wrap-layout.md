@@ -12,7 +12,7 @@ contributors: [rigor789, ikoevska]
 
 The following example creates a row of equally-sized items. When the row runs out of space, the container wraps the last item on a new row.
 
-```html
+```vue-html
 <WrapLayout backgroundColor="#3c495e">
   <Label text="first" width="30%" height="30%" backgroundColor="#43b883"/>
   <Label text="second" width="30%" height="30%" backgroundColor="#1c6b48"/>
@@ -27,7 +27,7 @@ The following example creates a row of equally-sized items. When the row runs ou
 
 The following example creates a column of equally-sized items. When the row runs out of space, the container wraps the last item on a new column.
 
-```html
+```vue-html
 <WrapLayout orientation="vertical" backgroundColor="#3c495e">
   <Label text="first" width="30%" height="30%" backgroundColor="#43b883"/>
   <Label text="second" width="30%" height="30%" backgroundColor="#1c6b48"/>
@@ -40,11 +40,11 @@ The following example creates a column of equally-sized items. When the row runs
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-`orientation` | `String` | Specifies the stacking direction.<br/>Valid values: `horizontal` (arranges items in rows) and `vertical` (arranges items in columns).<br/>Default value: `horizontal`.
-`itemWidth` | `Number` | Sets the width used to measure and layout each child.<br/>Default value: `Number.NaN`, which does not restrict children.
-`itemHeight` | `Number` | Sets the height used to measure and layout each child.<br/>Default value is `Number.NaN`, which does not restrict children.
+| Name          | Type     | Description                                                                                                                                                            |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `orientation` | `String` | Specifies the stacking direction.<br/>Valid values: `horizontal` (arranges items in rows) and `vertical` (arranges items in columns).<br/>Default value: `horizontal`. |
+| `itemWidth`   | `Number` | Sets the width used to measure and layout each child.<br/>Default value: `Number.NaN`, which does not restrict children.                                               |
+| `itemHeight`  | `Number` | Sets the height used to measure and layout each child.<br/>Default value is `Number.NaN`, which does not restrict children.                                            |
 
 ## Additional children props
 

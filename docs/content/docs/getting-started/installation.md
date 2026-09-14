@@ -28,4 +28,3 @@ Want to see what NativeScript-Vue is all about without any setup? You can previe
 [👉 Launch NativeScript-Vue App on StackBlitz](https://nativescript.new/vue3)
 
 Note: You'll need to download the [NativeScript Preview app](https://preview.nativescript.org/) on your device to run this preview. While this allows you to explore the full NativeScript ecosystem quickly, it does have limitations, such as limited access to third party plugins.
-

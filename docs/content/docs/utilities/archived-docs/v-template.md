@@ -7,10 +7,10 @@ The `<v-template>` component lets you define markup that you can reuse as a temp
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `if` | `String` | The condition for using this template.
-| `name` | `String` | The name of the template, auto-generated if omitted.
+| Name   | Type     | Description                                          |
+| ------ | -------- | ---------------------------------------------------- |
+| `if`   | `String` | The condition for using this template.               |
+| `name` | `String` | The name of the template, auto-generated if omitted. |
 
 ## Basic usage
 
@@ -32,17 +32,17 @@ Templates are stored as objects conforming to the [`KeyedTemplate`](https://docs
 
 #### The `selectorFn` property
 
-The `selectorFn` property returns a function that accepts a single parameter. This parameter is the item whose template is selected. 
+The `selectorFn` property returns a function that accepts a single parameter. This parameter is the item whose template is selected.
 
 The single-parameter function goes through all templates registered in the `TemplateBag` instance and returns the first one where the `if` condition is met. If none of the templates match, returns `default`.
 
 #### Available methods
 
-| Method | Description |
-|---|---|
-| `registerTemplate(name: String, condition: String?, scopedFn: Function): void` | _Mainly used internally._<br/>Registers templates in the `TemplateBag` instance.<br/>The `scopedFn` should be a render function of a [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots) |
-| `getConditionFn(condition: String): Function` | _Used internally._<br/>Builds a function that evaluates the given condition. |
-| `getAvailable(): Array<String>` | Returns an array of available [`KeyedTemplates`](https://docs.nativescript.org/api-reference/interfaces/_ui_core_view_.keyedtemplate). (Returns an array of template names.) |
-| `getKeyedTemplate(name: String): KeyedTemplate` | Returns the [`KeyedTemplate`](https://docs.nativescript.org/api-reference/interfaces/_ui_core_view_.keyedtemplate) with the specified name. |
-| `getKeyedTemplates(): Array<KeyedTemplate>` | Returns an array of all the [`KeyedTemplates`](https://docs.nativescript.org/api-reference/interfaces/_ui_core_view_.keyedtemplate) registered in the `TemplateBag`. |
-| `patchTemplate(name: String, context: any, oldVnode: VNode?): View` | Patches an existing [`VNode`](https://vuejs.org/v2/guide/render-function.html#The-Virtual-DOM) using the provided `context`. If no `oldVnode` is provided, creates a new View instance for the specified template. |
+| Method                                                                         | Description                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `registerTemplate(name: String, condition: String?, scopedFn: Function): void` | _Mainly used internally._<br/>Registers templates in the `TemplateBag` instance.<br/>The `scopedFn` should be a render function of a [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots)        |
+| `getConditionFn(condition: String): Function`                                  | _Used internally._<br/>Builds a function that evaluates the given condition.                                                                                                                                       |
+| `getAvailable(): Array<String>`                                                | Returns an array of available [`KeyedTemplates`](https://docs.nativescript.org/api-reference/interfaces/_ui_core_view_.keyedtemplate). (Returns an array of template names.)                                       |
+| `getKeyedTemplate(name: String): KeyedTemplate`                                | Returns the [`KeyedTemplate`](https://docs.nativescript.org/api-reference/interfaces/_ui_core_view_.keyedtemplate) with the specified name.                                                                        |
+| `getKeyedTemplates(): Array<KeyedTemplate>`                                    | Returns an array of all the [`KeyedTemplates`](https://docs.nativescript.org/api-reference/interfaces/_ui_core_view_.keyedtemplate) registered in the `TemplateBag`.                                               |
+| `patchTemplate(name: String, context: any, oldVnode: VNode?): View`            | Patches an existing [`VNode`](https://vuejs.org/v2/guide/render-function.html#The-Virtual-DOM) using the provided `context`. If no `oldVnode` is provided, creates a new View instance for the specified template. |

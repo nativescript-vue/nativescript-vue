@@ -10,7 +10,7 @@ contributors: [MisterBrownRSA, rigor789, eddyverbruggen, ikoevska]
 
 ---
 
-```html
+```vue-html
 <Label text="Label" />
 ```
 
@@ -20,7 +20,7 @@ contributors: [MisterBrownRSA, rigor789, eddyverbruggen, ikoevska]
 
 If you need to style parts of the text, you can use a combination of a [`FormattedString`](https://docs.nativescript.org/angular/ui/ng-ui-widgets/formatted-string) and [`Span`](https://docs.nativescript.org/api-reference/classes/_text_span_.span) elements.
 
-```html
+```vue-html
 <Label textWrap="true">
   <FormattedString>
     <Span text="This text has a " />
@@ -34,13 +34,13 @@ If you need to style parts of the text, you can use a combination of a [`Formatt
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `text` | `String` | Gets or sets the text of the label.
-| `textWrap` | `Boolean` | Gets or sets whether the label wraps text.<br/>Default value: `false`.
+| Name       | Type      | Description                                                            |
+| ---------- | --------- | ---------------------------------------------------------------------- |
+| `text`     | `String`  | Gets or sets the text of the label.                                    |
+| `textWrap` | `Boolean` | Gets or sets whether the label wraps text.<br/>Default value: `false`. |
 
 ## Native component
 
-| Android | iOS |
-|---------|-----|
-| [`android.widget.TextView`](https://developer.android.com/reference/android/widget/TextView.html) | [`UILabel`](https://developer.apple.com/documentation/uikit/uilabel)
+| Android                                                                                           | iOS                                                                  |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [`android.widget.TextView`](https://developer.android.com/reference/android/widget/TextView.html) | [`UILabel`](https://developer.apple.com/documentation/uikit/uilabel) |

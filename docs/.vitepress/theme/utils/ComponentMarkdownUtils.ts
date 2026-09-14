@@ -1,14 +1,14 @@
-import { dataComponents } from "../data/DataComponents";
+import { dataComponents } from '../data/DataComponents';
 
 export const componentMarkdownUtils = {
   buildIdMarkdown: (id: string) => {
-    return id.trim().toLowerCase().replace(/\s/g, "-");
+    return id.trim().toLowerCase().replace(/\s/g, '-');
   },
   processSearchableVueContent(src: string) {
-    if (src.includes("<!-- COMPONENT_LIST_CONTENT -->")) {
+    if (src.includes('<!-- COMPONENT_LIST_CONTENT -->')) {
       src = src.replace(
-        "<!-- COMPONENT_LIST_CONTENT -->",
-        generateSearchableComponents()
+        '<!-- COMPONENT_LIST_CONTENT -->',
+        generateSearchableComponents(),
       );
     }
 
@@ -17,7 +17,7 @@ export const componentMarkdownUtils = {
 };
 
 function generateSearchableComponents() {
-  let md = "";
+  let md = '';
   dataComponents.forEach((section) => {
     md += `## ${section.name}\n`;
     section.views.forEach((view) => {

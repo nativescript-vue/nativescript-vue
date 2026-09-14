@@ -23,16 +23,16 @@ If you have used Vue.js before you will feel right at home with NativeScript-Vue
 
 There are many options to build mobile apps. Here are some situations where we think NativeScript-Vue is a great fit.
 
-* **You need a truly native iOS and Android app**: NativeScript builds your apps using native user interface components on iOS and Android. The apps you build are not web-based, and therefore are not subject to the limitations inherent in WebView-based application frameworks. NativeScript also provides [an extensive collection of plugins](http://market.nativescript.org/) to tie into native device features. So if you need to tie into an iOS or Android API or feature as part of your app, you can do that with NativeScript.
-* **You like JavaScript**: With NativeScript you write your mobile applications in JavaScript — not Objective-C, not Swift, and not Java. If you like JavaScript, you’ll love writing native iOS and Android apps with the same language you use in your Web and/or Node apps.
-* **You like Vue**: Vue is known for its simple approach to the view layer. If you like building web apps with Vue, you’ll be right at home with NativeScript-Vue, as you’ll be using the same syntax for handling common tasks like data binding and event handling.
+- **You need a truly native iOS and Android app**: NativeScript builds your apps using native user interface components on iOS and Android. The apps you build are not web-based, and therefore are not subject to the limitations inherent in WebView-based application frameworks. NativeScript also provides [an extensive collection of plugins](http://market.nativescript.org/) to tie into native device features. So if you need to tie into an iOS or Android API or feature as part of your app, you can do that with NativeScript.
+- **You like JavaScript**: With NativeScript you write your mobile applications in JavaScript — not Objective-C, not Swift, and not Java. If you like JavaScript, you’ll love writing native iOS and Android apps with the same language you use in your Web and/or Node apps.
+- **You like Vue**: Vue is known for its simple approach to the view layer. If you like building web apps with Vue, you’ll be right at home with NativeScript-Vue, as you’ll be using the same syntax for handling common tasks like data binding and event handling.
 
 ## What’s the catch?
 
 If you have existing Vue experience, there are two big things you’ll need to learn to be successful with NativeScript-Vue.
 
-* **Working with the NativeScript CLI**: NativeScript is a framework for building iOS and Android apps, not web apps. You’ll need to learn how a few commands work in the NativeScript CLI, and some basics of how iOS simulators and Android Virtual Devices work.
-* **Learning the NativeScript UI components**: Because NativeScript uses native user interface components, HTML controls like `<div>` and `<span>` don’t exist in NativeScript. Instead you’ll need to learn a [new set of components](https://docs.nativescript.org/ui) you can use to render your interfaces.
+- **Working with the NativeScript CLI**: NativeScript is a framework for building iOS and Android apps, not web apps. You’ll need to learn how a few commands work in the NativeScript CLI, and some basics of how iOS simulators and Android Virtual Devices work.
+- **Learning the NativeScript UI components**: Because NativeScript uses native user interface components, HTML controls like `<div>` and `<span>` don’t exist in NativeScript. Instead you’ll need to learn a [new set of components](https://docs.nativescript.org/ui) you can use to render your interfaces.
 
 Don’t worry though. Although there is a learning curve for working with NativeScript-Vue, you should find things much easier than learning iOS or Android from the ground up. After all, you’ll still be writing your source code in JavaScript and Vue.
 
@@ -44,5 +44,5 @@ NativeScript-Vue is an open source project and contributions are very much encou
 
 NativeScript-Vue is relatively feature-complete. At this time we’re focusing on two things:
 
-* **Documentation**: Not everything you can do in NativeScript-Vue is documented on this site. We’re actively adding samples and use cases to this site, and contributions are welcome.
-* **Sample apps**: We’re looking for people to put this plugin through its paces and send feedback our way. If you’re interested, join the [NativeScript Community Discord](https://www.nativescript.org/discord) and let us know in the #vue channel.
+- **Documentation**: Not everything you can do in NativeScript-Vue is documented on this site. We’re actively adding samples and use cases to this site, and contributions are welcome.
+- **Sample apps**: We’re looking for people to put this plugin through its paces and send feedback our way. If you’re interested, join the [NativeScript Community Discord](https://www.nativescript.org/discord) and let us know in the #vue channel.

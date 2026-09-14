@@ -38,7 +38,7 @@ This requires and registers the plugin in your `Vue` instance. The `registerElem
 
 ### Use the plugin in your app
 
-```HTML
+```vue-html
 <Gradient direction="to right" colors="#FF0077, red, #FF00FF">
   <Label text="Best gradient." style="color: white; padding: 20" />
 </Gradient>

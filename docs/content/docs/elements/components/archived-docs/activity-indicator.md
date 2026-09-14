@@ -8,7 +8,7 @@ contributors: [MisterBrownRSA, rigor789, ikoevska]
 
 ---
 
-```html
+```vue-html
 <ActivityIndicator busy="true" @busyChange="onBusyChanged" />
 ```
 
@@ -16,18 +16,18 @@ contributors: [MisterBrownRSA, rigor789, ikoevska]
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `busy` | `Boolean` | Gets or sets whether the indicator is active. When `true`, the indicator is active.
+| Name   | Type      | Description                                                                         |
+| ------ | --------- | ----------------------------------------------------------------------------------- |
+| `busy` | `Boolean` | Gets or sets whether the indicator is active. When `true`, the indicator is active. |
 
 ## Events
 
-| Name | Description |
-|------|-------------|
-| `busyChange`| Emitted when the `busy` property is changed.
+| Name         | Description                                  |
+| ------------ | -------------------------------------------- |
+| `busyChange` | Emitted when the `busy` property is changed. |
 
 ## Native component
 
-| Android | iOS |
-|---------|-----|
-| [`android.widget.ProgressBar` (indeterminate = true)](https://developer.android.com/reference/android/widget/ProgressBar.html)	| [`UIActivityIndicatorView`](https://developer.apple.com/documentation/uikit/uiactivityindicatorview)
+| Android                                                                                                                        | iOS                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| [`android.widget.ProgressBar` (indeterminate = true)](https://developer.android.com/reference/android/widget/ProgressBar.html) | [`UIActivityIndicatorView`](https://developer.apple.com/documentation/uikit/uiactivityindicatorview) |

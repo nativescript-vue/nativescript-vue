@@ -10,7 +10,7 @@ See also: [WebView](/en/docs/elements/components/web-view).
 
 ---
 
-```html
+```vue-html
 <HtmlView html="<div><h1>HtmlView</h1></div>" />
 ```
 
@@ -18,12 +18,12 @@ See also: [WebView](/en/docs/elements/components/web-view).
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `html` | `String` | The HTML content to be shown.
+| Name   | Type     | Description                   |
+| ------ | -------- | ----------------------------- |
+| `html` | `String` | The HTML content to be shown. |
 
 ## Native component
 
-| Android | iOS |
-|---------|-----|
-| [`android.widget.TextView`](https://developer.android.com/reference/android/widget/TextView.html) | [`UITextView`](https://developer.apple.com/documentation/uikit/uitextview)
+| Android                                                                                           | iOS                                                                        |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`android.widget.TextView`](https://developer.android.com/reference/android/widget/TextView.html) | [`UITextView`](https://developer.apple.com/documentation/uikit/uitextview) |

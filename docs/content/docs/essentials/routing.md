@@ -1,18 +1,18 @@
 ---
-contributors: [eddyverbruggen, fartek, rigor789, ikoevska, tralves, sis0k0, vallemar]
+contributors:
+  [eddyverbruggen, fartek, rigor789, ikoevska, tralves, sis0k0, vallemar]
 ---
 
 # Manual Routing
 
-
 The easiest way to implement routing in NativeScript-Vue is to use any of the following convenience functions:
 
-* [`$navigateTo`](#view-navigation)
-* [`$navigateBack`](#navigateback-options-backstackentry-null)
+- [`$navigateTo`](#view-navigation)
+- [`$navigateBack`](#navigateback-options-backstackentry-null)
 
 For more complex navigation scenarios, you can use multiple `<Frame>` components and a navigation-specific component:
 
-* [`Modal View`](#modal-view-navigation)
+- [`Modal View`](#modal-view-navigation)
 
 ## Basic navigation concepts
 
@@ -26,15 +26,15 @@ A basic application structure for browsing is as follows.
 ```vue
 // App.vue
 <script lang="ts" setup>
-import Detail from "./Detail.vue"
+import Detail from './Detail.vue';
 </script>
 
 <template>
   <Frame>
     <Page>
-        <StackLayout>
-            <Button text="Navigate to Detail Page" @tap="$navigateTo(Detail)" />
-        </StackLayout>
+      <StackLayout>
+        <Button text="Navigate to Detail Page" @tap="$navigateTo(Detail)" />
+      </StackLayout>
     </Page>
   </Frame>
 </template>
@@ -46,9 +46,9 @@ Note that in the App.vue component `Frame` is declared and inside it has a `Page
 // Detail.vue
 <template>
   <Page>
-      <StackLayout>
-          <Label text="Navigation to Detail component completed" />
-      </StackLayout>
+    <StackLayout>
+      <Label text="Navigation to Detail component completed" />
+    </StackLayout>
   </Page>
 </template>
 ```
@@ -68,16 +68,16 @@ In the `Master` component, use a `data` property to expose the `Detail` componen
 ```vue
 // Master.vue
 <script lang="ts" setup>
-import Detail from "./Detail.vue"
+import Detail from './Detail.vue';
 </script>
 
 <template>
   <Frame>
     <Page>
-        <ActionBar title="Master" />
-        <StackLayout>
-            <Button text="To Detail directly" @tap="$navigateTo(Detail)" />
-        </StackLayout>
+      <ActionBar title="Master" />
+      <StackLayout>
+        <Button text="To Detail directly" @tap="$navigateTo(Detail)" />
+      </StackLayout>
     </Page>
   </Frame>
 </template>
@@ -90,10 +90,10 @@ Bind a button to a method and use `$navigateTo(Detail)` to navigate to the `Deta
 ```vue
 // Master.vue
 <script lang="ts" setup>
-import { $navigateTo } from "nativescript-vue"
-import Detail from "./Detail.vue"
+import { $navigateTo } from 'nativescript-vue';
+import Detail from './Detail.vue';
 
-function goToDetailPage(){
+function goToDetailPage() {
   $navigateTo(Detail);
 }
 </script>
@@ -101,10 +101,10 @@ function goToDetailPage(){
 <template>
   <Frame>
     <Page>
-        <ActionBar title="Master" />
-        <StackLayout>
-            <Button text="To Detail directly" @tap="goToDetailPage" />
-        </StackLayout>
+      <ActionBar title="Master" />
+      <StackLayout>
+        <Button text="To Detail directly" @tap="goToDetailPage" />
+      </StackLayout>
     </Page>
   </Frame>
 </template>
@@ -140,10 +140,10 @@ $navigateTo(Detail, {
 ```vue
 // Detail.vue
 <script lang="ts" setup>
-const emit = defineEmits(["change"])
+const emit = defineEmits(['change']);
 
-function goToDetailPage(){
-  emit("change", { foo: "bar" })
+function goToDetailPage() {
+  emit('change', { foo: 'bar' });
 }
 </script>
 ```
@@ -182,7 +182,6 @@ $navigateTo(Detail, {
 });
 ```
 
-
 ### Navigating within a frame
 
 Each [`<Frame>`](https://docs.nativescript.org/ui/frame) element has its own navigation stack. If you are using [multiple frames](https://docs.nativescript.org/ui/frame#multiple-root-frames), you may want to specify in which frame the navigation will occur. For example, having a button in the side bar that changes the page in the main area. You can do this by adding the `frame` option:
@@ -194,9 +193,10 @@ $navigateTo(SomeComp, {
 ```
 
 The value for the `frame` option can be one of the following:
-* the `id` of the `<Frame>` component (for example: `<Frame id="main-frame">`)
-* the `ref` for the `<Frame>` (for example: `<Frame ref="mainFrame">`)
-* the `<Frame>` instance itself
+
+- the `id` of the `<Frame>` component (for example: `<Frame id="main-frame">`)
+- the `ref` for the `<Frame>` (for example: `<Frame ref="mainFrame">`)
+- the `<Frame>` instance itself
 
 ### `$navigateBack(options, backstackEntry = null)`
 
@@ -205,16 +205,17 @@ In the `Detail` component, add a button that triggers the globally exposed `$nav
 ```vue
 //Detail.vue
 <template>
-    <Page>
-        <ActionBar title="Detail" />
-        <StackLayout>
-          <Button text="Back to Master" @tap="$navigateBack" />
-        </StackLayout>
-    </Page>
+  <Page>
+    <ActionBar title="Detail" />
+    <StackLayout>
+      <Button text="Back to Master" @tap="$navigateBack" />
+    </StackLayout>
+  </Page>
 </template>
 ```
 
 ## Modal View Navigation
+
 Navigation using modals - detached from the current backstack.
 
 ### Showing a modal
@@ -224,10 +225,10 @@ Use `$showModal` to show the `Detail` page modally. This function behaves simila
 ```vue
 //Master.vue
 <script lang="ts" setup>
-import { $showModal } from "nativescript-vue"
-import Detail from "./Detail.vue"
+import { $showModal } from 'nativescript-vue';
+import Detail from './Detail.vue';
 
-function showDetailPageModally(){
+function showDetailPageModally() {
   $showModal(Detail);
 }
 </script>
@@ -235,10 +236,10 @@ function showDetailPageModally(){
 <template>
   <Frame>
     <Page>
-        <ActionBar title="Master" />
-        <StackLayout>
-            <Button text="Show Detail modally" @tap="showDetailPageModally" />
-        </StackLayout>
+      <ActionBar title="Master" />
+      <StackLayout>
+        <Button text="Show Detail modally" @tap="showDetailPageModally" />
+      </StackLayout>
     </Page>
   </Frame>
 </template>
@@ -249,10 +250,10 @@ function showDetailPageModally(){
 <template>
   <Frame>
     <Page>
-        <ActionBar title="Detail" />
-        <StackLayout>
-            <Label text="I am a modal!" />
-        </StackLayout>
+      <ActionBar title="Detail" />
+      <StackLayout>
+        <Label text="I am a modal!" />
+      </StackLayout>
     </Page>
   </Frame>
 </template>
@@ -293,9 +294,9 @@ You can use the `$closeModal()` function from anywhere in your application, call
 
 ```vue
 <script lang="ts" setup>
-import { $closeModal } from "nativescript-vue"
+import { $closeModal } from 'nativescript-vue';
 
-function closeModal(){
+function closeModal() {
   $closeModal();
 }
 </script>
@@ -312,7 +313,7 @@ In the following example, closing the modal outputs 'Foo' in the console.
 
 ```JavaScript
 // ... inside Master
-$showModal(Detail, { 
+$showModal(Detail, {
  closeCallback(data, ...args) {
     console.log(data); // print: Foo
   }
@@ -322,18 +323,20 @@ $showModal(Detail, {
 Examples:
 <br>
 Using `$modal.close`.
+
 ```vue
 <!-- inside Detail.vue -->
 <Button @tap="$modal.close('Foo')" text="Close" />
 ```
 
 Using `$closeModal`.
+
 ```vue
 <script lang="ts" setup>
-import { $closeModal } from "nativescript-vue"
+import { $closeModal } from 'nativescript-vue';
 
-function closeModal(){
-  $closeModal("Foo");
+function closeModal() {
+  $closeModal('Foo');
 }
 </script>
 <template>

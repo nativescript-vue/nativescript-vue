@@ -15,9 +15,13 @@ The method is part of the [`dialogs` module](https://docs.nativescript.org/api-r
 The `login()` method is available globally. You can call it anywhere in your app.
 
 ```javascript
-login("Your message", "Username field value", "Password field value").then(result => {
-  console.log(`Dialog result: ${result.result}, user: ${result.userName}, pwd: ${result.password}`);
-});
+login('Your message', 'Username field value', 'Password field value').then(
+  (result) => {
+    console.log(
+      `Dialog result: ${result.result}, user: ${result.userName}, pwd: ${result.password}`,
+    );
+  },
+);
 ```
 
 ## Configure dialog options

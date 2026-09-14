@@ -14,19 +14,19 @@ outdated: false
 In Vue 2, the app was initialized like this:
 
 ```ts
-import Vue from "nativescript-vue";
-import Home from "./components/Home.vue";
+import Vue from 'nativescript-vue';
+import Home from './components/Home.vue';
 
 new Vue({
-  render: (h) => h("frame", [h(Home)]),
+  render: (h) => h('frame', [h(Home)]),
 }).$start();
 ```
 
 In Vue 3, you now use `createApp`:
 
 ```ts
-import { createApp } from "nativescript-vue";
-import Home from "./components/Home.vue";
+import { createApp } from 'nativescript-vue';
+import Home from './components/Home.vue';
 
 const app = createApp(Home);
 app.start();
@@ -43,7 +43,7 @@ app.start();
 
 Navigation functions like `$navigateTo`, `$navigateBack`, and `$showModal` must now be **imported** instead of being accessed from `this`.
 
-```html
+```vue-html
 <script lang="ts" setup>
   import { $navigateTo, $navigateBack, $showModal } from "nativescript-vue";
   import MyComponent from "./components/MyComponent.vue";
@@ -79,25 +79,25 @@ Plugins are now registered using `registerElement` instead of modifying the Vue 
 #### **Before (Vue 2)**
 
 ```ts
-import Vue from "nativescript-vue";
+import Vue from 'nativescript-vue';
 
 Vue.registerElement(
-  "Gradient",
-  () => require("nativescript-gradient").Gradient
+  'Gradient',
+  () => require('nativescript-gradient').Gradient,
 );
 ```
 
 #### **Now (Vue 3)**
 
 ```ts
-import { createApp, registerElement } from "nativescript-vue";
-import Home from "./components/Home.vue";
+import { createApp, registerElement } from 'nativescript-vue';
+import Home from './components/Home.vue';
 
-registerElement("Gradient", () => require("nativescript-gradient").Gradient);
+registerElement('Gradient', () => require('nativescript-gradient').Gradient);
 
 // or using import statements
-import { Gradient } from "nativescript-gradient";
-registerElement("Gradient", () => Gradient);
+import { Gradient } from 'nativescript-gradient';
+registerElement('Gradient', () => Gradient);
 
 const app = createApp(Home);
 app.start();
@@ -106,9 +106,9 @@ app.start();
 > ✅ **Note** Some plugins export a Vue3 compatible plugin, that can be used with `.use()`, like `@nativescript-community/ui-collectionview/vue3`. Consult the plugin documentation and if it doesn't specify this, use `registerElement` normally.
 
 ```ts
-import { createApp } from "nativescript-vue";
-import Home from "./components/Home.vue";
-import CollectionView from "@nativescript-community/ui-collectionview/vue3";
+import { createApp } from 'nativescript-vue';
+import Home from './components/Home.vue';
+import CollectionView from '@nativescript-community/ui-collectionview/vue3';
 
 const app = createApp(Home);
 app.use(CollectionView);
@@ -123,7 +123,7 @@ app.start();
 
 **Before (Vue 2)**
 
-```html
+```vue-html
 <ListView for="item in listOfItems">
   <v-template>
     <label :text="item.text" />
@@ -137,7 +137,7 @@ app.start();
 
 **Now (Vue 3)**
 
-```html
+```vue-html
 <script lang="ts" setup>
   const items = ref([
     /* ... items... */
@@ -163,7 +163,7 @@ app.start();
 
 🚀 **Bonus:** You can now strongly type `item` using TypeScript!
 
-```html
+```vue-html
 <template
   #default="{ item, index }: { item: MyType, index: number }"
 ></template>
@@ -171,6 +171,6 @@ app.start();
 
 Or, using the `ListItem` helper type:
 
-```html
+```vue-html
 <template #default="{ item, index }: ListItem<MyType>"></template>
 ```

@@ -1,6 +1,5 @@
 ---
 contributors: [vallemar]
-
 ---
 
 # NativeScript Components

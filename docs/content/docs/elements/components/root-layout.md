@@ -29,14 +29,13 @@ function showRootLayout(){
     }
   })
   node.mount();
-  
+
   getRootLayout()
     .open(node.nativeView, {
       animation: {...},
       ...
     });
 }
-
 </script>
 
 <template>

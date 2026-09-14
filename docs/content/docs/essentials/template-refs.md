@@ -10,15 +10,15 @@ In NativeScript-Vue it is exactly the same as Vue but with one change to take in
 
 ```vue
 <script lang="ts" setup>
-import { ref, onMounted } from "nativescript-vue"
-import { type Label } from "@nativescript/core"
+import { ref, onMounted } from 'nativescript-vue';
+import { type Label } from '@nativescript/core';
 
 const el = ref();
 
 onMounted(() => {
   const labelView = el.value.nativeView as Label;
-  labelView.text= "Text changed";
-})
+  labelView.text = 'Text changed';
+});
 </script>
 
 <template>
@@ -29,7 +29,6 @@ onMounted(() => {
 ## Using `useTemplateRef`
 
 In nativescript-vue we can also use [`useTemplateRef​`](https://vuejs.org/guide/essentials/template-refs#accessing-the-refs) just like in vue, to access the native view access the `.nativeView` property of the reactive value.
-
 
 ```vue
 <script setup>

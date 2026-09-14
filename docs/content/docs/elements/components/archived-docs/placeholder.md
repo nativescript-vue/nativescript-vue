@@ -8,7 +8,7 @@ contributors: [moeddami]
 
 ---
 
-```html
+```vue-html
 <Placeholder @creatingView="creatingView" />
 ```
 

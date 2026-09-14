@@ -10,13 +10,13 @@ The default state is `false` or OFF.
 
 ---
 
-```html
+```vue-html
 <Switch checked="true" />
 ```
 
 `<Switch>`provides two-way data binding using `v-model`.
 
-```html
+```vue-html
 <Switch v-model="itemEnabled" />
 ```
 
@@ -24,18 +24,18 @@ The default state is `false` or OFF.
 
 ## Props
 
-| Name | Type | Description |
-|------|------|-------------|
-| `checked` | `Boolean` | Gets or sets the value of the switch selection.<br/>Default value: `false`.
+| Name      | Type      | Description                                                                 |
+| --------- | --------- | --------------------------------------------------------------------------- |
+| `checked` | `Boolean` | Gets or sets the value of the switch selection.<br/>Default value: `false`. |
 
 ## Events
 
-| Name | Description |
-|------|-------------|
-| `checkedChange`| Emitted when the switch selection changes.
+| Name            | Description                                |
+| --------------- | ------------------------------------------ |
+| `checkedChange` | Emitted when the switch selection changes. |
 
 ## Native component
 
-| Android | iOS |
-|---------|-----|
-| [`android.widget.Switch`](https://developer.android.com/reference/android/widget/Switch.html) | [`UISwitch`](https://developer.apple.com/documentation/uikit/uiswitch)
+| Android                                                                                       | iOS                                                                    |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [`android.widget.Switch`](https://developer.android.com/reference/android/widget/Switch.html) | [`UISwitch`](https://developer.apple.com/documentation/uikit/uiswitch) |

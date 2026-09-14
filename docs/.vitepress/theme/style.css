@@ -1,11 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @source './components/*.vue';
 @source '../../content/**/*.md';
 :root {
 }
 .dark {
 }
-@theme inline{
+@theme inline {
   --color-ns: #65adf1;
   --color-vue: var(--vp-c-green-1);
   --color-bg: var(--vp-c-bg);
@@ -155,13 +155,13 @@
  * Custom CSS
  * -------------------------------------------------------------------------- */
 
-.text-color{
+.text-color {
   color: var(--vp-c-text-1) !important;
 }
 
-.vp-doc a[href^="https://www.nativescript.org"],
-.vp-doc a[href^="https://nativescript.org"],
-.vp-doc a[href^="https://docs.nativescript.org"], 
-.vp-doc a[href^="https://docs.nativescript.org"] code {
+.vp-doc a[href^='https://www.nativescript.org'],
+.vp-doc a[href^='https://nativescript.org'],
+.vp-doc a[href^='https://docs.nativescript.org'],
+.vp-doc a[href^='https://docs.nativescript.org'] code {
   color: var(--color-ns);
 }

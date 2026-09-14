@@ -32,7 +32,7 @@ The most recent version of Pinia will be added to your `package.json`.
 Open your app entry file (likely `app.js`, `main.js` or `app.ts`) and add the following line at the top:
 
 ```ts
-import {createPinia} from "pinia";
+import { createPinia } from 'pinia';
 const pinia = createPinia();
 createApp(Main).use(pinia).start();
 ```
@@ -46,19 +46,19 @@ You need to create a new constant to store your state and invoke Pinia API calls
 In the following example, a simple store constant includes the state of a counter and tracks its changes:
 
 ```ts
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 export const counterStore = defineStore('counter', {
- state: () => ({
-  count: 0,
- }),
- actions: {
-  increment() {
-   this.count++;
+  state: () => ({
+    count: 0,
+  }),
+  actions: {
+    increment() {
+      this.count++;
+    },
+    decrement() {
+      this.count--;
+    },
   },
-  decrement() {
-   this.count--;
-  }
- }
 });
 ```
 

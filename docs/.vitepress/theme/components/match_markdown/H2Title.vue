@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { componentMarkdownUtils } from "../../utils/ComponentMarkdownUtils";
-import HeaderAnchorPermanentLink from "./HeaderAnchorPermanentLink.vue";
+import { componentMarkdownUtils } from '../../utils/ComponentMarkdownUtils';
+import HeaderAnchorPermanentLink from './HeaderAnchorPermanentLink.vue';
 
 defineProps<{ title: string }>();
 </script>

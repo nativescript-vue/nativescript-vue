@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { dataComponents } from "../data/DataComponents";
-import ComponentListItem from "./ComponentListItem.vue";
-import H2Title from "./match_markdown/H2Title.vue";
+import { dataComponents } from '../data/DataComponents';
+import ComponentListItem from './ComponentListItem.vue';
+import H2Title from './match_markdown/H2Title.vue';
 </script>
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

@@ -16,7 +16,6 @@ First, install the Vue CLI globally:
 npm install -g @vue/cli
 ```
 
-
 Then, scaffold a new Vue web application:
 
 ```bash
@@ -50,11 +49,12 @@ npm run preview:ios
 
 ## Project structure
 
-In the default project structure, the web and mobile files reside in the same directory. Take a look, for example, at the two files `main.js` and `main.native.js`. Since they are the entry point for your mobile and web apps, and probably include separate platform plugins, they are differentiated by means of their naming convention. Any file named ``*.native.*`` will be rendered only for mobile.
+In the default project structure, the web and mobile files reside in the same directory. Take a look, for example, at the two files `main.js` and `main.native.js`. Since they are the entry point for your mobile and web apps, and probably include separate platform plugins, they are differentiated by means of their naming convention. Any file named `*.native.*` will be rendered only for mobile.
 
 Mount a web app:
 
 **main.js**
+
 ```javascript
 import Vue from 'vue';
 import App from '~/App.vue';
@@ -69,6 +69,7 @@ new Vue({
 Start a NativeScript-Vue app:
 
 **main.native.js**
+
 ```javascript
 import Vue from 'nativescript-vue';
 
@@ -77,7 +78,7 @@ import App from './App.vue';
 Vue.config.silent = false;
 
 new Vue({
-  render: h => h('frame', [h(App)]),
+  render: (h) => h('frame', [h(App)]),
 }).$start();
 ```
 
@@ -87,16 +88,16 @@ Now take a look at `App.vue`, the single point of entry and the first Vue SFC wi
 <template web>
   <div class="w-page">
     <div class="w-container">
-      <img src="~/assets/logo.png" alt="logo" height="20%" width="20%">
-      <HelloWorld :msg="msg"/>
+      <img src="~/assets/logo.png" alt="logo" height="20%" width="20%" />
+      <HelloWorld :msg="msg" />
     </div>
   </div>
 </template>
 <template native>
   <Page>
-    <ActionBar :title="navbarTitle"/>
+    <ActionBar :title="navbarTitle" />
     <GridLayout rows="auto, auto">
-      <HelloWorld :msg="msg"/>
+      <HelloWorld :msg="msg" />
     </GridLayout>
   </Page>
 </template>
@@ -130,15 +131,15 @@ In this file, as well, an example of forked styles is given: import only the sty
 
 ```vue
 <style web>
-  @import '~styles/style-one';
+@import '~styles/style-one';
 
-  .w-page {
-    height: 100%;
-    width: 100%;
-  }
+.w-page {
+  height: 100%;
+  width: 100%;
+}
 </style>
 <style native>
-  @import '~styles/style-one';
+@import '~styles/style-one';
 </style>
 ```
 
