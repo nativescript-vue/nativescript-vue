@@ -1,0 +1,27 @@
+{
+  "name": "demo-vite",
+  "main": "src/app.ts",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@nativescript/core": "~9.1.1",
+    "@valor/nativescript-websockets": "^2.0.2",
+    "nativescript-vue": "^3.1.1"
+  },
+  "devDependencies": {
+    "@nativescript/ios": "9.1.0",
+    "@nativescript/tailwind": "~4.0.10",
+    "@nativescript/types": "~9.1.1",
+    "@nativescript/vite": "^8.0.8",
+    "@types/node": "~26.5.0",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vitejs/plugin-vue-jsx": "^5.1.6",
+    "nativescript": "^9.1.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.11"
+  },
+  "scripts": {
+    "link-runtime": "cd .. && npm run build && mkdir -p demo-vite/.runtime && npm pack --silent --pack-destination demo-vite/.runtime && cd demo-vite && npm i --no-save ./.runtime/nativescript-vue-*.tgz"
+  }
+}
