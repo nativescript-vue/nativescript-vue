@@ -8,6 +8,8 @@ npx ns debug ios      # HMR dev server
 npx ns run ios --no-hmr
 ```
 
+`App_Resources` is not committed; the CLI generates it on the first prepare.
+
 `npm install` gives you the published `nativescript-vue`. To run against the
 runtime in this repo:
 
