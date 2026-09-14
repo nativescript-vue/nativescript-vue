@@ -1,13 +1,14 @@
 ---
-contributors: [jlooper, ikoevska]
+contributors: [jlooper, ikoevska, rigor789]
 ---
 
 # Using Vue Plugins
 
-This page provides an overview of the currently supported Vue plugins that work with NativeScript-Vue.
+Vue plugins are installed with `app.use()` exactly as on the web, because `createApp` returns a real Vue application instance. Anything that only depends on the Vue runtime — state management, i18n, composables, validation — works unchanged. Plugins that assume a browser DOM, or that own the view tree the way vue-router does, do not.
 
 - [Vue Router](#vue-router)
 - [Pinia](#pinia)
+- [VueUse](#vueuse)
 
 ## Vue Router
 
@@ -15,39 +16,34 @@ This page provides an overview of the currently supported Vue plugins that work 
 
 ## Pinia
 
-Pinia is a state management pattern and library. It serves as a store for all the components in an app and implements rules to ensure that state is mutated in a predictable fashion.
+Pinia is the recommended store for Vue 3, and works as-is.
 
 ### Install the plugin
 
-Install Pinia as you would normally in your Vue.js app. With npm, for example:
-
 ```shell
-npm install --save pinia
+npm install pinia
 ```
 
-The most recent version of Pinia will be added to your `package.json`.
+### Register the plugin
 
-### Import the plugin
-
-Open your app entry file (likely `app.js`, `main.js` or `app.ts`) and add the following line at the top:
+In the app entry file, `src/app.ts`:
 
 ```ts
+import { createApp } from 'nativescript-vue';
 import { createPinia } from 'pinia';
-const pinia = createPinia();
-createApp(Main).use(pinia).start();
+import Home from './components/Home.vue';
+
+createApp(Home).use(createPinia()).start();
 ```
 
-Now you can use Pinia to manage the state of your mobile app, similar to how you would use it in a standard Vue web app.
+### Create a store
 
-### Usage: Create a store
-
-You need to create a new constant to store your state and invoke Pinia API calls. You can do that in the app entry file after the creation of the Vue instance or in a separate folder (for example, `/store`).
-
-In the following example, a simple store constant includes the state of a counter and tracks its changes:
+Define stores as usual, for example in `src/stores/counter.ts`:
 
 ```ts
 import { defineStore } from 'pinia';
-export const counterStore = defineStore('counter', {
+
+export const useCounterStore = defineStore('counter', {
   state: () => ({
     count: 0,
   }),
@@ -62,40 +58,32 @@ export const counterStore = defineStore('counter', {
 });
 ```
 
-### Usage: Use the store
+### Use the store
 
-Now you can manage state by calling the store you just created. In the following example, the app tracks the count value as you press a '+' or '-' button. Note that you don't manipulate the state itself, but call actions to increment and decrement its value.
-
-```Vue
+```vue
 <script lang="ts" setup>
-import { computed } from 'nativescript-vue';
-import { counterStore } from '~/store/counter';
-import { StackLayout } from '@nativescript/core';
+import { useCounterStore } from '~/stores/counter';
 
-const store = counterStore();
-
-const count = computed(() => store.count);
-
+const counter = useCounterStore();
 </script>
 
 <template>
   <Page>
-    <ScrollView>
-      <StackLayout>
-        <Button @tap="store.increment()" text="+" />
-        <Button @tap="store.decrement()" text="-" />
-        <Label :text="count" />
-      </StackLayout>
-    </ScrollView>
+    <StackLayout>
+      <Button @tap="counter.increment()" text="+" />
+      <Button @tap="counter.decrement()" text="-" />
+      <Label :text="counter.count" />
+    </StackLayout>
   </Page>
 </template>
 ```
 
 For more information about Pinia, see [the Pinia documentation](https://pinia.vuejs.org/).
 
-### HMR Support
+::: tip TypeScript
+Pinia augments the `vue` module with its types. The blank template maps `vue` to `nativescript-vue` in `tsconfig.json` so those augmentations line up — see [TypeScript](/docs/essentials/typescript#paths-mapping-vue-to-nativescript-vue) if you are adding Pinia to an older project.
+:::
 
-For HMR support please take a look at this article from [Vladyslav Piskunov](https://twitter.com/vladyslav_p) [Implementing Hot Module Reload (HMR) for Pinia in NativeScript-Vue with Webpack 5](https://medium.com/@vladyslav_uk/implementing-hot-module-reload-hmr-for-pinia-in-nativescript-vue-with-webpack-5-1754604ff00f)
-<!--
-For more examples about how to manage the elements of Vuex, explore the [`/store` folder](https://github.com/tralves/groceries-ns-vue/tree/master/app/store/) of the NativeScript-Vue Groceries sample.
--->
+## VueUse
+
+[VueUse](https://vueuse.org/) composables that only use Vue's reactivity — `useDebounceFn`, `useIntervalFn`, `useAsyncState`, `createSharedComposable` and many more — work without changes. Composables built on browser-only APIs — `useLocalStorage`, `useMediaQuery`, `useEventListener` on `window`, anything touching `document` — do not, since there is no DOM. Use the NativeScript equivalents from `@nativescript/core` for those.

@@ -25,7 +25,7 @@ Text children of an element are joined and set as its `text` property, so the fa
 
 ### Styling
 
-`class` is a plain class string handed to NativeScript's CSS engine, and `style` bindings set NativeScript style properties — a subset of CSS with some NativeScript-specific additions. See [styling](https://docs.nativescript.org/ui/styling) for the supported selectors and properties.
+`class` is a plain class string handed to NativeScript's CSS engine, and `style` bindings set NativeScript style properties — a subset of CSS with some NativeScript-specific additions. See [styling](https://docs.nativescript.org/guide/styling) for the supported selectors and properties.
 
 `v-show` sets `visibility: collapsed` on the view rather than `display: none`.
 

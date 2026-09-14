@@ -1,17 +1,16 @@
 ---
 contributors: [vallemar, rigor789]
-outdated: false
 ---
 
 # Upgrade Guide
 
-<!-- > Estimated time for the upgrade: **10-20 minutes**. -->
-
 ## Upgrading from v2 to v3
 
-### Application Initialization Changes
+NativeScript-Vue 3 is built on Vue 3. Besides the [Vue 3 migration](https://v3-migration.vuejs.org/) itself, these are the NativeScript-Vue specific changes.
 
-In Vue 2, the app was initialized like this:
+### Application initialization
+
+In NativeScript-Vue 2 the app was started from a `Vue` instance:
 
 ```ts
 import Vue from 'nativescript-vue';
@@ -22,155 +21,130 @@ new Vue({
 }).$start();
 ```
 
-In Vue 3, you now use `createApp`:
+In 3 you use `createApp`:
 
 ```ts
 import { createApp } from 'nativescript-vue';
 import Home from './components/Home.vue';
 
-const app = createApp(Home);
-app.start();
+createApp(Home).start();
 ```
 
-✅ **Key Changes:**
+✅ **Key changes:**
 
-- Use `createApp(Home)` instead of `new Vue()`.
-- The root `<Frame>` component should now be inside `Home.vue` (depending on your frame/navigation setup), not in the `createApp` function.
+- `createApp(Home).start()` replaces `new Vue({ ... }).$start()`.
+- The root `<Frame>` now lives in the root component's template, not in a render function. See the template's [`Home.vue`](https://github.com/nativescript-vue/nativescript-vue/blob/main/packages/template-blank/src/components/Home.vue#L33).
 
-[Example Implementation](https://github.com/nativescript-vue/nativescript-vue/blob/main/packages/template-blank/src/components/Home.vue#L33)
+### Navigation
 
-### Navigation Changes in Vue 3
+`$navigateTo`, `$navigateBack`, `$showModal` and `$closeModal` are exported from `nativescript-vue` for use in `<script setup>`:
 
-Navigation functions like `$navigateTo`, `$navigateBack`, and `$showModal` must now be **imported** instead of being accessed from `this`.
-
-```vue-html
+```vue
 <script lang="ts" setup>
-  import { $navigateTo, $navigateBack, $showModal } from "nativescript-vue";
-  import MyComponent from "./components/MyComponent.vue";
+import { $navigateTo, $navigateBack, $showModal } from 'nativescript-vue';
+import MyComponent from './components/MyComponent.vue';
 
-  function navigate() {
-    $navigateTo(MyComponent, {
-      /* options */
-    });
-  }
+function navigate() {
+  $navigateTo(MyComponent, {/* options */});
+}
 
-  function goBack() {
-    $navigateBack();
-  }
+function goBack() {
+  $navigateBack();
+}
 
-  function openModal() {
-    $showModal(MyComponent, {
-      /* options */
-    });
-  }
+function openModal() {
+  $showModal(MyComponent, {/* options */});
+}
 </script>
 ```
 
-> ✅ **Why the change?**
->
-> Vue 3 now uses **composition API** and removes `$navigateTo` from the component instance.
+They are still available on `this` in the Options API, and as `$navigateTo(...)` directly in templates. See [Routing](/docs/essentials/routing) for the full API — `$navigateBack` now takes an options object, and `$showModal` returns a promise resolving with the modal's result.
 
-> **Note** Vue3 also supports the options API, where these methods are still available on `this`, however we recommend using the composition API.
+### Plugin registration
 
-### Plugin Registration
+`registerElement` is an import instead of a static method on `Vue`.
 
-Plugins are now registered using `registerElement` instead of modifying the Vue instance.
-
-#### **Before (Vue 2)**
+**Before (v2)**
 
 ```ts
 import Vue from 'nativescript-vue';
 
-Vue.registerElement(
-  'Gradient',
-  () => require('nativescript-gradient').Gradient,
-);
+Vue.registerElement('PDFView', () => require('@nativescript/pdf').PDFView);
 ```
 
-#### **Now (Vue 3)**
+**Now (v3)**
 
 ```ts
 import { createApp, registerElement } from 'nativescript-vue';
 import Home from './components/Home.vue';
 
-registerElement('Gradient', () => require('nativescript-gradient').Gradient);
+registerElement('PDFView', () => require('@nativescript/pdf').PDFView);
 
-// or using import statements
-import { Gradient } from 'nativescript-gradient';
-registerElement('Gradient', () => Gradient);
-
-const app = createApp(Home);
-app.start();
+createApp(Home).start();
 ```
 
-> ✅ **Note** Some plugins export a Vue3 compatible plugin, that can be used with `.use()`, like `@nativescript-community/ui-collectionview/vue3`. Consult the plugin documentation and if it doesn't specify this, use `registerElement` normally.
+Plugins that ship a Vue 3 plugin are installed with `app.use()` instead. See [NativeScript plugins](/docs/essentials/nativescript-plugins) for both forms.
 
-```ts
-import { createApp } from 'nativescript-vue';
-import Home from './components/Home.vue';
-import CollectionView from '@nativescript-community/ui-collectionview/vue3';
+### ListView
 
-const app = createApp(Home);
-app.use(CollectionView);
-app.start();
-```
+1. `for="item in listOfItems"` becomes `:items="listOfItems"`.
+1. `<v-template if="...">` becomes a named slot picked by `:itemTemplateSelector`.
+1. The slot scope is destructured with `#default="{ item, index }"`.
 
-### ListView Changes
-
-1. Instead of `for="item in listOfItems"`, use `:items="items"`
-1. Instead of `if="condition"` us `:itemTemplateSelector="function"`
-1. Use `#default="{ item, index }"` inside `<template>`
-
-**Before (Vue 2)**
+**Before (v2)**
 
 ```vue-html
-<ListView for="item in listOfItems">
+<ListView for="item in items">
   <v-template>
-    <label :text="item.text" />
+    <Label :text="item.text" />
   </v-template>
 
-  <v-template if="item.odd">
-    <label :text="item.text" class="bg-red-500" />
+  <v-template if="$odd">
+    <Label :text="item.text" class="bg-red-500" />
   </v-template>
 </ListView>
 ```
 
-**Now (Vue 3)**
+**Now (v3)**
 
-```vue-html
+```vue
 <script lang="ts" setup>
-  const items = ref([
-    /* ... items... */
-  ]);
+import { ref } from 'nativescript-vue';
+import type { ListItem } from 'nativescript-vue';
 
-  function itemTemplateSelector(item, index) {
-    return index % 2 === 0 ? "default" : "odd";
-  }
+const items = ref([/* ... items ... */]);
+
+function itemTemplateSelector({ odd }: ListItem) {
+  return odd ? 'odd' : 'default';
+}
 </script>
 
 <template>
   <ListView :items="items" :itemTemplateSelector="itemTemplateSelector">
-    <template #default="{ item, index }">
-      <label :text="item.text" />
+    <template #default="{ item }">
+      <Label :text="item.text" />
     </template>
 
-    <template #odd="{ item, index }">
-      <label :text="item.text" class="bg-red-500" />
+    <template #odd="{ item }">
+      <Label :text="item.text" class="bg-red-500" />
     </template>
   </ListView>
 </template>
 ```
 
-🚀 **Bonus:** You can now strongly type `item` using TypeScript!
+`itemTemplateSelector` receives the same `{ item, index, even, odd }` object the slots do, and returns the name of the slot to use.
 
-```vue-html
-<template
-  #default="{ item, index }: { item: MyType, index: number }"
-></template>
-```
-
-Or, using the `ListItem` helper type:
+🚀 **Bonus:** the slot scope can be typed with the `ListItem` helper:
 
 ```vue-html
 <template #default="{ item, index }: ListItem<MyType>"></template>
 ```
+
+See [ListView](/docs/elements/components/list-view) for the full API.
+
+### Other differences
+
+- `$modal` is `false` outside a modal, so `v-if="$modal"` distinguishes a component shown as a page from one shown modally.
+- `<Android>` and `<iOS>` are available again since 3.1.
+- Template refs expose the native view as `.nativeView`, see [Template Refs](/docs/essentials/template-refs).
+- The [Gotchas](/docs/essentials/gotchas#coming-from-nativescript-vue-2) page lists the remaining mental-model changes.
