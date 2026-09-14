@@ -1,5 +1,10 @@
 import { NSVElement } from '../../dom';
-import { isBoolean, isAndroidKey, isIOSKey } from '../../runtimeHelpers';
+import {
+  isBoolean,
+  isAndroidKey,
+  isIOSKey,
+  stripPlatformPrefix,
+} from '../../runtimeHelpers';
 import { isAndroid, isIOS } from '../../nativescript';
 
 export function patchAttr(
@@ -13,13 +18,13 @@ export function patchAttr(
       // if we encounter an android key, and we are not on android we can safely ignore it
       return;
     }
-    key = key.substring(8);
+    key = stripPlatformPrefix(key, 'android');
   } else if (isIOSKey(key)) {
     if (!isIOS) {
       // if we encounter an ios key, and we are not on ios we can safely ignore it
       return;
     }
-    key = key.substring(4);
+    key = stripPlatformPrefix(key, 'ios');
   }
 
   // detect expandable attrs for boolean values
