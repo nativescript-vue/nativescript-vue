@@ -1,4 +1,5 @@
 import {
+  Application,
   EventData,
   Frame,
   NavigationEntry,
@@ -46,9 +47,9 @@ export function install(app: App) {
   app.config.globalProperties.$navigateBack = $navigateBack;
 }
 
-function resolveFrame(frame?: ResolvableFrame): Frame {
+function resolveFrame(frame?: ResolvableFrame): Frame | undefined {
   if (!frame) {
-    return Frame.topmost();
+    return Frame.topmost() ?? findFrame(() => true);
   }
 
   const ob = unref(frame);
@@ -61,10 +62,45 @@ function resolveFrame(frame?: ResolvableFrame): Frame {
     return ob.nativeView;
   }
 
-  // todo: either change core Frame to add frames to the stack when they are created
-  // or do as we did in 2.x - handle a Map of frames.
-  // right now, empty frames can't be navigated as they are not recognized by `getFrameById`
-  return Frame.getFrameById(ob);
+  return (
+    Frame.getFrameById(ob) ?? findFrame((candidate) => candidate.id === ob)
+  );
+}
+
+/**
+ * Core's frame stack only lists frames that have navigated, so it is empty
+ * after Android recreates the activity, and getFrameById misses frames that
+ * never navigated. Walk the displayed views instead, topmost modal first.
+ */
+function findFrame(match: (frame: Frame) => boolean): Frame | undefined {
+  const root = Application.getRootView();
+  if (!root) {
+    return undefined;
+  }
+
+  const roots = [...(root._getRootModalViews?.() ?? []).reverse(), root];
+  for (const view of roots) {
+    const frame = findFrameIn(view, match);
+    if (frame) {
+      return frame;
+    }
+  }
+}
+
+function findFrameIn(
+  view: ViewBase,
+  match: (frame: Frame) => boolean,
+): Frame | undefined {
+  if (view instanceof Frame && match(view)) {
+    return view;
+  }
+
+  let found: Frame | undefined;
+  view.eachChild((child) => {
+    found = findFrameIn(child, match);
+    return !found;
+  });
+  return found;
 }
 
 export function $navigateTo<P = any>(
