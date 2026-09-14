@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { h, nextTick, ref } from '../src';
 import { __setPlatform } from './stubs/nativescript-core';
-import { mount, nativeChildren } from './helpers';
+import { elementChildren, mount, nativeChildren } from './helpers';
 
 describe('renderer', () => {
   it('mounts a component tree into native views', () => {
@@ -97,5 +97,56 @@ describe('renderer', () => {
     items.value = ['A', 'C'];
     await nextTick();
     expect(nativeChildren(el)).toEqual(['A', 'C']);
+  });
+});
+
+describe('keyed reorders', () => {
+  function mountList(initial: string[]) {
+    const items = ref(initial);
+    const { el } = mount({
+      render: () =>
+        h(
+          'StackLayout',
+          items.value.map((t) => h('Label', { key: t, text: t })),
+        ),
+    });
+    return {
+      el,
+      async set(next: string[]) {
+        items.value = next;
+        await nextTick();
+        expect(nativeChildren(el)).toEqual(next);
+        expect(elementChildren(el)).toEqual(next);
+      },
+    };
+  }
+
+  it('moves an item to the end and keeps later appends after it', async () => {
+    const list = mountList(['A', 'B', 'C', 'D']);
+    await list.set(['B', 'C', 'D', 'A']);
+    await list.set(['B', 'C', 'D', 'A', 'E']);
+  });
+
+  it('moves an item forward past its siblings', async () => {
+    const list = mountList(['A', 'B', 'C', 'D']);
+    await list.set(['B', 'C', 'A', 'D']);
+    await list.set(['B', 'A', 'C', 'D']);
+  });
+
+  it('reverses and shuffles', async () => {
+    const list = mountList(['A', 'B', 'C', 'D', 'E']);
+    await list.set(['E', 'D', 'C', 'B', 'A']);
+    await list.set(['C', 'A', 'E', 'B', 'D']);
+    await list.set(['A', 'B', 'C', 'D', 'E']);
+  });
+
+  it('keeps sibling lookups consistent after moves', async () => {
+    const list = mountList(['A', 'B', 'C']);
+    await list.set(['B', 'C', 'A']);
+    const [b, c, a] = list.el.childNodes.filter(
+      (n) => n.nodeType === 'element',
+    );
+    expect(a.prevSibling).toBe(c);
+    expect(b.nextSibling).toBe(c);
   });
 });
