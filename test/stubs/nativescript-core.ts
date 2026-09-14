@@ -176,6 +176,21 @@ export class WrapLayout extends LayoutBase {}
 export class ScrollView extends ContentView {}
 export class Page extends ContentView {
   actionBar: any;
+  private _actionBarHidden: boolean | undefined;
+  /** Mirrors a core boolean property without a default value. */
+  get actionBarHidden() {
+    return this._actionBarHidden;
+  }
+  set actionBarHidden(value: any) {
+    if (typeof value !== 'boolean') {
+      const lower = String(value).toLowerCase();
+      if (lower !== 'true' && lower !== 'false') {
+        throw new Error(`Invalid boolean: ${value}`);
+      }
+      value = lower === 'true';
+    }
+    this._actionBarHidden = value;
+  }
 }
 
 export class Frame extends View {

@@ -49,6 +49,15 @@ describe('renderer', () => {
     expect(el.nativeView.android).toBeUndefined();
   });
 
+  it('treats an empty string as true for boolean properties only', () => {
+    const { el } = mount({
+      render: () =>
+        h('Page', { actionBarHidden: '' }, [h('Label', { text: '' })]),
+    });
+    expect(el.nativeView.actionBarHidden).toBe(true);
+    expect(el.childNodes[0].nativeView.text).toBe('');
+  });
+
   it('wires event listeners and unwires them when removed', async () => {
     const calls: string[] = [];
     const handler = ref<(() => void) | null>(() => calls.push('tap'));
