@@ -1,6 +1,7 @@
 {
   "name": "nativescript-vue-docs",
   "private": true,
+  "type": "module",
   "description": "Source of https://nativescript-vue.org",
   "license": "MIT",
   "scripts": {
@@ -18,7 +19,7 @@
     "@types/node": "^26.5.1",
     "kill-port": "^2.0.1",
     "linkinator": "^6.1.2",
-    "vitepress": "^1.6.4",
+    "vitepress": "^2.0.0-alpha.20",
     "vue": "^3.5.42",
     "wait-on": "^8.0.3",
     "wrangler": "^4.131.2"

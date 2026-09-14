@@ -1,4 +1,4 @@
-import { dataComponents } from '../data/DataComponents';
+import { dataComponents } from '../data/DataComponents.ts';
 
 export const componentMarkdownUtils = {
   buildIdMarkdown: (id: string) => {
