@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.2 (2026-09-15)
+
+- **`useItemTemplates()`** turns a component's slots into native item templates and renders recycled cells from them, so list-style plugin components (CollectionView, Pager) can share the machinery behind the built-in `ListView` instead of copying it. `templateRoots()` and `createItemContext()` are exported alongside it, and ListView is built on the composable. See [Views that recycle item templates](https://nativescript-vue.org/docs/essentials/nativescript-plugins#views-that-recycle-item-templates). (#1170)
+
 ## 3.1.1 (2026-09-14)
 
 - `@nativescript-vue/template-blank` declares its repository, which npm requires to accept the package's provenance. `nativescript-vue@3.1.0` shipped, but the template could not be staged for 3.1.0, so 3.1.1 is its first release of this line. (#1157)

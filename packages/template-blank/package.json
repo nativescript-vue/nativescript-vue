@@ -1,7 +1,7 @@
 {
   "name": "@nativescript-vue/template-blank",
   "main": "src/app.ts",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nativescript-vue/nativescript-vue.git",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@nativescript/core": "~9.1.1",
-    "nativescript-vue": "3.1.1"
+    "nativescript-vue": "3.1.2"
   },
   "devDependencies": {
     "@nativescript/tailwind": "~4.0.10",
