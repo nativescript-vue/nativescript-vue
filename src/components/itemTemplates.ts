@@ -90,6 +90,11 @@ export interface ItemTemplates<C extends ItemContext> {
    * cell behind `recycled` when the native view hands one back.
    */
   renderCell(ctx: C, recycled?: View): View;
+  /**
+   * Unmounts the cell behind a view the native view is discarding. Views
+   * that never came from `renderCell` are ignored.
+   */
+  disposeCell(view: View | undefined): void;
   /** Vnodes of every realized cell; render them as the native element's children. */
   cellVNodes(): VNode[];
 }
@@ -110,8 +115,8 @@ interface CellData<C> {
  * Vue as part of this component's tree but placed by the native view, so
  * they must never be inserted as its children.
  *
- * Which native event triggers `renderCell`, and how the view gets back to
- * the native side, is the caller's business.
+ * Which native events trigger `renderCell` and `disposeCell`, and how the
+ * view gets back to the native side, is the caller's business.
  */
 export function useItemTemplates<C extends ItemContext = ListItem>(
   options: ItemTemplatesOptions<C>,
@@ -152,6 +157,16 @@ export function useItemTemplates<C extends ItemContext = ListItem>(
     return view;
   }
 
+  function disposeCell(view: View | undefined) {
+    const id: string | undefined = view?.[CELL_ID];
+    if (id === undefined || !(id in cells.value)) {
+      return;
+    }
+    delete cells.value[id];
+    delete view[CELL_ID];
+    vm.update();
+  }
+
   function cellVNodes(): VNode[] {
     return Object.entries(cells.value).map(([id, cell]) => {
       const roots = templateRoots(slots[cell.slotName]?.(cell.ctx) ?? []);
@@ -173,7 +188,13 @@ export function useItemTemplates<C extends ItemContext = ListItem>(
     });
   }
 
-  return { itemTemplates, templateNameFor, renderCell, cellVNodes };
+  return {
+    itemTemplates,
+    templateNameFor,
+    renderCell,
+    disposeCell,
+    cellVNodes,
+  };
 }
 
 function findByKey(vnode: VNode, key: string): VNode | undefined {

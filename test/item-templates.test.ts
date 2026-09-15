@@ -4,6 +4,8 @@ import {
   Fragment,
   defineComponent,
   h,
+  nextTick,
+  onUnmounted,
   ref,
   registerElement,
   NSVViewFlags,
@@ -27,14 +29,16 @@ registerElement('Carousel', () => Carousel, {
 const Slides = defineComponent({
   props: { items: Array, selector: Function },
   setup(props, ctx) {
-    const { itemTemplates, renderCell, cellVNodes } = useItemTemplates({
-      slots: ctx.slots,
-      selectTemplate: (item) => props.selector?.(item),
-      componentName: 'Slides',
-    });
+    const { itemTemplates, renderCell, disposeCell, cellVNodes } =
+      useItemTemplates({
+        slots: ctx.slots,
+        selectTemplate: (item) => props.selector?.(item),
+        componentName: 'Slides',
+      });
     ctx.expose({
       load: (index: number, recycled?: View) =>
         renderCell(createItemContext(props.items[index], index), recycled),
+      dispose: disposeCell,
     });
     return () => h('Carousel', { itemTemplates }, cellVNodes());
   },
@@ -45,7 +49,11 @@ function mountSlides(props: Record<string, any>, slots: Record<string, any>) {
   const { el } = mount({
     render: () => h(Slides, { ref: slides, ...props }, slots),
   });
-  return { el, load: slides.value.load as (i: number, recycled?: View) => any };
+  return {
+    el,
+    load: slides.value.load as (i: number, recycled?: View) => any,
+    dispose: slides.value.dispose as (view: View) => void,
+  };
 }
 
 describe('useItemTemplates', () => {
@@ -85,6 +93,27 @@ describe('useItemTemplates', () => {
     const reused = load(1, first);
     expect(reused).toBe(first);
     expect(reused.text).toBe('B');
+  });
+
+  it('unmounts a disposed cell and does not reuse it', async () => {
+    const unmounted: string[] = [];
+    const Row = defineComponent({
+      props: { text: String },
+      setup: (props) => {
+        onUnmounted(() => unmounted.push(props.text));
+        return () => h('Label', { text: props.text });
+      },
+    });
+    const { load, dispose } = mountSlides(
+      { items: ['A', 'B'] },
+      { default: ({ item }: ListItem) => h(Row, { text: item }) },
+    );
+    const first = load(0);
+    dispose(first);
+    await nextTick();
+    expect(unmounted).toEqual(['A']);
+    expect(load(1, first)).not.toBe(first);
+    dispose(first);
   });
 
   it('falls back to a label when the slot renders nothing', () => {

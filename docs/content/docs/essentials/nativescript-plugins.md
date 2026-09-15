@@ -77,12 +77,17 @@ registerElement(
 export const Pager = defineComponent({
   props: { items: Array, itemTemplateSelector: Function },
   setup(props, ctx) {
-    const { itemTemplates, templateNameFor, renderCell, cellVNodes } =
-      useItemTemplates({
-        slots: ctx.slots,
-        selectTemplate: (item) => props.itemTemplateSelector?.(item),
-        componentName: 'Pager',
-      });
+    const {
+      itemTemplates,
+      templateNameFor,
+      renderCell,
+      disposeCell,
+      cellVNodes,
+    } = useItemTemplates({
+      slots: ctx.slots,
+      selectTemplate: (item) => props.itemTemplateSelector?.(item),
+      componentName: 'Pager',
+    });
 
     const itemAt = (index) => createItemContext(props.items[index], index);
 
@@ -97,6 +102,9 @@ export const Pager = defineComponent({
           onItemLoading(event) {
             event.view = renderCell(itemAt(event.index), event.view);
           },
+          onItemDisposing(event) {
+            disposeCell(event.view);
+          },
         },
         cellVNodes(),
       );
@@ -104,7 +112,7 @@ export const Pager = defineComponent({
 });
 ```
 
-Each slot becomes a template named after the slot. `renderCell()` renders the slot for an item and returns the native view of the cell, reusing the one the native view hands back when it recycles. Which event triggers it and how the view is returned depends on the native view, so that part stays in the wrapper.
+Each slot becomes a template named after the slot. `renderCell()` renders the slot for an item and returns the native view of the cell, reusing the one the native view hands back when it recycles. `disposeCell()` unmounts a cell the native view discards. Which events trigger them and how the view is returned depends on the native view, so that part stays in the wrapper.
 
 ## Plugins that ship a Vue plugin
 
