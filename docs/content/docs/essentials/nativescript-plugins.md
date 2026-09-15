@@ -51,6 +51,69 @@ registerElement('Rating', () => require('some-rating-plugin').Rating, {
 
 See [Gotchas](/docs/essentials/gotchas#v-model-only-works-on-elements-that-declare-a-model-pair) for the elements that support `v-model` out of the box.
 
+## Views that recycle item templates
+
+Views like ListView, CollectionView or Pager build their cells from templates and reuse them while scrolling. `useItemTemplates()` turns a component's slots into those templates, so a plugin can wrap its view in a Vue component the same way the built-in `<ListView>` is built:
+
+```ts
+import {
+  createItemContext,
+  defineComponent,
+  h,
+  registerElement,
+  NSVViewFlags,
+  useItemTemplates,
+} from 'nativescript-vue';
+
+registerElement(
+  'NativePager',
+  () => require('@nativescript-community/ui-pager').Pager,
+  {
+    // cells are patched by Vue, but placed by the native view
+    viewFlags: NSVViewFlags.NO_CHILDREN,
+  },
+);
+
+export const Pager = defineComponent({
+  props: { items: Array, itemTemplateSelector: Function },
+  setup(props, ctx) {
+    const {
+      itemTemplates,
+      templateNameFor,
+      renderCell,
+      disposeCell,
+      cellVNodes,
+    } = useItemTemplates({
+      slots: ctx.slots,
+      selectTemplate: (item) => props.itemTemplateSelector?.(item),
+      componentName: 'Pager',
+    });
+
+    const itemAt = (index) => createItemContext(props.items[index], index);
+
+    return () =>
+      h(
+        'NativePager',
+        {
+          items: props.items,
+          itemTemplates,
+          itemTemplateSelector: (item, index) =>
+            templateNameFor(createItemContext(item, index)),
+          onItemLoading(event) {
+            event.view = renderCell(itemAt(event.index), event.view);
+          },
+          onItemDisposing(event) {
+            disposeCell(event.view);
+          },
+        },
+        cellVNodes(),
+      );
+  },
+});
+```
+
+Each slot becomes a template named after the slot. `renderCell()` renders the slot for an item and returns the native view of the cell, reusing the one the native view hands back when it recycles. `disposeCell()` unmounts a cell the native view discards. Which events trigger them and how the view is returned depends on the native view, so that part stays in the wrapper.
+
 ## Plugins that ship a Vue plugin
 
 Some plugins, in particular those from [nativescript-community](https://github.com/nativescript-community), export a Vue plugin that registers their elements for you. Those are installed with `app.use()` instead of `registerElement`:

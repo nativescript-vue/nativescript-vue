@@ -1,13 +1,4 @@
-import {
-  Comment,
-  defineComponent,
-  Fragment,
-  getCurrentInstance,
-  h,
-  ref,
-  VNode,
-  watch,
-} from '@vue/runtime-core';
+import { defineComponent, h, ref, watch } from '@vue/runtime-core';
 
 import {
   ItemEventData,
@@ -15,52 +6,18 @@ import {
   ObservableArray,
 } from '@nativescript/core';
 
-import { NSVElement, NSVViewFlags } from '../dom';
+import { NSVViewFlags } from '../dom';
 import { registerElement } from '../registry';
-import { ELEMENT_REF } from '../runtimeHelpers';
-import { logger } from '../util/logger';
+import { createItemContext, ListItem, useItemTemplates } from './itemTemplates';
 
 registerElement('NSCListView', () => NSCListView, {
   viewFlags: NSVViewFlags.NO_CHILDREN,
 });
 
-export interface ListItem<T = any> {
-  item: T;
-  index: number;
-  even: boolean;
-  odd: boolean;
-}
+export type { ListItem };
 
 /** Payload of the ListView `itemTap` event. */
 export type ListViewItemTapEvent<T = any> = ItemEventData & ListItem<T>;
-
-function getListItem(item: any, index: number): ListItem {
-  return {
-    item,
-    index,
-    even: index % 2 === 0,
-    odd: index % 2 !== 0,
-  };
-}
-
-const LIST_CELL_ID = Symbol('list_cell_id');
-
-/**
- * The element vnodes a template renders. Fragments are unwrapped because a
- * forwarded `<slot>` renders as one, and a cell needs an element to hand to
- * the native ListView.
- */
-function templateRoots(vnodes: VNode[]): VNode[] {
-  return vnodes.flatMap((vnode) => {
-    if (vnode.type === Comment) {
-      return [];
-    }
-    if (vnode.type === Fragment) {
-      return templateRoots(vnode.children as VNode[]);
-    }
-    return [vnode];
-  });
-}
 
 export const ListView = /*#__PURE__*/ defineComponent({
   name: 'ListView',
@@ -76,21 +33,14 @@ export const ListView = /*#__PURE__*/ defineComponent({
     itemTap: (event: ListViewItemTapEvent) => !!event,
   },
   setup(props, ctx) {
-    const itemTemplates = Object.keys(ctx.slots).map((slotName) => {
-      return {
-        key: slotName,
-        createView() {
-          // no need to return anything here
-        },
-      };
-    });
-
-    const getSlotName = (itemCtx: ListItem) =>
-      props.itemTemplateSelector?.(itemCtx) ?? 'default';
+    const { itemTemplates, templateNameFor, renderCell, cellVNodes } =
+      useItemTemplates<ListItem>({
+        slots: ctx.slots,
+        selectTemplate: (item) => props.itemTemplateSelector?.(item),
+        componentName: 'ListView',
+      });
 
     const listView = ref(null);
-
-    const vm = getCurrentInstance();
 
     function refresh() {
       try {
@@ -112,7 +62,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
     watch(() => props.itemTemplateSelector, refresh);
 
     function listItemAt(index: number): ListItem {
-      return getListItem(
+      return createItemContext(
         props.items instanceof ObservableArray
           ? props.items.getItem(index)
           : props.items[index],
@@ -126,73 +76,13 @@ export const ListView = /*#__PURE__*/ defineComponent({
       ctx.emit('itemTap', Object.assign(event, listItemAt(event.index)));
     }
 
-    let cellId = 0;
-    interface ItemCellData {
-      itemCtx: ListItem;
-      slotName: string;
-    }
-    const cells = ref<Record<string, ItemCellData>>({});
-
     function onItemLoading(event: ItemEventData) {
-      const el = event.view?.[ELEMENT_REF] as NSVElement;
-      const id = el?.nativeView[LIST_CELL_ID] ?? `LIST_CELL_${cellId++}`;
-
-      const itemCtx = listItemAt(event.index);
-
-      // update the cell data with the current row
-      cells.value[id] = {
-        itemCtx,
-        slotName: getSlotName(itemCtx),
-      };
-
-      // trigger an update!
-      vm.update();
-
-      // find the vnode rendering this cell
-      const vnode = (vm.subTree.children as VNode[]).find((vnode) => {
-        return vnode.key === id;
-      });
-
-      // store the cell id on the Element itself so we can retrieve it when recycling kicks in
-      const cellEl = vnode.el.nativeView;
-      cellEl[LIST_CELL_ID] = id;
-
-      // finally, set the event.view to the rendered cellEl
-      event.view = cellEl;
+      event.view = renderCell(listItemAt(event.index), event.view);
     }
 
     function itemTemplateSelector(item, index) {
-      // pass on the template selector call with the ListItem context
-      return getSlotName(getListItem(item, index));
+      return templateNameFor(createItemContext(item, index));
     }
-
-    // render all realized templates as children
-    const cellVNODES = () =>
-      Object.entries(cells.value).map(([id, entry]) => {
-        const roots = templateRoots(
-          ctx.slots[entry.slotName]?.(entry.itemCtx) ?? [],
-        );
-
-        if (roots.length === 0) {
-          logger.warn(`ListView template must contain at least one element.`);
-        } else if (roots.length > 1) {
-          logger.warn(
-            `ListView template must contain a single root element. Found: ${roots.length}. Only the first one will be used.`,
-          );
-        }
-
-        const vnode: VNode =
-          roots.at(0) ??
-          // default template is just a label
-          h('Label', {
-            text: entry.itemCtx.item,
-          });
-
-        // set the key to the list cell id, so we can find this cell later...
-        vnode.key = id;
-
-        return vnode;
-      });
 
     return () => {
       return h(
@@ -205,7 +95,7 @@ export const ListView = /*#__PURE__*/ defineComponent({
           onItemLoading,
           onItemTap,
         },
-        cellVNODES(),
+        cellVNodes(),
       );
     };
   },
