@@ -16,12 +16,12 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.2",
     "kill-port": "^2.0.1",
     "linkinator": "^6.1.2",
     "vitepress": "^2.0.0-alpha.20",
-    "vue": "^3.5.42",
+    "vue": "^3.5.43",
     "wait-on": "^8.0.3",
-    "wrangler": "^4.131.2"
+    "wrangler": "^4.139.0"
   }
 }
