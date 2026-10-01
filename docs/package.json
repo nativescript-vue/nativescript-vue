@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/node": "^26.5.1",
     "kill-port": "^2.0.1",
-    "linkinator": "^6.1.2",
+    "linkinator": "^8.1.0",
     "vitepress": "^2.0.0-alpha.20",
     "vue": "^3.5.42",
     "wait-on": "^8.0.3",
