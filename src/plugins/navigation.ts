@@ -126,12 +126,24 @@ export function $navigateTo<P = any>(
     const disposeCallback = (args: EventData) => {
       const page = args.object as Page;
 
-      // if we are reloading, don't unmount the view, as the reload will unmount/remount it.
-      if (!isReloading && view) {
+      const nativeWindow = frame.getNativeWindow?.();
+      // Native UI disposal also happens during Activity/scene recreation. Wait
+      // until core updates its history, then only unmount a page it discarded.
+      void nextTick(() => {
+        if (isReloading || !view || view.nativeView !== page) return;
+        const retained =
+          frame.currentPage === page ||
+          frame.backStack.some((entry) => entry.resolvedPage === page);
+        const hostRetained = nativeWindow
+          ? nativeWindow.state !== 'closed' &&
+            frame.getNativeWindow?.() === nativeWindow
+          : (frame as Frame & { _isInFrameStack?: boolean })._isInFrameStack !==
+            false;
+        if (retained && hostRetained) return;
         page.off(ViewBase.disposeNativeViewEvent, disposeCallback);
         view.unmount();
         view = null;
-      }
+      });
     };
 
     const reloadPage = () => {
