@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.3 (2026-10-26)
+
+- Pages opened with `$navigateTo` keep their Vue app when the native UI is torn down while the page stays in the frame's history, as happens when Android recreates the activity or an iOS scene disconnects. They unmount once the page leaves the history or its window closes for good, including a window that closes after it detached. (#1187, from #1178 by @rafaelaugustos)
+
 ## 3.1.2 (2026-09-15)
 
 - **`useItemTemplates()`** turns a component's slots into native item templates and renders recycled cells from them, so list-style plugin components (CollectionView, Pager) can share the machinery behind the built-in `ListView` instead of copying it. `templateRoots()` and `createItemContext()` are exported alongside it, and ListView is built on the composable. See [Views that recycle item templates](https://nativescript-vue.org/docs/essentials/nativescript-plugins#views-that-recycle-item-templates). (#1170)
