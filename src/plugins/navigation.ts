@@ -122,27 +122,62 @@ export function $navigateTo<P = any>(
 
     const root = new NSVRoot();
     let isReloading = false;
+    let watchedWindow: NativeWindow | undefined;
+
+    const unmountPage = () => {
+      if (!view) {
+        return;
+      }
+
+      stopWatchingWindow();
+      view.nativeView.off(ViewBase.disposeNativeViewEvent, disposeCallback);
+      view.unmount();
+      view = null;
+    };
+
+    // A retained page gets no further disposal event when its window closes
+    // after detaching (e.g. an iOS scene session discarded from the app
+    // switcher), so the close has to be observed directly.
+    const watchWindow = (nativeWindow: NativeWindow) => {
+      if (watchedWindow === nativeWindow) {
+        return;
+      }
+
+      stopWatchingWindow();
+      watchedWindow = nativeWindow;
+      watchedWindow.on('close', unmountPage);
+    };
+
+    const stopWatchingWindow = () => {
+      watchedWindow?.off('close', unmountPage);
+      watchedWindow = undefined;
+    };
 
     const disposeCallback = (args: EventData) => {
       const page = args.object as Page;
+      // Read synchronously: core detaches the frame from its window right
+      // after tearing it down.
+      const windowAtDisposal = frame.getNativeWindow?.();
 
-      const nativeWindow = frame.getNativeWindow?.();
-      // Native UI disposal also happens during Activity/scene recreation. Wait
-      // until core updates its history, then only unmount a page it discarded.
+      // Native UI is also disposed during Activity/scene recreation. Core
+      // updates its history right after disposing a discarded page, so decide
+      // on the next tick.
       void nextTick(() => {
-        if (isReloading || !view || view.nativeView !== page) return;
-        const retained =
-          frame.currentPage === page ||
-          frame.backStack.some((entry) => entry.resolvedPage === page);
-        const hostRetained = nativeWindow
-          ? nativeWindow.state !== 'closed' &&
-            frame.getNativeWindow?.() === nativeWindow
-          : (frame as Frame & { _isInFrameStack?: boolean })._isInFrameStack !==
-            false;
-        if (retained && hostRetained) return;
-        page.off(ViewBase.disposeNativeViewEvent, disposeCallback);
-        view.unmount();
-        view = null;
+        if (isReloading || !view || view.nativeView !== page) {
+          return;
+        }
+
+        if (
+          !isPageInHistory(frame, page) ||
+          !isFrameHostAlive(frame, windowAtDisposal)
+        ) {
+          unmountPage();
+          return;
+        }
+
+        if (windowAtDisposal) {
+          watchWindow(windowAtDisposal);
+        }
       });
     };
 
@@ -206,6 +241,32 @@ export function $navigateTo<P = any>(
     console.error(e, e.stack);
     throw e;
   }
+}
+
+type NativeWindow = NonNullable<ReturnType<Frame['getNativeWindow']>>;
+
+function isPageInHistory(frame: Frame, page: Page) {
+  if (frame.currentPage === page) {
+    return true;
+  }
+
+  return frame.backStack.some((entry) => entry.resolvedPage === page);
+}
+
+function isFrameHostAlive(frame: Frame, windowAtDisposal?: NativeWindow) {
+  if (!windowAtDisposal) {
+    // core < 9.1, or the frame has left its window: a disposed frame also
+    // leaves the frame stack.
+    return (
+      (frame as Frame & { _isInFrameStack?: boolean })._isInFrameStack !== false
+    );
+  }
+
+  if (windowAtDisposal.state === 'closed') {
+    return false;
+  }
+
+  return frame.getNativeWindow() === windowAtDisposal;
 }
 
 export async function $navigateBack(options?: NavigateBackOptions) {
