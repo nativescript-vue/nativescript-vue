@@ -4,6 +4,7 @@ import GH1010 from './components/GH1010.vue';
 import GH1011 from './components/GH1011.vue';
 import GH1012 from './components/GH1012.vue';
 import GH1017 from './components/GH1017.vue';
+import GH1178 from './components/GH1178/GH1178.vue';
 import HMRTestLoader from './components/HMRTestLoader.vue';
 import Home from './components/Home.vue';
 import demo_KeepAlive from './components/demo_KeepAlive.vue';
@@ -45,4 +46,9 @@ export const demos: Demo[] = [
   { name: 'GH1011', component: GH1011, root: 'view' },
   { name: 'GH1012', component: GH1012, root: 'view' },
   { name: 'GH1017', component: GH1017, root: 'view' },
+  {
+    name: 'GH1178 multi-window page retention',
+    component: GH1178,
+    root: 'frame',
+  },
 ];
