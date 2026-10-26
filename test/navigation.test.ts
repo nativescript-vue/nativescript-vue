@@ -86,11 +86,22 @@ describe('$navigateBack', () => {
   });
 });
 
+function createWindow() {
+  const window = new ViewBase();
+  window.state = 'attached';
+  return window;
+}
+
+function closeWindow(window: ViewBase) {
+  window.notify({ eventName: 'close', object: window });
+  window.state = 'closed';
+}
+
 describe('navigated page native UI disposal', () => {
   it('keeps apps reactive through window detach, then unmounts a discarded page once', async () => {
     const frame = new Frame();
     Frame._topmost = frame;
-    const window = { state: 'attached' };
+    const window = createWindow();
     frame.getNativeWindow = () => window;
     createApp({ render: () => h('Frame') }).start();
     const count = ref(1);
@@ -134,7 +145,7 @@ describe('navigated page native UI disposal', () => {
   it('unmounts retained history when its window closes permanently', async () => {
     const frame = new Frame();
     Frame._topmost = frame;
-    const window = { state: 'attached' };
+    const window = createWindow();
     frame.getNativeWindow = () => window;
     createApp({ render: () => h('Frame') }).start();
     const unmounted = vi.fn();
@@ -156,7 +167,7 @@ describe('navigated page native UI disposal', () => {
   it('unmounts a page when its root is released from the window', async () => {
     const frame = new Frame();
     Frame._topmost = frame;
-    let window: { state: string } | undefined = { state: 'attached' };
+    let window: ViewBase | undefined = createWindow();
     frame.getNativeWindow = () => window;
     createApp({ render: () => h('Frame') }).start();
     const unmounted = vi.fn();
@@ -173,5 +184,65 @@ describe('navigated page native UI disposal', () => {
     window = undefined;
     await nextTick();
     expect(unmounted).toHaveBeenCalledOnce();
+  });
+
+  it('unmounts retained pages when their detached window closes later', async () => {
+    const frame = new Frame();
+    Frame._topmost = frame;
+    const window = createWindow();
+    frame.getNativeWindow = () => window;
+    createApp({ render: () => h('Frame') }).start();
+    const unmounted = vi.fn();
+    const component = {
+      setup() {
+        onUnmounted(unmounted);
+        return () => h('Page');
+      },
+    };
+    const first = $navigateTo(component);
+    const second = $navigateTo(component);
+    first.notify({ eventName: ViewBase.disposeNativeViewEvent, object: first });
+    second.notify({
+      eventName: ViewBase.disposeNativeViewEvent,
+      object: second,
+    });
+    window.state = 'detached';
+    await nextTick();
+    expect(unmounted).not.toHaveBeenCalled();
+
+    closeWindow(window);
+    await nextTick();
+    expect(unmounted).toHaveBeenCalledTimes(2);
+  });
+
+  it('stops watching the window once a retained page is discarded', async () => {
+    const frame = new Frame();
+    Frame._topmost = frame;
+    const window = createWindow();
+    frame.getNativeWindow = () => window;
+    createApp({ render: () => h('Frame') }).start();
+    const unmounted = vi.fn();
+    const target = $navigateTo({
+      setup() {
+        onUnmounted(unmounted);
+        return () => h('Page');
+      },
+    });
+    $navigateTo({ render: () => h('Page') });
+    target.notify({
+      eventName: ViewBase.disposeNativeViewEvent,
+      object: target,
+    });
+    await nextTick();
+    expect(window._listeners.get('close')).toHaveLength(1);
+
+    frame.backStack = [];
+    target.notify({
+      eventName: ViewBase.disposeNativeViewEvent,
+      object: target,
+    });
+    await nextTick();
+    expect(unmounted).toHaveBeenCalledOnce();
+    expect(window._listeners.get('close')).toHaveLength(0);
   });
 });
